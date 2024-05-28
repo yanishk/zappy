@@ -5,13 +5,18 @@
 ## Makefile
 ##
 
-CC			=	g++
+CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra
 CPPFLAGS	=	-iquote ./include
 
-SRC			=	./src/main.c		\
+SRC			=	./src/main.c						\
+				./src/server.c 						\
+				./src/initialize_server.c           \
+				./src/run_server.c                  \
+				./src/insert_client_in_struct.c     \
+				./src/close_client_socket.c         \
 
 OBJ			=	$(SRC:.c=.o)
 

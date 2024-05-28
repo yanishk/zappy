@@ -28,5 +28,5 @@ int main(int ac, __attribute__((__unused__)) char **av)
         display_help();
         return EXIT_WITH_ERROR;
     }
-    return EXIT_WITH_SUCCESS;
+    return server("4040");
 }
