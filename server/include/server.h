@@ -5,15 +5,15 @@
 ** server
 */
 
+#include "arguments.h"
+
 #ifndef SERVER_H_
     #define SERVER_H_
 
-    #define MIN_ARGS 13
     #define EXIT_WITH_ERROR 84
     #define EXIT_WITH_SUCCESS 0
     #define MAX_USER 1024
 
-    #include <sys/queue.h>
     #include <sys/select.h>
     #include <arpa/inet.h>
     #include <stdbool.h>
@@ -36,9 +36,8 @@ typedef struct server_s {
     clients_t **clients;
 } server_t;
 
-
-int server(const char *port_number);
-server_t *init_server_struct(const char *port_number);
+int server(int ac, const char **av);
+server_t *init_server_struct(const int port);
 int initialize_server(server_t *server);
 int run_server(server_t *server);
 int insert_client_in_struct(server_t *server, const int client_fd);
