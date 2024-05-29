@@ -24,11 +24,6 @@ typedef struct clients_s {
     bool has_been_closed;
 } clients_t;
 
-// typedef struct cmd_s {
-//     char **tab;
-//     size_t len;
-// } cmd_t;
-
 typedef struct server_s {
     struct sockaddr_in sock_addr;
     int port;
