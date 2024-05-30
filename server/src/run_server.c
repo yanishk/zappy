@@ -25,7 +25,7 @@ static int check_clients_sockets(server_t *server)
             close_client_socket(server);
         }
     }
-    return 0;
+    return EXIT_WITH_SUCCESS;
 }
 
 static int add_client_socket(server_t *server, int new_client_fd)
@@ -44,10 +44,10 @@ static int add_client_socket(server_t *server, int new_client_fd)
         server->fd_array = realloc(server->fd_array,
             sizeof(int) * server->size);
         if (server->fd_array == NULL)
-            return 84;
+            return EXIT_WITH_ERROR;
         server->fd_array[server->size - 1] = new_client_fd;
     }
-    return 0;
+    return EXIT_WITH_SUCCESS;
 }
 
 static int accept_connections(server_t *server, int new_client_fd)
@@ -58,7 +58,7 @@ static int accept_connections(server_t *server, int new_client_fd)
         (struct sockaddr *) &server->sock_addr, &addrlen);
     if (new_client_fd == -1) {
         perror("accept");
-        return 84;
+        return EXIT_WITH_ERROR;
     }
     return new_client_fd;
 }
@@ -69,13 +69,13 @@ static int check_server_socket(server_t *server)
 
     if (FD_ISSET(server->server_fd, &server->readfds) != 0) {
         new_client_fd = accept_connections(server, new_client_fd);
-        if (new_client_fd == 84)
-            return 84;
+        if (new_client_fd == EXIT_WITH_ERROR)
+            return EXIT_WITH_ERROR;
         dprintf(new_client_fd, "WELCOME\n");
-        if (add_client_socket(server, new_client_fd) == 84)
-            return 84;
+        if (add_client_socket(server, new_client_fd) == EXIT_WITH_ERROR)
+            return EXIT_WITH_ERROR;
     }
-    return 0;
+    return EXIT_WITH_SUCCESS;
 }
 
 static int set_sockets(server_t *server)
@@ -92,9 +92,9 @@ static int set_sockets(server_t *server)
     if (select(server->max_fd_set + 1, &server->readfds,
         NULL, NULL, NULL) == -1) {
         perror("select");
-        return 84;
+        return EXIT_WITH_ERROR;
     }
-    return 0;
+    return EXIT_WITH_SUCCESS;
 }
 
 int run_server(server_t *server)
@@ -103,10 +103,10 @@ int run_server(server_t *server)
         FD_ZERO(&server->readfds);
         FD_SET(server->server_fd, &server->readfds);
         server->max_fd_set = server->server_fd;
-        if (set_sockets(server) == 84 ||
-            check_server_socket(server) == 84 ||
-            check_clients_sockets(server) == 84)
-            return 84;
+        if (set_sockets(server) == EXIT_WITH_ERROR ||
+            check_server_socket(server) == EXIT_WITH_ERROR ||
+            check_clients_sockets(server) == EXIT_WITH_ERROR)
+            return EXIT_WITH_ERROR;
     }
-    return 0;
+    return EXIT_WITH_SUCCESS;
 }

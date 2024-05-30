@@ -17,12 +17,19 @@ static void free_server_struct(server_t *server)
     free(server);
 }
 
-int server(const char *port_number)
+int server(int ac, const char **av)
 {
-    server_t *server = init_server_struct(port_number);
+    arguments_t arg;
+    server_t *server;
 
-    if (initialize_server(server) == 84 || run_server(server) == 84)
-        return 84;
+    if (init_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR)
+        return EXIT_WITH_ERROR;
+    server = init_server_struct(arg.port);
+    if (server == NULL)
+        return EXIT_WITH_ERROR;
+    if (initialize_server(server) == EXIT_WITH_ERROR ||
+        run_server(server) == EXIT_WITH_ERROR)
+        return EXIT_WITH_ERROR;
     free_server_struct(server);
-    return 0;
+    return EXIT_WITH_SUCCESS;
 }

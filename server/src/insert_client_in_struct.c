@@ -23,5 +23,5 @@ int insert_client_in_struct(server_t *server, const int client_fd)
             return i;
         }
     }
-    return 0;
+    return EXIT_WITH_SUCCESS;
 }
