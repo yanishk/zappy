@@ -40,12 +40,12 @@ typedef struct arguments_s {
     TAILQ_HEAD(, team_s) team_head;
 } arguments_t;
 
-int flag_n(const char **, int, bool *, arguments_t *);
-int flag_p(const char **, int, bool *, arguments_t *);
-int flag_x(const char **, int, bool *, arguments_t *);
-int flag_y(const char **, int, bool *, arguments_t *);
-int flag_c(const char **, int, bool *, arguments_t *);
-int flag_f(const char **, int, bool *, arguments_t *);
+int team_name_flag(const char **, int, bool *, arguments_t *);
+int port_flag(const char **, int, bool *, arguments_t *);
+int width_flag(const char **, int, bool *, arguments_t *);
+int height_flag(const char **, int, bool *, arguments_t *);
+int nb_clients_flag(const char **, int, bool *, arguments_t *);
+int frequency_flag(const char **, int, bool *, arguments_t *);
 
 int init_arg_struct(int ac, const char **av, arguments_t *arguments);
 void print_arg_struct(const arguments_t arguments);
