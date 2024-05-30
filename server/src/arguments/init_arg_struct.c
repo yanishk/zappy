@@ -86,7 +86,8 @@ static int check_arg_values(arguments_t *arg)
     return EXIT_WITH_SUCCESS;
 }
 
-static int call_flag(const char **av, int i, bool *is_a_team_name, arguments_t *arg)
+static int call_flag(const char **av, int i,
+    bool *is_a_team_name, arguments_t *arg)
 {
     for (size_t y = 0; y < NB_FLAGS; y++) {
         if (flag_func[y](av, i, is_a_team_name, arg) == EXIT_WITH_ERROR)
