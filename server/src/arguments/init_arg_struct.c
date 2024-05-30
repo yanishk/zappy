@@ -20,18 +20,18 @@ struct flag_occurence flags[] = {
 
 int (*flag_func[])(const char **av, int i,
     bool *is_a_team_name, arguments_t *arg) = {
-    &flag_n,
-    &flag_p,
-    &flag_x,
-    &flag_y,
-    &flag_c,
-    &flag_f
+    &team_name_flag,
+    &port_flag,
+    &width_flag,
+    &height_flag,
+    &nb_clients_flag,
+    &frequency_flag
 };
 
-static void increment_flag_occurence(const char *flag_name)
+static void increment_flag_occurence(const char *team_name_flagame)
 {
     for (size_t i = 0; i != NB_FLAGS; i++) {
-        if (strcmp(flags[i].name, flag_name) == 0)
+        if (strcmp(flags[i].name, team_name_flagame) == 0)
             flags[i].occurence++;
     }
 }

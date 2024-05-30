@@ -19,12 +19,12 @@ SRC			=	./src/main.c							\
 				./src/call_cmd_function.c				\
 				./src/close_client_socket.c         	\
 				./src/arguments/init_arg_struct.c 		\
-				./src/arguments/flag_c.c 				\
-				./src/arguments/flag_f.c  				\
-				./src/arguments/flag_n.c 				\
-				./src/arguments/flag_p.c  				\
-				./src/arguments/flag_x.c  				\
-				./src/arguments/flag_y.c  				\
+				./src/arguments/nb_clients_flag.c 		\
+				./src/arguments/frequency_flag.c  		\
+				./src/arguments/team_name_flag.c 		\
+				./src/arguments/port_flag.c  			\
+				./src/arguments/width_flag.c  			\
+				./src/arguments/height_flag.c  			\
 				./src/command/exit.c					\
 				./src/lib/array_functions.c 			\
 				./src/lib/word_array.c
