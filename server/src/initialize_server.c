@@ -12,12 +12,13 @@
 
 static int check_socket_creation(server_t *server)
 {
-    if (server->port == 0) {
-        fprintf(stderr, "argument isn't a port\n");
-        return 84;
-    }
     if (server->server_fd == -1) {
         fprintf(stderr, "socket creation failed\n");
+        return 84;
+    }
+    if (setsockopt(server->server_fd, SOL_SOCKET, SO_REUSEADDR,
+        &(int){1}, sizeof(int)) < 0) {
+        perror("setsockopt");
         return 84;
     }
     return 0;

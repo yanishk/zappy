@@ -21,6 +21,7 @@ static int check_clients_sockets(server_t *server)
         client_fd = server->fd_array[i];
         if (FD_ISSET(client_fd, &server->readfds) != 0) {
             server->user_index = insert_client_in_struct(server, client_fd);
+            get_user_input(server, client_fd);
             close_client_socket(server);
         }
     }
@@ -56,7 +57,7 @@ static int accept_connections(server_t *server, int new_client_fd)
     new_client_fd = accept(server->server_fd,
         (struct sockaddr *) &server->sock_addr, &addrlen);
     if (new_client_fd == -1) {
-        fprintf(stdout, "accept failed\n");
+        perror("accept");
         return 84;
     }
     return new_client_fd;

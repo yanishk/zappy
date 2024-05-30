@@ -17,6 +17,10 @@ SRC			=	./src/main.c						\
 				./src/run_server.c                  \
 				./src/insert_client_in_struct.c     \
 				./src/close_client_socket.c         \
+				./src/call_cmd_function.c			\
+				./src/lib/array_functions.c 		\
+				./src/lib/word_array.c				\
+				./src/command/exit.c
 
 OBJ			=	$(SRC:.c=.o)
 
