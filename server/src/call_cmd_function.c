@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int (*cmd_func[NB_CMD])() = {
+int (*cmd_func[NB_CMD])(server_t *server) = {
     &exit_func
 };
 

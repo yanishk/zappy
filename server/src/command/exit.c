@@ -6,9 +6,10 @@
 */
 
 #include <stdlib.h>
+#include "server.h"
 
-int exit_func(void)
+int exit_func(server_t *server)
 {
-    exit(100);
-    return 1;
+    server->clients[server->user_index]->has_been_closed = true;
+    return EXIT_WITH_SUCCESS;
 }

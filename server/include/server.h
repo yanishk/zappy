@@ -21,7 +21,7 @@
     #include <stdbool.h>
 
 static char *const cmd_lst[NB_CMD] = {
-    "/exit"
+    "exit"
 };
 
 typedef struct clients_s {
@@ -59,6 +59,6 @@ void get_user_input(server_t *server, const int client_fd);
 size_t array_size(char **array);
 char **word_array(char const *str, char *delim);
 
-int exit_func(void);
+int exit_func(server_t *server);
 
 #endif /* !SERVER_H_ */
