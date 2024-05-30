@@ -8,7 +8,7 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra
+CFLAGS		=	-Wall -Wextra -g
 CPPFLAGS	=	-iquote ./include
 
 SRC			=	./src/main.c							\

@@ -86,7 +86,7 @@ static int check_arg_values(arguments_t *arg)
     return EXIT_WITH_SUCCESS;
 }
 
-int call_flag(const char **av, int i, bool *is_a_team_name, arguments_t *arg)
+static int call_flag(const char **av, int i, bool *is_a_team_name, arguments_t *arg)
 {
     for (size_t y = 0; y < NB_FLAGS; y++) {
         if (flag_func[y](av, i, is_a_team_name, arg) == EXIT_WITH_ERROR)
@@ -95,12 +95,22 @@ int call_flag(const char **av, int i, bool *is_a_team_name, arguments_t *arg)
     return EXIT_WITH_SUCCESS;
 }
 
-int init_arg_struct(int ac, const char **av, arguments_t *arg)
+static void init_arg_struct(arguments_t *arg)
+{
+    TAILQ_INIT(&arg->team_head);
+    arg->port = 0;
+    arg->width = 0;
+    arg->height = 0;
+    arg->freq = 0;
+    arg->nb_clients = 0;
+}
+
+int fill_arg_struct(int ac, const char **av, arguments_t *arg)
 {
     bool is_a_team_name = false;
     unsigned int status = 0;
 
-    TAILQ_INIT(&arg->team_head);
+    init_arg_struct(arg);
     for (int i = 1; i != ac; i++) {
         increment_flag_occurence(av[i]);
         if (i < ac - 1)

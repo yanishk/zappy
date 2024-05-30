@@ -22,7 +22,7 @@ int server(int ac, const char **av)
     arguments_t arg;
     server_t *server;
 
-    if (init_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR)
+    if (fill_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR)
         return EXIT_WITH_ERROR;
     server = init_server_struct(arg.port);
     if (server == NULL)
