@@ -5,13 +5,29 @@
 ## Makefile
 ##
 
-CC			=	g++
+CC			=	gcc
 RM			=	rm -f
 
 CFLAGS		=	-Wall -Wextra -Werror
 CPPFLAGS	=	-iquote ./include
 
-SRC			=	./src/main.c		\
+SRC			=	./src/main.c							\
+				./src/server.c 							\
+				./src/initialize_server.c           	\
+				./src/run_server.c                  	\
+				./src/insert_client_in_struct.c     	\
+				./src/call_cmd_function.c				\
+				./src/close_client_socket.c         	\
+				./src/arguments/init_arg_struct.c 		\
+				./src/arguments/nb_clients_flag.c 		\
+				./src/arguments/frequency_flag.c  		\
+				./src/arguments/team_name_flag.c 		\
+				./src/arguments/port_flag.c  			\
+				./src/arguments/width_flag.c  			\
+				./src/arguments/height_flag.c  			\
+				./src/command/exit.c					\
+				./src/lib/array_functions.c 			\
+				./src/lib/word_array.c
 
 OBJ			=	$(SRC:.c=.o)
 

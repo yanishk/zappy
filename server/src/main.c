@@ -6,6 +6,8 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "server.h"
 
 static void display_help(void)
@@ -19,14 +21,14 @@ static void display_help(void)
     dprintf(2, "\t\tclientsNb\tis the number of authorized clients per ");
     dprintf(2, "team\n");
     dprintf(2, "\t\tfreq\t\tis the reciprocal of time unit for execution");
-    dprintf(2, " of actions\n");
+    dprintf(2, " of actions (optional)\n");
 }
 
-int main(int ac, __attribute__((__unused__)) char **av)
+int main(int ac, const char **av)
 {
     if (ac < MIN_ARGS) {
         display_help();
         return EXIT_WITH_ERROR;
     }
-    return EXIT_WITH_SUCCESS;
+    return server(ac, av);
 }
