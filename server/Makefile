@@ -32,8 +32,10 @@ SRC			=	./src/main.c							\
 				./src/arguments/width_flag.c  			\
 				./src/arguments/height_flag.c  			\
 				./src/command/exit.c					\
+				./src/command/inventory.c 				\
 				./src/lib/array_functions.c 			\
-				./src/lib/word_array.c
+				./src/lib/word_array.c					\
+				./src/lib/get_player_byid.c
 
 OBJ			=	$(SRC:.c=.o)
 

@@ -13,7 +13,7 @@
     #define EXIT_WITH_SUCCESS 0
     #define UNKNOWN_COMMAND 1
     #define MAX_USER 1024
-    #define NB_CMD 1
+    #define NB_CMD 2
     #define BUFFER_MAX_SIZE 1024
 
     #include <sys/select.h>
@@ -22,7 +22,8 @@
     #include "map.h"
 
 static char *const cmd_lst[NB_CMD] = {
-    "exit"
+    "Exit",
+    "Inventory"
 };
 
 typedef struct clients_s {
@@ -60,9 +61,11 @@ bool is_player_connected(const zappy_t *zappy, const unsigned int client_fd);
 int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
     const unsigned int client_fd);
 
-int exit_func(server_t *server);
+int exit_func(server_t *server, zappy_t *zappy, int client_fd);
+int inventory_command(server_t *server, zappy_t *zappy, int client_fd);
 
 size_t array_size(char **array);
 char **word_array(char const *str, char *delim);
+player_t *get_player(zappy_t *zappy, const unsigned int client_fd);
 
 #endif /* !SERVER_H_ */

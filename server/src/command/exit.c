@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "server.h"
 
-int exit_func(server_t *server)
+int exit_func(server_t *server, zappy_t *, int)
 {
     server->clients[server->user_index]->has_been_closed = true;
     return EXIT_WITH_SUCCESS;
