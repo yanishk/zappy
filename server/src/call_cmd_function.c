@@ -15,7 +15,8 @@
 
 int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy, int client_fd) = {
     &exit_func,
-    &inventory_command
+    &inventory_command,
+    &take_command
 };
 
 static int read_client_socket(server_t *server, const unsigned int client_fd)
@@ -24,7 +25,7 @@ static int read_client_socket(server_t *server, const unsigned int client_fd)
 
     if (read(client_fd, buffer, BUFFER_MAX_SIZE) == 0)
         return EXIT_WITH_ERROR;
-    server->cmd_arg.tab = word_array(buffer, "\n\r");
+    server->cmd_arg.tab = word_array(buffer, "\n ");
     server->cmd_arg.len = array_size(server->cmd_arg.tab);
     if (strlen(server->cmd_arg.tab[0]) == 0)
         return EXIT_WITH_ERROR;
@@ -50,5 +51,7 @@ void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg)
         status = connect_player(server, zappy, arg, client_fd);
     if (status == UNKNOWN_COMMAND || status == EXIT_WITH_ERROR)
         dprintf(client_fd, "ko\n");
+    else
+        dprintf(client_fd, "ok\n");
     free(server->cmd_arg.tab);
 }

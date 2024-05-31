@@ -10,7 +10,7 @@ RM			=	rm -f
 
 CFLAGS		=	-Wall -Wextra -Werror -lm
 CPPFLAGS	=	-iquote ./include
-FLAGS_DEBUG = -g
+FLAGS_DEBUG = 	-g
 
 SRC			=	./src/main.c							\
 				./src/server.c 							\
@@ -33,6 +33,7 @@ SRC			=	./src/main.c							\
 				./src/arguments/height_flag.c  			\
 				./src/command/exit.c					\
 				./src/command/inventory.c 				\
+				./src/command/take_command.c 			\
 				./src/lib/array_functions.c 			\
 				./src/lib/word_array.c					\
 				./src/lib/get_player_byid.c
