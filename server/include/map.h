@@ -10,6 +10,8 @@
 
     #include <stdlib.h>
     #include "arguments.h"
+    #include <stdbool.h>
+    #include "arguments.h"
 
 typedef struct resource_s {
     size_t linemate;
@@ -36,6 +38,8 @@ typedef struct zappy_s {
     resource_t **resource;
     TAILQ_HEAD(, player_s) player_head;
 } zappy_t;
+
+void density_onland(arguments_t *args, zappy_t *zappy);
 
 void initialize_map(const arguments_t arg, zappy_t *zappy);
 void initialize_players(const arguments_t arg, zappy_t *zappy);

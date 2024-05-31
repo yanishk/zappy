@@ -19,6 +19,14 @@ static void free_server_struct(server_t *server)
     free(server);
 }
 
+static void init_basis_map(zappy_t *zappy, arguments_t *arg)
+{
+    zappy->resource = malloc(sizeof(resource_t *) * arg->width);
+    for (int x = 0; x < arg->height; x++)
+        zappy->resource[x] = malloc(sizeof(resource_t) * arg->height);
+    density_onland(arg, zappy);
+}
+
 int server(int ac, const char **av)
 {
     server_t *server;
@@ -29,6 +37,7 @@ int server(int ac, const char **av)
     srand(time(NULL));
     if (fill_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR)
         return EXIT_WITH_ERROR;
+    init_basis_map(&zappy, &arg);
     server = init_server_struct(arg.port);
     initialize_map(arg, &zappy);
     if (server == NULL)

@@ -8,7 +8,7 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra
+CFLAGS		=	-Wall -Wextra -Werror -lm
 CPPFLAGS	=	-iquote ./include
 FLAGS_DEBUG = -g
 
@@ -32,6 +32,7 @@ SRC			=	./src/main.c							\
 				./src/arguments/width_flag.c  			\
 				./src/arguments/height_flag.c  			\
 				./src/command/exit.c					\
+				./src/map/initialization_ressources.c	\
 				./src/lib/array_functions.c 			\
 				./src/lib/word_array.c
 
@@ -42,7 +43,7 @@ NAME		=	zappy_server
 all:	$(NAME)
 
 $(NAME):	$(OBJ)
-	$(CC) -o $(NAME) $(OBJ)
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS)
 
 debug: CFLAGS += $(FLAGS_DEBUG)
 debug: all
