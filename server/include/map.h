@@ -13,6 +13,12 @@
     #include <stdbool.h>
     #include "arguments.h"
 
+    #define RIGHT_ANGLE 90
+    #define NORTH 0
+    #define EAST 90
+    #define SOUTH 180
+    #define WEST 270
+
 typedef struct resource_s {
     size_t linemate;
     size_t deraumere;
@@ -24,12 +30,13 @@ typedef struct resource_s {
 } resource_t;
 
 typedef struct player_s {
-    size_t width;
-    size_t height;
+    int width;
+    int height;
     bool is_egg;
     char *team_name;
     unsigned int id;
     size_t level;
+    size_t direction;
     resource_t inventory;
     TAILQ_ENTRY(player_s) player_entries;
 } player_t;
@@ -44,6 +51,7 @@ void density_onland(arguments_t *args, zappy_t *zappy);
 void initialize_map(const arguments_t arg, zappy_t *zappy);
 void initialize_teams(const arguments_t arg, zappy_t *zappy);
 void initialize_resources(resource_t *resource);
+void print_players_pos_and_direction(const zappy_t zappy);
 void print_players(const zappy_t zappy);
 
 #endif /* !MAP_H_ */

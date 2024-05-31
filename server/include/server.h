@@ -13,7 +13,7 @@
     #define EXIT_WITH_SUCCESS 0
     #define UNKNOWN_COMMAND 1
     #define MAX_USER 1024
-    #define NB_CMD 3
+    #define NB_CMD 6
     #define BUFFER_MAX_SIZE 1024
 
     #include <sys/select.h>
@@ -25,7 +25,10 @@
 static char *const cmd_lst[NB_CMD] = {
     "Exit",
     "Inventory",
-    "Take"
+    "Take",
+    "Forward",
+    "Left",
+    "Right"
 };
 
 struct object_taken {
@@ -68,9 +71,12 @@ bool is_player_connected(const zappy_t *zappy, const unsigned int client_fd);
 int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
     const unsigned int client_fd);
 
-int exit_func(server_t *server, zappy_t *zappy, int client_fd);
-int inventory_command(server_t *server, zappy_t *zappy, int client_fd);
-int take_command(server_t *server, zappy_t *zappy, int client_fd);
+int exit_func(server_t *, zappy_t *, const arguments_t, int);
+int inventory_command(server_t *, zappy_t *, const arguments_t, int);
+int take_command(server_t *, zappy_t *, const arguments_t, int);
+int move_forward(server_t *, zappy_t *, const arguments_t, int);
+int turn_left(server_t *, zappy_t *, const arguments_t, int);
+int turn_right(server_t *, zappy_t *, const arguments_t, int);
 
 size_t array_size(char **array);
 char **word_array(char const *str, char *delim);

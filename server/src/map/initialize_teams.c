@@ -9,7 +9,7 @@
 #include "server.h"
 #include "map.h"
 
-static bool has_already_an_egg(zappy_t *zappy, size_t height, size_t width)
+static bool has_already_an_egg(zappy_t *zappy, int height, int width)
 {
     player_t *player;
     unsigned int count = 0;
@@ -49,6 +49,11 @@ static void initialize_players_pos(const arguments_t arg, zappy_t *zappy)
     }
 }
 
+size_t initialize_player_direction(void)
+{
+    return RIGHT_ANGLE * (rand() % 4);
+}
+
 void initialize_players(const arguments_t arg, zappy_t *zappy, team_t *team)
 {
     player_t *player;
@@ -62,6 +67,7 @@ void initialize_players(const arguments_t arg, zappy_t *zappy, team_t *team)
     player->width = 0;
     player->is_egg = true;
     player->team_name = strdup(team->team_name);
+    player->direction = initialize_player_direction();
     initialize_players_pos(arg, zappy);
 }
 

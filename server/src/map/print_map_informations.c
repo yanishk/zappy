@@ -19,6 +19,20 @@ static void print_resources(const resource_t resource)
     printf("\tthystame:%ld\n", resource.thystame);
 }
 
+void print_players_pos_and_direction(const zappy_t zappy)
+{
+    player_t *player;
+
+    TAILQ_FOREACH(player, &zappy.player_head, player_entries) {
+        printf("\tid=%d\n", player->id);
+        printf("\tteam_name=%s\n", player->team_name);
+        printf("\tpos : width(x)=%d, height(y)=%d\n",
+            player->width, player->height);
+        printf("\tdirection=%ld\n", player->direction);
+        printf("\n");
+    }
+}
+
 void print_players(const zappy_t zappy)
 {
     player_t *player;
@@ -27,10 +41,11 @@ void print_players(const zappy_t zappy)
         printf("new egg:\n");
         printf("\tid=%d\n", player->id);
         printf("\tteam_name=%s\n", player->team_name);
-        printf("\tpos : height=%ld, width=%ld\n",
-            player->height, player->width);
+        printf("\tpos : width(x)=%d, height(y)=%d\n",
+            player->width, player->height);
         printf("\tis_egg=%d\n", player->is_egg);
         printf("\tlevel=%ld\n", player->level);
+        printf("\tdirection=%ld\n", player->direction);
         print_resources(player->inventory);
         printf("\n");
     }

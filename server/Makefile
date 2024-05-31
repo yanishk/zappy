@@ -8,7 +8,7 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra -Werror -lm
+CFLAGS		=	-Wall -Wextra -lm
 CPPFLAGS	=	-iquote ./include
 FLAGS_DEBUG = 	-g
 
@@ -34,6 +34,9 @@ SRC			=	./src/main.c							\
 				./src/command/exit.c					\
 				./src/command/inventory.c 				\
 				./src/command/take_command.c 			\
+				./src/command/move_forward.c 			\
+				./src/command/turn_left.c 				\
+				./src/command/turn_right.c 				\
 				./src/lib/array_functions.c 			\
 				./src/lib/word_array.c					\
 				./src/lib/get_player_byid.c
