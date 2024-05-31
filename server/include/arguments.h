@@ -5,12 +5,13 @@
 ** arguments
 */
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <sys/queue.h>
 
 #ifndef ARGUMENTS_H_
     #define ARGUMENTS_H_
+
+    #include <stdio.h>
+    #include <stdbool.h>
+    #include <sys/queue.h>
 
     #define MIN_ARGS 11
     #define NB_FLAGS 6
@@ -35,8 +36,9 @@ typedef struct arguments_s {
     int port;
     int width;
     int height;
-    int nb_clients;
     int freq;
+    int nb_clients;
+    int nb_teams;
     TAILQ_HEAD(, team_s) team_head;
 } arguments_t;
 

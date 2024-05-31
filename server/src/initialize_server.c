@@ -81,7 +81,6 @@ server_t *init_server_struct(const int port_number)
     server->fd_array = create_int_array(server->size);
     if (server->fd_array == NULL)
         return NULL;
-    server->max_fd_set = 0;
     init_client_struct(server);
     return server;
 }

@@ -12,8 +12,10 @@
 #include <string.h>
 #include <unistd.h>
 #include "server.h"
+#include "map.h"
 
-static int check_clients_sockets(server_t *server)
+static int check_clients_sockets(server_t *server, zappy_t *zappy,
+    const arguments_t arg)
 {
     int client_fd = 0;
 
@@ -21,7 +23,7 @@ static int check_clients_sockets(server_t *server)
         client_fd = server->fd_array[i];
         if (FD_ISSET(client_fd, &server->readfds) != 0) {
             server->user_index = insert_client_in_struct(server, client_fd);
-            get_user_input(server, client_fd);
+            get_user_input(server, zappy, arg);
             close_client_socket(server);
         }
     }
@@ -80,16 +82,18 @@ static int check_server_socket(server_t *server)
 
 static int set_sockets(server_t *server)
 {
+    static unsigned int max_fd_set = 0;
     unsigned int client_fd = 0;
 
+    max_fd_set = server->server_fd;
     for (size_t i = 0; i != server->size; i += 1) {
         client_fd = server->fd_array[i];
         if (client_fd != 0)
             FD_SET(client_fd, &server->readfds);
-        if (client_fd > server->max_fd_set)
-            server->max_fd_set = client_fd;
+        if (client_fd > max_fd_set)
+            max_fd_set = client_fd;
     }
-    if (select(server->max_fd_set + 1, &server->readfds,
+    if (select(max_fd_set + 1, &server->readfds,
         NULL, NULL, NULL) == -1) {
         perror("select");
         return EXIT_WITH_ERROR;
@@ -97,15 +101,14 @@ static int set_sockets(server_t *server)
     return EXIT_WITH_SUCCESS;
 }
 
-int run_server(server_t *server)
+int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
 {
     while (1) {
         FD_ZERO(&server->readfds);
         FD_SET(server->server_fd, &server->readfds);
-        server->max_fd_set = server->server_fd;
         if (set_sockets(server) == EXIT_WITH_ERROR ||
             check_server_socket(server) == EXIT_WITH_ERROR ||
-            check_clients_sockets(server) == EXIT_WITH_ERROR)
+            check_clients_sockets(server, zappy, arg) == EXIT_WITH_ERROR)
             return EXIT_WITH_ERROR;
     }
     return EXIT_WITH_SUCCESS;

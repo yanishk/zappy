@@ -65,6 +65,7 @@ static void fill_team_name(const char *team_name, const bool is_a_team_name,
         team = malloc(sizeof(team_t));
         TAILQ_INSERT_TAIL(&arg->team_head, team, team_entries);
         team->team_name = strdup(team_name);
+        (*arg).nb_teams++;
     }
 }
 
@@ -104,6 +105,7 @@ static void init_arg_struct(arguments_t *arg)
     arg->height = 0;
     arg->freq = 0;
     arg->nb_clients = 0;
+    arg->nb_teams = 0;
 }
 
 int fill_arg_struct(int ac, const char **av, arguments_t *arg)

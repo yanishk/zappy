@@ -5,13 +5,13 @@
 ** server
 */
 
-#include "arguments.h"
 
 #ifndef SERVER_H_
     #define SERVER_H_
 
     #define EXIT_WITH_ERROR 84
     #define EXIT_WITH_SUCCESS 0
+    #define UNKNOWN_COMMAND 1
     #define MAX_USER 1024
     #define NB_CMD 1
     #define BUFFER_MAX_SIZE 1024
@@ -19,6 +19,7 @@
     #include <sys/select.h>
     #include <arpa/inet.h>
     #include <stdbool.h>
+    #include "map.h"
 
 static char *const cmd_lst[NB_CMD] = {
     "exit"
@@ -41,7 +42,6 @@ typedef struct server_s {
     int server_fd;
     int *fd_array;
     size_t size;
-    unsigned int max_fd_set;
     int user_index;
     fd_set readfds;
     clients_t **clients;
@@ -51,14 +51,18 @@ typedef struct server_s {
 int server(int ac, const char **av);
 server_t *init_server_struct(const int port);
 int initialize_server(server_t *server);
-int run_server(server_t *server);
+int run_server(server_t *server, zappy_t *zappy, const arguments_t arg);
 int insert_client_in_struct(server_t *server, const int client_fd);
 void close_client_socket(server_t *);
-void get_user_input(server_t *server, const int client_fd);
+void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg);
+
+bool is_player_connected(const zappy_t *zappy, const unsigned int client_fd);
+int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
+    const unsigned int client_fd);
+
+int exit_func(server_t *server);
 
 size_t array_size(char **array);
 char **word_array(char const *str, char *delim);
-
-int exit_func(server_t *server);
 
 #endif /* !SERVER_H_ */

@@ -8,8 +8,9 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra
 CPPFLAGS	=	-iquote ./include
+FLAGS_DEBUG = -g
 
 SRC			=	./src/main.c							\
 				./src/server.c 							\
@@ -18,6 +19,11 @@ SRC			=	./src/main.c							\
 				./src/insert_client_in_struct.c     	\
 				./src/call_cmd_function.c				\
 				./src/close_client_socket.c         	\
+				./src/player_connection.c 				\
+				./src/map/initialize_map.c 				\
+				./src/map/initialize_players.c 			\
+				./src/map/initialize_resources.c 		\
+				./src/map/print_map_informations.c 		\
 				./src/arguments/init_arg_struct.c 		\
 				./src/arguments/nb_clients_flag.c 		\
 				./src/arguments/frequency_flag.c  		\
@@ -37,6 +43,9 @@ all:	$(NAME)
 
 $(NAME):	$(OBJ)
 	$(CC) -o $(NAME) $(OBJ)
+
+debug: CFLAGS += $(FLAGS_DEBUG)
+debug: all
 
 clean:
 	$(RM) $(OBJ)
