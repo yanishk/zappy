@@ -20,6 +20,7 @@ SRC			=	./src/main.c							\
 				./src/call_cmd_function.c				\
 				./src/close_client_socket.c         	\
 				./src/player_connection.c 				\
+				./src/free_program.c 					\
 				./src/map/initialize_map.c 				\
 				./src/map/initialize_teams.c 			\
 				./src/map/initialize_resources.c 		\

@@ -9,7 +9,7 @@
 #include <time.h>
 #include "map.h"
 
-static void repartition_food(arguments_t *args, zappy_t *zappy)
+static void repartition_food(const arguments_t *args, zappy_t *zappy)
 {
     size_t max_food = round(args->width * args->height * 0.5);
     size_t index = 0;
@@ -26,7 +26,7 @@ static void repartition_food(arguments_t *args, zappy_t *zappy)
     }
 }
 
-static void repartition_linemate(arguments_t *args, zappy_t *zappy)
+static void repartition_linemate(const arguments_t *args, zappy_t *zappy)
 {
     size_t max_linemate = round(args->width * args->height * 0.3);
     size_t index = 0;
@@ -43,7 +43,7 @@ static void repartition_linemate(arguments_t *args, zappy_t *zappy)
     }
 }
 
-static void repartition_deraumere(arguments_t *args, zappy_t *zappy)
+static void repartition_deraumere(const arguments_t *args, zappy_t *zappy)
 {
     size_t max_deraumere = round(args->width * args->height * 0.15);
     size_t index = 0;
@@ -60,7 +60,7 @@ static void repartition_deraumere(arguments_t *args, zappy_t *zappy)
     }
 }
 
-static void repartition_sibur(arguments_t *args, zappy_t *zappy)
+static void repartition_sibur(const arguments_t *args, zappy_t *zappy)
 {
     size_t max_sibur = round(args->width * args->height * 0.1);
     size_t index = 0;
@@ -77,7 +77,7 @@ static void repartition_sibur(arguments_t *args, zappy_t *zappy)
     }
 }
 
-static void repartition_mendiane(arguments_t *args, zappy_t *zappy)
+static void repartition_mendiane(const arguments_t *args, zappy_t *zappy)
 {
     size_t max_mendiane = round(args->width * args->height * 0.1);
     size_t index = 0;
@@ -94,7 +94,7 @@ static void repartition_mendiane(arguments_t *args, zappy_t *zappy)
     }
 }
 
-static void repartition_phiras(arguments_t *args, zappy_t *zappy)
+static void repartition_phiras(const arguments_t *args, zappy_t *zappy)
 {
     size_t max_phiras = round(args->width * args->height * 0.08);
     size_t index = 0;
@@ -111,7 +111,7 @@ static void repartition_phiras(arguments_t *args, zappy_t *zappy)
     }
 }
 
-static void repartition_thystame(arguments_t *args, zappy_t *zappy)
+static void repartition_thystame(const arguments_t *args, zappy_t *zappy)
 {
     size_t max_thystame = round(args->width * args->height * 0.05);
     size_t index = 0;
@@ -139,9 +139,8 @@ void initialize_resources(resource_t *resource)
     resource->thystame = 0;
 }
 
-void density_onland(arguments_t *args, zappy_t *zappy)
+void density_onland(const arguments_t *args, zappy_t *zappy)
 {
-    srand(time(NULL));
     for (int x = 0; x < args->width; x++) {
         for (int y = 0; y < args->height; y++) {
             initialize_resources(&zappy->resource[x][y]);

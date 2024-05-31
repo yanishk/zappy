@@ -14,7 +14,7 @@
 #include "map.h"
 
 int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
-    const arguments_t arg, int client_fd) = {
+    const arguments_t arg, const unsigned int client_fd) = {
     &exit_func,
     &inventory_command,
     &take_command,
@@ -37,12 +37,12 @@ static int read_client_socket(server_t *server,
     return EXIT_WITH_SUCCESS;
 }
 
-static void answer_client(int status, int client_fd)
+static void answer_client(const int status, const unsigned int client_fd)
 {
     if (status == UNKNOWN_COMMAND || status == EXIT_WITH_ERROR)
-        dprintf(client_fd, "ko\n");
+        dprintf(client_fd, COMMAND_KO);
     else
-        dprintf(client_fd, "ok\n");
+        dprintf(client_fd, COMMAND_OK);
 }
 
 void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg)
@@ -58,11 +58,9 @@ void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg)
             status = cmd_func[i](server, zappy, arg, client_fd);
         }
     }
-    if (status == UNKNOWN_COMMAND)
-        dprintf(client_fd, "ko\n");
     if (server->cmd_arg.len == 1 && !is_player_connected(zappy, client_fd) &&
         status == UNKNOWN_COMMAND)
         status = connect_player(server, zappy, arg, client_fd);
     answer_client(status, client_fd);
-    free(server->cmd_arg.tab);
+    free_array(server->cmd_arg.tab);
 }

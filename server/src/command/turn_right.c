@@ -8,7 +8,8 @@
 #include "server.h"
 #include "map.h"
 
-int turn_right(server_t *, zappy_t *zappy, const arguments_t, int client_fd)
+int turn_right(server_t *, zappy_t *zappy, const arguments_t,
+    const unsigned int client_fd)
 {
     player_t *player = get_player(zappy, client_fd);
 

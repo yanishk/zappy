@@ -74,16 +74,10 @@ void initialize_players(const arguments_t arg, zappy_t *zappy, team_t *team)
 void initialize_teams(const arguments_t arg, zappy_t *zappy)
 {
     team_t *team = TAILQ_FIRST(&arg.team_head);
-    team_t *team_next;
 
     for (int i = 0; i != arg.nb_teams; i++) {
-        for (int j = 0; j != arg.nb_clients; j++) {
+        for (int j = 0; j != arg.nb_clients; j++)
             initialize_players(arg, zappy, team);
-        }
-        if (TAILQ_NEXT(team, team_entries) != NULL) {
-            team_next = TAILQ_NEXT(team, team_entries);
-            free(team);
-            team = team_next;
-        }
+        team = TAILQ_NEXT(team, team_entries);
     }
 }

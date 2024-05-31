@@ -12,9 +12,11 @@
     #define EXIT_WITH_ERROR 84
     #define EXIT_WITH_SUCCESS 0
     #define UNKNOWN_COMMAND 1
-    #define MAX_USER 1024
     #define NB_CMD 6
+    #define MAX_USER 1024
     #define BUFFER_MAX_SIZE 1024
+    #define COMMAND_KO "ko\n"
+    #define COMMAND_OK "ok\n"
 
     #include <sys/select.h>
     #include <arpa/inet.h>
@@ -66,19 +68,22 @@ int run_server(server_t *server, zappy_t *zappy, const arguments_t arg);
 int insert_client_in_struct(server_t *server, const int client_fd);
 void close_client_socket(server_t *);
 void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg);
+void free_program(server_t *server, zappy_t *zappy, arguments_t *arg);
 
 bool is_player_connected(const zappy_t *zappy, const unsigned int client_fd);
 int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
     const unsigned int client_fd);
 
-int exit_func(server_t *, zappy_t *, const arguments_t, int);
-int inventory_command(server_t *, zappy_t *, const arguments_t, int);
-int take_command(server_t *, zappy_t *, const arguments_t, int);
-int move_forward(server_t *, zappy_t *, const arguments_t, int);
-int turn_left(server_t *, zappy_t *, const arguments_t, int);
-int turn_right(server_t *, zappy_t *, const arguments_t, int);
+int exit_func(server_t *, zappy_t *, const arguments_t, const unsigned int);
+int inventory_command(server_t *, zappy_t *, const arguments_t,
+    const unsigned int);
+int take_command(server_t *, zappy_t *, const arguments_t, const unsigned int);
+int move_forward(server_t *, zappy_t *, const arguments_t, const unsigned int);
+int turn_left(server_t *, zappy_t *, const arguments_t, const unsigned int);
+int turn_right(server_t *, zappy_t *, const arguments_t, const unsigned int);
 
 size_t array_size(char **array);
+void free_array(char **array);
 char **word_array(char const *str, char *delim);
 player_t *get_player(zappy_t *zappy, const unsigned int client_fd);
 

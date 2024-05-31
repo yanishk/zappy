@@ -92,7 +92,7 @@ static bool take_thystame(server_t *server, zappy_t *zappy, player_t *player,
 }
 
 int take_command(server_t *server, zappy_t *zappy, const arguments_t,
-    int client_fd)
+    const unsigned int client_fd)
 {
     player_t *player = get_player(zappy, client_fd);
     bool was_taken = false;
