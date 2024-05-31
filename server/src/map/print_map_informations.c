@@ -25,6 +25,7 @@ void print_players(const zappy_t zappy)
 
     TAILQ_FOREACH(player, &zappy.player_head, player_entries) {
         printf("new egg:\n");
+        printf("\tid=%d\n", player->id);
         printf("\tteam_name=%s\n", player->team_name);
         printf("\tpos : height=%ld, width=%ld\n",
             player->height, player->width);

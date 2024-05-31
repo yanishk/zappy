@@ -42,7 +42,7 @@ typedef struct zappy_s {
 void density_onland(arguments_t *args, zappy_t *zappy);
 
 void initialize_map(const arguments_t arg, zappy_t *zappy);
-void initialize_players(const arguments_t arg, zappy_t *zappy);
+void initialize_teams(const arguments_t arg, zappy_t *zappy);
 void initialize_resources(resource_t *resource);
 void print_players(const zappy_t zappy);
 

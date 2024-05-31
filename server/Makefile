@@ -21,7 +21,7 @@ SRC			=	./src/main.c							\
 				./src/close_client_socket.c         	\
 				./src/player_connection.c 				\
 				./src/map/initialize_map.c 				\
-				./src/map/initialize_players.c 			\
+				./src/map/initialize_teams.c 			\
 				./src/map/initialize_resources.c 		\
 				./src/map/print_map_informations.c 		\
 				./src/arguments/init_arg_struct.c 		\
@@ -32,7 +32,6 @@ SRC			=	./src/main.c							\
 				./src/arguments/width_flag.c  			\
 				./src/arguments/height_flag.c  			\
 				./src/command/exit.c					\
-				./src/map/initialization_ressources.c	\
 				./src/lib/array_functions.c 			\
 				./src/lib/word_array.c
 
