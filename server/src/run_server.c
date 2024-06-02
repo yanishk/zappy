@@ -96,12 +96,9 @@ static int check_server_socket(server_t *server)
     return EXIT_WITH_SUCCESS;
 }
 
-static int set_sockets(server_t *server)
+static unsigned int set_max_fd(server_t *server, unsigned int client_fd,
+    unsigned int max_fd_set)
 {
-    static unsigned int max_fd_set = 0;
-    unsigned int client_fd = 0;
-
-    max_fd_set = server->server_fd;
     for (size_t i = 0; i != server->size; i += 1) {
         client_fd = server->fd_array[i];
         if (client_fd != 0)
@@ -109,8 +106,21 @@ static int set_sockets(server_t *server)
         if (client_fd > max_fd_set)
             max_fd_set = client_fd;
     }
+    return max_fd_set;
+}
+
+static int set_sockets(server_t *server)
+{
+    static unsigned int max_fd_set = 0;
+    unsigned int client_fd = 0;
+    struct timeval timeout;
+
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 0;
+    max_fd_set = server->server_fd;
+    max_fd_set = set_max_fd(server, client_fd, max_fd_set);
     if (select(max_fd_set + 1, &server->readfds,
-        NULL, NULL, NULL) == -1) {
+        NULL, NULL, &timeout) == -1) {
         perror("select");
         if (errno != EINTR)
             return EXIT_WITH_ERROR;
