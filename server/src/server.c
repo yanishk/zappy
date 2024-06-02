@@ -11,7 +11,6 @@
 #include <time.h>
 #include "server.h"
 
-
 int server(int ac, const char **av)
 {
     server_t *server;

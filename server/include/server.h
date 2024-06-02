@@ -11,6 +11,7 @@
 
     #define EXIT_WITH_ERROR 84
     #define EXIT_WITH_SUCCESS 0
+    #define INTERRUPT_SYSCALL 4
     #define UNKNOWN_COMMAND 1
     #define NB_CMD 6
     #define MAX_USER 1024

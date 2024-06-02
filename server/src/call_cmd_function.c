@@ -28,8 +28,10 @@ static int read_client_socket(server_t *server,
 {
     char buffer[BUFFER_MAX_SIZE] = {0};
 
-    if (read(client_fd, buffer, BUFFER_MAX_SIZE) == 0)
+    if (read(client_fd, buffer, BUFFER_MAX_SIZE) == 0) {
+        server->clients[server->user_index]->has_been_closed = true;
         return EXIT_WITH_ERROR;
+    }
     server->cmd_arg.tab = word_array(buffer, "\n ");
     server->cmd_arg.len = array_size(server->cmd_arg.tab);
     if (strlen(server->cmd_arg.tab[0]) == 0)

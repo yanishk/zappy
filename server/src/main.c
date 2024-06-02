@@ -11,12 +11,6 @@
 #include <signal.h>
 #include "server.h"
 
-static void exit_program(int signal)
-{
-    if (signal == SIGINT)
-        exit(0);
-}
-
 static void display_help(void)
 {
     dprintf(2, "USAGE: ./zappy_server -p port -x width -y height -n name1");
@@ -37,6 +31,5 @@ int main(int ac, const char **av)
         display_help();
         return EXIT_WITH_ERROR;
     }
-    signal(SIGINT, exit_program);
     return server(ac, av);
 }

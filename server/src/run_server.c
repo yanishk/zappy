@@ -11,8 +11,24 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
+#include <errno.h>
 #include "server.h"
 #include "map.h"
+
+static sig_atomic_t handle_server(const volatile sig_atomic_t new_status)
+{
+    static volatile sig_atomic_t status = 1;
+
+    status = new_status;
+    return status;
+}
+
+static void handle_ctrl_c(int signal)
+{
+    if (signal == SIGINT)
+        handle_server(0);
+}
 
 static int check_clients_sockets(server_t *server, zappy_t *zappy,
     const arguments_t arg)
@@ -96,18 +112,25 @@ static int set_sockets(server_t *server)
     if (select(max_fd_set + 1, &server->readfds,
         NULL, NULL, NULL) == -1) {
         perror("select");
-        return EXIT_WITH_ERROR;
+        if (errno != EINTR)
+            return EXIT_WITH_ERROR;
+        return INTERRUPT_SYSCALL;
     }
     return EXIT_WITH_SUCCESS;
 }
 
 int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
 {
-    while (1) {
+    int select_status = 0;
+
+    signal(SIGINT, handle_ctrl_c);
+    while (handle_server(1)) {
         FD_ZERO(&server->readfds);
         FD_SET(server->server_fd, &server->readfds);
-        if (set_sockets(server) == EXIT_WITH_ERROR ||
-            check_server_socket(server) == EXIT_WITH_ERROR ||
+        select_status = set_sockets(server);
+        if (select_status != EXIT_WITH_SUCCESS)
+            return select_status;
+        if (check_server_socket(server) == EXIT_WITH_ERROR ||
             check_clients_sockets(server, zappy, arg) == EXIT_WITH_ERROR)
             return EXIT_WITH_ERROR;
     }
