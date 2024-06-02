@@ -20,7 +20,8 @@ int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
     &take_command,
     &move_forward,
     &turn_left,
-    &turn_right
+    &turn_right,
+    &set_object
 };
 
 static int read_client_socket(server_t *server,

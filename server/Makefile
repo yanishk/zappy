@@ -35,6 +35,7 @@ SRC			=	./src/main.c							\
 				./src/command/exit.c					\
 				./src/command/inventory.c 				\
 				./src/command/take_command.c 			\
+				./src/command/set_object.c	 			\
 				./src/command/move_forward.c 			\
 				./src/command/turn_left.c 				\
 				./src/command/turn_right.c 				\

@@ -13,7 +13,7 @@
     #define EXIT_WITH_SUCCESS 0
     #define INTERRUPT_SYSCALL 4
     #define UNKNOWN_COMMAND 1
-    #define NB_CMD 6
+    #define NB_CMD 7
     #define MAX_USER 1024
     #define BUFFER_MAX_SIZE 1024
     #define COMMAND_KO "ko\n"
@@ -31,12 +31,8 @@ static char *const cmd_lst[NB_CMD] = {
     "Take",
     "Forward",
     "Left",
-    "Right"
-};
-
-struct object_taken {
-    char *object;
-    size_t amount;
+    "Right",
+    "Set"
 };
 
 typedef struct clients_s {
@@ -79,6 +75,8 @@ int exit_func(server_t *, zappy_t *, const arguments_t, const unsigned int);
 int inventory_command(server_t *, zappy_t *, const arguments_t,
     const unsigned int);
 int take_command(server_t *, zappy_t *, const arguments_t, const unsigned int);
+int set_object(server_t *server, zappy_t *zappy, const arguments_t,
+    const unsigned int client_fd);
 int move_forward(server_t *, zappy_t *, const arguments_t, const unsigned int);
 int turn_left(server_t *, zappy_t *, const arguments_t, const unsigned int);
 int turn_right(server_t *, zappy_t *, const arguments_t, const unsigned int);
