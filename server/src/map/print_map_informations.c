@@ -41,8 +41,8 @@ void print_players(const zappy_t zappy)
         printf("new egg:\n");
         printf("\tid=%d\n", player->id);
         printf("\tteam_name=%s\n", player->team_name);
-        printf("\tpos : width(x)=%d, height(y)=%d\n",
-            player->width, player->height);
+        printf("\tpos : height(x)=%d, width(y)=%d\n",
+            player->height, player->width);
         printf("\tis_egg=%d\n", player->is_egg);
         printf("\tlevel=%ld\n", player->level);
         printf("\tdirection=%ld\n", player->direction);

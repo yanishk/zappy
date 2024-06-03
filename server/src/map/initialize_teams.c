@@ -61,6 +61,7 @@ void initialize_players(const arguments_t arg, zappy_t *zappy, team_t *team)
     player = malloc(sizeof(player_t));
     TAILQ_INSERT_TAIL(&zappy->player_head, player, player_entries);
     initialize_resources(&player->inventory);
+    player->inventory.food = 10;
     player->id = 0;
     player->level = 0;
     player->height = 0;

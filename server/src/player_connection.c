@@ -29,6 +29,8 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
     unsigned int active_players = 0;
     player_t *player;
 
+    if (is_player_connected(zappy, client_fd))
+        return UNKNOWN_COMMAND;
     for ((player) = ((&zappy->player_head)->tqh_first); (player);
         (player) = ((player)->player_entries.tqe_next)) {
         if (strcmp(server->cmd_arg_array[0], player->team_name) == 0 &&

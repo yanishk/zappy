@@ -10,21 +10,13 @@
 
 static void go_north(player_t *player, const arguments_t arg)
 {
-    if (player->width == 0)
-        player->width = arg.width;
+    if (player->height == 0)
+        player->height = arg.height;
     else
-        player->width--;
+        player->height--;
 }
 
 static void go_east(player_t *player, const arguments_t arg)
-{
-    if (player->height == arg.height)
-        player->height = 0;
-    else
-        player->height++;
-}
-
-static void go_south(player_t *player, const arguments_t arg)
 {
     if (player->width == arg.width)
         player->width = 0;
@@ -32,12 +24,20 @@ static void go_south(player_t *player, const arguments_t arg)
         player->width++;
 }
 
+static void go_south(player_t *player, const arguments_t arg)
+{
+    if (player->height == arg.height)
+        player->height = 0;
+    else
+        player->height++;
+}
+
 static void go_west(player_t *player, const arguments_t arg)
 {
-    if (player->height == 0)
-        player->height = arg.height;
+    if (player->width == 0)
+        player->width = arg.width;
     else
-        player->height--;
+        player->width--;
 }
 
 int move_forward(server_t *, zappy_t *zappy,

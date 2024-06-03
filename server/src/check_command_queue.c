@@ -10,14 +10,12 @@
 static void call_commands(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client)
 {
-    time_t end;
     int status = 0;
     command_t *command;
 
     for ((command) = ((&client->command_head)->tqh_first); (command);
         (command) = ((command)->command_entries.tqe_next)) {
-        end = time(NULL);
-        if (difftime(end, command->time_begin) >= command->time_unit) {
+        if (time_is_up(command->time_begin, command->time_unit)) {
             server->cmd_arg_array = command->tab;
             status = command->index == NB_CMD ?
             connect_player(server, zappy, arg, client->client_fd) :

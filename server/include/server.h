@@ -90,5 +90,6 @@ void free_array(char **);
 char **word_array(char const *, char *);
 player_t *get_player(zappy_t *, const unsigned int);
 bool is_command_queue_full(client_t *);
+bool time_is_up(time_t, double);
 
 #endif /* !SERVER_H_ */

@@ -54,21 +54,17 @@ static int insert_game_command_in_queue(server_t *server, client_t *client)
     return UNKNOWN_COMMAND;
 }
 
-static void insert_other_command_in_queue(server_t *server, zappy_t *zappy,
-    client_t *client, const int status)
+static void insert_other_command_in_queue(server_t *server,
+    client_t *client)
 {
     command_t *command;
 
-    if (array_size(server->cmd_arg_array) == 1 &&
-        !is_player_connected(zappy, client->client_fd) &&
-        status == UNKNOWN_COMMAND) {
-        command = malloc(sizeof(command_t));
-        TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);
-        command->tab = server->cmd_arg_array;
-        command->time_unit = 0;
-        command->index = NB_CMD;
-        command->time_begin = time(NULL);
-    }
+    command = malloc(sizeof(command_t));
+    TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);
+    command->tab = server->cmd_arg_array;
+    command->time_unit = 0;
+    command->index = NB_CMD;
+    command->time_begin = time(NULL);
 }
 
 void get_user_input(server_t *server, zappy_t *zappy, client_t *client)
@@ -82,6 +78,8 @@ void get_user_input(server_t *server, zappy_t *zappy, client_t *client)
             free_array(server->cmd_arg_array);
         return;
     }
-    status = insert_game_command_in_queue(server, client);
-    insert_other_command_in_queue(server, zappy, client, status);
+    if (is_player_connected(zappy, client->client_fd))
+        status = insert_game_command_in_queue(server, client);
+    if (status == UNKNOWN_COMMAND)
+        insert_other_command_in_queue(server, client);
 }

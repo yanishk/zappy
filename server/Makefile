@@ -44,7 +44,8 @@ SRC			=	./src/main.c								\
 				./src/lib/array_functions.c 				\
 				./src/lib/word_array.c						\
 				./src/lib/get_player_by_id.c				\
-				./src/lib/is_command_queue_full.c
+				./src/lib/is_command_queue_full.c			\
+				./src/lib/time_is_up.c
 
 OBJ			=	$(SRC:.c=.o)
 
