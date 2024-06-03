@@ -9,9 +9,9 @@
 #include "map.h"
 
 int turn_left(server_t *, zappy_t *zappy, const arguments_t,
-    const unsigned int client_fd)
+    client_t *client)
 {
-    player_t *player = get_player(zappy, client_fd);
+    player_t *player = get_player(zappy, client->client_fd);
 
     if (player == NULL)
         return EXIT_WITH_ERROR;

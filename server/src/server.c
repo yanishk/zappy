@@ -21,7 +21,7 @@ int server(int ac, const char **av)
     srand(time(NULL));
     if (fill_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR)
         return EXIT_WITH_ERROR;
-    server = init_server_struct(arg.port);
+    server = init_server_struct(arg);
     initialize_map(arg, &zappy);
     if (server == NULL)
         return EXIT_WITH_ERROR;

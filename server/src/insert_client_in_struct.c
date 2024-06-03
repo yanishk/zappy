@@ -10,18 +10,27 @@
 #include <stdio.h>
 #include "server.h"
 
-int insert_client_in_struct(server_t *server, const int client_fd)
+client_t *get_client_in_struct(server_t *server, const int client_fd)
 {
     for (size_t i = 0; i != MAX_USER; i += 1) {
         if (server->clients[i]->client_fd == client_fd) {
-            return i;
+            return server->clients[i];
         }
     }
+    return NULL;
+}
+
+client_t *insert_client_in_struct(server_t *server, const int client_fd)
+{
+    client_t *client = get_client_in_struct(server, client_fd);
+
+    if (client != NULL)
+        return client;
     for (size_t i = 0; i != MAX_USER; i += 1) {
         if (server->clients[i]->client_fd == 0) {
             server->clients[i]->client_fd = client_fd;
-            return i;
+            return server->clients[i];
         }
     }
-    return EXIT_WITH_SUCCESS;
+    return NULL;
 }

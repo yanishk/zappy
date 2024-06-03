@@ -14,7 +14,6 @@
 #include <signal.h>
 #include <errno.h>
 #include "server.h"
-#include "map.h"
 
 static sig_atomic_t handle_server(const volatile sig_atomic_t new_status)
 {
@@ -34,14 +33,16 @@ static int check_clients_sockets(server_t *server, zappy_t *zappy,
     const arguments_t arg)
 {
     int client_fd = 0;
+    client_t *client = NULL;
 
     for (size_t i = 0; i != server->size; i += 1) {
         client_fd = server->fd_array[i];
         if (FD_ISSET(client_fd, &server->readfds) != 0) {
-            server->user_index = insert_client_in_struct(server, client_fd);
-            get_user_input(server, zappy, arg);
-            close_client_socket(server);
+            client = insert_client_in_struct(server, client_fd);
+            get_user_input(server, zappy, client);
+            close_client_socket(server, client);
         }
+        check_command_queue(server, zappy, arg, client_fd);
     }
     return EXIT_WITH_SUCCESS;
 }
@@ -96,35 +97,34 @@ static int check_server_socket(server_t *server)
     return EXIT_WITH_SUCCESS;
 }
 
-static unsigned int set_max_fd(server_t *server, unsigned int client_fd,
-    unsigned int max_fd_set)
+static void set_clients_sockets(server_t *server, unsigned int *max_fd_set)
 {
+    unsigned int client_fd = 0;
+
+    *max_fd_set = server->server_fd;
     for (size_t i = 0; i != server->size; i += 1) {
         client_fd = server->fd_array[i];
         if (client_fd != 0)
             FD_SET(client_fd, &server->readfds);
-        if (client_fd > max_fd_set)
-            max_fd_set = client_fd;
+        if (client_fd > *max_fd_set)
+            *max_fd_set = client_fd;
     }
-    return max_fd_set;
 }
 
 static int set_sockets(server_t *server)
 {
     static unsigned int max_fd_set = 0;
-    unsigned int client_fd = 0;
     struct timeval timeout;
 
     timeout.tv_sec = 0;
     timeout.tv_usec = 0;
-    max_fd_set = server->server_fd;
-    max_fd_set = set_max_fd(server, client_fd, max_fd_set);
+    set_clients_sockets(server, &max_fd_set);
     if (select(max_fd_set + 1, &server->readfds,
         NULL, NULL, &timeout) == -1) {
         perror("select");
-        if (errno != EINTR)
-            return EXIT_WITH_ERROR;
-        return INTERRUPT_SYSCALL;
+        if (errno == EINTR)
+            return INTERRUPTED_SYSCALL;
+        return EXIT_WITH_ERROR;
     }
     return EXIT_WITH_SUCCESS;
 }

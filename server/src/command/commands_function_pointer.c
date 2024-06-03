@@ -1,0 +1,29 @@
+/*
+** EPITECH PROJECT, 2024
+** zappy
+** File description:
+** commands_function_pointer
+*/
+
+#include "server.h"
+
+int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
+    const arguments_t arg, client_t *client) = {
+    &exit_func,
+    &inventory_command,
+    &take_command,
+    &set_object,
+    &move_forward,
+    &turn_left,
+    &turn_right
+};
+
+command_infos_t cmd_list[NB_CMD] = {
+    {"Exit", 0},
+    {"Inventory", 1},
+    {"Take", 7},
+    {"Set", 7},
+    {"Forward", 7},
+    {"Left", 7},
+    {"Right", 7}
+};

@@ -8,9 +8,25 @@
 #include <unistd.h>
 #include "server.h"
 
+static void free_client_commands(client_t *client)
+{
+    command_t *command = TAILQ_FIRST(&client->command_head);
+    command_t *command_next;
+
+    while (command != NULL) {
+        if (command->tab != NULL)
+            free(command->tab);
+        command_next = TAILQ_NEXT(command, command_entries);
+        free(command);
+        command = command_next;
+    }
+}
+
 static void free_server(server_t *server)
 {
     close(server->server_fd);
+    for (int i = 0; i != MAX_USER; i += 1)
+        free_client_commands(server->clients[i]);
     for (int i = 0; i != MAX_USER; i += 1)
         free(server->clients[i]);
     free(server->clients);

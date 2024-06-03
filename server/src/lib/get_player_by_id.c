@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** zappy
 ** File description:
-** get_player_byid
+** get_player_by_id
 */
 
 #include "map.h"

@@ -15,7 +15,7 @@ static unsigned int count_active_players(const server_t *server,
     player_t *player;
 
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
-        if (strcmp(server->cmd_arg.tab[0], player->team_name) == 0 &&
+        if (strcmp(server->cmd_arg_array[0], player->team_name) == 0 &&
             !player->is_egg) {
             count_eggs++;
         }
@@ -31,7 +31,7 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
 
     for ((player) = ((&zappy->player_head)->tqh_first); (player);
         (player) = ((player)->player_entries.tqe_next)) {
-        if (strcmp(server->cmd_arg.tab[0], player->team_name) == 0 &&
+        if (strcmp(server->cmd_arg_array[0], player->team_name) == 0 &&
             player->is_egg) {
             player->id = client_fd;
             player->is_egg = false;

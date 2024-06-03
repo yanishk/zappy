@@ -8,16 +8,17 @@
 #include "server.h"
 
 int inventory_command(server_t *, zappy_t *zappy, const arguments_t,
-    const unsigned int client_fd)
+    client_t *client)
 {
-    player_t *player = get_player(zappy, client_fd);
+    player_t *player = get_player(zappy, client->client_fd);
 
     if (player == NULL)
         return EXIT_WITH_ERROR;
-    dprintf(client_fd, "[food %ld, linemate %ld, deraumere %ld, sibur %ld, "
-        "mendiane %ld, phiras %ld, thystame %ld]\n", player->inventory.food,
-        player->inventory.linemate, player->inventory.deraumere,
-        player->inventory.sibur, player->inventory.mendiane,
-        player->inventory.phiras, player->inventory.thystame);
+    dprintf(client->client_fd, "[food %ld, linemate %ld, deraumere %ld, "
+        "sibur %ld, " "mendiane %ld, phiras %ld, thystame %ld]\n",
+        player->inventory.food, player->inventory.linemate,
+        player->inventory.deraumere, player->inventory.sibur,
+        player->inventory.mendiane, player->inventory.phiras,
+        player->inventory.thystame);
     return EXIT_WITH_SUCCESS;
 }
