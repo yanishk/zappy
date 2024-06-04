@@ -5,13 +5,28 @@
 ** Main
 */
 
-#include "Ai.hpp"
+#include <string.h>
+#include "TeamAi.hpp"
 
-int main(int ac, __attribute__((__unused__)) char **av)
+int main(int ac, char **av)
 {
-    if (ac != MIN_ARGS) {
-        Ai::displayHelp();
+    if (ac < MIN_ARGS) {
+        std::cerr << "USAGE: ./zappy_ai -p port -n name -h machine\n";
+        std::cerr << "\t\tport\t\tis the port number\n";
+        std::cerr << "\t\tname\t\tis the name of the team\n";
+        std::cerr << "\t\tmachine\t\tis the name of the machine; localhost by default\n";
         return EXIT_WITH_ERROR;
     }
-    return EXIT_WITH_SUCCESS;
+    std::string port;
+    std::string teamName;
+    for (std::size_t i = 0; av[i] != NULL; ++i) {
+        if (!strcmp(av[i], PORT_FLAG) && av[i + 1] != NULL) {
+            port = std::string(av[i + 1]);
+        }
+        if (!strcmp(av[i], NAME_FLAG) && av[i + 1] != NULL) {
+            teamName = std::string(av[i + 1]);
+        }
+    }
+    Zappy::TeamAi team(Network::Network(port), teamName);
+    return team.run();
 }
