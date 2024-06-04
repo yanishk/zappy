@@ -15,6 +15,7 @@
 
     #include <iostream>
     #include <vector>
+    #include <memory>
 
     #include "Ressources.hpp"
     #include "Network.hpp"
@@ -36,7 +37,7 @@ namespace Zappy
             Network::Network _network;
             std::string _teamName;
             Ressources _ressources;
-            std::vector<IAi> _team;
+            std::vector<std::unique_ptr<IAi>> _team;
 
     };
 
