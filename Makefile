@@ -19,6 +19,12 @@ all:
 	mv ./gui/zappy_gui .
 	mv ./server/zappy_server .
 
+tests_run:
+	make tests_run -C ai
+
+coverage:
+	make coverage -C ai
+
 clean:
 	make clean -C ai
 	make clean -C gui
