@@ -21,6 +21,7 @@
 
 namespace Zappy
 {
+
     enum RessourceType {
         Food,
         Linemate,
@@ -32,9 +33,11 @@ namespace Zappy
     };
 
     class Ressources {
+
         public:
 
             void addRessources(const std::string &ressource, int value);
+            void removeRessources(const std::string &ressource, int value);
 
             void operator+=(const Ressources &other) {
 
@@ -48,21 +51,23 @@ namespace Zappy
 
                 }
 
-            }
+            };
 
         private:
+
             std::unordered_map<std::string, int> _ressources {
-                                                            { FOOD, 0 },
-                                                            { LINEMATE, 0 },
-                                                            { DERAUMERE, 0 },
-                                                            { SIBUR, 0 },
-                                                            { MENDIANE, 0 },
-                                                            { PHIRAS, 0 },
-                                                            { THYSTAME, 0 }
+                                            { FOOD,         0 },
+                                            { LINEMATE,     0 },
+                                            { DERAUMERE,    0 },
+                                            { SIBUR,        0 },
+                                            { MENDIANE,     0 },
+                                            { PHIRAS,       0 },
+                                            { THYSTAME,     0 }
             };
+
     };
 
-}
+};
 
 
 #endif /* !RESSOURCES_HPP_ */

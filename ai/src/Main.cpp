@@ -6,6 +6,7 @@
 */
 
 #include <string.h>
+
 #include "TeamAi.hpp"
 
 int main(int ac, char **av)
@@ -17,8 +18,10 @@ int main(int ac, char **av)
         std::cerr << "\t\tmachine\t\tis the name of the machine; localhost by default\n";
         return EXIT_WITH_ERROR;
     }
+
     std::string port;
     std::string teamName;
+
     for (std::size_t i = 0; av[i] != NULL; ++i) {
         if (!strcmp(av[i], PORT_FLAG) && av[i + 1] != NULL) {
             port = std::string(av[i + 1]);
@@ -27,6 +30,7 @@ int main(int ac, char **av)
             teamName = std::string(av[i + 1]);
         }
     }
+
     Zappy::TeamAi team(Network::Network(port), teamName);
     return team.run();
 }

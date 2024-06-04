@@ -15,25 +15,32 @@
 
     #include <iostream>
     #include <vector>
+
     #include "Ressources.hpp"
     #include "Network.hpp"
     #include "IAi.hpp"
 
 namespace Zappy
 {
+
     class TeamAi {
+
         public:
-            TeamAi(const Network::Network &network, const std::string &teamName): _network(network), _teamName(teamName) {}
+
+            TeamAi(const Network::Network &network, const std::string &teamName): _network(network), _teamName(teamName) {};
 
             int run();
+
         private:
+
             Network::Network _network;
             std::string _teamName;
             Ressources _ressources;
             std::vector<IAi> _team;
+
     };
 
-}
+};
 
 
 #endif /* !TEAM_AI_HPP_ */
