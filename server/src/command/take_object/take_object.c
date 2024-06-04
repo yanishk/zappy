@@ -9,13 +9,13 @@
 #include "command.h"
 
 function_array_t array_take[] = {
-    { "food", &take_food },
-    { "linemate", &take_linemate },
-    { "deraumere", &take_deraumere },
-    { "sibur", &take_sibur },
-    { "mendiane", &take_mendiane },
-    { "phiras", &take_phiras },
-    { "thystame", &take_thystame }
+    { FOOD, &take_food },
+    { LINEMATE, &take_linemate },
+    { DERAUMERE, &take_deraumere },
+    { DERAUMERE, &take_sibur },
+    { MENDIANE, &take_mendiane },
+    { PHIRAS, &take_phiras },
+    { THYSTAME, &take_thystame }
 };
 
 int take_command(server_t *server, zappy_t *zappy, const arguments_t,

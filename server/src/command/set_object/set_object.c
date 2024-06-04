@@ -9,13 +9,13 @@
 #include "command.h"
 
 function_array_t array_set[] = {
-    { "food", &set_food },
-    { "linemate", &set_linemate },
-    { "deraumere", &set_deraumere },
-    { "sibur", &set_sibur },
-    { "mendiane", &set_mendiane },
-    { "phiras", &set_phiras },
-    { "thystame", &set_thystame }
+    { FOOD, &set_food },
+    { LINEMATE, &set_linemate },
+    { DERAUMERE, &set_deraumere },
+    { SIBUR, &set_sibur },
+    { MENDIANE, &set_mendiane },
+    { PHIRAS, &set_phiras },
+    { THYSTAME, &set_thystame }
 };
 
 int set_object(server_t *server, zappy_t *zappy, const arguments_t,

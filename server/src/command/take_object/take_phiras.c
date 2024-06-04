@@ -10,7 +10,7 @@
 bool take_phiras(server_t *server, zappy_t *zappy, player_t *player,
     bool was_taken)
 {
-    if (strcmp("phiras", server->cmd_arg_array[1]) == 0
+    if (strcmp(PHIRAS, server->cmd_arg_array[1]) == 0
     && zappy->resource[player->height][player->width].phiras > 0) {
         zappy->resource[player->height][player->width].phiras -= 1;
         player->inventory.phiras += 1;

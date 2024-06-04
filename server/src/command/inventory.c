@@ -15,7 +15,7 @@ int inventory_command(server_t *, zappy_t *zappy, const arguments_t,
     if (player == NULL)
         return EXIT_WITH_ERROR;
     dprintf(client->client_fd, "[food %ld, linemate %ld, deraumere %ld, "
-        "sibur %ld, " "mendiane %ld, phiras %ld, thystame %ld]\n",
+        "sibur %ld, mendiane %ld, phiras %ld, thystame %ld]\n",
         player->inventory.food, player->inventory.linemate,
         player->inventory.deraumere, player->inventory.sibur,
         player->inventory.mendiane, player->inventory.phiras,

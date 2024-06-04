@@ -10,7 +10,7 @@
 bool take_sibur(server_t *server, zappy_t *zappy, player_t *player,
     bool was_taken)
 {
-    if (strcmp("sibur", server->cmd_arg_array[1]) == 0
+    if (strcmp(DERAUMERE, server->cmd_arg_array[1]) == 0
     && zappy->resource[player->height][player->width].sibur > 0) {
         zappy->resource[player->height][player->width].sibur -= 1;
         player->inventory.sibur += 1;

@@ -11,7 +11,7 @@
 
 static void repartition_food(const arguments_t *args, zappy_t *zappy)
 {
-    size_t max_food = round(args->width * args->height * 0.5);
+    size_t max_food = round(args->width * args->height * FOOD_DEN);
     size_t index = 0;
     int rand_width = 0;
     int rand_height = 0;
@@ -28,7 +28,7 @@ static void repartition_food(const arguments_t *args, zappy_t *zappy)
 
 static void repartition_linemate(const arguments_t *args, zappy_t *zappy)
 {
-    size_t max_linemate = round(args->width * args->height * 0.3);
+    size_t max_linemate = round(args->width * args->height * LINEMATE_DEN);
     size_t index = 0;
     int rand_width = 0;
     int rand_height = 0;
@@ -45,7 +45,7 @@ static void repartition_linemate(const arguments_t *args, zappy_t *zappy)
 
 static void repartition_deraumere(const arguments_t *args, zappy_t *zappy)
 {
-    size_t max_deraumere = round(args->width * args->height * 0.15);
+    size_t max_deraumere = round(args->width * args->height * DERAUMERE_DEN);
     size_t index = 0;
     int rand_width = 0;
     int rand_height = 0;
@@ -62,7 +62,7 @@ static void repartition_deraumere(const arguments_t *args, zappy_t *zappy)
 
 static void repartition_sibur(const arguments_t *args, zappy_t *zappy)
 {
-    size_t max_sibur = round(args->width * args->height * 0.1);
+    size_t max_sibur = round(args->width * args->height * SIBUR_DEN);
     size_t index = 0;
     int rand_width = 0;
     int rand_height = 0;
@@ -79,7 +79,7 @@ static void repartition_sibur(const arguments_t *args, zappy_t *zappy)
 
 static void repartition_mendiane(const arguments_t *args, zappy_t *zappy)
 {
-    size_t max_mendiane = round(args->width * args->height * 0.1);
+    size_t max_mendiane = round(args->width * args->height * MENDIANE_DEN);
     size_t index = 0;
     int rand_width = 0;
     int rand_height = 0;
@@ -96,7 +96,7 @@ static void repartition_mendiane(const arguments_t *args, zappy_t *zappy)
 
 static void repartition_phiras(const arguments_t *args, zappy_t *zappy)
 {
-    size_t max_phiras = round(args->width * args->height * 0.08);
+    size_t max_phiras = round(args->width * args->height * PHIRAS_DEN);
     size_t index = 0;
     int rand_width = 0;
     int rand_height = 0;
@@ -113,7 +113,7 @@ static void repartition_phiras(const arguments_t *args, zappy_t *zappy)
 
 static void repartition_thystame(const arguments_t *args, zappy_t *zappy)
 {
-    size_t max_thystame = round(args->width * args->height * 0.05);
+    size_t max_thystame = round(args->width * args->height * THYSTAME_DEN);
     size_t index = 0;
     int rand_width = 0;
     int rand_height = 0;
