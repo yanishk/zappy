@@ -53,6 +53,10 @@ namespace Zappy
 
             };
 
+            int getRessource(const std::string &ressource) {
+                return _ressources[ressource];
+            };
+
         private:
 
             std::unordered_map<std::string, int> _ressources {
