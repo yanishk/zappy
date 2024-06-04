@@ -15,6 +15,7 @@ SRC			=	./src/Main.cpp			\
 				./src/Network.cpp		\
 				./src/TeamAi.cpp		\
 				./src/Ressources.cpp	\
+				./src/AIFactory.cpp		\
 
 OBJ			=	$(SRC:.cpp=.o)
 
