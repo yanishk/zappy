@@ -60,10 +60,10 @@ void answer_client(const int, const unsigned int);
 void free_client_commands(client_t *);
 void free_program(server_t *, zappy_t *, arguments_t *);
 
-size_t array_size(char **array);
-void free_array(char **array);
-char **word_array(char const *str, char *delim);
-player_t *get_player(zappy_t *zappy, const unsigned int client_fd);
+size_t array_size(char **);
+void free_array(char **);
+char **word_array(char const *, char *);
+player_t *get_player(zappy_t *, const unsigned int);
 bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
 

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** main
+** init_arg_struct
 */
 
 #include <string.h>

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** call_cmd_function
+** get_user_input
 */
 
 #include <stddef.h>

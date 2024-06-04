@@ -19,14 +19,14 @@ typedef struct command_s {
     char **tab;
     double time_unit;
     size_t index;
-    time_t time_begin;
+    clock_t clock_begin;
     TAILQ_ENTRY(command_s) command_entries;
 } command_t;
 
 typedef struct function_array {
     char *ressource;
     bool (*func)(server_t *server, zappy_t *zappy, player_t *player,
-        bool was_set);
+        bool);
 } function_array_t;
 
 extern int (*cmd_func[NB_CMD])(server_t *, zappy_t *, const arguments_t,
@@ -44,35 +44,21 @@ int connect_player(server_t *, zappy_t *, const arguments_t,
     const unsigned int);
 
 int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
-bool set_thystame(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_set);
-bool set_sibur(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_set);
-bool set_phiras(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_set);
-bool set_mendiane(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_set);
-bool set_linemate(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_set);
-bool set_food(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_set);
-bool set_deraumere(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_set);
+bool set_thystame(server_t *, zappy_t *, player_t *, bool);
+bool set_sibur(server_t *, zappy_t *, player_t *, bool);
+bool set_phiras(server_t *, zappy_t *, player_t *, bool);
+bool set_mendiane(server_t *, zappy_t *, player_t *, bool);
+bool set_linemate(server_t *, zappy_t *, player_t *, bool);
+bool set_food(server_t *, zappy_t *, player_t *, bool);
+bool set_deraumere(server_t *, zappy_t *, player_t *, bool);
 
 int take_command(server_t *, zappy_t *, const arguments_t, client_t *);
-bool take_thystame(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_taken);
-bool take_sibur(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_taken);
-bool take_phiras(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_taken);
-bool take_mendiane(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_taken);
-bool take_linemate(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_taken);
-bool take_food(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_taken);
-bool take_deraumere(server_t *server, zappy_t *zappy, player_t *player,
-    bool was_taken);
+bool take_thystame(server_t *, zappy_t *, player_t *, bool);
+bool take_sibur(server_t *, zappy_t *, player_t *, bool);
+bool take_phiras(server_t *, zappy_t *, player_t *, bool);
+bool take_mendiane(server_t *, zappy_t *, player_t *, bool);
+bool take_linemate(server_t *, zappy_t *, player_t *, bool);
+bool take_food(server_t *, zappy_t *, player_t *, bool);
+bool take_deraumere(server_t *, zappy_t *, player_t *, bool);
 
 #endif /* !COMMAND_H_ */
