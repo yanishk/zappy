@@ -25,13 +25,16 @@ typedef struct command_s {
 
 typedef struct function_array {
     char *ressource;
-    bool (*func)(server_t *server, zappy_t *zappy, player_t *player,
-        bool);
+    bool (*func)(server_t *, zappy_t *, player_t *, bool);
 } function_array_t;
 
 extern int (*cmd_func[NB_CMD])(server_t *, zappy_t *, const arguments_t,
     client_t *);
 extern command_infos_t cmd_list[NB_CMD];
+
+bool is_player_connected(const zappy_t *, const unsigned int);
+int connect_player(server_t *, zappy_t *, const arguments_t,
+    const unsigned int);
 
 int exit_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int inventory_command(server_t *, zappy_t *, const arguments_t, client_t *);
@@ -39,9 +42,6 @@ int move_forward(server_t *, zappy_t *, const arguments_t, client_t *);
 int turn_left(server_t *, zappy_t *, const arguments_t, client_t *);
 int turn_right(server_t *, zappy_t *, const arguments_t, client_t *);
 int connect_nbr(server_t *, zappy_t *, const arguments_t, client_t *);
-bool is_player_connected(const zappy_t *, const unsigned int);
-int connect_player(server_t *, zappy_t *, const arguments_t,
-    const unsigned int);
 
 int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
 bool set_thystame(server_t *, zappy_t *, player_t *, bool);

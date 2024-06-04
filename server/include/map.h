@@ -33,10 +33,10 @@ typedef struct resource_s {
 typedef struct player_s {
     int width;
     int height;
-    bool is_egg;
-    char *team_name;
-    unsigned int id;
     int level;
+    unsigned int id;
+    char *team_name;
+    bool is_egg;
     size_t direction;
     clock_t clock_begin;
     resource_t inventory;

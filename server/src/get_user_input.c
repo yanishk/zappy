@@ -24,7 +24,7 @@ static int read_client_socket(server_t *server, client_t *client)
     }
     server->cmd_arg_array = word_array(buffer, "\n ");
     if (strlen(server->cmd_arg_array[0]) == 0)
-        return EXIT_WITH_ERROR;
+        return UNKNOWN_COMMAND;
     return EXIT_WITH_SUCCESS;
 }
 
@@ -72,8 +72,7 @@ void get_user_input(server_t *server, zappy_t *zappy, client_t *client)
 {
     int status = UNKNOWN_COMMAND;
 
-    print_players_pos_and_direction(*zappy);
-    if (read_client_socket(server, client) == EXIT_WITH_ERROR)
+    if (read_client_socket(server, client) != EXIT_WITH_SUCCESS)
         return;
     if (is_command_queue_full(client)) {
         if (server->cmd_arg_array != NULL)

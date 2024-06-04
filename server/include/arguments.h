@@ -49,7 +49,7 @@ int height_flag(const char **, int, bool *, arguments_t *);
 int nb_clients_flag(const char **, int, bool *, arguments_t *);
 int frequency_flag(const char **, int, bool *, arguments_t *);
 
-int fill_arg_struct(int ac, const char **av, arguments_t *arguments);
-void print_arg_struct(const arguments_t arguments);
+int fill_arg_struct(int, const char **, arguments_t *);
+void print_arg_struct(const arguments_t);
 
 #endif
