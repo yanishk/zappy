@@ -7,6 +7,7 @@
 
 #include <asio.hpp>
 #include <iostream>
+
 #include "Network.hpp"
 
 void Network::Network::sendInformationToServer(const std::string &information)

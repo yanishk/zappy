@@ -14,18 +14,18 @@
     #include "Network.hpp"
     #include "Ressources.hpp"
 
-namespace Zappy
-{
+namespace Zappy {
 
     class IAi {
 
         public:
-            IAi() {}
+
+            IAi() {};
 
             virtual std::vector<std::string> look() const;
 
     };
 
-}
+};
 
 #endif /* !IAI_HPP_ */
