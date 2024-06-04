@@ -11,9 +11,10 @@
     #include <string>
     #include <unordered_map>
     #include <memory>
-    #include "IAi.hpp"
 
-    #define CREATE_COMPONENT(AI) [](const std::string name){ return std::make_unique<AI>(name); }
+    #include "AAi.hpp"
+
+    #define CREATE_COMPONENT(AI) [](const std::string &name){ return std::make_unique<AI>(name); }
 
 namespace Zappy
 {

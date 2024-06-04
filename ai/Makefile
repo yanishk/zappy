@@ -16,7 +16,6 @@ SRC			=	./src/Main.cpp					\
 				./src/Network.cpp				\
 				./src/TeamAi.cpp				\
 				./src/Ressources.cpp			\
-				./src/AIFactory.cpp				\
 
 SRC_TEST	=	./src/Ressources.cpp			\
 				./tests/TestsRessources.cpp		\

@@ -9,7 +9,7 @@
 
 Zappy::AIFactory::AIFactory()
 {
-    _table.emplace("default", IAi());
+    _table.emplace("default", AAi());
 }
 
 std::unique_ptr<Zappy::IAi> Zappy::AIFactory::createComponent(const std::string &value)
