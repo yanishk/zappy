@@ -7,12 +7,14 @@
 
 #include <time.h>
 #include <stdbool.h>
+#include "server.h"
 
-bool time_is_up(time_t begin, double time_unit)
+bool time_is_up(clock_t begin, double time_unit)
 {
-    time_t end = time(NULL);
+    clock_t end = clock();
+    double time_elapsed_in_ms = ((end - begin) * TO_MILLI) / CLOCKS_PER_SEC;
 
-    if (difftime(end, begin) >= time_unit)
+    if (time_elapsed_in_ms >= time_unit)
         return true;
     return false;
 }

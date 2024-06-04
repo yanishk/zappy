@@ -16,6 +16,7 @@
     #define MAX_USER 1024
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
+    #define TO_MILLI 1000
     #define COMMAND_KO "ko\n"
     #define COMMAND_OK "ok\n"
     #define NB_RESSOURCES 7
@@ -51,10 +52,12 @@ int initialize_server(server_t *);
 int run_server(server_t *, zappy_t *, const arguments_t);
 client_t *get_client_in_struct(server_t *, const int);
 client_t *insert_client_in_struct(server_t *, const int);
-void check_command_queue(server_t *, zappy_t *, const arguments_t, const int);
-void close_client_socket(server_t *, client_t *);
+void check_command_queue(server_t *, zappy_t *, const arguments_t, client_t *);
+void close_client_socket(server_t *, zappy_t *, client_t *);
 void get_user_input(server_t *, zappy_t *, client_t *);
+void check_players_food(server_t *, zappy_t *, const arguments_t);
 void answer_client(const int, const unsigned int);
+void free_client_commands(client_t *);
 void free_program(server_t *, zappy_t *, arguments_t *);
 
 size_t array_size(char **array);
@@ -62,6 +65,6 @@ void free_array(char **array);
 char **word_array(char const *str, char *delim);
 player_t *get_player(zappy_t *zappy, const unsigned int client_fd);
 bool is_command_queue_full(client_t *);
-bool time_is_up(time_t, double);
+bool time_is_up(clock_t, double);
 
 #endif /* !SERVER_H_ */

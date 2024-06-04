@@ -73,8 +73,10 @@ static void init_client_struct(server_t *server)
 
 static void set_commands_time_unit(int frequency)
 {
-    for (size_t i = 0; i < NB_CMD; i++)
+    for (size_t i = 0; i < NB_CMD; i++) {
         cmd_list[i].time_unit /= frequency;
+        cmd_list[i].time_unit *= TO_MILLI;
+    }
 }
 
 server_t *init_server_struct(const arguments_t arg)

@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** all_teams
+** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
 ** call_cmd_function
 */
@@ -38,6 +38,7 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
             player->is_egg) {
             player->id = client_fd;
             player->is_egg = false;
+            player->clock_begin = clock();
             active_players = count_active_players(server, zappy);
             dprintf(client_fd, "%d %d\n%d\n", arg.height, arg.width,
                 arg.nb_clients - active_players);

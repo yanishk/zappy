@@ -9,11 +9,14 @@
 #include "server.h"
 #include "command.h"
 
-static void free_client_commands(client_t *client)
+void free_client_commands(client_t *client)
 {
-    command_t *command = TAILQ_FIRST(&client->command_head);
+    command_t *command;
     command_t *command_next;
 
+    if (TAILQ_EMPTY(&client->command_head))
+        return;
+    command = TAILQ_FIRST(&client->command_head);
     while (command != NULL) {
         if (command->tab != NULL)
             free(command->tab);

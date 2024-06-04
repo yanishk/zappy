@@ -33,16 +33,20 @@ static int check_clients_sockets(server_t *server, zappy_t *zappy,
     const arguments_t arg)
 {
     int client_fd = 0;
-    client_t *client = NULL;
+    client_t *client;
 
     for (size_t i = 0; i != server->size; i += 1) {
         client_fd = server->fd_array[i];
         if (FD_ISSET(client_fd, &server->readfds) != 0) {
             client = insert_client_in_struct(server, client_fd);
             get_user_input(server, zappy, client);
-            close_client_socket(server, client);
-        }
-        check_command_queue(server, zappy, arg, client_fd);
+        } else
+            client = get_client_in_struct(server, client_fd);
+        check_players_food(server, zappy, arg);
+        if (client == NULL)
+            continue;
+        check_command_queue(server, zappy, arg, client);
+        close_client_socket(server, zappy, client);
     }
     return EXIT_WITH_SUCCESS;
 }

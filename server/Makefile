@@ -21,6 +21,7 @@ SRC			=	./src/main.c								\
 				./src/check_command_queue.c 				\
 				./src/close_client_socket.c         		\
 				./src/player_connection.c 					\
+				./src/check_players_food.c 					\
 				./src/free_program.c 						\
 				./src/map/initialize_map.c 					\
 				./src/map/initialize_teams.c 				\

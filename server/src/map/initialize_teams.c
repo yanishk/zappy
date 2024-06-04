@@ -34,27 +34,23 @@ static void check_existing_eggs_pos(const arguments_t arg, zappy_t *zappy,
     } while (has_already_an_egg(zappy, player->height, player->width));
 }
 
-static void initialize_players_pos(const arguments_t arg, zappy_t *zappy)
+static void initialize_player_pos(const arguments_t arg, zappy_t *zappy,
+    player_t *player)
 {
-    player_t *player;
-
-    for ((player) = ((&zappy->player_head)->tqh_first); (player);
-        (player) = ((player)->player_entries.tqe_next)) {
-        if (arg.nb_teams * arg.nb_clients <= arg.height * arg.width) {
-            check_existing_eggs_pos(arg, zappy, player);
-        } else {
-            player->height = rand() % arg.height;
-            player->width = rand() % arg.width;
-        }
+    if (arg.nb_teams * arg.nb_clients <= arg.height * arg.width) {
+        check_existing_eggs_pos(arg, zappy, player);
+    } else {
+        player->height = rand() % arg.height;
+        player->width = rand() % arg.width;
     }
 }
 
-size_t initialize_player_direction(void)
+static size_t initialize_player_direction(void)
 {
     return RIGHT_ANGLE * (rand() % 4);
 }
 
-void initialize_players(const arguments_t arg, zappy_t *zappy, team_t *team)
+void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name)
 {
     player_t *player;
 
@@ -67,9 +63,9 @@ void initialize_players(const arguments_t arg, zappy_t *zappy, team_t *team)
     player->height = 0;
     player->width = 0;
     player->is_egg = true;
-    player->team_name = strdup(team->team_name);
+    player->team_name = strdup(team_name);
     player->direction = initialize_player_direction();
-    initialize_players_pos(arg, zappy);
+    initialize_player_pos(arg, zappy, player);
 }
 
 void initialize_teams(const arguments_t arg, zappy_t *zappy)
@@ -78,7 +74,7 @@ void initialize_teams(const arguments_t arg, zappy_t *zappy)
 
     for (int i = 0; i != arg.nb_teams; i++) {
         for (int j = 0; j != arg.nb_clients; j++)
-            initialize_players(arg, zappy, team);
+            initialize_player(arg, zappy, team->team_name);
         team = TAILQ_NEXT(team, team_entries);
     }
 }

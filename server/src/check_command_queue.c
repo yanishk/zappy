@@ -8,15 +8,17 @@
 #include "server.h"
 #include "command.h"
 
-static void call_commands(server_t *server, zappy_t *zappy,
+void check_command_queue(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client)
 {
     int status = 0;
     command_t *command;
 
+    if (TAILQ_EMPTY(&client->command_head))
+        return;
     for ((command) = ((&client->command_head)->tqh_first); (command);
         (command) = ((command)->command_entries.tqe_next)) {
-        if (time_is_up(command->time_begin, command->time_unit)) {
+        if (time_is_up(command->clock_begin, command->time_unit)) {
             server->cmd_arg_array = command->tab;
             status = command->index == NB_CMD ?
             connect_player(server, zappy, arg, client->client_fd) :
@@ -26,16 +28,4 @@ static void call_commands(server_t *server, zappy_t *zappy,
             TAILQ_REMOVE(&client->command_head, command, command_entries);
         }
     }
-}
-
-void check_command_queue(server_t *server, zappy_t *zappy,
-    const arguments_t arg, const int client_fd)
-{
-    client_t *client = get_client_in_struct(server, client_fd);
-
-    if (client == NULL)
-        return;
-    if (TAILQ_EMPTY(&client->command_head))
-        return;
-    call_commands(server, zappy, arg, client);
 }

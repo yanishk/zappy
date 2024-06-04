@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** all_teams
+** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
 ** call_cmd_function
 */
@@ -48,7 +48,7 @@ static int insert_game_command_in_queue(server_t *server, client_t *client)
             command->tab = server->cmd_arg_array;
             command->time_unit = cmd_list[i].time_unit;
             command->index = i;
-            command->time_begin = time(NULL);
+            command->clock_begin = clock();
             return EXIT_WITH_SUCCESS;
         }
     }
@@ -65,13 +65,14 @@ static void insert_other_command_in_queue(server_t *server,
     command->tab = server->cmd_arg_array;
     command->time_unit = 0;
     command->index = NB_CMD;
-    command->time_begin = time(NULL);
+    command->clock_begin = clock();
 }
 
 void get_user_input(server_t *server, zappy_t *zappy, client_t *client)
 {
     int status = UNKNOWN_COMMAND;
 
+    print_players_pos_and_direction(*zappy);
     if (read_client_socket(server, client) == EXIT_WITH_ERROR)
         return;
     if (is_command_queue_full(client)) {

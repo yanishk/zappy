@@ -19,5 +19,4 @@ void initialize_map(const arguments_t arg, zappy_t *zappy)
 {
     init_basis_map(zappy, &arg);
     initialize_teams(arg, zappy);
-    print_players(*zappy);
 }
