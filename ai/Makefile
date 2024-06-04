@@ -8,10 +8,13 @@
 CXX			=	g++
 RM			=	rm -f
 
-CXXFLAGS	=	-Wall -Wextra -Werror
+CXXFLAGS	=	-Wall -Wextra -Werror -lasio
 CPPFLAGS	=	-iquote ./include
 
-SRC			=	./src/Main.cpp		\
+SRC			=	./src/Main.cpp			\
+				./src/Network.cpp		\
+				./src/TeamAi.cpp		\
+				./src/Ressources.cpp	\
 
 OBJ			=	$(SRC:.cpp=.o)
 
