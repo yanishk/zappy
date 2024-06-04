@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+#include "command.h"
 
 static void call_commands(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client)

@@ -35,12 +35,27 @@ SRC			=	./src/main.c								\
 				./src/arguments/height_flag.c  				\
 				./src/command/exit.c						\
 				./src/command/inventory.c 					\
-				./src/command/take_command.c 				\
-				./src/command/set_object.c	 				\
+				./src/command/take_command/take_command.c	\
+				./src/command/take_command/take_food.c		\
+				./src/command/take_command/take_linemate.c	\
+				./src/command/take_command/take_mendiane.c	\
+				./src/command/take_command/take_phiras.c	\
+				./src/command/take_command/take_sibur.c		\
+				./src/command/take_command/take_thystames.c	\
+				./src/command/take_command/take_deraumere.c	\
+				./src/command/set_object/set_object.c 		\
+				./src/command/set_object/set_food.c			\
+				./src/command/set_object/set_linemate.c		\
+				./src/command/set_object/set_mendiane.c		\
+				./src/command/set_object/set_phiras.c		\
+				./src/command/set_object/set_sibur.c		\
+				./src/command/set_object/set_thystame.c		\
+				./src/command/set_object/set_deraumere.c	\
 				./src/command/move_forward.c 				\
 				./src/command/turn_left.c 					\
 				./src/command/turn_right.c 					\
 				./src/command/commands_function_pointer.c	\
+				./src/command/connect_nbr.c 				\
 				./src/lib/array_functions.c 				\
 				./src/lib/word_array.c						\
 				./src/lib/get_player_by_id.c				\

@@ -44,7 +44,7 @@ void print_players(const zappy_t zappy)
         printf("\tpos : height(x)=%d, width(y)=%d\n",
             player->height, player->width);
         printf("\tis_egg=%d\n", player->is_egg);
-        printf("\tlevel=%ld\n", player->level);
+        printf("\tlevel=%d\n", player->level);
         printf("\tdirection=%ld\n", player->direction);
         print_resources(player->inventory);
         printf("\n");

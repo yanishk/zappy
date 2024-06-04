@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include "server.h"
+#include "command.h"
 
 static void free_client_commands(client_t *client)
 {

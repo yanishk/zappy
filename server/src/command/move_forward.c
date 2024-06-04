@@ -11,14 +11,14 @@
 static void go_north(player_t *player, const arguments_t arg)
 {
     if (player->height == 0)
-        player->height = arg.height;
+        player->height = arg.height - 1;
     else
         player->height--;
 }
 
 static void go_east(player_t *player, const arguments_t arg)
 {
-    if (player->width == arg.width)
+    if (player->width == arg.width - 1)
         player->width = 0;
     else
         player->width++;
@@ -26,7 +26,7 @@ static void go_east(player_t *player, const arguments_t arg)
 
 static void go_south(player_t *player, const arguments_t arg)
 {
-    if (player->height == arg.height)
+    if (player->height == arg.height - 1)
         player->height = 0;
     else
         player->height++;
@@ -35,7 +35,7 @@ static void go_south(player_t *player, const arguments_t arg)
 static void go_west(player_t *player, const arguments_t arg)
 {
     if (player->width == 0)
-        player->width = arg.width;
+        player->width = arg.width - 1;
     else
         player->width--;
 }

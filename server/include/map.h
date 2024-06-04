@@ -35,7 +35,7 @@ typedef struct player_s {
     bool is_egg;
     char *team_name;
     unsigned int id;
-    size_t level;
+    int level;
     size_t direction;
     resource_t inventory;
     TAILQ_ENTRY(player_s) player_entries;

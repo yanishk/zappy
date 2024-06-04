@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "server.h"
+#include "command.h"
 
 static int check_socket_creation(server_t *server)
 {

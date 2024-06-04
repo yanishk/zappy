@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+#include "command.h"
 
 static unsigned int command_queue_size(client_t *client)
 {

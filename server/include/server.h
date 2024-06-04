@@ -12,12 +12,13 @@
     #define EXIT_WITH_SUCCESS 0
     #define INTERRUPTED_SYSCALL 4
     #define UNKNOWN_COMMAND 1
-    #define NB_CMD 7
+    #define NB_CMD 8
     #define MAX_USER 1024
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
     #define COMMAND_KO "ko\n"
     #define COMMAND_OK "ok\n"
+    #define NB_RESSOURCES 7
 
     #include <sys/select.h>
     #include <arpa/inet.h>
@@ -25,19 +26,6 @@
     #include <string.h>
     #include <time.h>
     #include "map.h"
-
-typedef struct command_infos {
-    char *name;
-    double time_unit;
-} command_infos_t;
-
-typedef struct command_s {
-    char **tab;
-    double time_unit;
-    size_t index;
-    time_t time_begin;
-    TAILQ_ENTRY(command_s) command_entries;
-} command_t;
 
 typedef struct client_s {
     struct sockaddr_in sock_addr;
@@ -57,10 +45,6 @@ typedef struct server_s {
     char **cmd_arg_array;
 } server_t;
 
-extern int (*cmd_func[NB_CMD])(server_t *, zappy_t *, const arguments_t,
-    client_t *);
-extern command_infos_t cmd_list[NB_CMD];
-
 int server(int, const char **);
 server_t *init_server_struct(const arguments_t);
 int initialize_server(server_t *);
@@ -73,22 +57,10 @@ void get_user_input(server_t *, zappy_t *, client_t *);
 void answer_client(const int, const unsigned int);
 void free_program(server_t *, zappy_t *, arguments_t *);
 
-int exit_func(server_t *, zappy_t *, const arguments_t, client_t *);
-int inventory_command(server_t *, zappy_t *, const arguments_t, client_t *);
-int take_command(server_t *, zappy_t *, const arguments_t, client_t *);
-int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
-int move_forward(server_t *, zappy_t *, const arguments_t, client_t *);
-int turn_left(server_t *, zappy_t *, const arguments_t, client_t *);
-int turn_right(server_t *, zappy_t *, const arguments_t, client_t *);
-
-bool is_player_connected(const zappy_t *, const unsigned int);
-int connect_player(server_t *, zappy_t *, const arguments_t,
-    const unsigned int);
-
-size_t array_size(char **);
-void free_array(char **);
-char **word_array(char const *, char *);
-player_t *get_player(zappy_t *, const unsigned int);
+size_t array_size(char **array);
+void free_array(char **array);
+char **word_array(char const *str, char *delim);
+player_t *get_player(zappy_t *zappy, const unsigned int client_fd);
 bool is_command_queue_full(client_t *);
 bool time_is_up(time_t, double);
 

@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include "server.h"
+#include "command.h"
 
 static unsigned int count_active_players(const server_t *server,
     const zappy_t *zappy)

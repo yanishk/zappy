@@ -63,7 +63,7 @@ void initialize_players(const arguments_t arg, zappy_t *zappy, team_t *team)
     initialize_resources(&player->inventory);
     player->inventory.food = 10;
     player->id = 0;
-    player->level = 0;
+    player->level = 1;
     player->height = 0;
     player->width = 0;
     player->is_egg = true;
