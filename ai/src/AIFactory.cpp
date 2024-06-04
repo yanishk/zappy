@@ -9,18 +9,13 @@
 
 Zappy::AIFactory::AIFactory()
 {
-    _table.emplace("default", IAi());
 }
 
 std::unique_ptr<Zappy::IAi> Zappy::AIFactory::createComponent(const std::string &value)
 {
 
-    for (const auto &i:_table) {
-
-        if (i.first == value) {
-            return std::make_unique<IAi>(i.second);
-        }
-
+    if (_table.find(value) != _table.end()) {
+        return _table.find(value)->second(value);
     }
 
     return nullptr;
