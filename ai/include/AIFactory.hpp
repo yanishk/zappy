@@ -14,7 +14,7 @@
     #include <functional>
     #include "IA/IAi.hpp"
 
-    #define CREATE_AI(AI) [](const std::string &name){ return std::make_unique<AI>(name); }
+    #define CREATE_COMPONENT(AI) [](const std::string &name){ return std::make_unique<AI>(name); }
 
 namespace Zappy
 {
