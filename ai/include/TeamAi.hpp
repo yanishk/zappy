@@ -19,7 +19,7 @@
 
     #include "Ressources.hpp"
     #include "Network.hpp"
-    #include "IAi.hpp"
+    #include "IA/IAi.hpp"
 
 namespace Zappy
 {

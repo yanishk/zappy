@@ -11,23 +11,28 @@
     #include <string>
     #include <unordered_map>
     #include <memory>
-
-    #include "AAi.hpp"
+    #include <functional>
+    #include "IA/IAi.hpp"
 
     #define CREATE_COMPONENT(AI) [](const std::string &name){ return std::make_unique<AI>(name); }
 
 namespace Zappy
 {
-    
+
+    using CreateAI = std::function<std::unique_ptr<Zappy::IAi>(const std::string)>;
+
     class AIFactory {
+
         public:
             AIFactory();
             ~AIFactory() = default;
 
-            std::unique_ptr<IAi> createComponent(const std::string &value);
+            std::unique_ptr<Zappy::IAi> createComponent(const std::string &value);
 
         private:
-            std::unordered_map<std::string, IAi> _table;
+
+            std::unordered_map<std::string, CreateAI> _table;
+
     };
 
 }
