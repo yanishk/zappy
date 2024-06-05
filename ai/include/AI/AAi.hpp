@@ -19,6 +19,13 @@
 
 namespace Zappy {
 
+    enum Orientation {
+        NORTH,
+        SOUTH,
+        WEST,
+        EST
+    };
+
     class AAi : public IAi {
 
         public:
@@ -32,29 +39,32 @@ namespace Zappy {
 
             virtual int run() = 0;
 
-            bool forward() const;
-            bool right() const;
-            bool left() const;
+            bool forward();
+            bool right();
+            bool left();
 
-            std::vector<std::string> look() const;
-            std::vector<std::string> inventory() const;
-            bool broadcastText() const;
+            std::vector<std::string> look();
+            bool inventory();
+            bool broadcastText(const std::string &text);
 
-            std::size_t connectNumber() const;
-            bool fork() const;
-            bool eject() const;
+            std::size_t connectNumber();
+            bool fork();
+            bool eject();
 
-            bool takeObject() const;
-            bool setObject() const;
-            bool incantation() const;
+            bool takeObject(const std::string &object);
+            bool setObject(const std::string &object);
+            bool incantation();
 
         protected:
 
             Network::Network _network;
             Ressources _ressources;
 
-            std::pair<std::size_t, std::size_t> _position;
+            std::pair<double, double> _position;
+            Orientation _orientation;
             std::size_t _level;
+            std::size_t countMember(const std::string &line) const;
+            bool checkRessources(const std::vector<std::string> &newRessources);
 
     };
 
