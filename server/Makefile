@@ -8,7 +8,7 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra -Werror -lm
+CFLAGS		=	-Wall -Wextra -lm
 CPPFLAGS	=	-iquote ./include
 FLAGS_DEBUG = 	-g
 
