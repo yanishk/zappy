@@ -26,7 +26,7 @@
     #define COMMAND_OK "ok\n"
 
     #define NB_CMD 10
-    #define NB_RESSOURCES 7
+    #define NB_RESOURCES 7
 
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
@@ -73,7 +73,7 @@ char **word_array(char const *, char *);
 player_t *get_player(zappy_t *, const unsigned int);
 bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
-int get_resources(resource_t *, char *);
-void set_resources(resource_t *, char *, int);
+int get_resources(resource_t *, const char *);
+void set_resources(resource_t *, const char *, int);
 
 #endif /* !SERVER_H_ */

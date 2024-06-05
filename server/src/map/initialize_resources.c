@@ -21,7 +21,7 @@ struct repartion_resource repartion[] = {
 };
 
 static void repartition_resource(const arguments_t *args, zappy_t *zappy,
-    char *name, double density)
+    const char *name, double density)
 {
     size_t max = round(args->width * args->height * density);
     size_t index = 0;
@@ -56,7 +56,7 @@ void density_onland(const arguments_t *args, zappy_t *zappy)
             initialize_resources(&zappy->resource[x][y]);
         }
     }
-    for (int index = 0; index < NB_RESSOURCES; index++) {
+    for (int index = 0; index < NB_RESOURCES; index++) {
         repartition_resource(args, zappy, repartion[index].name,
             repartion[index].density);
     }

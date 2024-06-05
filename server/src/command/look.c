@@ -7,84 +7,60 @@
 
 #include "server.h"
 
-char *get_on_land(zappy_t *zappy, int pos_height, int pos_width, const unsigned int client_fd)
+static char *get_resources_tile(int resource_decount, char *string_on_land,
+    const char *name)
 {
-    int ressource_decount = 0;
-    char *string_on_land = malloc(1);
     char *new_string = NULL;
-    player_t *player = get_player(zappy, client_fd);
 
-    string_on_land[0] = '\0';
-    TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
-        if (player->height == pos_height && player->width == pos_width && player->id != client_fd) {
-            new_string = realloc(string_on_land, strlen(string_on_land) + sizeof(" food"));
+    if (resource_decount > 0) {
+        while (resource_decount != 0) {
+            new_string = realloc(string_on_land, strlen(string_on_land) +
+                sizeof(" ") + sizeof(name));
+            string_on_land = new_string;
+            strcat(string_on_land, " ");
+            strcat(string_on_land, name);
+            resource_decount--;
+        }
+    }
+    return string_on_land;
+}
+
+static char *find_player_tile(zappy_t *zappy, const int pos_height,
+    const int pos_width, const unsigned int client_fd, char *string_on_land)
+{
+    player_t *player = get_player(zappy, client_fd);
+    char *new_string = NULL;
+
+    for ((player) = ((&zappy->player_head)->tqh_first); (player);
+        (player) = ((player)->player_entries.tqe_next)) {
+        if (player->height == pos_height && player->width == pos_width
+            && player->id != client_fd) {
+            new_string = realloc(string_on_land,
+                strlen(string_on_land) + sizeof(" player"));
             string_on_land = new_string;
             strcat(string_on_land, " player");
         }
     }
+    return string_on_land;
+}
 
-    if (zappy->resource[pos_height][pos_width].food > 0) {
-        ressource_decount = zappy->resource[pos_height][pos_width].food;
-        while (ressource_decount != 0) {
-            new_string = realloc(string_on_land, strlen(string_on_land) + sizeof(" food"));
-            string_on_land = new_string;
-            strcat(string_on_land, " food");
-            ressource_decount--;
-        }
-    }
-    if (zappy->resource[pos_height][pos_width].linemate > 0) {
-        ressource_decount = zappy->resource[pos_height][pos_width].linemate;
-        while (ressource_decount != 0) {
-            new_string = realloc(string_on_land, strlen(string_on_land) + sizeof(" linemate"));
-            string_on_land = new_string;
-            strcat(string_on_land, " linemate");
-            ressource_decount--;
-        }
-    }
-    if (zappy->resource[pos_height][pos_width].deraumere > 0) {
-        ressource_decount = zappy->resource[pos_height][pos_width].deraumere;
-        while (ressource_decount != 0) {
-            new_string = realloc(string_on_land, strlen(string_on_land) + sizeof(" deraumere"));
-            string_on_land = new_string;
-            strcat(string_on_land, " deraumere");
-            ressource_decount--;
-        }
-    }
-    if (zappy->resource[pos_height][pos_width].sibur > 0) {
-        ressource_decount = zappy->resource[pos_height][pos_width].sibur;
-        while (ressource_decount != 0) {
-            new_string = realloc(string_on_land, strlen(string_on_land) + sizeof(" sibur"));
-            string_on_land = new_string;
-            strcat(string_on_land, " sibur");
-            ressource_decount--;
-        }
-    }
-    if (zappy->resource[pos_height][pos_width].mendiane > 0) {
-        ressource_decount = zappy->resource[pos_height][pos_width].mendiane;
-        while (ressource_decount != 0) {
-            new_string = realloc(string_on_land, strlen(string_on_land) + sizeof(" mendiane"));
-            string_on_land = new_string;
-            strcat(string_on_land, " mendiane");
-            ressource_decount--;
-        }
-    }
-    if (zappy->resource[pos_height][pos_width].phiras > 0) {
-        ressource_decount = zappy->resource[pos_height][pos_width].phiras;
-        while (ressource_decount != 0) {
-            new_string = realloc(string_on_land, strlen(string_on_land) + sizeof(" phiras"));
-            string_on_land = new_string;
-            strcat(string_on_land, " phiras");
-            ressource_decount--;
-        }
-    }
-    if (zappy->resource[pos_height][pos_width].thystame > 0) {
-        ressource_decount = zappy->resource[pos_height][pos_width].thystame;
-        while (ressource_decount != 0) {
-            new_string = realloc(string_on_land, strlen(string_on_land) + sizeof(" thystame"));
-            string_on_land = new_string;
-            strcat(string_on_land, " thystame");
-            ressource_decount--;
-        }
+char *get_on_land(zappy_t *zappy, const int pos_height,
+    const int pos_width, const unsigned int client_fd)
+{
+    int resource_decount = 0;
+    char *string_on_land = malloc(1);
+    const char *resource_list[NB_RESOURCES] = {FOOD, LINEMATE, DERAUMERE,
+        SIBUR, MENDIANE, PHIRAS, THYSTAME};
+
+    string_on_land[0] = '\0';
+    string_on_land = find_player_tile(zappy, pos_height, pos_width,
+        client_fd, string_on_land);
+    for (size_t i = 0; i < NB_RESOURCES; i++) {
+        resource_decount =
+            get_resources(&zappy->resource[pos_height][pos_width],
+            resource_list[i]);
+        string_on_land = get_resources_tile(resource_decount,
+            string_on_land, resource_list[i]);
     }
     return string_on_land;
 }
