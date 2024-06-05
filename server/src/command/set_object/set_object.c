@@ -26,7 +26,7 @@ int set_object(server_t *server, zappy_t *zappy, const arguments_t,
 
     if (player == NULL || server->cmd_arg_array[1] == NULL)
         return EXIT_WITH_ERROR;
-    for (size_t index = 0; index != NB_RESSOURCES; index++) {
+    for (size_t index = 0; index < NB_RESSOURCES; index++) {
         if (strcmp(array_set[index].ressource,
             server->cmd_arg_array[1]) == 0) {
             was_set = array_set[index].func(server, zappy, player, was_set);

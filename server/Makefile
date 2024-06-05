@@ -36,14 +36,14 @@ SRC			=	./src/main.c								\
 				./src/arguments/height_flag.c  				\
 				./src/command/exit.c						\
 				./src/command/inventory.c 					\
-				./src/command/take_command/take_command.c	\
-				./src/command/take_command/take_food.c		\
-				./src/command/take_command/take_linemate.c	\
-				./src/command/take_command/take_mendiane.c	\
-				./src/command/take_command/take_phiras.c	\
-				./src/command/take_command/take_sibur.c		\
-				./src/command/take_command/take_thystames.c	\
-				./src/command/take_command/take_deraumere.c	\
+				./src/command/take_object/take_object.c		\
+				./src/command/take_object/take_food.c		\
+				./src/command/take_object/take_linemate.c	\
+				./src/command/take_object/take_mendiane.c	\
+				./src/command/take_object/take_phiras.c		\
+				./src/command/take_object/take_sibur.c		\
+				./src/command/take_object/take_thystames.c	\
+				./src/command/take_object/take_deraumere.c	\
 				./src/command/set_object/set_object.c 		\
 				./src/command/set_object/set_food.c			\
 				./src/command/set_object/set_linemate.c		\

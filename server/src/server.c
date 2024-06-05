@@ -13,7 +13,7 @@
 
 int server(int ac, const char **av)
 {
-    server_t *server;
+    server_t *server = NULL;
     arguments_t arg;
     zappy_t zappy;
 

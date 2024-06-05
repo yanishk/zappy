@@ -27,13 +27,15 @@ static void handle_ctrl_c(int signal)
 {
     if (signal == SIGINT)
         handle_server(0);
+    if (signal == SIGPIPE)
+        handle_server(0);
 }
 
 static int check_clients_sockets(server_t *server, zappy_t *zappy,
     const arguments_t arg)
 {
     int client_fd = 0;
-    client_t *client;
+    client_t *client = NULL;
 
     for (size_t i = 0; i != server->size; i += 1) {
         client_fd = server->fd_array[i];
@@ -138,6 +140,7 @@ int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
     int select_status = 0;
 
     signal(SIGINT, handle_ctrl_c);
+    signal(SIGPIPE, handle_ctrl_c);
     while (handle_server(1)) {
         FD_ZERO(&server->readfds);
         FD_SET(server->server_fd, &server->readfds);

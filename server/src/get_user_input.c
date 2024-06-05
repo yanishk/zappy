@@ -38,7 +38,7 @@ void answer_client(const int status, const unsigned int client_fd)
 
 static int insert_game_command_in_queue(server_t *server, client_t *client)
 {
-    command_t *command;
+    command_t *command = NULL;
 
     for (size_t i = 0; i < NB_CMD; i++) {
         if (array_size(server->cmd_arg_array) >= 1 &&
@@ -58,7 +58,7 @@ static int insert_game_command_in_queue(server_t *server, client_t *client)
 static void insert_other_command_in_queue(server_t *server,
     client_t *client)
 {
-    command_t *command;
+    command_t *command = NULL;
 
     command = malloc(sizeof(command_t));
     TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);

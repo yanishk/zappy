@@ -11,7 +11,7 @@
 
 static bool has_already_an_egg(zappy_t *zappy, int height, int width)
 {
-    player_t *player;
+    player_t *player = NULL;
     unsigned int count = 0;
 
     if (TAILQ_EMPTY(&zappy->player_head))
@@ -52,7 +52,7 @@ static size_t initialize_player_direction(void)
 
 void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name)
 {
-    player_t *player;
+    player_t *player = NULL;
 
     player = malloc(sizeof(player_t));
     TAILQ_INSERT_TAIL(&zappy->player_head, player, player_entries);

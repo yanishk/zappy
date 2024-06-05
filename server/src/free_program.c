@@ -11,8 +11,8 @@
 
 void free_client_commands(client_t *client)
 {
-    command_t *command;
-    command_t *command_next;
+    command_t *command = NULL;
+    command_t *command_next = NULL;
 
     if (TAILQ_EMPTY(&client->command_head))
         return;
@@ -41,7 +41,7 @@ static void free_server(server_t *server)
 static void free_arg_teams(arguments_t *arg)
 {
     team_t *team = TAILQ_FIRST(&arg->team_head);
-    team_t *team_next;
+    team_t *team_next = NULL;
 
     while (team != NULL) {
         if (team->team_name != NULL)
@@ -55,7 +55,7 @@ static void free_arg_teams(arguments_t *arg)
 static void free_zappy_players(zappy_t *zappy)
 {
     player_t *player = TAILQ_FIRST(&zappy->player_head);
-    player_t *player_next;
+    player_t *player_next = NULL;
 
     while (player != NULL) {
         if (player->team_name != NULL)

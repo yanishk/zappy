@@ -26,7 +26,7 @@ int take_command(server_t *server, zappy_t *zappy, const arguments_t,
 
     if (player == NULL || server->cmd_arg_array[1] == NULL)
         return EXIT_WITH_ERROR;
-    for (size_t i = 0; i != NB_RESSOURCES; i++) {
+    for (size_t i = 0; i < NB_RESSOURCES; i++) {
         if (strcmp(array_take[i].ressource, server->cmd_arg_array[1]) == 0) {
             was_taken = array_take[i].func(server, zappy, player, was_taken);
         }

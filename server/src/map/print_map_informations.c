@@ -21,7 +21,7 @@ static void print_resources(const resource_t resource)
 
 void print_players_pos_and_direction(const zappy_t zappy)
 {
-    player_t *player;
+    player_t *player = NULL;
 
     TAILQ_FOREACH(player, &zappy.player_head, player_entries) {
         printf("\tid=%d\n", player->id);
@@ -35,7 +35,7 @@ void print_players_pos_and_direction(const zappy_t zappy)
 
 void print_players(const zappy_t zappy)
 {
-    player_t *player;
+    player_t *player = NULL;
 
     TAILQ_FOREACH(player, &zappy.player_head, player_entries) {
         printf("new egg:\n");

@@ -9,7 +9,7 @@
 
 player_t *get_player(zappy_t *zappy, const unsigned int client_fd)
 {
-    player_t *player;
+    player_t *player = NULL;
 
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
         if (player->id == client_fd)

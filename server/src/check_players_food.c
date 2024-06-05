@@ -20,7 +20,7 @@ static void check_player_food(server_t *server, zappy_t *zappy,
     const arguments_t arg, player_t *player)
 {
     double food_time_unit = set_food_time_unit(arg.freq);
-    client_t *client;
+    client_t *client = NULL;
 
     if (player->is_egg)
         return;
@@ -42,7 +42,7 @@ static void check_player_food(server_t *server, zappy_t *zappy,
 void check_players_food(server_t *server, zappy_t *zappy,
     const arguments_t arg)
 {
-    player_t *player;
+    player_t *player = NULL;
 
     for ((player) = ((&zappy->player_head)->tqh_first); (player);
         (player) = ((player)->player_entries.tqe_next)) {
