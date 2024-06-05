@@ -36,22 +36,8 @@ SRC			=	./src/main.c								\
 				./src/arguments/height_flag.c  				\
 				./src/command/exit.c						\
 				./src/command/inventory.c 					\
-				./src/command/take_object/take_object.c		\
-				./src/command/take_object/take_food.c		\
-				./src/command/take_object/take_linemate.c	\
-				./src/command/take_object/take_mendiane.c	\
-				./src/command/take_object/take_phiras.c		\
-				./src/command/take_object/take_sibur.c		\
-				./src/command/take_object/take_thystames.c	\
-				./src/command/take_object/take_deraumere.c	\
-				./src/command/set_object/set_object.c 		\
-				./src/command/set_object/set_food.c			\
-				./src/command/set_object/set_linemate.c		\
-				./src/command/set_object/set_mendiane.c		\
-				./src/command/set_object/set_phiras.c		\
-				./src/command/set_object/set_sibur.c		\
-				./src/command/set_object/set_thystame.c		\
-				./src/command/set_object/set_deraumere.c	\
+				./src/command/take_object.c					\
+				./src/command/set_object.c 					\
 				./src/command/move_forward.c 				\
 				./src/command/turn_left.c 					\
 				./src/command/turn_right.c 					\
@@ -61,7 +47,9 @@ SRC			=	./src/main.c								\
 				./src/lib/word_array.c						\
 				./src/lib/get_player_by_id.c				\
 				./src/lib/is_command_queue_full.c			\
-				./src/lib/time_is_up.c
+				./src/lib/time_is_up.c						\
+				./src/lib/get_resources.c					\
+				./src/lib/set_resources.c
 
 OBJ			=	$(SRC:.c=.o)
 

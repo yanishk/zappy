@@ -12,7 +12,7 @@ void check_command_queue(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client)
 {
     int status = 0;
-    command_t *command;
+    command_t *command = NULL;
 
     if (TAILQ_EMPTY(&client->command_head))
         return;

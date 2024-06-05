@@ -10,6 +10,9 @@
 
     #include "server.h"
 
+    #define OBJECT_TO_TAKE server->cmd_arg_array[1]
+    #define TILE_RESOURCE zappy->resource[player->height][player->width]
+
 typedef struct command_infos {
     char *name;
     double time_unit;
@@ -22,11 +25,6 @@ typedef struct command_s {
     clock_t clock_begin;
     TAILQ_ENTRY(command_s) command_entries;
 } command_t;
-
-typedef struct function_array {
-    char *ressource;
-    bool (*func)(server_t *, zappy_t *, player_t *, bool);
-} function_array_t;
 
 extern int (*cmd_func[NB_CMD])(server_t *, zappy_t *, const arguments_t,
     client_t *);
@@ -42,23 +40,7 @@ int move_forward(server_t *, zappy_t *, const arguments_t, client_t *);
 int turn_left(server_t *, zappy_t *, const arguments_t, client_t *);
 int turn_right(server_t *, zappy_t *, const arguments_t, client_t *);
 int connect_nbr(server_t *, zappy_t *, const arguments_t, client_t *);
-
 int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
-bool set_thystame(server_t *, zappy_t *, player_t *, bool);
-bool set_sibur(server_t *, zappy_t *, player_t *, bool);
-bool set_phiras(server_t *, zappy_t *, player_t *, bool);
-bool set_mendiane(server_t *, zappy_t *, player_t *, bool);
-bool set_linemate(server_t *, zappy_t *, player_t *, bool);
-bool set_food(server_t *, zappy_t *, player_t *, bool);
-bool set_deraumere(server_t *, zappy_t *, player_t *, bool);
-
-int take_command(server_t *, zappy_t *, const arguments_t, client_t *);
-bool take_thystame(server_t *, zappy_t *, player_t *, bool);
-bool take_sibur(server_t *, zappy_t *, player_t *, bool);
-bool take_phiras(server_t *, zappy_t *, player_t *, bool);
-bool take_mendiane(server_t *, zappy_t *, player_t *, bool);
-bool take_linemate(server_t *, zappy_t *, player_t *, bool);
-bool take_food(server_t *, zappy_t *, player_t *, bool);
-bool take_deraumere(server_t *, zappy_t *, player_t *, bool);
+int take_object(server_t *, zappy_t *, const arguments_t, client_t *);
 
 #endif /* !COMMAND_H_ */

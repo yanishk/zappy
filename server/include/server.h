@@ -12,14 +12,19 @@
     #define EXIT_WITH_SUCCESS 0
     #define INTERRUPTED_SYSCALL 4
     #define UNKNOWN_COMMAND 1
+    #define ERROR_RETURN -1
+
     #define NB_CMD 8
+    #define NB_RESSOURCES 7
+
     #define MAX_USER 1024
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
+
     #define TO_MILLI 1000
+
     #define COMMAND_KO "ko\n"
     #define COMMAND_OK "ok\n"
-    #define NB_RESSOURCES 7
 
     #include <sys/select.h>
     #include <arpa/inet.h>
@@ -66,5 +71,7 @@ char **word_array(char const *, char *);
 player_t *get_player(zappy_t *, const unsigned int);
 bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
+int get_resources(resource_t *, char *);
+void set_resources(resource_t *, char *, int);
 
 #endif /* !SERVER_H_ */

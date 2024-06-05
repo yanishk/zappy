@@ -66,6 +66,11 @@ typedef struct zappy_s {
     TAILQ_HEAD(, player_s) player_head;
 } zappy_t;
 
+struct repartion_resource {
+    char *name;
+    double density;
+};
+
 void density_onland(const arguments_t *args, zappy_t *zappy);
 void initialize_map(const arguments_t arg, zappy_t *zappy);
 void initialize_teams(const arguments_t arg, zappy_t *zappy);

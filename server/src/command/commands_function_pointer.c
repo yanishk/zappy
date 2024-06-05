@@ -11,7 +11,7 @@ int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client) = {
     &exit_func,
     &inventory_command,
-    &take_command,
+    &take_object,
     &set_object,
     &move_forward,
     &turn_left,
