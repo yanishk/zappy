@@ -12,20 +12,20 @@
     #include <unordered_map>
     #include <memory>
     #include <functional>
-    #include "IA/IAi.hpp"
+
+    #include "AI/IAi.hpp"
 
     #define CREATE_COMPONENT(AI) [](const std::string &name){ return std::make_unique<AI>(name); }
 
-namespace Zappy
-{
+    #define QUEEN "Queen"
 
-    using CreateAI = std::function<std::unique_ptr<Zappy::IAi>(const std::string)>;
+namespace Zappy {
+
+    using CreateAI = std::function<std::unique_ptr<Zappy::IAi>()>;
 
     class AIFactory {
 
         public:
-            AIFactory();
-            ~AIFactory() = default;
 
             std::unique_ptr<Zappy::IAi> createComponent(const std::string &value);
 
@@ -35,6 +35,6 @@ namespace Zappy
 
     };
 
-}
+};
 
 #endif /* !AIFACTORY_HPP_ */

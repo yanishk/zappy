@@ -13,9 +13,13 @@
 void Network::Network::sendInformationToServer(const std::string &information)
 {
     try {
+
         asio::write(*_socket, asio::buffer(information));
+
     } catch (const std::system_error &err) {
+
         std::cerr << err.what() << std::endl;
+
     }
 }
 
@@ -35,6 +39,7 @@ std::string Network::Network::getInfoFromServer()
             throw asio::system_error(error);
             std::cerr << "error\n";
         }
+
         std::string line;
         std::getline(is, line);
 

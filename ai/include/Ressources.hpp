@@ -16,11 +16,13 @@
     #define PHIRAS "phiras"
     #define THYSTAME "thystame"
 
+    #define FOOD_START_VALUE 10
+    #define NONE 0
+
     #include <string>
     #include <unordered_map>
 
-namespace Zappy
-{
+namespace Zappy {
 
     enum RessourceType {
         Food,
@@ -36,8 +38,8 @@ namespace Zappy
 
         public:
 
-            void addRessources(const std::string &ressource, int value);
-            void removeRessources(const std::string &ressource, int value);
+            bool addRessources(const std::string &ressource, int value);
+            bool removeRessources(const std::string &ressource, int value);
 
             void operator+=(const Ressources &other) {
 
@@ -60,13 +62,13 @@ namespace Zappy
         private:
 
             std::unordered_map<std::string, int> _ressources {
-                                            { FOOD,         0 },
-                                            { LINEMATE,     0 },
-                                            { DERAUMERE,    0 },
-                                            { SIBUR,        0 },
-                                            { MENDIANE,     0 },
-                                            { PHIRAS,       0 },
-                                            { THYSTAME,     0 }
+                { FOOD,         FOOD_START_VALUE },
+                { LINEMATE,     NONE },
+                { DERAUMERE,    NONE },
+                { SIBUR,        NONE },
+                { MENDIANE,     NONE },
+                { PHIRAS,       NONE },
+                { THYSTAME,     NONE }
             };
 
     };
