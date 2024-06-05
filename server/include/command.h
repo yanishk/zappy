@@ -16,6 +16,7 @@
 typedef struct command_infos {
     char *name;
     double time_unit;
+    size_t arg_nb;
 } command_infos_t;
 
 typedef struct command_s {

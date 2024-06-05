@@ -41,7 +41,7 @@ static int insert_game_command_in_queue(server_t *server, client_t *client)
     command_t *command = NULL;
 
     for (size_t i = 0; i < NB_CMD; i++) {
-        if (array_size(server->cmd_arg_array) >= 1 &&
+        if (array_size(server->cmd_arg_array) == cmd_list[i].arg_nb &&
         strcmp(server->cmd_arg_array[0], cmd_list[i].name) == 0) {
             command = malloc(sizeof(command_t));
             TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);
