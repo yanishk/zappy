@@ -23,21 +23,21 @@ namespace Zappy {
 
             virtual int run() = 0;
 
-            virtual bool forward() const = 0;
-            virtual bool right() const = 0;
-            virtual bool left() const = 0;
+            virtual bool forward() = 0;
+            virtual bool right() = 0;
+            virtual bool left() = 0;
 
-            virtual std::vector<std::string> look() const = 0;
-            virtual std::vector<std::string> inventory() const = 0;
-            virtual bool broadcastText() const = 0;
+            virtual std::vector<std::string> look() = 0;
+            virtual bool inventory() = 0;
+            virtual bool broadcastText(const std::string &text) = 0;
 
-            virtual std::size_t connectNumber() const = 0;
-            virtual bool fork() const = 0;
-            virtual bool eject() const = 0;
+            virtual std::size_t connectNumber() = 0;
+            virtual bool fork() = 0;
+            virtual bool eject() = 0;
 
-            virtual bool takeObject() const = 0;
-            virtual bool setObject() const = 0;
-            virtual bool incantation() const = 0;
+            virtual bool takeObject(const std::string &object) = 0;
+            virtual bool setObject(const std::string &object) = 0;
+            virtual bool incantation() = 0;
 
     };
 
