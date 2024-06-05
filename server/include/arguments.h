@@ -5,15 +5,17 @@
 ** arguments
 */
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <sys/queue.h>
 
 #ifndef ARGUMENTS_H_
     #define ARGUMENTS_H_
 
+    #include <stdio.h>
+    #include <stdbool.h>
+    #include <sys/queue.h>
+
     #define MIN_ARGS 11
     #define NB_FLAGS 6
+
     #define INVALID_PORT "port must be a number > 0\n"
     #define INVALID_WIDTH "width must be a number > 0\n"
     #define INVALID_HEIGHT "height must be a number > 0\n"
@@ -35,8 +37,9 @@ typedef struct arguments_s {
     int port;
     int width;
     int height;
-    int nb_clients;
     int freq;
+    int nb_clients;
+    int nb_teams;
     TAILQ_HEAD(, team_s) team_head;
 } arguments_t;
 
@@ -47,7 +50,7 @@ int height_flag(const char **, int, bool *, arguments_t *);
 int nb_clients_flag(const char **, int, bool *, arguments_t *);
 int frequency_flag(const char **, int, bool *, arguments_t *);
 
-int fill_arg_struct(int ac, const char **av, arguments_t *arguments);
-void print_arg_struct(const arguments_t arguments);
+int fill_arg_struct(int, const char **, arguments_t *);
+void print_arg_struct(const arguments_t);
 
 #endif

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** server
+** run_server
 */
 
 #include <arpa/inet.h>
@@ -11,19 +11,42 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
+#include <errno.h>
 #include "server.h"
 
-static int check_clients_sockets(server_t *server)
+static sig_atomic_t handle_server(const volatile sig_atomic_t new_status)
+{
+    static volatile sig_atomic_t status = 1;
+
+    status = new_status;
+    return status;
+}
+
+static void handle_ctrl_c(int signal)
+{
+    if (signal == SIGINT || signal == SIGPIPE)
+        handle_server(0);
+}
+
+static int check_clients_sockets(server_t *server, zappy_t *zappy,
+    const arguments_t arg)
 {
     int client_fd = 0;
+    client_t *client = NULL;
 
     for (size_t i = 0; i != server->size; i += 1) {
         client_fd = server->fd_array[i];
         if (FD_ISSET(client_fd, &server->readfds) != 0) {
-            server->user_index = insert_client_in_struct(server, client_fd);
-            get_user_input(server, client_fd);
-            close_client_socket(server);
-        }
+            client = insert_client_in_struct(server, client_fd);
+            get_user_input(server, zappy, client);
+        } else
+            client = get_client_in_struct(server, client_fd);
+        check_players_food(server, zappy, arg);
+        if (client == NULL)
+            continue;
+        check_command_queue(server, zappy, arg, client);
+        close_client_socket(server, zappy, client);
     }
     return EXIT_WITH_SUCCESS;
 }
@@ -78,34 +101,52 @@ static int check_server_socket(server_t *server)
     return EXIT_WITH_SUCCESS;
 }
 
-static int set_sockets(server_t *server)
+static void set_clients_sockets(server_t *server, unsigned int *max_fd_set)
 {
     unsigned int client_fd = 0;
 
+    *max_fd_set = server->server_fd;
     for (size_t i = 0; i != server->size; i += 1) {
         client_fd = server->fd_array[i];
         if (client_fd != 0)
             FD_SET(client_fd, &server->readfds);
-        if (client_fd > server->max_fd_set)
-            server->max_fd_set = client_fd;
+        if (client_fd > *max_fd_set)
+            *max_fd_set = client_fd;
     }
-    if (select(server->max_fd_set + 1, &server->readfds,
-        NULL, NULL, NULL) == -1) {
+}
+
+static int set_sockets(server_t *server)
+{
+    static unsigned int max_fd_set = 0;
+    struct timeval timeout;
+
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 0;
+    set_clients_sockets(server, &max_fd_set);
+    if (select(max_fd_set + 1, &server->readfds,
+        NULL, NULL, &timeout) == -1) {
         perror("select");
+        if (errno == EINTR)
+            return INTERRUPTED_SYSCALL;
         return EXIT_WITH_ERROR;
     }
     return EXIT_WITH_SUCCESS;
 }
 
-int run_server(server_t *server)
+int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
 {
-    while (1) {
+    int select_status = 0;
+
+    signal(SIGINT, handle_ctrl_c);
+    signal(SIGPIPE, handle_ctrl_c);
+    while (handle_server(1)) {
         FD_ZERO(&server->readfds);
         FD_SET(server->server_fd, &server->readfds);
-        server->max_fd_set = server->server_fd;
-        if (set_sockets(server) == EXIT_WITH_ERROR ||
-            check_server_socket(server) == EXIT_WITH_ERROR ||
-            check_clients_sockets(server) == EXIT_WITH_ERROR)
+        select_status = set_sockets(server);
+        if (select_status != EXIT_WITH_SUCCESS)
+            return select_status;
+        if (check_server_socket(server) == EXIT_WITH_ERROR ||
+            check_clients_sockets(server, zappy, arg) == EXIT_WITH_ERROR)
             return EXIT_WITH_ERROR;
     }
     return EXIT_WITH_SUCCESS;

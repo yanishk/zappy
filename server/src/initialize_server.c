@@ -2,13 +2,14 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** server
+** initialize_server
 */
 
 #include <netinet/ip.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "server.h"
+#include "command.h"
 
 static int check_socket_creation(server_t *server)
 {
@@ -59,29 +60,44 @@ int initialize_server(server_t *server)
     return EXIT_WITH_SUCCESS;
 }
 
+void init_client(client_t *client)
+{
+    client->client_fd = 0;
+    client->has_been_closed = false;
+    TAILQ_INIT(&client->command_head);
+}
+
 static void init_client_struct(server_t *server)
 {
-    server->clients = malloc(sizeof(clients_t) * (MAX_USER));
-    for (int i = 0; i != MAX_USER; i += 1) {
-        server->clients[i] = malloc(sizeof(clients_t));
-        server->clients[i]->client_fd = 0;
-        server->clients[i]->has_been_closed = false;
+    server->clients = malloc(sizeof(client_t) * (server->max_user));
+    for (size_t i = 0; i != server->max_user; i += 1) {
+        server->clients[i] = malloc(sizeof(client_t));
+        init_client(server->clients[i]);
     }
 }
 
-server_t *init_server_struct(const int port_number)
+static void set_commands_time_unit(int frequency)
+{
+    for (size_t i = 0; i < NB_CMD; i++) {
+        cmd_list[i].time_unit /= frequency;
+        cmd_list[i].time_unit *= TO_MILLI;
+    }
+}
+
+server_t *init_server_struct(const arguments_t arg)
 {
     server_t *server = malloc(sizeof(server_t));
 
     if (server == NULL)
         return NULL;
-    server->port = port_number;
+    server->port = arg.port;
     server->server_fd = socket(AF_INET, SOCK_STREAM, 0);
     server->size = 1;
     server->fd_array = create_int_array(server->size);
+    server->max_user = 1;
     if (server->fd_array == NULL)
         return NULL;
-    server->max_fd_set = 0;
     init_client_struct(server);
+    set_commands_time_unit(arg.freq);
     return server;
 }

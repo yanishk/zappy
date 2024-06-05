@@ -5,60 +5,75 @@
 ** server
 */
 
-#include "arguments.h"
-
 #ifndef SERVER_H_
     #define SERVER_H_
-
-    #define EXIT_WITH_ERROR 84
-    #define EXIT_WITH_SUCCESS 0
-    #define MAX_USER 1024
-    #define NB_CMD 1
-    #define BUFFER_MAX_SIZE 1024
 
     #include <sys/select.h>
     #include <arpa/inet.h>
     #include <stdbool.h>
+    #include <string.h>
+    #include <time.h>
+    #include "map.h"
 
-static char *const cmd_lst[NB_CMD] = {
-    "exit"
-};
+    #define EXIT_WITH_ERROR 84
+    #define EXIT_WITH_SUCCESS 0
+    #define ERROR_RETURN -1
+    #define UNKNOWN_COMMAND 1
+    #define COMMAND_SUCCESS 2
+    #define INTERRUPTED_SYSCALL 4
 
-typedef struct clients_s {
+    #define COMMAND_KO "ko\n"
+    #define COMMAND_OK "ok\n"
+
+    #define NB_CMD 8
+    #define NB_RESSOURCES 7
+
+    #define MAX_BUFFER_SIZE 1024
+    #define MAX_QUEUE_COMMANDS 10
+
+    #define TO_MILLI 1000
+
+typedef struct client_s {
     struct sockaddr_in sock_addr;
     int client_fd;
     bool has_been_closed;
-} clients_t;
-
-typedef struct cmd_s {
-    char **tab;
-    size_t len;
-} cmd_t;
+    TAILQ_HEAD(, command_s) command_head;
+} client_t;
 
 typedef struct server_s {
     struct sockaddr_in sock_addr;
     int port;
     int server_fd;
     int *fd_array;
+    size_t max_user;
     size_t size;
-    unsigned int max_fd_set;
-    int user_index;
     fd_set readfds;
-    clients_t **clients;
-    cmd_t cmd_arg;
+    client_t **clients;
+    char **cmd_arg_array;
 } server_t;
 
-int server(int ac, const char **av);
-server_t *init_server_struct(const int port);
-int initialize_server(server_t *server);
-int run_server(server_t *server);
-int insert_client_in_struct(server_t *server, const int client_fd);
-void close_client_socket(server_t *);
-void get_user_input(server_t *server, const int client_fd);
+int server(int, const char **);
+server_t *init_server_struct(const arguments_t);
+int initialize_server(server_t *);
+void init_client(client_t *);
+int run_server(server_t *, zappy_t *, const arguments_t);
+client_t *get_client_in_struct(server_t *, const int);
+client_t *insert_client_in_struct(server_t *, const int);
+void check_command_queue(server_t *, zappy_t *, const arguments_t, client_t *);
+void close_client_socket(server_t *, zappy_t *, client_t *);
+void get_user_input(server_t *, zappy_t *, client_t *);
+void check_players_food(server_t *, zappy_t *, const arguments_t);
+void answer_client(const int, const unsigned int);
+void free_client_commands(client_t *);
+void free_program(server_t *, zappy_t *, arguments_t *);
 
-size_t array_size(char **array);
-char **word_array(char const *str, char *delim);
-
-int exit_func(server_t *server);
+size_t array_size(char **);
+void free_array(char **);
+char **word_array(char const *, char *);
+player_t *get_player(zappy_t *, const unsigned int);
+bool is_command_queue_full(client_t *);
+bool time_is_up(clock_t, double);
+int get_resources(resource_t *, char *);
+void set_resources(resource_t *, char *, int);
 
 #endif /* !SERVER_H_ */

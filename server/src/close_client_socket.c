@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** server
+** close_client_socket
 */
 
 #include <arpa/inet.h>
@@ -23,13 +23,17 @@ static void remove_client_socket(server_t *server, const int client_fd)
     }
 }
 
-void close_client_socket(server_t *server)
+void close_client_socket(server_t *server, zappy_t *zappy, client_t *client)
 {
-    clients_t *client = server->clients[server->user_index];
+    player_t *player = get_player(zappy, client->client_fd);
 
     if (client->has_been_closed) {
         close(client->client_fd);
         FD_CLR(client->client_fd, &server->readfds);
         remove_client_socket(server, client->client_fd);
+        if (player != NULL)
+            TAILQ_REMOVE(&zappy->player_head, player, player_entries);
+        client->client_fd = 0;
+        client->has_been_closed = false;
     }
 }

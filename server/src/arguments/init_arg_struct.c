@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** main
+** init_arg_struct
 */
 
 #include <string.h>
@@ -59,12 +59,13 @@ static int check_flags_occurences(arguments_t *arg)
 static void fill_team_name(const char *team_name, const bool is_a_team_name,
     arguments_t *arg)
 {
-    team_t *team;
+    team_t *team = NULL;
 
     if (is_a_team_name && strcmp(team_name, "-n") != 0) {
         team = malloc(sizeof(team_t));
         TAILQ_INSERT_TAIL(&arg->team_head, team, team_entries);
         team->team_name = strdup(team_name);
+        (*arg).nb_teams++;
     }
 }
 
@@ -104,6 +105,7 @@ static void init_arg_struct(arguments_t *arg)
     arg->height = 0;
     arg->freq = 0;
     arg->nb_clients = 0;
+    arg->nb_teams = 0;
 }
 
 int fill_arg_struct(int ac, const char **av, arguments_t *arg)
@@ -128,7 +130,7 @@ int fill_arg_struct(int ac, const char **av, arguments_t *arg)
 
 void print_arg_struct(const arguments_t arg)
 {
-    team_t *team;
+    team_t *team = NULL;
 
     printf("teams:\n");
     TAILQ_FOREACH(team, &arg.team_head, team_entries)

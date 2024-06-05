@@ -8,28 +8,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #include "server.h"
-
-static void free_server_struct(server_t *server)
-{
-    close(server->server_fd);
-    free(server->fd_array);
-    free(server);
-}
 
 int server(int ac, const char **av)
 {
+    server_t *server = NULL;
     arguments_t arg;
-    server_t *server;
+    zappy_t zappy;
 
+    TAILQ_INIT(&zappy.player_head);
+    srand(time(NULL));
     if (fill_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR)
         return EXIT_WITH_ERROR;
-    server = init_server_struct(arg.port);
+    server = init_server_struct(arg);
+    initialize_map(arg, &zappy);
     if (server == NULL)
         return EXIT_WITH_ERROR;
     if (initialize_server(server) == EXIT_WITH_ERROR ||
-        run_server(server) == EXIT_WITH_ERROR)
+        run_server(server, &zappy, arg) == EXIT_WITH_ERROR)
         return EXIT_WITH_ERROR;
-    free_server_struct(server);
+    free_program(server, &zappy, &arg);
     return EXIT_WITH_SUCCESS;
 }
