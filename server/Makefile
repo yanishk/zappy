@@ -44,6 +44,7 @@ SRC			=	./src/main.c								\
 				./src/command/commands_function_pointer.c	\
 				./src/command/connect_nbr.c 				\
 				./src/command/fork_player.c 				\
+				./src/command/look.c		 				\
 				./src/lib/array_functions.c 				\
 				./src/lib/word_array.c						\
 				./src/lib/get_player_by_id.c				\

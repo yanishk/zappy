@@ -17,7 +17,8 @@ int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
     &turn_left,
     &turn_right,
     &connect_nbr,
-    &fork_player
+    &fork_player,
+    &look_around
 };
 
 command_infos_t cmd_list[NB_CMD] = {
@@ -30,4 +31,5 @@ command_infos_t cmd_list[NB_CMD] = {
     {"Right", 7},
     {"Connect_nbr", 0},
     {"Fork", 42},
+    {"Look", 7}
 };
