@@ -11,8 +11,7 @@
     #define LOOK "look\n"
 
     #include <vector>
-    #include "Network.hpp"
-    #include "Ressources.hpp"
+    #include <string>
 
 namespace Zappy {
 
@@ -22,7 +21,7 @@ namespace Zappy {
 
             IAi() = default;
 
-            virtual bool run() = 0;
+            virtual int run() = 0;
 
             virtual bool forward() const = 0;
             virtual bool right() const = 0;
@@ -32,7 +31,7 @@ namespace Zappy {
             virtual std::vector<std::string> inventory() const = 0;
             virtual bool broadcastText() const = 0;
 
-            virtual size_t connectNumber() const = 0;
+            virtual std::size_t connectNumber() const = 0;
             virtual bool fork() const = 0;
             virtual bool eject() const = 0;
 
