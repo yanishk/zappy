@@ -16,6 +16,7 @@ SRC			=	./src/Main.cpp					\
 				./src/Network.cpp				\
 				./src/Ressources.cpp			\
 				./src/Team.cpp					\
+				./src/AIFactory.cpp				\
 				./src/AI/AAi.cpp				\
 				./src/AI/Queen.cpp				\
 

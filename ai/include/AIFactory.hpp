@@ -15,19 +15,19 @@
 
     #include "AI/IAi.hpp"
 
-    #define CREATE_COMPONENT(AI) [](const std::string &name){ return std::make_unique<AI>(name); }
+    #define CREATE_COMPONENT(AI) [](const std::string &port){ return std::make_unique<AI>(port); }
 
     #define QUEEN "Queen"
 
 namespace Zappy {
 
-    using CreateAI = std::function<std::unique_ptr<Zappy::IAi>()>;
+    using CreateAI = std::function<std::unique_ptr<Zappy::IAi>(const std::string &value)>;
 
     class AIFactory {
 
         public:
 
-            std::unique_ptr<Zappy::IAi> createComponent(const std::string &value);
+            std::unique_ptr<Zappy::IAi> createComponent(const std::string &value, const std::string &port);
 
         private:
 

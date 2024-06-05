@@ -7,10 +7,10 @@
 
 #include "AIFactory.hpp"
 
-std::unique_ptr<Zappy::IAi> Zappy::AIFactory::createComponent(const std::string &value)
+std::unique_ptr<Zappy::IAi> Zappy::AIFactory::createComponent(const std::string &value, const std::string &port)
 {
     if (_table.find(value) != _table.end()) {
-        return _table.find(value)->second(value);
+        return _table.find(value)->second(port);
     }
 
     return nullptr;
