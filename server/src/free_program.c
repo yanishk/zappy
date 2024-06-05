@@ -18,8 +18,8 @@ void free_client_commands(client_t *client)
         return;
     command = TAILQ_FIRST(&client->command_head);
     while (command != NULL) {
-        if (command->tab != NULL)
-            free(command->tab);
+        if (command->array != NULL)
+            free(command->array);
         command_next = TAILQ_NEXT(command, command_entries);
         free(command);
         command = command_next;
@@ -29,9 +29,9 @@ void free_client_commands(client_t *client)
 static void free_server(server_t *server)
 {
     close(server->server_fd);
-    for (int i = 0; i != MAX_USER; i += 1)
+    for (size_t i = 0; i != server->max_user; i += 1)
         free_client_commands(server->clients[i]);
-    for (int i = 0; i != MAX_USER; i += 1)
+    for (size_t i = 0; i != server->max_user; i += 1)
         free(server->clients[i]);
     free(server->clients);
     free(server->fd_array);

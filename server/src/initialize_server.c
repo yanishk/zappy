@@ -60,14 +60,19 @@ int initialize_server(server_t *server)
     return EXIT_WITH_SUCCESS;
 }
 
+void init_client(client_t *client)
+{
+    client->client_fd = 0;
+    client->has_been_closed = false;
+    TAILQ_INIT(&client->command_head);
+}
+
 static void init_client_struct(server_t *server)
 {
-    server->clients = malloc(sizeof(client_t) * (MAX_USER));
-    for (int i = 0; i != MAX_USER; i += 1) {
+    server->clients = malloc(sizeof(client_t) * (server->max_user));
+    for (size_t i = 0; i != server->max_user; i += 1) {
         server->clients[i] = malloc(sizeof(client_t));
-        server->clients[i]->client_fd = 0;
-        server->clients[i]->has_been_closed = false;
-        TAILQ_INIT(&server->clients[i]->command_head);
+        init_client(server->clients[i]);
     }
 }
 
@@ -89,6 +94,7 @@ server_t *init_server_struct(const arguments_t arg)
     server->server_fd = socket(AF_INET, SOCK_STREAM, 0);
     server->size = 1;
     server->fd_array = create_int_array(server->size);
+    server->max_user = 1;
     if (server->fd_array == NULL)
         return NULL;
     init_client_struct(server);

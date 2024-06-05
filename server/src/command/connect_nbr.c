@@ -23,5 +23,5 @@ int connect_nbr(server_t *, zappy_t *zappy, const arguments_t,
         }
     }
     dprintf(client->client_fd, "%d\n", count_unused);
-    return EXIT_WITH_SUCCESS;
+    return COMMAND_SUCCESS;
 }

@@ -20,5 +20,5 @@ int inventory_command(server_t *, zappy_t *zappy, const arguments_t,
         player->inventory.deraumere, player->inventory.sibur,
         player->inventory.mendiane, player->inventory.phiras,
         player->inventory.thystame);
-    return EXIT_WITH_SUCCESS;
+    return COMMAND_SUCCESS;
 }

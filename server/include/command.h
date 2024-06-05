@@ -19,7 +19,7 @@ typedef struct command_infos {
 } command_infos_t;
 
 typedef struct command_s {
-    char **tab;
+    char **array;
     double time_unit;
     size_t index;
     clock_t clock_begin;

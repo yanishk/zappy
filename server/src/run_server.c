@@ -25,9 +25,7 @@ static sig_atomic_t handle_server(const volatile sig_atomic_t new_status)
 
 static void handle_ctrl_c(int signal)
 {
-    if (signal == SIGINT)
-        handle_server(0);
-    if (signal == SIGPIPE)
+    if (signal == SIGINT || signal == SIGPIPE)
         handle_server(0);
 }
 

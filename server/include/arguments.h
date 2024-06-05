@@ -15,6 +15,7 @@
 
     #define MIN_ARGS 11
     #define NB_FLAGS 6
+
     #define INVALID_PORT "port must be a number > 0\n"
     #define INVALID_WIDTH "width must be a number > 0\n"
     #define INVALID_HEIGHT "height must be a number > 0\n"

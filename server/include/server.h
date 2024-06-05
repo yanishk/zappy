@@ -8,30 +8,30 @@
 #ifndef SERVER_H_
     #define SERVER_H_
 
-    #define EXIT_WITH_ERROR 84
-    #define EXIT_WITH_SUCCESS 0
-    #define INTERRUPTED_SYSCALL 4
-    #define UNKNOWN_COMMAND 1
-    #define ERROR_RETURN -1
-
-    #define NB_CMD 8
-    #define NB_RESSOURCES 7
-
-    #define MAX_USER 1024
-    #define MAX_BUFFER_SIZE 1024
-    #define MAX_QUEUE_COMMANDS 10
-
-    #define TO_MILLI 1000
-
-    #define COMMAND_KO "ko\n"
-    #define COMMAND_OK "ok\n"
-
     #include <sys/select.h>
     #include <arpa/inet.h>
     #include <stdbool.h>
     #include <string.h>
     #include <time.h>
     #include "map.h"
+
+    #define EXIT_WITH_ERROR 84
+    #define EXIT_WITH_SUCCESS 0
+    #define ERROR_RETURN -1
+    #define UNKNOWN_COMMAND 1
+    #define COMMAND_SUCCESS 2
+    #define INTERRUPTED_SYSCALL 4
+
+    #define COMMAND_KO "ko\n"
+    #define COMMAND_OK "ok\n"
+
+    #define NB_CMD 8
+    #define NB_RESSOURCES 7
+
+    #define MAX_BUFFER_SIZE 1024
+    #define MAX_QUEUE_COMMANDS 10
+
+    #define TO_MILLI 1000
 
 typedef struct client_s {
     struct sockaddr_in sock_addr;
@@ -45,6 +45,7 @@ typedef struct server_s {
     int port;
     int server_fd;
     int *fd_array;
+    size_t max_user;
     size_t size;
     fd_set readfds;
     client_t **clients;
@@ -54,6 +55,7 @@ typedef struct server_s {
 int server(int, const char **);
 server_t *init_server_struct(const arguments_t);
 int initialize_server(server_t *);
+void init_client(client_t *);
 int run_server(server_t *, zappy_t *, const arguments_t);
 client_t *get_client_in_struct(server_t *, const int);
 client_t *insert_client_in_struct(server_t *, const int);

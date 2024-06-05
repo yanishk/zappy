@@ -42,7 +42,7 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
             active_players = count_active_players(server, zappy);
             dprintf(client_fd, "%d %d\n%d\n", arg.height, arg.width,
                 arg.nb_clients - active_players);
-            return EXIT_WITH_SUCCESS;
+            return COMMAND_SUCCESS;
         }
     }
     return UNKNOWN_COMMAND;

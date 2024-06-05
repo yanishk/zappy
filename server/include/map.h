@@ -37,7 +37,6 @@
     #define PHIRAS_DEN 0.08
     #define THYSTAME_DEN 0.05
 
-
 typedef struct resource_s {
     size_t linemate;
     size_t deraumere;
