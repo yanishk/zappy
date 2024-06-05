@@ -26,6 +26,11 @@ typedef struct command_s {
     TAILQ_ENTRY(command_s) command_entries;
 } command_t;
 
+typedef struct coordinate_s {
+    int height;
+    int width;
+} coordinate_t;
+
 extern int (*cmd_func[NB_CMD])(server_t *, zappy_t *, const arguments_t,
     client_t *);
 extern command_infos_t cmd_list[NB_CMD];
