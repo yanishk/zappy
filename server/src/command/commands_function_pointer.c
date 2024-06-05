@@ -21,13 +21,13 @@ int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
 };
 
 command_infos_t cmd_list[NB_CMD] = {
-    {"Exit", 0, 1},
-    {"Inventory", 1, 1},
-    {"Take", 7, 2},
-    {"Set", 7, 2},
-    {"Forward", 7, 1},
-    {"Left", 7, 1},
-    {"Right", 7, 1},
-    {"Connect_nbr", 0, 1},
-    {"Fork", 42, 1}
+    {EXIT_COMMAND, 0, 1},
+    {INVENTORY_COMMAND, 1, 1},
+    {TAKE_COMMAND, 7, 2},
+    {SET_COMMAND, 7, 2},
+    {FORWARD_COMMAND, 7, 1},
+    {LEFT_COMMAND, 7, 1},
+    {RIGHT_COMMAND, 7, 1},
+    {CONNECT_NBR_COMMAND, 0, 1},
+    {FORK_COMMAND, 42, 1}
 };

@@ -9,7 +9,8 @@
 
 static bool command_arg_is_valid(server_t *server, const char *command_name)
 {
-    if (strcmp(command_name, "Set") == 0 || strcmp(command_name, "Take") == 0)
+    if (strcmp(SET_COMMAND, command_name) == 0 ||
+        strcmp(TAKE_COMMAND, command_name) == 0)
         return is_a_resource(server->cmd_arg_array[1]);
     return true;
 }

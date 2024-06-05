@@ -10,6 +10,16 @@
 
     #include "server.h"
 
+    #define EXIT_COMMAND "Exit"
+    #define INVENTORY_COMMAND "Inventory"
+    #define TAKE_COMMAND "Take"
+    #define SET_COMMAND "Set"
+    #define FORWARD_COMMAND "Forward"
+    #define LEFT_COMMAND "Left"
+    #define RIGHT_COMMAND "Right"
+    #define CONNECT_NBR_COMMAND "Connect_nbr"
+    #define FORK_COMMAND "Fork"
+
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]
 
