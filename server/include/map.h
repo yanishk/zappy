@@ -21,6 +21,8 @@
 
     #define FOOD_TIME_UNIT 126
 
+    #define NB_RESOURCES 7
+
     #define FOOD "food"
     #define LINEMATE "linemate"
     #define DERAUMERE "deraumere"
