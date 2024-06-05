@@ -14,8 +14,10 @@ TTFLAGS		=	-lcriterion --coverage
 
 SRC			=	./src/Main.cpp					\
 				./src/Network.cpp				\
-				./src/TeamAi.cpp				\
 				./src/Ressources.cpp			\
+				./src/Team.cpp					\
+				./src/AI/AAi.cpp				\
+				./src/AI/Queen.cpp				\
 
 SRC_TEST	=	./src/Ressources.cpp			\
 				./tests/TestsRessources.cpp		\
