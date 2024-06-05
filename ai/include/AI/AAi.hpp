@@ -63,6 +63,8 @@ namespace Zappy {
             std::pair<double, double> _position;
             Orientation _orientation;
             std::size_t _level;
+
+        private:
             std::size_t countMember(const std::string &line) const;
             bool checkRessources(const std::vector<std::string> &newRessources);
 
