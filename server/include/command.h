@@ -42,5 +42,6 @@ int turn_right(server_t *, zappy_t *, const arguments_t, client_t *);
 int connect_nbr(server_t *, zappy_t *, const arguments_t, client_t *);
 int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int take_object(server_t *, zappy_t *, const arguments_t, client_t *);
+int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 
 #endif /* !COMMAND_H_ */

@@ -17,7 +17,7 @@ static unsigned int count_active_players(const server_t *server,
 
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
         if (strcmp(server->cmd_arg_array[0], player->team_name) == 0 &&
-            !player->is_egg) {
+            player->is_egg) {
             count_eggs++;
         }
     }
@@ -41,7 +41,7 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
             player->clock_begin = clock();
             active_players = count_active_players(server, zappy);
             dprintf(client_fd, "%d %d\n%d\n", arg.height, arg.width,
-                arg.nb_clients - active_players);
+                active_players);
             return COMMAND_SUCCESS;
         }
     }
