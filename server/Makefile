@@ -40,11 +40,13 @@ SRC			=	./src/main.c								\
 				./src/command/take_object.c					\
 				./src/command/set_object.c 					\
 				./src/command/move_forward.c 				\
+				./src/command/move_player.c 				\
 				./src/command/turn_left.c 					\
 				./src/command/turn_right.c 					\
 				./src/command/commands_function_pointer.c	\
 				./src/command/connect_nbr.c 				\
 				./src/command/fork_player.c 				\
+				./src/command/eject_from_tile.c 			\
 				./src/lib/array_functions.c 				\
 				./src/lib/word_array.c						\
 				./src/lib/get_player_by_id.c				\

@@ -5,7 +5,7 @@
 ** fork_player
 */
 
-#include "server.h"
+#include "command.h"
 
 int fork_player(server_t *, zappy_t *zappy, const arguments_t arg,
     client_t *client)

@@ -14,6 +14,9 @@
     #include "arguments.h"
 
     #define RIGHT_ANGLE 90
+
+    #define NB_DIRECTIONS 4
+
     #define NORTH 0
     #define EAST 90
     #define SOUTH 180
@@ -38,6 +41,14 @@
     #define MENDIANE_DEN 0.1
     #define PHIRAS_DEN 0.08
     #define THYSTAME_DEN 0.05
+
+typedef struct tile_numbering_s {
+    size_t direction;
+    size_t north_tile;
+    size_t west_tile;
+    size_t south_tile;
+    size_t east_tile;
+} tile_numbering_t;
 
 typedef struct resource_s {
     size_t linemate;
