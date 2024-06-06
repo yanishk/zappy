@@ -49,5 +49,6 @@ int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int take_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 int look_around(server_t *, zappy_t *, const arguments_t, client_t *);
+char *get_on_land(zappy_t *, coordinate_t, unsigned int);
 
 #endif /* !COMMAND_H_ */

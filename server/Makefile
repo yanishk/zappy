@@ -8,7 +8,7 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra -lm
+CFLAGS		=	-Wall -Wextra -Werror -lm
 CPPFLAGS	=	-iquote ./include
 FLAGS_DEBUG = 	-g
 
@@ -44,7 +44,8 @@ SRC			=	./src/main.c								\
 				./src/command/commands_function_pointer.c	\
 				./src/command/connect_nbr.c 				\
 				./src/command/fork_player.c 				\
-				./src/command/look.c		 				\
+				./src/command/look/look.c		 			\
+				./src/command/look/get_on_land.c 			\
 				./src/lib/array_functions.c 				\
 				./src/lib/word_array.c						\
 				./src/lib/get_player_by_id.c				\
