@@ -7,7 +7,7 @@
 
 #include "command.h"
 
-int get_resources(resource_t *resource, char *name)
+int get_resources(resource_t *resource, const char *name)
 {
     if (strcmp(name, FOOD) == 0)
         return resource->food;
