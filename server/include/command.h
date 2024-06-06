@@ -19,6 +19,7 @@
     #define RIGHT_COMMAND "Right"
     #define CONNECT_NBR_COMMAND "Connect_nbr"
     #define FORK_COMMAND "Fork"
+    #define LOOK_COMMAND "Look"
 
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]

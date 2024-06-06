@@ -13,15 +13,13 @@ static char *get_resources_tile(int resource_decount, char *string_on_land,
 {
     char *new_string = NULL;
 
-    if (resource_decount > 0) {
-        while (resource_decount != 0) {
-            new_string = realloc(string_on_land, strlen(string_on_land) +
-                sizeof(" ") + sizeof(name));
-            string_on_land = new_string;
-            strcat(string_on_land, " ");
-            strcat(string_on_land, name);
-            resource_decount--;
-        }
+    while (resource_decount < 0) {
+        new_string = realloc(string_on_land, strlen(string_on_land) +
+            sizeof(" ") + sizeof(name));
+        string_on_land = new_string;
+        strcat(string_on_land, " ");
+        strcat(string_on_land, name);
+        resource_decount--;
     }
     return string_on_land;
 }
@@ -49,7 +47,7 @@ char *get_on_land(zappy_t *zappy, coordinate_t pos,
     unsigned int client_fd)
 {
     int resource_decount = 0;
-    char *string_on_land = malloc(1);
+    char *string_on_land = malloc(sizeof(char));
     const char *resource_list[NB_RESOURCES] = {FOOD, LINEMATE, DERAUMERE,
         SIBUR, MENDIANE, PHIRAS, THYSTAME};
 

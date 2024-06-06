@@ -76,6 +76,6 @@ bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
 int get_resources(resource_t *, const char *);
 void set_resources(resource_t *, const char *, int);
-bool is_a_resource(char *);
+bool is_a_resource(const char *);
 
 #endif /* !SERVER_H_ */

@@ -30,6 +30,6 @@ command_infos_t cmd_list[NB_CMD] = {
     {LEFT_COMMAND, 7, 1},
     {RIGHT_COMMAND, 7, 1},
     {CONNECT_NBR_COMMAND, 0, 1},
-    {FORK_COMMAND, 42, 1}
-  //look
+    {FORK_COMMAND, 42, 1},
+    {LOOK_COMMAND, 7, 1}
 };
