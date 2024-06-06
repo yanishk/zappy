@@ -26,7 +26,6 @@
     #define COMMAND_OK "ok\n"
 
     #define NB_CMD 10
-    #define NB_RESOURCES 7
 
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
@@ -59,6 +58,8 @@ void init_client(client_t *);
 int run_server(server_t *, zappy_t *, const arguments_t);
 client_t *get_client_in_struct(server_t *, const int);
 client_t *insert_client_in_struct(server_t *, const int);
+int insert_game_command_in_queue(server_t *, client_t *);
+void insert_other_command_in_queue(server_t *, client_t *);
 void check_command_queue(server_t *, zappy_t *, const arguments_t, client_t *);
 void close_client_socket(server_t *, zappy_t *, client_t *);
 void get_user_input(server_t *, zappy_t *, client_t *);
@@ -75,5 +76,6 @@ bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
 int get_resources(resource_t *, const char *);
 void set_resources(resource_t *, const char *, int);
+bool is_a_resource(char *);
 
 #endif /* !SERVER_H_ */

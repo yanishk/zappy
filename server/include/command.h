@@ -10,12 +10,23 @@
 
     #include "server.h"
 
+    #define EXIT_COMMAND "Exit"
+    #define INVENTORY_COMMAND "Inventory"
+    #define TAKE_COMMAND "Take"
+    #define SET_COMMAND "Set"
+    #define FORWARD_COMMAND "Forward"
+    #define LEFT_COMMAND "Left"
+    #define RIGHT_COMMAND "Right"
+    #define CONNECT_NBR_COMMAND "Connect_nbr"
+    #define FORK_COMMAND "Fork"
+
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]
 
-typedef struct command_infos {
+typedef struct command_infos_s {
     char *name;
     double time_unit;
+    size_t arg_nb;
 } command_infos_t;
 
 typedef struct command_s {
