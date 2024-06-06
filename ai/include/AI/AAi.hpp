@@ -14,7 +14,8 @@
     #include "Network.hpp"
     #include "Ressources.hpp"
 
-    #define START_POSITION {0, 0}
+    #define INITIALIZE_MODE 0
+    #define START_POSITION {0.0, 0.0}
     #define START_LEVEL 1
 
 namespace Zappy {

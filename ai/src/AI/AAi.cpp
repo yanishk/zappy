@@ -11,12 +11,15 @@
 bool Zappy::AAi::forward()
 {
     _network.sendInformationToServer("Forward\n");
+    _position.first -= 1;
+
     return true;
 }
 
 bool Zappy::AAi::right()
 {
     _network.sendInformationToServer("Right\n");
+    _position.second += 1;
 
     return true;
 }
@@ -24,7 +27,8 @@ bool Zappy::AAi::right()
 bool Zappy::AAi::left()
 {
     _network.sendInformationToServer("Left\n");
-
+    _position.second -= 1;
+ 
     return true;
 }
 
@@ -44,8 +48,8 @@ std::size_t Zappy::AAi::countMember(const std::string &line) const
 std::vector<std::string> Zappy::AAi::look()
 {
     _network.sendInformationToServer("Look\n");
-    std::vector<std::string> vector;
     std::string information = _network.getInfoFromServer();
+    std::vector<std::string> vector;
     std::size_t nbMember = countMember(information);
 
     while (vector.size() < nbMember) {

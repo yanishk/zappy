@@ -20,6 +20,7 @@
     #define NONE 0
 
     #include <string>
+    #include <vector>
     #include <unordered_map>
 
 namespace Zappy {
@@ -55,9 +56,17 @@ namespace Zappy {
 
             };
 
+            int operator[](const std::string &ressource) {
+                return _ressources[ressource];
+            }
+
             int getRessource(const std::string &ressource) {
                 return _ressources[ressource];
             };
+
+            const std::string &indexToRessource(int index);
+
+            std::vector<int> getAllValueRessources();
 
         private:
 

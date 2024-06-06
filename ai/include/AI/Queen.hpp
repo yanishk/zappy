@@ -10,7 +10,6 @@
 
     #include "AAi.hpp"
 
-    #define INITIALIZE_MODE 0
     #define FIRST_LEVEL 1
 
 namespace Zappy {
