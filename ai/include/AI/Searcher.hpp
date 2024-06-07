@@ -8,6 +8,22 @@
 #ifndef SEARCHER_HPP_
     #define SEARCHER_HPP_
 
+    #define FIRST_LEVEL_RANGE       1, 3
+    #define SECOND_LEVEL_RANGE      4, 8
+    #define THISRT_LEVEL_RANGE      9, 15
+    #define FOURTH_LEVEL_RANGE      16, 24
+    #define FIVE_LEVEL_RANGE        25, 35
+    #define SIX_LEVEL_RANGE         36, 48
+    #define SEVEN_LEVEL_RANGE       49, 63
+
+    #define MIDDLE_FIRST_LEVEL      2
+    #define MIDDLE_SECOND_LEVEL     6
+    #define MIDDLE_THIRST_LEVEL     12
+    #define MIDDLE_FOURTH_LEVEL     20
+    #define MIDDLE_FIVE_LEVEL       30
+    #define MIDDLE_SIX_LEVEL        42
+    #define MIDDLE_SEVEN_LEVEL      56
+
     #define MIN_FOOD 20
 
     #include <map>
@@ -41,11 +57,13 @@ namespace Zappy
         private:
             Order _order;
             std::vector<std::string> _lastLook;
-            std::vector <Mouvement> _nextMouvment;
+            std::vector<Mouvement> _nextMouvment;
 
             void updateOrder();
-            bool isPriority(const std::string &item);
-            void whereShouldIGo();
+            bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
+            std::vector<std::vector<bool>> estimatePriority();
+            void whereShouldIGo(std::vector<std::vector<bool>> priority);
+            std::pair<int, int> whereIsThePriority(int index);
 
     };
 
