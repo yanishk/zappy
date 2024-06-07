@@ -26,24 +26,24 @@ static unsigned int count_active_players(const server_t *server,
 }
 
 int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
-    client_t *client)
+    const unsigned int client_fd)
 {
     unsigned int active_players = 0;
     player_t *player = NULL;
 
-    if (is_player_connected(zappy, client->client_fd))
+    if (is_player_connected(zappy, client_fd))
         return UNKNOWN_COMMAND;
     for ((player) = ((&zappy->player_head)->tqh_first); (player);
         (player) = ((player)->player_entries.tqe_next)) {
         if (strcmp(server->cmd_arg_array[0], player->team_name) == 0 &&
             player->is_egg) {
-            player->id = client->client_fd;
+            player->id = client_fd;
             player->is_egg = false;
             player->clock_begin = clock();
             active_players = count_active_players(server, zappy);
-            dprintf(client->client_fd, "%d %d\n%d\n", arg.height,
+            dprintf(client_fd, "%d %d\n%d\n", arg.height,
                 arg.width, active_players);
-            pnw_func(server, zappy, arg, client);
+            pnw_func(server, zappy, client_fd);
             return COMMAND_SUCCESS;
         }
     }

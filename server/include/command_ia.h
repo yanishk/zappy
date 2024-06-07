@@ -52,7 +52,8 @@ extern int (*cmd_func_ia[NB_IA_CMD])(server_t *, zappy_t *, const arguments_t,
 extern command_infos_t cmd_list_ia[NB_IA_CMD];
 
 bool is_player_connected(const zappy_t *, const unsigned int);
-int connect_player(server_t *, zappy_t *, const arguments_t, client_t *);
+int connect_player(server_t *, zappy_t *, const arguments_t,
+    const unsigned int);
 
 int inventory_command(server_t *, zappy_t *, const arguments_t, client_t *);
 int move_forward(server_t *, zappy_t *, const arguments_t, client_t *);

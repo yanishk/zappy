@@ -35,7 +35,9 @@ int mct_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int tna_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int plv_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int ppo_func(server_t *, zappy_t *, const arguments_t, client_t *);
-int pnw_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int pin_func(server_t *, zappy_t *, const arguments_t, client_t *);
+
+int pnw_func(server_t *, zappy_t *, const unsigned int);
+int pfk_func(server_t *, zappy_t *, const unsigned int);
 
 #endif /* !COMMAND_GUI_H_ */
