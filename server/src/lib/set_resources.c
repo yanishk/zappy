@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-void set_resources(resource_t *resource, char *name, int value)
+void set_resources(resource_t *resource, const char *name, int value)
 {
     if (strcmp(name, FOOD) == 0)
         resource->food += value;

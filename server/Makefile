@@ -18,6 +18,7 @@ SRC			=	./src/main.c								\
 				./src/run_server.c                  		\
 				./src/insert_client_in_struct.c     		\
 				./src/get_user_input.c						\
+				./src/insert_command_in_queue.c 			\
 				./src/check_command_queue.c 				\
 				./src/close_client_socket.c         		\
 				./src/player_connection.c 					\
@@ -43,13 +44,17 @@ SRC			=	./src/main.c								\
 				./src/command/turn_right.c 					\
 				./src/command/commands_function_pointer.c	\
 				./src/command/connect_nbr.c 				\
+				./src/command/fork_player.c 				\
+				./src/command/look/look.c		 			\
+				./src/command/look/get_on_land.c 			\
 				./src/lib/array_functions.c 				\
 				./src/lib/word_array.c						\
 				./src/lib/get_player_by_id.c				\
 				./src/lib/is_command_queue_full.c			\
 				./src/lib/time_is_up.c						\
 				./src/lib/get_resources.c					\
-				./src/lib/set_resources.c
+				./src/lib/set_resources.c					\
+				./src/lib/is_a_resource.c
 
 OBJ			=	$(SRC:.c=.o)
 
