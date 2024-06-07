@@ -53,11 +53,14 @@ SRC			=	./src/main.c											\
 				./src/command/command_gui/pnw.c				 			\
 				./src/command/command_gui/tna.c 						\
 				./src/command/command_gui/plv.c 						\
+				./src/command/command_gui/ppo.c 						\
 				./src/command/command_gui/commands_function_pointer.c	\
 				./src/lib/is_positive_number.c 							\
 				./src/lib/array_functions.c 							\
 				./src/lib/word_array.c									\
+				./src/lib/get_graphical_client.c 						\
 				./src/lib/get_player_by_id.c							\
+				./src/lib/get_player_direction.c 						\
 				./src/lib/is_command_queue_full.c						\
 				./src/lib/time_is_up.c									\
 				./src/lib/get_resources.c								\
