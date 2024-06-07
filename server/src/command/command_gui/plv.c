@@ -10,12 +10,11 @@
 int plv_func(server_t *server, zappy_t *zappy, const arguments_t,
     client_t *client)
 {
+    int player_id = atoi(server->cmd_arg_array[1]);
     player_t *player = NULL;
-    int player_id = 0;
 
-    if (!is_positive_number(server->cmd_arg_array[1]))
+    if (player_id == 0)
         return EXIT_WITH_ERROR;
-    player_id = atoi(server->cmd_arg_array[1]);
     player = get_player(zappy, player_id);
     if (player == NULL)
         return EXIT_WITH_ERROR;
