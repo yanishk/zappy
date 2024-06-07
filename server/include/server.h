@@ -22,9 +22,6 @@
     #define COMMAND_SUCCESS 2
     #define INTERRUPTED_SYSCALL 4
 
-    #define COMMAND_KO "ko\n"
-    #define COMMAND_OK "ok\n"
-
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
 

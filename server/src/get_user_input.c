@@ -40,12 +40,19 @@ void answer_client(const int status, const unsigned int client_fd)
 static void execute_graphical_command(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client)
 {
+    int status = UNKNOWN_COMMAND;
+    int arguments_nb = array_size(server->cmd_arg_array);
+
     for (size_t i = 0; i < NB_GUI_CMD; i++) {
-        if (array_size(server->cmd_arg_array) == cmd_list_gui[i].arg_nb &&
-        strcmp(server->cmd_arg_array[0], cmd_list_gui[i].name) == 0) {
-            cmd_func_gui[i](server, zappy, arg, client);
+        if (strcmp(server->cmd_arg_array[0], cmd_list_gui[i].name) == 0) {
+            status = arguments_nb == cmd_list_gui[i].arg_nb ?
+            cmd_func_gui[i](server, zappy, arg, client) : EXIT_WITH_ERROR;
         }
     }
+    if (status == UNKNOWN_COMMAND)
+        dprintf(client->client_fd, "suc\n");
+    if (status == EXIT_WITH_ERROR)
+        dprintf(client->client_fd, "sbp\n");
 }
 
 static void insert_command_in_queue(server_t *server, zappy_t *zappy,
