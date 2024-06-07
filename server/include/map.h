@@ -21,6 +21,7 @@
 
     #define FOOD_TIME_UNIT 126
 
+    #define NB_DIR 4
     #define NB_RESOURCES 7
 
     #define FOOD "food"
@@ -70,6 +71,11 @@ typedef struct zappy_s {
 struct repartion_resource {
     char *name;
     double density;
+};
+
+struct direction_player {
+    size_t angle;
+    int direction;
 };
 
 void density_onland(const arguments_t *args, zappy_t *zappy);
