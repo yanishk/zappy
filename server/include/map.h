@@ -79,5 +79,7 @@ void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name);
 void initialize_resources(resource_t *resource);
 void print_players_pos_and_direction(const zappy_t zappy);
 void print_players(const zappy_t zappy);
+void print_tile_resources(const unsigned int client_fd, int width, int height,
+    const resource_t resource);
 
 #endif /* !MAP_H_ */

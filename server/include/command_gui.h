@@ -8,7 +8,15 @@
 #ifndef COMMAND_GUI_H_
     #define COMMAND_GUI_H_
 
-    #include "server.h"
+    #include "common_command.h"
+
+    #define NB_GUI_CMD 4
+
+    #define MSZ_COMMAND "msg"
+    #define MCT_COMMAND "mct"
+    #define BCT_COMMAND "bct"
+
+    #define NB_DIR 4
 
     #define NB_DIR 4
 
@@ -17,19 +25,12 @@ typedef struct command_infos_gui_s {
     size_t arg_nb;
 } command_infos_gui_t;
 
-typedef struct command_gui_s {
-    size_t index;
-    TAILQ_ENTRY(command_ia_s) command_entries;
-} command_gui_t;
+extern int (*cmd_func_gui[NB_GUI_CMD])(server_t *, zappy_t *,
+    const arguments_t, client_t *);
+extern command_infos_gui_t cmd_list_gui[NB_GUI_CMD];
 
-struct direction_player {
-    size_t angle;
-    int direction;
-};
-
-extern int (*cmd_func_gui[NB_GUI_CMD])(client_t *);
-extern command_infos_gui_t cmd_list_ia[NB_GUI_CMD];
-
-int exit_func(client_t *);
+int msz_command(server_t *, zappy_t *, const arguments_t, client_t *);
+int bct_command(server_t *, zappy_t *, const arguments_t, client_t *);
+int mct_command(server_t *, zappy_t *, const arguments_t, client_t *);
 
 #endif /* !COMMAND_GUI_H_ */

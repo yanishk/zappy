@@ -25,9 +25,6 @@
     #define COMMAND_KO "ko\n"
     #define COMMAND_OK "ok\n"
 
-    #define NB_IA_CMD 10
-    #define NB_GUI_CMD 1
-
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
 
@@ -37,6 +34,7 @@ typedef struct client_s {
     struct sockaddr_in sock_addr;
     int client_fd;
     bool has_been_closed;
+    bool is_graphic;
     TAILQ_HEAD(, command_ia_s) command_head;
 } client_t;
 
@@ -63,7 +61,7 @@ int insert_game_command_in_queue(server_t *, client_t *);
 void insert_other_command_in_queue(server_t *, client_t *);
 void check_command_queue(server_t *, zappy_t *, const arguments_t, client_t *);
 void close_client_socket(server_t *, zappy_t *, client_t *);
-void get_user_input(server_t *, zappy_t *, client_t *);
+void get_user_input(server_t *, zappy_t *, const arguments_t, client_t *);
 void check_players_food(server_t *, zappy_t *, const arguments_t);
 void answer_client(const int, const unsigned int);
 void free_client_commands(client_t *);

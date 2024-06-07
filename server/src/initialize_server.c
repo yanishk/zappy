@@ -64,6 +64,7 @@ void init_client(client_t *client)
 {
     client->client_fd = 0;
     client->has_been_closed = false;
+    client->is_graphic = false;
     TAILQ_INIT(&client->command_head);
 }
 

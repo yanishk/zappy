@@ -2,15 +2,16 @@
 ** EPITECH PROJECT, 2024
 ** zappy_push_wo_vision
 ** File description:
-** command
+** command_ai
 */
 
-#ifndef COMMAND_H_
-    #define COMMAND_H_
+#ifndef COMMAND_AI_H_
+    #define COMMAND_AI_H_
 
-    #include "server.h"
+    #include "common_command.h"
 
-    #define EXIT_COMMAND "Exit"
+    #define NB_IA_CMD 10
+
     #define INVENTORY_COMMAND "Inventory"
     #define TAKE_COMMAND "Take"
     #define SET_COMMAND "Set"
@@ -51,7 +52,6 @@ bool is_player_connected(const zappy_t *, const unsigned int);
 int connect_player(server_t *, zappy_t *, const arguments_t,
     const unsigned int);
 
-int exit_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int inventory_command(server_t *, zappy_t *, const arguments_t, client_t *);
 int move_forward(server_t *, zappy_t *, const arguments_t, client_t *);
 int turn_left(server_t *, zappy_t *, const arguments_t, client_t *);
@@ -63,4 +63,4 @@ int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 int look_around(server_t *, zappy_t *, const arguments_t, client_t *);
 char *get_on_land(zappy_t *, coordinate_t, unsigned int);
 
-#endif /* !COMMAND_H_ */
+#endif /* !COMMAND_AI_H_ */

@@ -8,7 +8,7 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra -Werror -lm
+CFLAGS		=	-Wall -Wextra -lm
 CPPFLAGS	=	-iquote ./include
 FLAGS_DEBUG = 	-g
 
@@ -35,19 +35,23 @@ SRC			=	./src/main.c											\
 				./src/arguments/port_flag.c  							\
 				./src/arguments/width_flag.c  							\
 				./src/arguments/height_flag.c  							\
-				./src/command/command_ia/exit.c							\
+				./src/command/common/exit.c								\
 				./src/command/command_ia/inventory.c 					\
 				./src/command/command_ia/take_object.c					\
 				./src/command/command_ia/set_object.c 					\
 				./src/command/command_ia/move_forward.c 				\
 				./src/command/command_ia/turn_left.c 					\
 				./src/command/command_ia/turn_right.c 					\
-				./src/command/command_ia/commands_function_pointer.c	\
 				./src/command/command_ia/connect_nbr.c 					\
 				./src/command/command_ia/fork_player.c 					\
 				./src/command/command_ia/look/look.c		 			\
 				./src/command/command_ia/look/get_on_land.c 			\
+				./src/command/command_ia/commands_function_pointer.c	\
+				./src/command/command_gui/msz.c							\
+				./src/command/command_gui/mct.c							\
+				./src/command/command_gui/bct.c							\
 				./src/command/command_gui/pnw.c				 			\
+				./src/command/command_gui/commands_function_pointer.c	\
 				./src/lib/array_functions.c 							\
 				./src/lib/word_array.c									\
 				./src/lib/get_player_by_id.c							\

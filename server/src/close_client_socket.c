@@ -35,5 +35,6 @@ void close_client_socket(server_t *server, zappy_t *zappy, client_t *client)
             TAILQ_REMOVE(&zappy->player_head, player, player_entries);
         client->client_fd = 0;
         client->has_been_closed = false;
+        client->is_graphic = false;
     }
 }
