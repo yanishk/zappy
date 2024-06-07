@@ -47,6 +47,7 @@ SRC			=	./src/main.c											\
 				./src/command/command_ia/fork_player.c 					\
 				./src/command/command_ia/look/look.c		 			\
 				./src/command/command_ia/look/get_on_land.c 			\
+				./src/command/command_gui/pnw.c				 			\
 				./src/lib/array_functions.c 							\
 				./src/lib/word_array.c									\
 				./src/lib/get_player_by_id.c							\
