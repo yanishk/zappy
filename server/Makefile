@@ -52,6 +52,7 @@ SRC			=	./src/main.c											\
 				./src/command/command_gui/bct.c							\
 				./src/command/command_gui/pnw.c				 			\
 				./src/command/command_gui/commands_function_pointer.c	\
+				./src/lib/is_positive_number.c 							\
 				./src/lib/array_functions.c 							\
 				./src/lib/word_array.c									\
 				./src/lib/get_player_by_id.c							\
@@ -59,7 +60,8 @@ SRC			=	./src/main.c											\
 				./src/lib/time_is_up.c									\
 				./src/lib/get_resources.c								\
 				./src/lib/set_resources.c								\
-				./src/lib/is_a_resource.c
+				./src/lib/is_a_resource.c								\
+				./src/lib/get_tile_index.c
 
 OBJ			=	$(SRC:.c=.o)
 

@@ -15,8 +15,10 @@ struct direction_player direction[] = {
     {WEST, 4}
 };
 
-void pnw_func(player_t *player, client_t *client)
+int pnw_func(server_t *, zappy_t *zappy, const arguments_t, client_t *client)
 {
+    player_t *player = get_player(zappy, client->client_fd);
+
     for (size_t index = 0; index < NB_DIR; index++) {
         if (direction[index].angle == player->direction) {
             dprintf(client->client_fd, "pnw %d %d %d %d %d %s\n", player->id,
@@ -24,4 +26,5 @@ void pnw_func(player_t *player, client_t *client)
             player->level, player->team_name);
         }
     }
+    return EXIT_WITH_SUCCESS;
 }

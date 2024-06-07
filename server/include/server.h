@@ -67,6 +67,7 @@ void answer_client(const int, const unsigned int);
 void free_client_commands(client_t *);
 void free_program(server_t *, zappy_t *, arguments_t *);
 
+bool is_positive_number(const char *);
 size_t array_size(char **);
 void free_array(char **);
 char **word_array(char const *, char *);
@@ -76,5 +77,6 @@ bool time_is_up(clock_t, double);
 int get_resources(resource_t *, const char *);
 void set_resources(resource_t *, const char *, int);
 bool is_a_resource(const char *);
+int get_tile_index(const char *, const int);
 
 #endif /* !SERVER_H_ */
