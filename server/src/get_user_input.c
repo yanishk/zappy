@@ -41,7 +41,7 @@ static void execute_graphical_command(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client)
 {
     int status = UNKNOWN_COMMAND;
-    int arguments_nb = array_size(server->cmd_arg_array);
+    size_t arguments_nb = array_size(server->cmd_arg_array);
 
     for (size_t i = 0; i < NB_GUI_CMD; i++) {
         if (strcmp(server->cmd_arg_array[0], cmd_list_gui[i].name) == 0) {
