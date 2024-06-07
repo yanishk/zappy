@@ -54,6 +54,7 @@ SRC			=	./src/main.c											\
 				./src/command/command_gui/tna.c 						\
 				./src/command/command_gui/plv.c 						\
 				./src/command/command_gui/ppo.c 						\
+				./src/command/command_gui/pin.c 						\
 				./src/command/command_gui/commands_function_pointer.c	\
 				./src/lib/is_positive_number.c 							\
 				./src/lib/array_functions.c 							\

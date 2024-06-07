@@ -15,7 +15,8 @@ int (*cmd_func_gui[NB_GUI_CMD])(server_t *, zappy_t *,
     &mct_func,
     &tna_func,
     &plv_func,
-    &ppo_func
+    &ppo_func,
+    &pin_func
 };
 
 command_infos_gui_t cmd_list_gui[NB_GUI_CMD] = {
@@ -25,5 +26,6 @@ command_infos_gui_t cmd_list_gui[NB_GUI_CMD] = {
     {MCT_COMMAND, 1},
     {TNA_COMMAND, 1},
     {PLV_COMMAND, 2},
-    {PPO_COMMAND, 2}
+    {PPO_COMMAND, 2},
+    {PIN_COMMAND, 2}
 };
