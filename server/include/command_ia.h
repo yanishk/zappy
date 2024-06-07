@@ -43,9 +43,9 @@ typedef struct coordinate_s {
     int width;
 } coordinate_t;
 
-extern int (*cmd_func_ia[NB_CMD])(server_t *, zappy_t *, const arguments_t,
+extern int (*cmd_func_ia[NB_IA_CMD])(server_t *, zappy_t *, const arguments_t,
     client_t *);
-extern command_infos_t cmd_list_ia[NB_CMD];
+extern command_infos_t cmd_list_ia[NB_IA_CMD];
 
 bool is_player_connected(const zappy_t *, const unsigned int);
 int connect_player(server_t *, zappy_t *, const arguments_t,

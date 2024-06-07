@@ -25,7 +25,8 @@
     #define COMMAND_KO "ko\n"
     #define COMMAND_OK "ok\n"
 
-    #define NB_CMD 10
+    #define NB_IA_CMD 10
+    #define NB_GUI_CMD 1
 
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10

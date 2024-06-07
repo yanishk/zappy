@@ -19,7 +19,7 @@ int insert_game_command_in_queue(server_t *server, client_t *client)
 {
     command_ia_t *command = NULL;
 
-    for (size_t i = 0; i < NB_CMD; i++) {
+    for (size_t i = 0; i < NB_IA_CMD; i++) {
         if (array_size(server->cmd_arg_array) == cmd_list_ia[i].arg_nb &&
         strcmp(server->cmd_arg_array[0], cmd_list_ia[i].name) == 0 &&
         command_arg_is_valid(server, cmd_list_ia[i].name)) {
@@ -44,6 +44,6 @@ void insert_other_command_in_queue(server_t *server,
     TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);
     command->array = server->cmd_arg_array;
     command->time_unit = 0;
-    command->index = NB_CMD;
+    command->index = NB_IA_CMD;
     command->clock_begin = clock();
 }
