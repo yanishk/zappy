@@ -30,22 +30,22 @@ typedef struct command_infos_s {
     size_t arg_nb;
 } command_infos_t;
 
-typedef struct command_s {
+typedef struct command_ia_s {
     char **array;
     double time_unit;
     size_t index;
     clock_t clock_begin;
-    TAILQ_ENTRY(command_s) command_entries;
-} command_t;
+    TAILQ_ENTRY(command_ia_s) command_entries;
+} command_ia_t;
 
 typedef struct coordinate_s {
     int height;
     int width;
 } coordinate_t;
 
-extern int (*cmd_func[NB_CMD])(server_t *, zappy_t *, const arguments_t,
+extern int (*cmd_func_ia[NB_CMD])(server_t *, zappy_t *, const arguments_t,
     client_t *);
-extern command_infos_t cmd_list[NB_CMD];
+extern command_infos_t cmd_list_ia[NB_CMD];
 
 bool is_player_connected(const zappy_t *, const unsigned int);
 int connect_player(server_t *, zappy_t *, const arguments_t,

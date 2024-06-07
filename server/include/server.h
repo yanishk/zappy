@@ -36,7 +36,7 @@ typedef struct client_s {
     struct sockaddr_in sock_addr;
     int client_fd;
     bool has_been_closed;
-    TAILQ_HEAD(, command_s) command_head;
+    TAILQ_HEAD(, command_ia_s) command_head;
 } client_t;
 
 typedef struct server_s {

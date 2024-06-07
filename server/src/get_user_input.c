@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "server.h"
 #include "map.h"
-#include "command.h"
+#include "command_ia.h"
 
 static int read_client_socket(server_t *server, client_t *client)
 {

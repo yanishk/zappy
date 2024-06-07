@@ -5,7 +5,7 @@
 ** insert_command_in_queue
 */
 
-#include "command.h"
+#include "command_ia.h"
 
 static bool command_arg_is_valid(server_t *server, const char *command_name)
 {
@@ -17,16 +17,16 @@ static bool command_arg_is_valid(server_t *server, const char *command_name)
 
 int insert_game_command_in_queue(server_t *server, client_t *client)
 {
-    command_t *command = NULL;
+    command_ia_t *command = NULL;
 
     for (size_t i = 0; i < NB_CMD; i++) {
-        if (array_size(server->cmd_arg_array) == cmd_list[i].arg_nb &&
-        strcmp(server->cmd_arg_array[0], cmd_list[i].name) == 0 &&
-        command_arg_is_valid(server, cmd_list[i].name)) {
-            command = malloc(sizeof(command_t));
+        if (array_size(server->cmd_arg_array) == cmd_list_ia[i].arg_nb &&
+        strcmp(server->cmd_arg_array[0], cmd_list_ia[i].name) == 0 &&
+        command_arg_is_valid(server, cmd_list_ia[i].name)) {
+            command = malloc(sizeof(command_ia_t));
             TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);
             command->array = server->cmd_arg_array;
-            command->time_unit = cmd_list[i].time_unit;
+            command->time_unit = cmd_list_ia[i].time_unit;
             command->index = i;
             command->clock_begin = clock();
             return EXIT_WITH_SUCCESS;
@@ -38,9 +38,9 @@ int insert_game_command_in_queue(server_t *server, client_t *client)
 void insert_other_command_in_queue(server_t *server,
     client_t *client)
 {
-    command_t *command = NULL;
+    command_ia_t *command = NULL;
 
-    command = malloc(sizeof(command_t));
+    command = malloc(sizeof(command_ia_t));
     TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);
     command->array = server->cmd_arg_array;
     command->time_unit = 0;
