@@ -69,7 +69,6 @@ static void insert_command_in_queue(server_t *server, zappy_t *zappy,
         status = insert_game_command_in_queue(server, client);
     if (status == UNKNOWN_COMMAND)
         insert_other_command_in_queue(server, client);
-    print_players_pos_and_direction(*zappy);
 }
 
 void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg,

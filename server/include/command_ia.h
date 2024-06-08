@@ -10,7 +10,7 @@
 
     #include "common_command.h"
 
-    #define NB_IA_CMD 11
+    #define NB_IA_CMD 12
 
     #define COMMAND_KO "ko\n"
     #define COMMAND_OK "ok\n"
@@ -25,6 +25,7 @@
     #define FORK_COMMAND "Fork"
     #define EJECT_COMMAND "Eject"
     #define LOOK_COMMAND "Look"
+    #define BROADCAST_COMMAND "Broadcast"
 
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]
@@ -66,6 +67,7 @@ int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int take_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 int eject_from_tile(server_t *, zappy_t *, const arguments_t, client_t *);
+int broadcast(server_t *, zappy_t *, const arguments_t, client_t *);
 
 int look_around(server_t *, zappy_t *, const arguments_t, client_t *);
 char *get_on_land(zappy_t *, coordinate_t, unsigned int);

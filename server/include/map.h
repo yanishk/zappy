@@ -46,9 +46,13 @@
 typedef struct tile_numbering_s {
     size_t direction;
     size_t north_tile;
+    size_t north_west_tile;
     size_t west_tile;
+    size_t south_west_tile;
     size_t south_tile;
+    size_t south_east_tile;
     size_t east_tile;
+    size_t north_east_tile;
 } tile_numbering_t;
 
 typedef struct resource_s {

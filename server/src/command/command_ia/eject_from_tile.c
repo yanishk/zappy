@@ -8,10 +8,10 @@
 #include "command_ia.h"
 
 static tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {
-    {NORTH, 1, 3, 5, 7},
-    {WEST, 7, 1, 3, 5},
-    {SOUTH, 5, 7, 1, 3},
-    {EAST, 3, 5, 7, 1},
+    {NORTH, 1, 2, 3, 4, 5, 6, 7, 8},
+    {WEST, 7, 8, 1, 2, 3, 4, 5, 6},
+    {SOUTH, 5, 6, 7, 8, 1, 2, 3, 4},
+    {EAST, 3, 4, 5, 6, 7, 8, 1, 2}
 };
 
 static size_t get_previous_tile(const tile_numbering_t tile_numbering,

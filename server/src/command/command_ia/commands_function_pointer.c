@@ -19,7 +19,8 @@ int (*cmd_func_ia[NB_IA_CMD])(server_t *server, zappy_t *zappy,
     &connect_nbr,
     &fork_player,
     &eject_from_tile,
-    &look_around
+    &look_around,
+    &broadcast
 };
 
 command_infos_t cmd_list_ia[NB_IA_CMD] = {
@@ -33,5 +34,6 @@ command_infos_t cmd_list_ia[NB_IA_CMD] = {
     {CONNECT_NBR_COMMAND, 0, 1},
     {FORK_COMMAND, 42, 1},
     {EJECT_COMMAND, 7, 1},
-    {LOOK_COMMAND, 7, 1}
+    {LOOK_COMMAND, 7, 1},
+    {BROADCAST_COMMAND, 7, 2}
 };
