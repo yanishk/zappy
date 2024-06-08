@@ -45,7 +45,7 @@ extern command_infos_t cmd_list[NB_CMD];
 bool is_player_connected(const zappy_t *, const unsigned int);
 int connect_player(server_t *, zappy_t *, const arguments_t,
     const unsigned int);
-void move_player(size_t, player_t *, const arguments_t);
+void move_player(size_t direction, player_t *, const arguments_t);
 
 int exit_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int inventory_command(server_t *, zappy_t *, const arguments_t, client_t *);
@@ -57,6 +57,5 @@ int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int take_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 int eject_from_tile(server_t *, zappy_t *, const arguments_t, client_t *);
-
 
 #endif /* !COMMAND_H_ */

@@ -17,7 +17,7 @@ static tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {
 static size_t get_previous_tile(const tile_numbering_t tile_numbering,
     const size_t orientation)
 {
-    switch(orientation) {
+    switch (orientation) {
         case NORTH:
             return tile_numbering.south_tile;
         case WEST:
@@ -49,20 +49,23 @@ static void eject_player(const player_t *current_player, player_t *player,
 int eject_from_tile(server_t *, zappy_t *zappy, const arguments_t arg,
     client_t *client)
 {
+    int status = EXIT_WITH_ERROR;
     player_t *current_player = get_player(zappy, client->client_fd);
     player_t *player = NULL;
 
     if (current_player == NULL)
-        return EXIT_WITH_ERROR;
+        return status;
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
         if (player->width == current_player->width &&
             player->height == current_player->height &&
             player->id != current_player->id) {
-            if (player->is_egg)
+            if (player->is_egg) {
                 TAILQ_REMOVE(&zappy->player_head, player, player_entries);
-            else
+            } else {
                 eject_player(current_player, player, arg);
+                status = EXIT_WITH_SUCCESS;
+            }
         }
     }
-    return EXIT_WITH_SUCCESS;
+    return status;
 }
