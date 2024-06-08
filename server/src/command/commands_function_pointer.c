@@ -18,7 +18,8 @@ int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
     &turn_right,
     &connect_nbr,
     &fork_player,
-    &eject_from_tile
+    &eject_from_tile,
+    &look_around
 };
 
 command_infos_t cmd_list[NB_CMD] = {
@@ -31,5 +32,6 @@ command_infos_t cmd_list[NB_CMD] = {
     {RIGHT_COMMAND, 7, 1},
     {CONNECT_NBR_COMMAND, 0, 1},
     {FORK_COMMAND, 42, 1},
-    {EJECT_COMMAND, 7, 1}
+    {EJECT_COMMAND, 7, 1},
+    {LOOK_COMMAND, 7, 1}
 };

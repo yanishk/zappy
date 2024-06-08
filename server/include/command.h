@@ -20,6 +20,7 @@
     #define CONNECT_NBR_COMMAND "Connect_nbr"
     #define FORK_COMMAND "Fork"
     #define EJECT_COMMAND "Eject"
+    #define LOOK_COMMAND "Look"
 
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]
@@ -37,6 +38,11 @@ typedef struct command_s {
     clock_t clock_begin;
     TAILQ_ENTRY(command_s) command_entries;
 } command_t;
+
+typedef struct coordinate_s {
+    int height;
+    int width;
+} coordinate_t;
 
 extern int (*cmd_func[NB_CMD])(server_t *, zappy_t *, const arguments_t,
     client_t *);
@@ -57,5 +63,8 @@ int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int take_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 int eject_from_tile(server_t *, zappy_t *, const arguments_t, client_t *);
+
+int look_around(server_t *, zappy_t *, const arguments_t, client_t *);
+char *get_on_land(zappy_t *, coordinate_t, unsigned int);
 
 #endif /* !COMMAND_H_ */

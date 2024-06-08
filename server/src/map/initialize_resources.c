@@ -21,7 +21,7 @@ struct repartion_resource repartion[] = {
 };
 
 static void repartition_resource(const arguments_t *args, zappy_t *zappy,
-    char *name, double density)
+    const char *name, double density)
 {
     size_t max = round(args->width * args->height * density);
     size_t index = 0;
