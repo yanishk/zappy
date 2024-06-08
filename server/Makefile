@@ -23,6 +23,7 @@ SRC			=	./src/main.c								\
 				./src/close_client_socket.c         		\
 				./src/player_connection.c 					\
 				./src/check_players_food.c 					\
+				./src/replace_disconnected_players.c 		\
 				./src/free_program.c 						\
 				./src/map/initialize_map.c 					\
 				./src/map/initialize_teams.c 				\
@@ -40,16 +41,19 @@ SRC			=	./src/main.c								\
 				./src/command/take_object.c					\
 				./src/command/set_object.c 					\
 				./src/command/move_forward.c 				\
+				./src/command/move_player.c 				\
 				./src/command/turn_left.c 					\
 				./src/command/turn_right.c 					\
 				./src/command/commands_function_pointer.c	\
 				./src/command/connect_nbr.c 				\
 				./src/command/fork_player.c 				\
+				./src/command/eject_from_tile.c 			\
 				./src/command/look/look.c		 			\
 				./src/command/look/get_on_land.c 			\
 				./src/lib/array_functions.c 				\
 				./src/lib/word_array.c						\
 				./src/lib/get_player_by_id.c				\
+				./src/lib/is_on_same_tile.c 				\
 				./src/lib/is_command_queue_full.c			\
 				./src/lib/time_is_up.c						\
 				./src/lib/get_resources.c					\
