@@ -5,7 +5,7 @@
 ** get_resources
 */
 
-#include "command.h"
+#include "command_ia.h"
 
 int get_resources(resource_t *resource, const char *name)
 {

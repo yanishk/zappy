@@ -6,7 +6,7 @@
 */
 
 #include "server.h"
-#include "command.h"
+#include "command_ia.h"
 
 static char *get_resources_tile(int resource_decount, char *string_on_land,
     const char *name)

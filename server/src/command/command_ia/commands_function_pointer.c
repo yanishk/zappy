@@ -5,9 +5,9 @@
 ** commands_function_pointer
 */
 
-#include "command.h"
+#include "command_ia.h"
 
-int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
+int (*cmd_func_ia[NB_IA_CMD])(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client) = {
     &exit_func,
     &inventory_command,
@@ -22,7 +22,7 @@ int (*cmd_func[NB_CMD])(server_t *server, zappy_t *zappy,
     &look_around
 };
 
-command_infos_t cmd_list[NB_CMD] = {
+command_infos_t cmd_list_ia[NB_IA_CMD] = {
     {EXIT_COMMAND, 0, 1},
     {INVENTORY_COMMAND, 1, 1},
     {TAKE_COMMAND, 7, 2},

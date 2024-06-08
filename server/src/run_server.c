@@ -39,7 +39,7 @@ static int check_clients_sockets(server_t *server, zappy_t *zappy,
         client_fd = server->fd_array[i];
         if (FD_ISSET(client_fd, &server->readfds) != 0) {
             client = insert_client_in_struct(server, client_fd);
-            get_user_input(server, zappy, client);
+            get_user_input(server, zappy, arg, client);
         } else
             client = get_client_in_struct(server, client_fd);
         check_players_food(server, zappy, arg);

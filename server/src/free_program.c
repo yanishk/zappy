@@ -7,12 +7,12 @@
 
 #include <unistd.h>
 #include "server.h"
-#include "command.h"
+#include "command_ia.h"
 
 void free_client_commands(client_t *client)
 {
-    command_t *command = NULL;
-    command_t *command_next = NULL;
+    command_ia_t *command = NULL;
+    command_ia_t *command_next = NULL;
 
     if (TAILQ_EMPTY(&client->command_head))
         return;

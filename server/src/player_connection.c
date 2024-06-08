@@ -7,7 +7,8 @@
 
 #include <string.h>
 #include "server.h"
-#include "command.h"
+#include "command_ia.h"
+#include "command_gui.h"
 
 static unsigned int count_eggs_remaining(const server_t *server,
     const zappy_t *zappy)
@@ -40,8 +41,9 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
             player->status = IS_PLAYER;
             player->clock_begin = clock();
             count_eggs = count_eggs_remaining(server, zappy);
-            dprintf(client_fd, "%d %d\n%d\n", arg.height, arg.width,
-                count_eggs);
+            dprintf(client_fd, "%d %d\n%d\n", arg.height,
+                arg.width, count_eggs);
+            pnw_func(server, zappy, client_fd);
             return COMMAND_SUCCESS;
         }
     }

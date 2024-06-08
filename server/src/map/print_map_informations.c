@@ -52,3 +52,11 @@ void print_players(const zappy_t zappy)
     }
     printf("\n\n\n");
 }
+
+void print_tile_resources(const unsigned int client_fd, int width, int height,
+    const resource_t resource)
+{
+    dprintf(client_fd, "bct %d %d %ld %ld %ld %ld %ld %ld %ld\n",
+    width, height, resource.food, resource.linemate, resource.deraumere,
+    resource.sibur, resource.mendiane, resource.phiras, resource.thystame);
+}

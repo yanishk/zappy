@@ -6,7 +6,7 @@
 */
 
 #include "server.h"
-#include "command.h"
+#include "command_ia.h"
 
 static int check_heigth_ns(const arguments_t arg, player_t *player,
     size_t direction, int vision_x)
