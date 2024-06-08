@@ -66,6 +66,7 @@ SRC			=	./src/main.c											\
 				./src/lib/get_graphical_client.c 						\
 				./src/lib/get_player_by_id.c							\
 				./src/lib/get_player_direction.c 						\
+				./src/lib/get_random_team_egg.c 						\
 				./src/lib/is_on_same_tile.c 							\
 				./src/lib/is_command_queue_full.c						\
 				./src/lib/time_is_up.c									\

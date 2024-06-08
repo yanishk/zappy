@@ -74,6 +74,7 @@ size_t array_size(char **);
 void free_array(char **);
 char **word_array(char const *, char *);
 player_t *get_player(zappy_t *, const unsigned int);
+player_t *get_random_team_egg(zappy_t *, char *);
 int get_player_direction(const player_t *);
 client_t *get_graphical_client(server_t *);
 bool is_command_queue_full(client_t *);
