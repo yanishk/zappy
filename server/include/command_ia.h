@@ -10,7 +10,7 @@
 
     #include "common_command.h"
 
-    #define NB_IA_CMD 10
+    #define NB_IA_CMD 11
 
     #define COMMAND_KO "ko\n"
     #define COMMAND_OK "ok\n"

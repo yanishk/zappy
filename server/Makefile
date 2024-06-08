@@ -23,7 +23,7 @@ SRC			=	./src/main.c											\
 				./src/close_client_socket.c         					\
 				./src/player_connection.c 								\
 				./src/check_players_food.c 								\
-				./src/replace_disconnected_players.c 		\
+				./src/replace_disconnected_players.c 					\
 				./src/free_program.c 									\
 				./src/map/initialize_map.c 								\
 				./src/map/initialize_teams.c 							\
@@ -41,11 +41,12 @@ SRC			=	./src/main.c											\
 				./src/command/command_ia/take_object.c					\
 				./src/command/command_ia/set_object.c 					\
 				./src/command/command_ia/move_forward.c 				\
-				./src/command/move_player.c 				\
+				./src/command/command_ia/move_player.c 					\
 				./src/command/command_ia/turn_left.c 					\
 				./src/command/command_ia/turn_right.c 					\
 				./src/command/command_ia/connect_nbr.c 					\
 				./src/command/command_ia/fork_player.c 					\
+				./src/command/command_ia/eject_from_tile.c 				\
 				./src/command/command_ia/look/look.c		 			\
 				./src/command/command_ia/look/get_on_land.c 			\
 				./src/command/command_ia/commands_function_pointer.c	\
@@ -55,7 +56,6 @@ SRC			=	./src/main.c											\
 				./src/command/command_gui/pnw.c				 			\
 				./src/command/command_gui/tna.c 						\
 				./src/command/command_gui/plv.c 						\
-				./src/command/eject_from_tile.c 			\
 				./src/command/command_gui/ppo.c 						\
 				./src/command/command_gui/pin.c 						\
 				./src/command/command_gui/pfk.c 		 				\
@@ -66,7 +66,7 @@ SRC			=	./src/main.c											\
 				./src/lib/get_graphical_client.c 						\
 				./src/lib/get_player_by_id.c							\
 				./src/lib/get_player_direction.c 						\
-				./src/lib/is_on_same_tile.c 				\
+				./src/lib/is_on_same_tile.c 							\
 				./src/lib/is_command_queue_full.c						\
 				./src/lib/time_is_up.c									\
 				./src/lib/get_resources.c								\

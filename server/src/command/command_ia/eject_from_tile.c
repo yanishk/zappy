@@ -5,7 +5,7 @@
 ** eject_from_tile
 */
 
-#include "command.h"
+#include "command_ia.h"
 
 static tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {
     {NORTH, 1, 3, 5, 7},

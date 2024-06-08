@@ -5,7 +5,7 @@
 ** move_forward
 */
 
-#include "command.h"
+#include "command_ia.h"
 
 int move_forward(server_t *, zappy_t *zappy,
     const arguments_t arg, client_t *client)

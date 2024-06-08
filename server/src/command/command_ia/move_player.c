@@ -5,7 +5,7 @@
 ** move_player
 */
 
-#include "command.h"
+#include "command_ia.h"
 
 static void go_north(player_t *player, const arguments_t arg)
 {
