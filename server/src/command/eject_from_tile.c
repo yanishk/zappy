@@ -56,11 +56,11 @@ int eject_from_tile(server_t *, zappy_t *zappy, const arguments_t arg,
     if (current_player == NULL)
         return status;
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
-        if (player->width == current_player->width &&
-            player->height == current_player->height &&
-            player->id != current_player->id) {
-            if (player->is_egg) {
+        if (is_on_same_tile(player, current_player)) {
+            if (player->status == IS_EGG_FROM_FORK) {
                 TAILQ_REMOVE(&zappy->player_head, player, player_entries);
+            } else if (player->status == IS_EGG_FROM_START) {
+                initialize_player_pos(arg, zappy, player);
             } else {
                 eject_player(current_player, player, arg);
                 status = EXIT_WITH_SUCCESS;

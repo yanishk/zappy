@@ -77,5 +77,6 @@ bool time_is_up(clock_t, double);
 int get_resources(resource_t *, char *);
 void set_resources(resource_t *, char *, int);
 bool is_a_resource(char *);
+bool is_on_same_tile(const player_t *, const player_t *);
 
 #endif /* !SERVER_H_ */

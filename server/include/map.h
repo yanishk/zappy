@@ -60,13 +60,19 @@ typedef struct resource_s {
     size_t food;
 } resource_t;
 
+enum PLAYER_STATUS {
+    IS_EGG_FROM_START,
+    IS_EGG_FROM_FORK,
+    IS_PLAYER
+};
+
 typedef struct player_s {
     int width;
     int height;
     int level;
     unsigned int id;
     char *team_name;
-    bool is_egg;
+    enum PLAYER_STATUS status;
     size_t direction;
     clock_t clock_begin;
     resource_t inventory;
@@ -86,7 +92,10 @@ struct repartion_resource {
 void density_onland(const arguments_t *args, zappy_t *zappy);
 void initialize_map(const arguments_t arg, zappy_t *zappy);
 void initialize_teams(const arguments_t arg, zappy_t *zappy);
-void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name);
+void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name,
+    enum PLAYER_STATUS);
+void initialize_player_pos(const arguments_t arg, zappy_t *zappy,
+    player_t *player);
 void initialize_resources(resource_t *resource);
 void print_players_pos_and_direction(const zappy_t zappy);
 void print_players(const zappy_t zappy);

@@ -12,6 +12,6 @@ int fork_player(server_t *, zappy_t *zappy, const arguments_t arg,
 {
     player_t *player = get_player(zappy, client->client_fd);
 
-    initialize_player(arg, zappy, player->team_name);
+    initialize_player(arg, zappy, player->team_name, IS_EGG_FROM_FORK);
     return EXIT_WITH_SUCCESS;
 }
