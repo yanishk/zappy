@@ -68,6 +68,7 @@ void check_players_food(server_t *, zappy_t *, const arguments_t);
 void answer_client(const int, const unsigned int);
 void free_client_commands(client_t *);
 void free_program(server_t *, zappy_t *, arguments_t *);
+void free_zappy_player(zappy_t *, player_t *);
 
 bool is_positive_number(const char *);
 size_t array_size(char **);

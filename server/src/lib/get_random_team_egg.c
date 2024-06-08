@@ -29,10 +29,13 @@ static player_t **get_team_eggs(zappy_t *zappy,
 player_t *get_random_team_egg(zappy_t *zappy, char *team_name)
 {
     player_t **egg_array = NULL;
+    player_t *random_egg = NULL;
     size_t nb_players = 0;
 
     egg_array = get_team_eggs(zappy, &nb_players, team_name);
     if (egg_array == NULL || nb_players == 0)
         return NULL;
-    return egg_array[rand() % nb_players];
+    random_egg = egg_array[rand() % nb_players];
+    free(egg_array);
+    return random_egg;
 }

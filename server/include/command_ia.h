@@ -57,6 +57,7 @@ bool is_player_connected(const zappy_t *, const unsigned int);
 int connect_player(server_t *, zappy_t *, const arguments_t,
     const unsigned int);
 void move_player(size_t direction, player_t *, const arguments_t);
+void free_ia_command(client_t *, command_ia_t *);
 
 int inventory_command(server_t *, zappy_t *, const arguments_t, client_t *);
 int move_forward(server_t *, zappy_t *, const arguments_t, client_t *);

@@ -31,8 +31,7 @@ void close_client_socket(server_t *server, zappy_t *zappy, client_t *client)
         close(client->client_fd);
         FD_CLR(client->client_fd, &server->readfds);
         remove_client_socket(server, client->client_fd);
-        if (player != NULL)
-            TAILQ_REMOVE(&zappy->player_head, player, player_entries);
+        free_zappy_player(zappy, player);
         client->client_fd = 0;
         client->has_been_closed = false;
         client->is_graphic = false;
