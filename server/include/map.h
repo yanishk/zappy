@@ -21,6 +21,7 @@
 
     #define FOOD_TIME_UNIT 126
 
+    #define NB_DIR 4
     #define NB_RESOURCES 7
 
     #define FOOD "food"
@@ -72,6 +73,11 @@ struct repartion_resource {
     double density;
 };
 
+struct direction_player {
+    size_t angle;
+    int direction;
+};
+
 void density_onland(const arguments_t *args, zappy_t *zappy);
 void initialize_map(const arguments_t arg, zappy_t *zappy);
 void initialize_teams(const arguments_t arg, zappy_t *zappy);
@@ -79,5 +85,7 @@ void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name);
 void initialize_resources(resource_t *resource);
 void print_players_pos_and_direction(const zappy_t zappy);
 void print_players(const zappy_t zappy);
+void print_tile_resources(const unsigned int client_fd, int width, int height,
+    const resource_t resource);
 
 #endif /* !MAP_H_ */

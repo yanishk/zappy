@@ -7,7 +7,8 @@
 
 #include <string.h>
 #include "server.h"
-#include "command.h"
+#include "command_ia.h"
+#include "command_gui.h"
 
 static unsigned int count_active_players(const server_t *server,
     const zappy_t *zappy)
@@ -40,8 +41,9 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
             player->is_egg = false;
             player->clock_begin = clock();
             active_players = count_active_players(server, zappy);
-            dprintf(client_fd, "%d %d\n%d\n", arg.height, arg.width,
-                active_players);
+            dprintf(client_fd, "%d %d\n%d\n", arg.height,
+                arg.width, active_players);
+            pnw_func(server, zappy, client_fd);
             return COMMAND_SUCCESS;
         }
     }
