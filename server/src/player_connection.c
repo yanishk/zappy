@@ -9,7 +9,7 @@
 #include "server.h"
 #include "command.h"
 
-static unsigned int count_active_players(const server_t *server,
+static unsigned int count_eggs_remaining(const server_t *server,
     const zappy_t *zappy)
 {
     unsigned int count_eggs = 0;
@@ -27,7 +27,7 @@ static unsigned int count_active_players(const server_t *server,
 int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
     const unsigned int client_fd)
 {
-    unsigned int active_players = 0;
+    unsigned int count_eggs = 0;
     player_t *player = NULL;
 
     if (is_player_connected(zappy, client_fd))
@@ -39,9 +39,9 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
             player->id = client_fd;
             player->status = IS_PLAYER;
             player->clock_begin = clock();
-            active_players = count_active_players(server, zappy);
+            count_eggs = count_eggs_remaining(server, zappy);
             dprintf(client_fd, "%d %d\n%d\n", arg.height, arg.width,
-                active_players);
+                count_eggs);
             return COMMAND_SUCCESS;
         }
     }

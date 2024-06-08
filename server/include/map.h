@@ -89,6 +89,7 @@ struct repartion_resource {
     double density;
 };
 
+void replace_disconnected_players(const arguments_t arg, zappy_t *zappy);
 void density_onland(const arguments_t *args, zappy_t *zappy);
 void initialize_map(const arguments_t arg, zappy_t *zappy);
 void initialize_teams(const arguments_t arg, zappy_t *zappy);
