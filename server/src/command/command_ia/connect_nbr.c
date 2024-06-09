@@ -18,8 +18,7 @@ int connect_nbr(server_t *, zappy_t *zappy, const arguments_t,
         return EXIT_WITH_ERROR;
     team = player->team_name;
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
-        if (strcmp(player->team_name, team) == 0 &&
-            player->status != IS_PLAYER) {
+        if (strcmp(player->team_name, team) == 0) {
             count_unused += 1;
         }
     }

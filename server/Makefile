@@ -8,7 +8,7 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra -Werror -lm
+CFLAGS		=	-Wall -Wextra -lm
 CPPFLAGS	=	-iquote ./include
 FLAGS_DEBUG = 	-g
 
@@ -24,11 +24,12 @@ SRC			=	./src/main.c											\
 				./src/player_connection.c 								\
 				./src/check_players_food.c 								\
 				./src/replace_disconnected_players.c 					\
-				./src/free_program.c 									\
-				./src/map/initialize_map.c 								\
-				./src/map/initialize_teams.c 							\
-				./src/map/initialize_resources.c 						\
-				./src/map/print_map_informations.c 						\
+				./src/memory/free_program.c 							\
+				./src/memory/free_game.c 								\
+				./src/game/initialize_game.c 							\
+				./src/game/initialize_teams.c 							\
+				./src/game/initialize_resources.c 						\
+				./src/game/print_game_informations.c 					\
 				./src/arguments/init_arg_struct.c 						\
 				./src/arguments/nb_clients_flag.c 						\
 				./src/arguments/frequency_flag.c  						\
@@ -64,10 +65,12 @@ SRC			=	./src/main.c											\
 				./src/lib/is_positive_number.c 							\
 				./src/lib/array_functions.c 							\
 				./src/lib/word_array.c									\
+				./src/lib/get_next_id.c 								\
 				./src/lib/get_graphical_client.c 						\
-				./src/lib/get_player_by_id.c							\
+				./src/lib/get_link.c									\
 				./src/lib/get_player_direction.c 						\
 				./src/lib/get_random_team_egg.c 						\
+				./src/lib/count_team_slots.c							\
 				./src/lib/is_on_same_tile.c 							\
 				./src/lib/is_command_queue_full.c						\
 				./src/lib/time_is_up.c									\

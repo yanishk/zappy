@@ -30,10 +30,10 @@ static size_t get_previous_tile(const tile_numbering_t tile_numbering,
     return ERROR_RETURN;
 }
 
-static void eject_player(const player_t *current_player, player_t *player,
-    const arguments_t arg)
+static void eject_player(const zappy_t *zappy, const player_t *current_player,
+    player_t *player, const arguments_t arg)
 {
-    unsigned int ejected_client_fd = player->id;
+    unsigned int ejected_client_fd = get_client_fd(zappy, player->id);
     size_t previous_tile = 0;
 
     move_player(current_player->direction, player, arg);
@@ -46,26 +46,49 @@ static void eject_player(const player_t *current_player, player_t *player,
     }
 }
 
-int eject_from_tile(server_t *, zappy_t *zappy, const arguments_t arg,
-    client_t *client)
+static int eject_players(zappy_t *zappy, const arguments_t arg,
+    player_t *current_player)
 {
     int status = EXIT_WITH_ERROR;
-    player_t *current_player = get_player(zappy, client->client_fd);
     player_t *player = NULL;
 
     if (current_player == NULL)
         return status;
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
-        if (is_on_same_tile(player, current_player)) {
-            if (player->status == IS_EGG_FROM_FORK) {
-                TAILQ_REMOVE(&zappy->player_head, player, player_entries);
-            } else if (player->status == IS_EGG_FROM_START) {
-                initialize_player_pos(arg, zappy, player);
-            } else {
-                eject_player(current_player, player, arg);
-                status = EXIT_WITH_SUCCESS;
-            }
+        if (player_on_same_tile(current_player, player)) {
+            eject_player(zappy, current_player, player, arg);
+            status = EXIT_WITH_SUCCESS;
         }
     }
+    return status;
+}
+
+static void kill_eggs(zappy_t *zappy, player_t *current_player)
+{
+    egg_t *egg = NULL;
+    egg_t *egg_next = NULL;
+
+    if (TAILQ_EMPTY(&zappy->egg_head))
+        return;
+    egg = TAILQ_FIRST(&zappy->egg_head);
+    while (egg != NULL) {
+        egg_next = TAILQ_NEXT(egg, egg_entries);
+        if (egg_on_same_tile(current_player, egg)) {
+            free_egg(zappy, egg);
+        }
+        egg = egg_next;
+    }
+}
+
+int eject_from_tile(server_t *, zappy_t *zappy, const arguments_t arg,
+    client_t *client)
+{
+    player_t *current_player = get_player(zappy, client->client_fd);
+    int status = EXIT_WITH_ERROR;
+
+    if (current_player == NULL)
+        return EXIT_WITH_ERROR;
+    status = eject_players(zappy, arg, current_player);
+    kill_eggs(zappy, current_player);
     return status;
 }

@@ -31,7 +31,8 @@ void close_client_socket(server_t *server, zappy_t *zappy, client_t *client)
         close(client->client_fd);
         FD_CLR(client->client_fd, &server->readfds);
         remove_client_socket(server, client->client_fd);
-        free_zappy_player(zappy, player);
+        free_player(zappy, player);
+        free_link_by_client_fd(zappy, client->client_fd);
         client->client_fd = 0;
         client->has_been_closed = false;
         client->is_graphic = false;

@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2024
 ** zappy
 ** File description:
-** map
+** game
 */
 
-#ifndef MAP_H_
-    #define MAP_H_
+#ifndef GAME_H_
+    #define GAME_H_
 
     #include <stdlib.h>
     #include "arguments.h"
@@ -65,20 +65,38 @@ typedef struct resource_s {
     size_t food;
 } resource_t;
 
-enum PLAYER_STATUS {
-    IS_EGG_FROM_START,
-    IS_EGG_FROM_FORK,
-    IS_PLAYER
+typedef struct game_infos_s {
+    int last_player_id;
+    int last_egg_id;
+} game_infos_t;
+
+enum EGG_ORIGIN {
+    EGG_FROM_START,
+    EGG_FROM_FORK
 };
 
-typedef struct player_s {
+typedef struct link_s {
+    unsigned int client_fd;
+    unsigned int player_id;
+    TAILQ_ENTRY(link_s) link_entries;
+} link_t;
+
+typedef struct egg_s {
+    int id;
     int width;
     int height;
-    int level;
-    unsigned int id;
     char *team_name;
-    enum PLAYER_STATUS status;
+    enum EGG_ORIGIN origin;
+    TAILQ_ENTRY(egg_s) egg_entries;
+} egg_t;
+
+typedef struct player_s {
+    int id;
+    int width;
+    int height;
     size_t direction;
+    char *team_name;
+    int level;
     clock_t clock_begin;
     resource_t inventory;
     TAILQ_ENTRY(player_s) player_entries;
@@ -86,7 +104,10 @@ typedef struct player_s {
 
 typedef struct zappy_s {
     resource_t **resource;
+    game_infos_t *infos;
     TAILQ_HEAD(, player_s) player_head;
+    TAILQ_HEAD(, egg_s) egg_head;
+    TAILQ_HEAD(, link_s) link_head;
 } zappy_t;
 
 struct repartion_resource {
@@ -100,17 +121,16 @@ struct direction_player {
 };
 
 void replace_disconnected_players(const arguments_t arg, zappy_t *zappy);
-void density_onland(const arguments_t *args, zappy_t *zappy);
-void initialize_map(const arguments_t arg, zappy_t *zappy);
+void init_basis_map(zappy_t *zappy, const arguments_t *arg);
+void initialize_game(const arguments_t arg, zappy_t *zappy);
 void initialize_teams(const arguments_t arg, zappy_t *zappy);
-void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name,
-    enum PLAYER_STATUS);
-void initialize_player_pos(const arguments_t arg, zappy_t *zappy,
-    player_t *player);
+void initialize_egg(const arguments_t arg, zappy_t *zappy, char *team_name,
+    enum EGG_ORIGIN origin);
+void initialize_player(zappy_t *zappy, egg_t *egg);
 void initialize_resources(resource_t *resource);
-void print_players_pos_and_direction(const zappy_t zappy);
 void print_players(const zappy_t zappy);
+void print_eggs(const zappy_t zappy);
 void print_tile_resources(const unsigned int client_fd, int width, int height,
     const resource_t resource);
 
-#endif /* !MAP_H_ */
+#endif /* !GAME_H_ */

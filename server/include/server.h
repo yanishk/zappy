@@ -13,7 +13,7 @@
     #include <stdbool.h>
     #include <string.h>
     #include <time.h>
-    #include "map.h"
+    #include "game.h"
 
     #define EXIT_WITH_ERROR 84
     #define EXIT_WITH_SUCCESS 0
@@ -68,19 +68,30 @@ void check_players_food(server_t *, zappy_t *, const arguments_t);
 void answer_client(const int, const unsigned int);
 void free_client_commands(client_t *);
 void free_program(server_t *, zappy_t *, arguments_t *);
-void free_zappy_player(zappy_t *, player_t *);
+void free_player(zappy_t *, player_t *);
+void free_link_by_client_fd(zappy_t *, const unsigned int);
+void free_egg(zappy_t *, egg_t *);
+void free_game(zappy_t *, const arguments_t *ar);
 
 bool is_positive_number(const char *);
 size_t array_size(char **);
 void free_array(char **);
 char **word_array(char const *, char *);
-player_t *get_player(zappy_t *, const unsigned int);
-player_t *get_random_team_egg(zappy_t *, char *);
+int get_next_id(int *id);
+player_t *get_player(const zappy_t *, const unsigned int);
+int get_client_fd(const zappy_t *, const unsigned int);
+link_t *get_link_by_client_fd(const zappy_t *, const unsigned int);
+link_t *get_link_by_player_id(const zappy_t *, const unsigned int);
+egg_t *get_random_team_egg(zappy_t *, char *);
+unsigned int count_team_eggs(const zappy_t *, const char *);
+unsigned int count_team_players(const zappy_t *, const char *);
+unsigned int count_team_slots(const zappy_t *, const char *);
 int get_player_direction(const player_t *);
 client_t *get_graphical_client(server_t *);
 bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
-bool is_on_same_tile(const player_t *, const player_t *);
+bool player_on_same_tile(const player_t *, const player_t *);
+bool egg_on_same_tile(const player_t *, const egg_t *);
 int get_resources(resource_t *, const char *);
 void set_resources(resource_t *, const char *, int);
 bool is_a_resource(const char *);

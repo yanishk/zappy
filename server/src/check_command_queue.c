@@ -19,7 +19,7 @@ void check_command_queue(server_t *server, zappy_t *zappy,
         return;
     command = TAILQ_FIRST(&client->command_head);
     while (command != NULL) {
-        command_next = TAILQ_NEXT(command, command_entries);
+        command_next = TAILQ_NEXT(command, command_ia_entries);
         if (time_is_up(command->clock_begin, command->time_unit)) {
             server->cmd_arg_array = command->array;
             status = command->index == NB_IA_CMD ?

@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "server.h"
-#include "map.h"
+#include "game.h"
 #include "command_ia.h"
 #include "command_gui.h"
 
@@ -76,6 +76,8 @@ static void insert_command_in_queue(server_t *server, zappy_t *zappy,
 void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg,
     client_t *client)
 {
+    print_eggs(*zappy);
+    print_players(*zappy);
     if (read_client_socket(server, client) != EXIT_WITH_SUCCESS)
         return;
     if (!is_player_connected(zappy, client->client_fd)) {

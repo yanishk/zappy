@@ -6,7 +6,7 @@
 */
 
 #include <string.h>
-#include "map.h"
+#include "game.h"
 
 static void print_resources(const resource_t resource)
 {
@@ -19,19 +19,18 @@ static void print_resources(const resource_t resource)
     printf("\tthystame:%ld\n", resource.thystame);
 }
 
-void print_players_pos_and_direction(const zappy_t zappy)
+void print_eggs(const zappy_t zappy)
 {
-    player_t *player = NULL;
+    egg_t *egg = NULL;
 
-    TAILQ_FOREACH(player, &zappy.player_head, player_entries) {
-        printf("\tid=%d\n", player->id);
-        printf("\tteam_name=%s\n", player->team_name);
+    TAILQ_FOREACH(egg, &zappy.egg_head, egg_entries) {
+        printf("new_egg:\n");
+        printf("\tid=%d\n", egg->id);
+        printf("\tteam_name=%s\n", egg->team_name);
         printf("\tpos : height(x)=%d, width(y)=%d\n",
-            player->height, player->width);
-        printf("\tdirection=%ld\n", player->direction);
-        printf("\n");
+            egg->height, egg->width);
+        printf("\torigin:%d\n", egg->origin);
     }
-    printf("\n\n\n");
 }
 
 void print_players(const zappy_t zappy)
@@ -39,12 +38,11 @@ void print_players(const zappy_t zappy)
     player_t *player = NULL;
 
     TAILQ_FOREACH(player, &zappy.player_head, player_entries) {
-        printf("new egg:\n");
+        printf("new_player:\n");
         printf("\tid=%d\n", player->id);
         printf("\tteam_name=%s\n", player->team_name);
         printf("\tpos : height(x)=%d, width(y)=%d\n",
             player->height, player->width);
-        printf("\tstatus=%d\n", player->status);
         printf("\tlevel=%d\n", player->level);
         printf("\tdirection=%ld\n", player->direction);
         print_resources(player->inventory);
@@ -53,8 +51,8 @@ void print_players(const zappy_t zappy)
     printf("\n\n\n");
 }
 
-void print_tile_resources(const unsigned int client_fd, int width, int height,
-    const resource_t resource)
+void print_tile_resources(const unsigned int client_fd, int width,
+    int height, const resource_t resource)
 {
     dprintf(client_fd, "bct %d %d %ld %ld %ld %ld %ld %ld %ld\n",
     width, height, resource.food, resource.linemate, resource.deraumere,

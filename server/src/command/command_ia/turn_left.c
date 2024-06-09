@@ -6,7 +6,7 @@
 */
 
 #include "server.h"
-#include "map.h"
+#include "game.h"
 
 int turn_left(server_t *, zappy_t *zappy, const arguments_t,
     client_t *client)

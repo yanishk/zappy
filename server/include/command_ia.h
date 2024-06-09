@@ -41,7 +41,7 @@ typedef struct command_ia_s {
     double time_unit;
     size_t index;
     clock_t clock_begin;
-    TAILQ_ENTRY(command_ia_s) command_entries;
+    TAILQ_ENTRY(command_ia_s) command_ia_entries;
 } command_ia_t;
 
 typedef struct coordinate_s {

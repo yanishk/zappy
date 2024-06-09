@@ -15,18 +15,26 @@
 #include <errno.h>
 #include "server.h"
 
-static sig_atomic_t handle_server(const volatile sig_atomic_t new_status)
-{
-    static volatile sig_atomic_t status = 1;
+// static sig_atomic_t handle_server(const volatile sig_atomic_t new_status)
+// {
+//     static volatile sig_atomic_t status = 1;
 
-    status = new_status;
-    return status;
-}
+//     status = new_status;
+//     return status;
+// }
+
+// static void handle_ctrl_c(int signal)
+// {
+//     if (signal == SIGINT || signal == SIGPIPE)
+//         handle_server(0);
+// }
+
+static volatile sig_atomic_t status = 1;
 
 static void handle_ctrl_c(int signal)
 {
     if (signal == SIGINT || signal == SIGPIPE)
-        handle_server(0);
+        status = 0;
 }
 
 static int check_clients_sockets(server_t *server, zappy_t *zappy,
@@ -140,7 +148,7 @@ int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
 
     signal(SIGINT, handle_ctrl_c);
     signal(SIGPIPE, handle_ctrl_c);
-    while (handle_server(1)) {
+    while (status) {
         FD_ZERO(&server->readfds);
         FD_SET(server->server_fd, &server->readfds);
         select_status = set_sockets(server);
