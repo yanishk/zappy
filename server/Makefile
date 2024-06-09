@@ -9,7 +9,8 @@ CC			=	gcc
 RM			=	rm -f
 
 CFLAGS		=	-Wall -Wextra -lm
-CPPFLAGS	=	-iquote ./include
+CPPFLAGS	=	-iquote ./include -iquote ./include/command/ 	\
+				-iquote ./include/game/
 FLAGS_DEBUG = 	-g
 
 SRC			=	./src/main.c											\

@@ -32,9 +32,9 @@ static int read_client_socket(server_t *server, client_t *client)
 void answer_client(const int status, const unsigned int client_fd)
 {
     if (status == UNKNOWN_COMMAND || status == EXIT_WITH_ERROR)
-        dprintf(client_fd, COMMAND_KO);
+        dprintf(client_fd, "ko\n");
     else if (status == EXIT_WITH_SUCCESS)
-        dprintf(client_fd, COMMAND_OK);
+        dprintf(client_fd, "ok\n");
 }
 
 static void execute_graphical_command(server_t *server, zappy_t *zappy,

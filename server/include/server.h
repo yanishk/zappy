@@ -10,7 +10,6 @@
 
     #include <sys/select.h>
     #include <arpa/inet.h>
-    #include <stdbool.h>
     #include <string.h>
     #include <time.h>
     #include "game.h"
@@ -22,15 +21,8 @@
     #define COMMAND_SUCCESS 2
     #define INTERRUPTED_SYSCALL 4
 
-    #define COMMAND_KO "ko\n"
-    #define COMMAND_OK "ok\n"
-
-    #define NB_CMD 11
-
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
-
-    #define TO_MILLI 1000
 
 typedef struct client_s {
     struct sockaddr_in sock_addr;
@@ -59,19 +51,21 @@ void init_client(client_t *);
 int run_server(server_t *, zappy_t *, const arguments_t);
 client_t *get_client_in_struct(server_t *, const int);
 client_t *insert_client_in_struct(server_t *, const int);
+void get_user_input(server_t *, zappy_t *, const arguments_t, client_t *);
+void answer_client(const int, const unsigned int);
+void close_client_socket(server_t *, zappy_t *, client_t *);
+
+void check_players_food(server_t *, zappy_t *, const arguments_t);
 int insert_game_command_in_queue(server_t *, client_t *);
 void insert_other_command_in_queue(server_t *, client_t *);
 void check_command_queue(server_t *, zappy_t *, const arguments_t, client_t *);
-void close_client_socket(server_t *, zappy_t *, client_t *);
-void get_user_input(server_t *, zappy_t *, const arguments_t, client_t *);
-void check_players_food(server_t *, zappy_t *, const arguments_t);
-void answer_client(const int, const unsigned int);
-void free_client_commands(client_t *);
+
 void free_program(server_t *, zappy_t *, arguments_t *);
+void free_client_commands(client_t *);
 void free_player(zappy_t *, player_t *);
 void free_link_by_client_fd(zappy_t *, const unsigned int);
 void free_egg(zappy_t *, egg_t *);
-void free_game(zappy_t *, const arguments_t *ar);
+void free_game(zappy_t *, const arguments_t *);
 
 bool is_positive_number(const char *);
 size_t array_size(char **);

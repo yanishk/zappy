@@ -5,7 +5,7 @@
 ** check_player_food
 */
 
-#include "server.h"
+#include "command_ia.h"
 
 static double set_food_time_unit(const int frequency)
 {
@@ -16,8 +16,8 @@ static double set_food_time_unit(const int frequency)
     return food_time_unit;
 }
 
-static void kill_player(server_t *server, zappy_t *zappy, const arguments_t arg,
-    player_t *player)
+static void kill_player(server_t *server, zappy_t *zappy,
+    const arguments_t arg, player_t *player)
 {
     client_t *client = NULL;
     link_t *link = NULL;
