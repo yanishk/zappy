@@ -22,12 +22,6 @@
     #define COMMAND_SUCCESS 2
     #define INTERRUPTED_SYSCALL 4
 
-    #define COMMAND_KO "ko\n"
-    #define COMMAND_OK "ok\n"
-
-    #define NB_CMD 8
-    #define NB_RESSOURCES 7
-
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
 
@@ -37,7 +31,8 @@ typedef struct client_s {
     struct sockaddr_in sock_addr;
     int client_fd;
     bool has_been_closed;
-    TAILQ_HEAD(, command_s) command_head;
+    bool is_graphic;
+    TAILQ_HEAD(, command_ia_s) command_head;
 } client_t;
 
 typedef struct server_s {
@@ -59,21 +54,28 @@ void init_client(client_t *);
 int run_server(server_t *, zappy_t *, const arguments_t);
 client_t *get_client_in_struct(server_t *, const int);
 client_t *insert_client_in_struct(server_t *, const int);
+int insert_game_command_in_queue(server_t *, client_t *);
+void insert_other_command_in_queue(server_t *, client_t *);
 void check_command_queue(server_t *, zappy_t *, const arguments_t, client_t *);
 void close_client_socket(server_t *, zappy_t *, client_t *);
-void get_user_input(server_t *, zappy_t *, client_t *);
+void get_user_input(server_t *, zappy_t *, const arguments_t, client_t *);
 void check_players_food(server_t *, zappy_t *, const arguments_t);
 void answer_client(const int, const unsigned int);
 void free_client_commands(client_t *);
 void free_program(server_t *, zappy_t *, arguments_t *);
 
+bool is_positive_number(const char *);
 size_t array_size(char **);
 void free_array(char **);
 char **word_array(char const *, char *);
 player_t *get_player(zappy_t *, const unsigned int);
+int get_player_direction(const player_t *);
+client_t *get_graphical_client(server_t *);
 bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
-int get_resources(resource_t *, char *);
-void set_resources(resource_t *, char *, int);
+int get_resources(resource_t *, const char *);
+void set_resources(resource_t *, const char *, int);
+bool is_a_resource(const char *);
+int get_tile_index(const char *, const int);
 
 #endif /* !SERVER_H_ */

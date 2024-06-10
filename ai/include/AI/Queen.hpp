@@ -12,8 +12,10 @@
 
     #define FIRST_LEVEL 1
 
+    #define CRITICAL_FOOD 10
+
 namespace Zappy {
-    
+
     class Queen : public AAi {
 
         public:
@@ -37,6 +39,12 @@ namespace Zappy {
             std::string _name;
             bool initialize();
             std::pair<int, int> _mapSize;
+
+            bool executeAction();
+
+            std::size_t _lastFood;
+            std::vector<Action> _actions;
+
     };
 
 };

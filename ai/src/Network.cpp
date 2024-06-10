@@ -48,6 +48,7 @@ std::string Network::Network::getInfoFromServer()
     } catch (const std::exception &e) {
 
         std::cerr << e.what() << std::endl;
+        return std::string("dead");
 
     }
 
