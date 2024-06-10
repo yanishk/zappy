@@ -90,6 +90,7 @@ static void north_south_look(zappy_t *zappy, const arguments_t arg,
     size_t direction = player->direction;
     int vision_x_final = 0;
     int vision_y_final = 0;
+    char *string_on_land = NULL;
 
     for (int vision_x = 1; vision_x <= player->level; vision_x++) {
         vision_x_final = check_heigth_ns(arg, player, direction, vision_x);
@@ -97,9 +98,11 @@ static void north_south_look(zappy_t *zappy, const arguments_t arg,
             vision_y_final = check_width_ns(arg, player, vision_y);
             pos.height = vision_x_final;
             pos.width = vision_y_final;
-            dprintf(client->client_fd, "%s",
-                get_on_land(zappy, pos, client->client_fd));
+            string_on_land = get_on_land(zappy, pos, client->client_fd);
+            dprintf(client->client_fd, "%s", string_on_land);
             print_comma(vision_x, vision_y, player, client);
+            if (string_on_land != NULL)
+                free(string_on_land);
         }
     }
 }
@@ -111,6 +114,7 @@ static void west_east_look(zappy_t *zappy, const arguments_t arg,
     size_t direction = player->direction;
     int vision_x_final = 0;
     int vision_y_final = 0;
+    char *string_on_land = NULL;
 
     for (int vision_y = 1; vision_y <= player->level; vision_y++) {
         vision_y_final = check_width_we(arg, player, direction, vision_y);
@@ -118,9 +122,11 @@ static void west_east_look(zappy_t *zappy, const arguments_t arg,
             vision_x_final = check_height_we(arg, player, vision_x);
             pos.height = vision_x_final;
             pos.width = vision_y_final;
-            dprintf(client->client_fd, "%s",
-                get_on_land(zappy, pos, client->client_fd));
+            string_on_land = get_on_land(zappy, pos, client->client_fd);
+            dprintf(client->client_fd, "%s", string_on_land);
             print_comma(vision_x, vision_y, player, client);
+            if (string_on_land != NULL)
+                free(string_on_land);
         }
     }
 }
@@ -131,13 +137,16 @@ int look_around(server_t *, zappy_t *zappy, const arguments_t arg,
     player_t *player = get_player_by_fd(zappy, client->client_fd);
     coordinate_t pos = {player->height, player->width};
     size_t direction = player->direction;
+    char *string_on_land = NULL;
 
-    dprintf(client->client_fd, "[player%s,",
-        get_on_land(zappy, pos, client->client_fd));
+    string_on_land = get_on_land(zappy, pos, client->client_fd);
+    dprintf(client->client_fd, "[player%s,", string_on_land);
     if (direction == NORTH || direction == SOUTH)
         north_south_look(zappy, arg, player, client);
     if (direction == EAST || direction == WEST)
         west_east_look(zappy, arg, player, client);
     dprintf(client->client_fd, "]\n");
+    if (string_on_land != NULL)
+        free(string_on_land);
     return EXIT_WITH_SUCCESS;
 }
