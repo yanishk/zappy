@@ -18,14 +18,25 @@ namespace Zappy {
 
         public:
 
-            Queen(const std::string &port): AAi(port, INITIALIZE_MODE) {};
+            Queen(const std::string &port, const std::string &name): AAi(port, INITIALIZE_MODE), _isConnected(true) ,_name(name) {
+                if (_network.getInfoFromServer() != WELCOME) {
+                    _isConnected = false;
+                }
+                _network.sendInformationToServer(name);
+                std::string mapSize = _network.getInfoFromServer();
+                _mapSize.first = std::atoi(mapSize.c_str());
+                mapSize.erase(mapSize.begin(), mapSize.begin() + 3);
+                _mapSize.second = std::atoi(mapSize.c_str());
+            };
 
             int run();
 
         private:
 
+            bool _isConnected;
+            std::string _name;
             bool initialize();
-
+            std::pair<int, int> _mapSize;
     };
 
 };
