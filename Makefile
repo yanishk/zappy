@@ -1,49 +1,40 @@
 ##
 ## EPITECH PROJECT, 2024
-## B-YEP-400-PAR-4-1-zappy-edward.lalande
+## all_test_libray
 ## File description:
 ## Makefile
 ##
 
-RM			=	rm -f
+CXX		=	g++
 
-AI_BIN		=	zappy_ai
-GUI_BIN		=	zappy_gui
-SERVER_BIN	=	zappy_server
+SRC		=	main.cpp					\
+			src/display/DisplayGame.cpp			\
+			src/display/ParsesModelConfig.cpp	\
+			src/display/Island.cpp				\
+			src/display/Player.cpp				\
+			src/display/AllPlayer.cpp			\
+			src/client/Client.cpp		\
+			src/client/Commands.cpp
 
-all:
-	make -C ai
-	make -C gui
-	make -C server
-	mv ./ai/zappy_ai .
-	mv ./gui/zappy_gui .
-	mv ./server/zappy_server .
+OBJ		=	$(SRC:.cpp=.o)
 
-tests_run:
-	make tests_run -C ai
+NAME	=	zappy_gui
 
-coverage:
-	make coverage -C ai
+CPPFLAGS	=	-Wall -Wextra -iquote include -iquote src/display
+
+LIBFLAGS	=	-lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+
+all:	$(NAME)
+
+$(NAME): $(OBJ)
+	$(CXX) -o $(NAME) $(OBJ) $(LIBFLAGS)
 
 clean:
-	make clean -C ai
-	make clean -C gui
-	make clean -C server
+	$(RM) $(OBJ)
 
-fclean:
-	make fclean -C ai
-	make fclean -C gui
-	make fclean -C server
-	$(RM) $(AI_BIN)
-	$(RM) $(GUI_BIN)
-	$(RM) $(SERVER_BIN)
+fclean:		clean
+	$(RM) $(NAME)
 
-re:
-	make re -C ai
-	make re -C gui
-	make re -C server
-	mv ./ai/zappy_ai .
-	mv ./gui/zappy_gui .
-	mv ./server/zappy_server .
+re:		fclean all
 
-.PHONY: all clean fclean re
+.PHONY:	all clean fclean re
