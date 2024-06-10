@@ -32,44 +32,35 @@ bool Zappy::Searcher::haveIToTake(const std::string &item, std::unique_ptr<doubl
         return false;
     }
 
-    if (item == DERAUMERE &&
-            _order.getRessources().getAllValueRessources()[Deraumere] > _ressources.getRessource(DERAUMERE)
-            && *lastDensityObject > DERAUMERE_DENSITY) {
-        return true;
-    } else {
-        return false;
-    }
+    std::vector<std::string> itemDesired = {
+        DERAUMERE,
+        SIBUR,
+        MENDIANE,
+        PHIRAS,
+        THYSTAME
+    };
+    std::vector<RessourceType> itemType = {
+        Deraumere,
+        Sibur,
+        Mendiane,
+        Phiras,
+        Thystame
+    };
+    std::vector<double> itemDensity = {
+        DERAUMERE_DENSITY,
+        SIBUR_DENSITY,
+        MENDIANE_DENSITY,
+        PHIRAS_DENSITY,
+        THYSTAME_DENSITY
+    };
 
-    if (item == SIBUR &&
-            _order.getRessources().getAllValueRessources()[Sibur] > _ressources.getRessource(SIBUR)
-            && *lastDensityObject > SIBUR_DENSITY) {
-        return true;
-    } else {
-        return false;
-    }
+    for (std::size_t i = 0; i < itemDesired.size() && i < itemType.size() && i < itemDensity.size(); ++i) {
 
-    if (item == MENDIANE &&
-            _order.getRessources().getAllValueRessources()[Mendiane] > _ressources.getRessource(MENDIANE)
-            && *lastDensityObject > MENDIANE_DENSITY) {
-        return true;
-    } else {
-        return false;
-    }
+        if (_order.getRessources().getAllValueRessources()[itemType[i]] > _ressources.getRessource(itemDesired[i])
+         && *lastDensityObject > itemDensity[i]) {
+            return true;
+        }
 
-    if (item == PHIRAS &&
-            _order.getRessources().getAllValueRessources()[Phiras] > _ressources.getRessource(PHIRAS)
-            && *lastDensityObject > PHIRAS_DENSITY) {
-        return true;
-    } else {
-        return false;
-    }
-
-    if (item == THYSTAME &&
-            _order.getRessources().getAllValueRessources()[Thystame] > _ressources.getRessource(THYSTAME)
-            && *lastDensityObject > THYSTAME_DENSITY) {
-        return true;
-    } else {
-        return false;
     }
 
     return false;
@@ -261,7 +252,7 @@ void Zappy::Searcher::searchFood()
         index++;
     }
 
-    std::pair<int, int> pos = whereIsThePriority(index);
+    std::pair<int, int> pos = whereIsThePriority(priority);
     updateMove(pos);
 }
 
