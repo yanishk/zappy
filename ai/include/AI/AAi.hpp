@@ -18,6 +18,9 @@
     #define START_LEVEL 1
     #define START_WAIT 0
 
+    #define ERROR -1
+    #define DEAD "dead"
+
 namespace Zappy {
 
     enum Orientation {

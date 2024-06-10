@@ -17,9 +17,15 @@ Zappy::Team &Zappy::Team::getTeam(TeamOptions options)
 int Zappy::Team::run()
 {
     while (true) {
-        for (auto &player : _players) {
-            player.get()->run();
+
+        for (std::size_t i = 0; i < _players.size(); ++i) {
+
+            if (!_players[i].get()->run()) {
+                _players.erase(_players.begin() + i);                
+            }
+
         }
+
     }
 
     return EXIT_SUCCESS;

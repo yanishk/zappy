@@ -18,8 +18,8 @@ int Zappy::Queen::run()
         return EXIT_SUCCESS;
     }
 
-    if (_lastFood) {
-        
+    if (_network.getInfoFromServer() == DEAD) {
+        return ERROR;
     }
 
     while (_ressources.getRessource(FOOD) < CRITICAL_FOOD) {

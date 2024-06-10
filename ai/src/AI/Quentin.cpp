@@ -15,6 +15,10 @@ int Zappy::Quentin::run()
         return EXIT_SUCCESS;
     }
 
+    if (_network.getInfoFromServer() == DEAD) {
+        return ERROR;
+    }
+
     if (_nbRefills > ZERO_REFILL && _ressources.getRessource(FOOD) == LAST_FOOD) {
         _actions.push_back(Fork);
         return EXIT_SUCCESS;
