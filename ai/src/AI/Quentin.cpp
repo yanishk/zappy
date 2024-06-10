@@ -6,6 +6,7 @@
 */
 
 #include "AI/Quentin.hpp"
+#include "Team.hpp"
 
 int Zappy::Quentin::run()
 {
@@ -14,7 +15,7 @@ int Zappy::Quentin::run()
         return EXIT_SUCCESS;
     }
 
-    if (_nbRefills > LAST_REFILL && _ressources.getRessource(FOOD) == LAST_FOOD) {
+    if (_nbRefills > ZERO_REFILL && _ressources.getRessource(FOOD) == LAST_FOOD) {
         _actions.push_back(Fork);
         return EXIT_SUCCESS;
     }
@@ -36,13 +37,32 @@ bool Zappy::Quentin::executeAction()
 
     if (_actions.front() == Drop) {
         setObject(FOOD);
+        _wait = DROP_WAIT;
     }
 
     if (_actions.front() == Fork) {
-        // --- On doit fork un nouveau Quentin avec (_nbRefills - 1) en paramètres --- //
+        createQuentin();
     }
 
     _actions.erase(_actions.begin());
+
+    return true;
+}
+
+bool Zappy::Quentin::createQuentin()
+{
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
+
+    if (_nbRefills == ZERO_REFILL) {
+        return false;
+    }
+
+    fork();
+
+    std::unique_ptr<Quentin> quentin = std::make_unique<Quentin>(_network.getPort(), _nbRefills - 1);
+
+    team._players.push_back(std::move(quentin));
+    _wait = FORK_WAIT;
 
     return true;
 }

@@ -9,7 +9,10 @@
     #define QUENTIN_HPP_
 
     #define LAST_FOOD 1
-    #define LAST_REFILL 1
+    #define ZERO_REFILL 0
+
+    #define FORK_WAIT 42
+    #define DROP_WAIT 7
 
     #include "AAi.hpp"
 
@@ -26,6 +29,7 @@ namespace Zappy {
         private:
 
             bool executeAction();
+            bool createQuentin();
 
             size_t _nbRefills;
             std::vector<Action> _actions;
