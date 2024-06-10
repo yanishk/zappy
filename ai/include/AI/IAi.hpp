@@ -39,6 +39,8 @@ namespace Zappy {
             virtual bool setObject(const std::string &object) = 0;
             virtual bool incantation() = 0;
 
+            virtual std::size_t countObject(const std::string &objects, const std::string &type) = 0;
+
     };
 
 };

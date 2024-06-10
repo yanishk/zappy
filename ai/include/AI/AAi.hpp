@@ -66,8 +66,9 @@ namespace Zappy {
             bool incantation();
 
             std::size_t countObject(const std::string &objects, const std::string &type);
-
+    
         protected:
+
 
             Network::Network _network;
             Ressources _ressources;

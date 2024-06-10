@@ -7,6 +7,13 @@
 
 #include "Team.hpp"
 
+Zappy::Team &Zappy::Team::getTeam(TeamOptions options)
+{
+    static Zappy::Team team(options._name, options._port, std::move(options._queen));
+
+    return team;
+}
+
 int Zappy::Team::run()
 {
     while (true) {
