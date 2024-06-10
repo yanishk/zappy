@@ -33,7 +33,7 @@
 namespace Zappy
 {
     enum Mouvement{
-        Up,
+        Forward,
         Left,
         Right,
         Back,
@@ -42,7 +42,9 @@ namespace Zappy
 
     class Searcher : public AAi {
         public:
-            Searcher(const std::string &port, Order order): AAi(port, INITIALIZE_MODE), _order(order) {};
+            Searcher(const std::string &port, Order order): AAi(port, INITIALIZE_MODE), _order(order) {
+                _isGoingToQueen = false;
+            };
 
             int run();
 
@@ -60,6 +62,7 @@ namespace Zappy
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
             std::vector<std::string> _objectToTake;
+            bool _isGoingToQueen;
 
             void move();
 
@@ -72,6 +75,7 @@ namespace Zappy
 
             void updateOrder();
             void searchFood();
+            void showMustGoOn();
     };
 
 }

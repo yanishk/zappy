@@ -178,8 +178,9 @@ void Zappy::Searcher::updateMove(std::pair<int, int> pos)
     }
 
     for (int i = 0; i < pos.first; ++i) {
-        _nextMouvment.emplace(_nextMouvment.begin(), Up);
+        _nextMouvment.emplace(_nextMouvment.begin(), Forward);
     }
+
     _nextMouvment.emplace(_nextMouvment.begin(), Take);
 }
 
@@ -215,7 +216,7 @@ void Zappy::Searcher::move()
     Mouvement nextMove = _nextMouvment.front();
 
     switch (nextMove) {
-        case Up:
+        case Forward:
             forward();
             _nextMouvment.erase(_nextMouvment.begin());
             break;
@@ -233,6 +234,8 @@ void Zappy::Searcher::move()
         case Back:
             left();
             left();
+            forward();
+            _nextMouvment.erase(_nextMouvment.begin());
             _nextMouvment.erase(_nextMouvment.begin());
             _nextMouvment.erase(_nextMouvment.begin());
             break;
@@ -262,10 +265,40 @@ void Zappy::Searcher::searchFood()
     updateMove(pos);
 }
 
+void Zappy::Searcher::showMustGoOn()
+{
+    double x = _position.first;
+    double y = _position.second;
+
+    if (x < 0) {
+        for (double i = 0; i > x; --i) {
+            _nextMouvment.push_back(Forward);
+        }
+    } else {
+        _nextMouvment.push_back(Back);
+        for (; x > 0; --x) {
+            _nextMouvment.push_back(Forward);
+        }
+    }
+
+    if (y < 0) {
+        for (double i = 0; i > y; --i) {
+            _nextMouvment.push_back(Right);
+        }
+    } else {
+        for (; y > 0; --y) {
+            _nextMouvment.push_back(Left);
+        }
+    }
+
+}
+
 int Zappy::Searcher::run()
 {
     updateOrder();
-    if (_lastLook.empty()) {
+    if (_nextMouvment.empty() && !_isGoingToQueen && _order.empty()) {
+        _isGoingToQueen = true;
+    } else if (_nextMouvment.empty() && !_isGoingToQueen && !_order.empty()) {
         _lastLook = look();
         auto priority = estimatePriority();
         whereShouldIGo(priority);
@@ -278,8 +311,11 @@ int Zappy::Searcher::run()
     }
 
     updateOrder();
-    if (_nextMouvment.empty()) {
+    if (_nextMouvment.empty() && !_isGoingToQueen) {
         _lastLook.clear();
+    } else if (_nextMouvment.empty() && _isGoingToQueen) {
+        showMustGoOn();
     }
+
     return EXIT_SUCCESS;
 }
