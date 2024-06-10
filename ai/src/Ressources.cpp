@@ -12,28 +12,28 @@ bool Zappy::Ressources::addRessources(const std::string &ressource, int value)
     _ressources[ressource] += value;
     return true;
 }
-const std::string &Zappy::Ressources::indexToRessource(int index)
+std::string Zappy::Ressources::indexToRessource(int index)
 {
     switch (index) {
         case Food:
-            return FOOD;
+            return std::string(FOOD);
         case Linemate:
-            return LINEMATE;
+            return std::string(LINEMATE);
         case Deraumere:
-            return DERAUMERE;
+            return std::string(DERAUMERE);
         case Sibur:
-            return SIBUR;
+            return std::string(SIBUR);
         case Mendiane:
-            return MENDIANE;
+            return std::string(MENDIANE);
         case Phiras:
-            return PHIRAS;
+            return std::string(PHIRAS);
         case Thystame:
-            return THYSTAME;
+            return std::string(THYSTAME);
         default:
-            return "none";
+            return std::string("none");
     }
 
-    return "none";
+    return std::string("none");
 }
 
 std::vector<int> Zappy::Ressources::getAllValueRessources()

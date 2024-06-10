@@ -72,7 +72,7 @@ namespace Zappy {
                 return _ressources[ressource];
             };
 
-            const std::string &indexToRessource(int index);
+            std::string indexToRessource(int index);
 
             std::vector<int> getAllValueRessources();
 

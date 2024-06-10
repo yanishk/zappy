@@ -99,6 +99,8 @@ std::vector<std::vector<bool>> Zappy::Searcher::estimatePriority()
         priority.push_back(itemPriority);
 
     }
+
+    return priority;
 }
 
 std::pair<int, int> Zappy::Searcher::whereIsThePriority(int index)
