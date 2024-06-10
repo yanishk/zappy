@@ -198,3 +198,20 @@ bool Zappy::AAi::incantation()
 
     return _network.getInfoFromServer() == "ok";
 }
+
+std::size_t Zappy::AAi::countObject(const std::string &objects, const std::string &type)
+{
+    if (!type.length()) {
+        return 0;
+    }
+
+    std::size_t count = 0;
+    std::size_t offset = objects.find(type);
+
+    while (offset != std::string::npos) {
+        count += 1;
+        offset = objects.find(type, offset + type.length());
+    }
+
+    return count;
+}
