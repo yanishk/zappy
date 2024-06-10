@@ -27,6 +27,10 @@ namespace Zappy
                 return _ressourcesNeeded;
             }
 
+            bool empty() {
+                return _ressourcesNeeded.empty();
+            }
+
             bool removeRessources(const std::string &ressource, int value) {
                 return _ressourcesNeeded.removeRessources(ressource, value);
             }

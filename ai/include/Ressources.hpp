@@ -72,6 +72,17 @@ namespace Zappy {
                 return _ressources[ressource];
             };
 
+            bool empty() {
+
+                for (const auto &i:_ressources) {
+                    if (i.second > 0) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
             std::string indexToRessource(int index);
 
             std::vector<int> getAllValueRessources();
