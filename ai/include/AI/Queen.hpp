@@ -25,6 +25,7 @@ namespace Zappy {
                     _isConnected = false;
                 }
                 _network.sendInformationToServer(name);
+                // _network.getInfoFromServer(); <- a mettre plus tard parce que le serveur envoie un nombre puis le x et y
                 std::string mapSize = _network.getInfoFromServer();
                 _mapSize.first = std::atoi(mapSize.c_str());
                 mapSize.erase(mapSize.begin(), mapSize.begin() + 3);

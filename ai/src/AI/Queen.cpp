@@ -32,9 +32,8 @@ int Zappy::Queen::run()
 bool Zappy::Queen::initialize()
 {
     const std::size_t maxPlayers = connectNumber();
-    std::cerr << "mp: " << maxPlayers << "\n";
+
     for (std::size_t i = 0; i < maxPlayers; i++) {
-        std::cerr << "ici\n";
         Zappy::Queen queen(_network.getPort(), _name);
     }
 

@@ -34,7 +34,7 @@ std::string Network::Network::getInfoFromServer()
 
         if (error == asio::error::eof) {
             std::cout << "Connection closed by server." << std::endl;
-            return std::string("end");
+            return std::string("dead");
         } else if (error) {
             throw asio::system_error(error);
             std::cerr << "error\n";
