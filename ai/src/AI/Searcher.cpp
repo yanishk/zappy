@@ -171,6 +171,13 @@ void Zappy::Searcher::whereShouldIGo(std::vector<std::vector<bool>> priority)
         }
         index++;
     }
+
+    if (biggestPriority == 0) {
+        return;
+    }
+
+    _objectToTake.push_back(_lastLook[biggestPriority]);
+
     std::pair<int, int> multiplicator = whereIsThePriority(index);
 
     if (multiplicator == std::make_pair<int, int>(ERROR, ERROR)) {
@@ -192,7 +199,44 @@ void Zappy::Searcher::whereShouldIGo(std::vector<std::vector<bool>> priority)
     for (int i = 0; i < multiplicator.first; ++i) {
         _nextMouvment.emplace(_nextMouvment.begin(), Up);
     }
+    _nextMouvment.emplace(_nextMouvment.begin(), Take);
 
+    priority[biggestPriority].clear();
+    whereShouldIGo(priority);
+}
+
+void Zappy::Searcher::move()
+{
+    Mouvement nextMove = _nextMouvment.front();
+
+    switch (nextMove) {
+        case Up:
+            forward();
+            _nextMouvment.erase(_nextMouvment.begin());
+            break;
+
+        case Left:
+            left();
+            _nextMouvment.erase(_nextMouvment.begin());
+            break;
+
+        case Right:
+            right();
+            _nextMouvment.erase(_nextMouvment.begin());
+            break;
+
+        case Back:
+            left();
+            left();
+            _nextMouvment.erase(_nextMouvment.begin());
+            _nextMouvment.erase(_nextMouvment.begin());
+            break;
+
+        default:
+            takeObject(_objectToTake.front());
+            _objectToTake.erase(_objectToTake.begin());
+            break;
+    }
 }
 
 int Zappy::Searcher::run()
@@ -200,10 +244,11 @@ int Zappy::Searcher::run()
     updateOrder();
     if (_lastLook.empty()) {
         _lastLook = look();
+        auto priority = estimatePriority();
+        whereShouldIGo(priority);
     }
 
-    auto priority = estimatePriority();
-    whereShouldIGo(priority);
+    move();
 
     updateOrder();
     if (_nextMouvment.empty()) {

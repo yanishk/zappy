@@ -36,7 +36,8 @@ namespace Zappy
         Up,
         Left,
         Right,
-        Back
+        Back,
+        Take
     };
 
     class Searcher : public AAi {
@@ -58,12 +59,14 @@ namespace Zappy
             Order _order;
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
+            std::vector<std::string> _objectToTake;
 
             void updateOrder();
             bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
             std::vector<std::vector<bool>> estimatePriority();
             void whereShouldIGo(std::vector<std::vector<bool>> priority);
             std::pair<int, int> whereIsThePriority(int index);
+            void move();
 
     };
 
