@@ -19,6 +19,7 @@ SRC			=	./src/Main.cpp					\
 				./src/AIFactory.cpp				\
 				./src/AI/AAi.cpp				\
 				./src/AI/Queen.cpp				\
+				./src/AI/Searcher.cpp			\
 				./src/AI/Quentin.cpp			\
 
 SRC_TEST	=	./src/Ressources.cpp			\

@@ -14,7 +14,7 @@ void Network::Network::sendInformationToServer(const std::string &information)
 {
     try {
 
-        asio::write(*_socket, asio::buffer(information));
+        asio::write(*_socket, asio::buffer(information + "\n"));
 
     } catch (const std::system_error &err) {
 
