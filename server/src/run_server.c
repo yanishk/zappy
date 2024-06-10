@@ -140,7 +140,7 @@ int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
 
     signal(SIGINT, handle_ctrl_c);
     signal(SIGPIPE, handle_ctrl_c);
-    while (status) {
+    while (handle_server(1)) {
         FD_ZERO(&server->readfds);
         FD_SET(server->server_fd, &server->readfds);
         select_status = set_sockets(server);
