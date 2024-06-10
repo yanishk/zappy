@@ -295,6 +295,9 @@ void Zappy::Searcher::showMustGoOn()
 
 int Zappy::Searcher::run()
 {
+    if (_network.getInfoFromServer() == "dead") {
+        return ERROR;
+    }
     updateOrder();
     if (_nextMouvment.empty() && !_isGoingToQueen && _order.empty()) {
         _isGoingToQueen = true;
