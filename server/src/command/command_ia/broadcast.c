@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+#include "command_ia.h"
 
 static tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {
     {NORTH, 1, 2, 3, 4, 5, 6, 7, 8},
@@ -24,7 +25,8 @@ static int height_direct_func(size_t receiver_height, size_t sender_height)
     return receiver_height - sender_height;
 }
 
-static int width_undirect_func(size_t receiver_width, size_t sender_width, size_t map_width)
+static int width_undirect_func(size_t receiver_width, size_t sender_width,
+    size_t map_width)
 {
     if (receiver_width < sender_width) {
         return (map_width - sender_width) + receiver_width;
@@ -32,63 +34,85 @@ static int width_undirect_func(size_t receiver_width, size_t sender_width, size_
     return (map_width - receiver_width) + sender_width;
 }
 
-static int height_undirect_func(size_t receiver_height, size_t sender_height, size_t map_height)
+static int height_undirect_func(size_t receiver_height, size_t sender_height,
+    size_t map_height)
 {
     if (receiver_height < sender_height)
         return (map_height - sender_height) + receiver_height;
     return (map_height - receiver_height) + sender_height;
 }
 
-int broadcast(server_t *server, zappy_t *zappy, const arguments_t arg, client_t *client)
+static void fill_road_broadcast(player_t *sender, player_t *receiver,
+    const arguments_t arg, road_broadcast_t *road)
+{
+    road->width_direct = width_direct_func(receiver->width, sender->width);
+    road->height_direct = height_direct_func(receiver->height, sender->height);
+    road->width_undirect = width_undirect_func(receiver->width, sender->width,
+        arg.width);
+    road->height_undirect = height_undirect_func(receiver->height,
+        sender->height, arg.height);
+}
+
+static int get_straight_line(road_broadcast_t *road, int i, size_t dir_diag)
+{
+    if (road->height_direct == 0 && road->width_direct != 0) {
+        if (road->width_direct > road->width_undirect)
+            dir_diag = tile_numbering_list[i].east_tile;
+        else
+            dir_diag = tile_numbering_list[i].west_tile;
+    }
+    if (road->width_direct == 0 && road->height_direct != 0) {
+        if (road->height_direct > road->height_undirect)
+            dir_diag = tile_numbering_list[i].south_tile;
+        else
+            dir_diag = tile_numbering_list[i].north_tile;
+    }
+    return dir_diag;
+}
+
+static int get_diagonal_line(road_broadcast_t *road, int i, size_t dir_diag)
+{
+    if (road->height_direct != 0 && road->height_direct != 0) {
+        if (road->width_direct > road->width_undirect)
+            dir_diag = tile_numbering_list[i].east_tile;
+        else
+            dir_diag = tile_numbering_list[i].west_tile;
+        if (road->height_direct > road->height_undirect)
+            dir_diag -= 1;
+        else
+            dir_diag += 1;
+    }
+    return dir_diag;
+}
+
+static void find_shortest_path(server_t *server, player_t *receiver,
+    road_broadcast_t *road)
+{
+    size_t dir_diag = 0;
+
+    for (int i = 0; i < NB_DIRECTIONS; i++) {
+        if (tile_numbering_list[i].direction == receiver->direction) {
+            dir_diag = get_straight_line(road, i, dir_diag);
+            dir_diag = get_diagonal_line(road, i, dir_diag);
+            dprintf(receiver->id, "message %ld, %s\n", dir_diag,
+                server->cmd_arg_array[1]);
+        }
+    }
+}
+
+int broadcast(server_t *server, zappy_t *zappy, const arguments_t arg,
+    client_t *client)
 {
     player_t *sender = get_player(zappy, client->client_fd);
     player_t *receiver = NULL;
-    int width_direct = 0;
-    int height_direct = 0;
-    int width_undirect = 0;
-    int height_undirect = 0;
-    size_t dir_diag = 0;
+    road_broadcast_t *road = malloc(sizeof(road_broadcast_t));
 
-    printf("Sender[%d][%d]\n", sender->height, sender->width);
     TAILQ_FOREACH(receiver, &zappy->player_head, player_entries) {
         if (receiver->id != sender->id) {
-            printf("Receiver[%d][%d], Dir = %ld\n", receiver->height, receiver->width, receiver->direction);
-            width_direct = width_direct_func(receiver->width, sender->width);
-            height_direct = height_direct_func(receiver->height, sender->height);
-            width_undirect = width_undirect_func(receiver->width, sender->width, arg.width);
-            height_undirect = height_undirect_func(receiver->height, sender->height, arg.height); //mettre dans une struct
-
-            for (int i = 0; i < NB_DIRECTIONS; i++) {
-                if (tile_numbering_list[i].direction == receiver->direction) {
-                    if (height_direct == 0 && width_direct == 0)
-                        dir_diag = 0;
-                    if (height_direct == 0 && width_direct != 0) {
-                        if (width_direct > width_undirect)
-                            dir_diag = tile_numbering_list[i].east_tile;
-                        else
-                            dir_diag = tile_numbering_list[i].west_tile;
-                    }
-                    if (width_direct == 0 && height_direct != 0) {
-                        if (height_direct > height_undirect)
-                            dir_diag = tile_numbering_list[i].south_tile;
-                        else
-                            dir_diag = tile_numbering_list[i].north_tile;
-                    }
-                    if (height_direct != 0 && height_direct != 0) {
-                        if (width_direct > width_undirect)
-                            dir_diag = tile_numbering_list[i].east_tile;
-                        else
-                            dir_diag = tile_numbering_list[i].west_tile;
-                        if (height_direct > height_undirect)
-                            dir_diag -= 1;
-                        else
-                            dir_diag += 1;
-                    }
-                    dprintf(receiver->id, "message %ld, %s\n", dir_diag, server->cmd_arg_array[1]);
-                }
-
-            }
+            fill_road_broadcast(sender, receiver, arg, road);
+            find_shortest_path(server, receiver, road);
         }
     }
+    free(road);
     return EXIT_WITH_SUCCESS;
 }

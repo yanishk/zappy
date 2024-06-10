@@ -49,6 +49,13 @@ typedef struct coordinate_s {
     int width;
 } coordinate_t;
 
+typedef struct road_broadcast_s {
+    int width_direct;
+    int height_direct;
+    int width_undirect;
+    int height_undirect;
+} road_broadcast_t;
+
 extern int (*cmd_func_ia[NB_IA_CMD])(server_t *, zappy_t *, const arguments_t,
     client_t *);
 extern command_infos_t cmd_list_ia[NB_IA_CMD];
