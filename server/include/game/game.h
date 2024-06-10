@@ -43,7 +43,8 @@ typedef struct zappy_s {
 void initialize_game(const arguments_t, zappy_t *);
 void init_basis_map(zappy_t *, const arguments_t *);
 void initialize_teams(const arguments_t, zappy_t *);
-void initialize_egg(const arguments_t, zappy_t *, char *, enum EGG_ORIGIN);
+void initialize_egg(const arguments_t, zappy_t *, char *,
+    enum EGG_ORIGIN origin);
 void initialize_player(zappy_t *, egg_t *);
 void initialize_resources(resource_t *);
 void replace_disconnected_players(const arguments_t, zappy_t *);

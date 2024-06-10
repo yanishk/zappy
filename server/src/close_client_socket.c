@@ -25,7 +25,7 @@ static void remove_client_socket(server_t *server, const int client_fd)
 
 void close_client_socket(server_t *server, zappy_t *zappy, client_t *client)
 {
-    player_t *player = get_player(zappy, client->client_fd);
+    player_t *player = get_player_by_fd(zappy, client->client_fd);
 
     if (client->has_been_closed) {
         close(client->client_fd);

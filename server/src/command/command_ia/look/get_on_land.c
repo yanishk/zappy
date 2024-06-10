@@ -27,7 +27,7 @@ static char *get_resources_tile(int resource_decount, char *string_on_land,
 static char *find_player_tile(zappy_t *zappy, coordinate_t pos,
     const unsigned int client_fd, char *string_on_land)
 {
-    player_t *current_player = get_player(zappy, client_fd);
+    player_t *current_player = get_player_by_fd(zappy, client_fd);
     player_t *player = NULL;
     char *new_string = NULL;
 

@@ -128,7 +128,7 @@ static void west_east_look(zappy_t *zappy, const arguments_t arg,
 int look_around(server_t *, zappy_t *zappy, const arguments_t arg,
     client_t *client)
 {
-    player_t *player = get_player(zappy, client->client_fd);
+    player_t *player = get_player_by_fd(zappy, client->client_fd);
     coordinate_t pos = {player->height, player->width};
     size_t direction = player->direction;
 

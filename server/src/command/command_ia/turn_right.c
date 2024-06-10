@@ -11,7 +11,7 @@
 int turn_right(server_t *, zappy_t *zappy, const arguments_t,
     client_t *client)
 {
-    player_t *player = get_player(zappy, client->client_fd);
+    player_t *player = get_player_by_fd(zappy, client->client_fd);
 
     if (player == NULL)
         return EXIT_WITH_ERROR;

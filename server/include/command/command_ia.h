@@ -14,9 +14,6 @@
 
     #define NB_IA_CMD 12
 
-    #define COMMAND_KO "ko\n"
-    #define COMMAND_OK "ok\n"
-
     #define INVENTORY_COMMAND "Inventory"
     #define TAKE_COMMAND "Take"
     #define SET_COMMAND "Set"

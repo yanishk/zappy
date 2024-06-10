@@ -49,13 +49,24 @@ static int get_player_id(const zappy_t *zappy, const unsigned int client_fd)
     return link->player_id;
 }
 
-player_t *get_player(const zappy_t *zappy, const unsigned int client_fd)
+player_t *get_player_by_fd(const zappy_t *zappy, const unsigned int client_fd)
 {
     int player_id = get_player_id(zappy, client_fd);
     player_t *player = NULL;
 
     if (player_id == ERROR_RETURN)
         return NULL;
+    TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
+        if (player->id == player_id)
+            return player;
+    }
+    return NULL;
+}
+
+player_t *get_player_by_id(const zappy_t *zappy, const int player_id)
+{
+    player_t *player = NULL;
+
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
         if (player->id == player_id)
             return player;
