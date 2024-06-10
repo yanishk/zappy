@@ -7,6 +7,7 @@
 
 #include "server.h"
 #include "command_ia.h"
+#include "command_gui.h"
 
 int take_object(server_t *server, zappy_t *zappy, const arguments_t,
     client_t *client)
@@ -24,6 +25,7 @@ int take_object(server_t *server, zappy_t *zappy, const arguments_t,
     if (resource_on_land > 0) {
         set_resources(&TILE_RESOURCE, OBJECT_TO_TAKE, -1);
         set_resources(&player->inventory, OBJECT_TO_TAKE, 1);
+        pgt_func(server, zappy, client, OBJECT_TO_TAKE);
     }
     return EXIT_WITH_SUCCESS;
 }

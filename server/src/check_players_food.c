@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+#include "command_gui.h"
 
 static double set_food_time_unit(const int frequency)
 {
@@ -28,6 +29,7 @@ static void check_player_food(server_t *server, zappy_t *zappy,
         if (player->inventory.food == 0) {
             dprintf(player->id, "dead\n");
             client = get_client_in_struct(server, player->id);
+            pdi_func(server, zappy, client);
             client->has_been_closed = true;
             close_client_socket(server, zappy, client);
             initialize_player(arg, zappy, player->team_name);
