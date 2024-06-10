@@ -24,7 +24,7 @@
     #define MIDDLE_SIX_LEVEL        42
     #define MIDDLE_SEVEN_LEVEL      56
 
-    #define MIN_FOOD 20
+    #define MIN_FOOD 10
 
     #include <map>
     #include "AAi.hpp"
@@ -61,13 +61,17 @@ namespace Zappy
             std::vector<Mouvement> _nextMouvment;
             std::vector<std::string> _objectToTake;
 
-            void updateOrder();
-            bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
-            std::vector<std::vector<bool>> estimatePriority();
-            void whereShouldIGo(std::vector<std::vector<bool>> priority);
-            std::pair<int, int> whereIsThePriority(int index);
             void move();
 
+            bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
+            void whereShouldIGo(std::vector<std::vector<bool>> priority);
+            void updateMove(std::pair<int, int> pos);
+
+            std::vector<std::vector<bool>> estimatePriority();
+            std::pair<int, int> whereIsThePriority(int index);
+
+            void updateOrder();
+            void searchFood();
     };
 
 }

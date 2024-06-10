@@ -159,6 +159,30 @@ std::pair<int, int> Zappy::Searcher::whereIsThePriority(int index)
     return where;
 }
 
+void Zappy::Searcher::updateMove(std::pair<int, int> pos)
+{
+    if (pos == std::make_pair<int, int>(ERROR, ERROR)) {
+        return;
+    }
+
+    if (pos.second < 0) {
+
+        for (int i = 0; i > pos.second; --i) {
+            _nextMouvment.emplace(_nextMouvment.begin(), Left);
+        }
+
+    } else {
+        for (int i = 0; i < pos.second; ++i) {
+            _nextMouvment.emplace(_nextMouvment.begin(), Right);
+        }
+    }
+
+    for (int i = 0; i < pos.first; ++i) {
+        _nextMouvment.emplace(_nextMouvment.begin(), Up);
+    }
+    _nextMouvment.emplace(_nextMouvment.begin(), Take);
+}
+
 void Zappy::Searcher::whereShouldIGo(std::vector<std::vector<bool>> priority)
 {
     std::size_t biggestPriority = 0;
@@ -178,28 +202,9 @@ void Zappy::Searcher::whereShouldIGo(std::vector<std::vector<bool>> priority)
 
     _objectToTake.push_back(_lastLook[biggestPriority]);
 
-    std::pair<int, int> multiplicator = whereIsThePriority(index);
+    std::pair<int, int> pos = whereIsThePriority(index);
 
-    if (multiplicator == std::make_pair<int, int>(ERROR, ERROR)) {
-        return;
-    }
-
-    if (multiplicator.second < 0) {
-
-        for (int i = 0; i > multiplicator.second; --i) {
-            _nextMouvment.emplace(_nextMouvment.begin(), Left);
-        }
-
-    } else {
-        for (int i = 0; i < multiplicator.second; ++i) {
-            _nextMouvment.emplace(_nextMouvment.begin(), Right);
-        }
-    }
-
-    for (int i = 0; i < multiplicator.first; ++i) {
-        _nextMouvment.emplace(_nextMouvment.begin(), Up);
-    }
-    _nextMouvment.emplace(_nextMouvment.begin(), Take);
+    updateMove(pos);
 
     priority[biggestPriority].clear();
     whereShouldIGo(priority);
@@ -239,6 +244,24 @@ void Zappy::Searcher::move()
     }
 }
 
+void Zappy::Searcher::searchFood()
+{
+    std::vector<std::string> lookForFood = look();
+    std::size_t priority = 0;
+    int index = 0;
+
+    for (const auto &i: lookForFood) {
+
+        if (i == FOOD) {
+            priority = index;
+        }
+        index++;
+    }
+
+    std::pair<int, int> pos = whereIsThePriority(index);
+    updateMove(pos);
+}
+
 int Zappy::Searcher::run()
 {
     updateOrder();
@@ -249,6 +272,10 @@ int Zappy::Searcher::run()
     }
 
     move();
+
+    if (_ressources.getRessource(FOOD) < MIN_FOOD) {
+        searchFood();
+    }
 
     updateOrder();
     if (_nextMouvment.empty()) {
