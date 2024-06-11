@@ -68,9 +68,11 @@ class CommandManager {
         std::vector<std::vector<std::string>> _pgtCmd;
 
 
-        std::vector<std::string> _sgtCmd;
-        std::vector<std::string> _eboCmd; // useless atm
-        std::vector<std::string> _smgCmd;
+        std::vector<std::vector<std::string>> _sgtCmd;
+        std::vector<std::vector<std::string>> _smgCmd; // time part
+        std::vector<std::vector<std::string>> _sstCmd;
+
+        std::vector<std::vector<std::string>> _eboCmd; // egg part
 
         std::vector<std::string> _sentCommands;
         std::vector<std::string> _receivedResponses;
