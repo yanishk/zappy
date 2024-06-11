@@ -25,8 +25,10 @@ void Client::run()
 {
     std::thread display(&Client::startDisplay, this);
     std::thread reader(&Client::readServ, this);
+    std::thread writer(&Client::writeToServ, this);
+
     reader.join();
-    writeToServ();
+    writer.join();
     display.join();
 }
 
