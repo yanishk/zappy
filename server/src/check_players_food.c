@@ -6,6 +6,7 @@
 */
 
 #include "command_ia.h"
+#include "command_gui.h"
 
 static void kill_player(server_t *server, zappy_t *zappy,
     const arguments_t arg, player_t *player)
@@ -18,6 +19,7 @@ static void kill_player(server_t *server, zappy_t *zappy,
         return;
     dprintf(link->client_fd, "dead\n");
     initialize_egg(arg, zappy, player->team_name);
+    pdi_func(server, zappy, link->client_fd);
     client = get_client_in_struct(server, link->client_fd);
     client->has_been_closed = true;
     close_client_socket(server, zappy, client);

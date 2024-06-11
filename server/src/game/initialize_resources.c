@@ -28,7 +28,7 @@ static void repartition_resource(const arguments_t *args, zappy_t *zappy,
     int rand_width = 0;
     int rand_height = 0;
 
-    while (index != max) {
+    while (index < max) {
         rand_width = (rand()) % args->width;
         rand_height = (rand()) % args->height;
         if (get_resources(&zappy->resource[rand_width][rand_height], name) > 0)

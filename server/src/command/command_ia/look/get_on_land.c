@@ -53,7 +53,8 @@ char *get_on_land(zappy_t *zappy, coordinate_t pos,
         SIBUR, MENDIANE, PHIRAS, THYSTAME};
 
     string_on_land[0] = '\0';
-    string_on_land = find_player_tile(zappy, pos, client_fd, string_on_land);
+    string_on_land = strdup(find_player_tile(zappy, pos, client_fd,
+        string_on_land));
     for (size_t i = 0; i < NB_RESOURCES; i++) {
         resource_decount =
             get_resources(&zappy->resource[pos.height][pos.width],
