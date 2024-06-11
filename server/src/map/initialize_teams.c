@@ -34,7 +34,7 @@ static void check_existing_eggs_pos(const arguments_t arg, zappy_t *zappy,
     } while (has_already_an_egg(zappy, player->height, player->width));
 }
 
-static void initialize_player_pos(const arguments_t arg, zappy_t *zappy,
+void initialize_player_pos(const arguments_t arg, zappy_t *zappy,
     player_t *player)
 {
     if (arg.nb_teams * arg.nb_clients <= arg.height * arg.width) {
@@ -50,7 +50,8 @@ static size_t initialize_player_direction(void)
     return RIGHT_ANGLE * (rand() % 4);
 }
 
-void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name)
+void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name,
+    enum PLAYER_STATUS status)
 {
     player_t *player = NULL;
 
@@ -62,7 +63,7 @@ void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name)
     player->level = 1;
     player->height = 0;
     player->width = 0;
-    player->is_egg = true;
+    player->status = status;
     player->team_name = strdup(team_name);
     player->direction = initialize_player_direction();
     initialize_player_pos(arg, zappy, player);
@@ -74,7 +75,7 @@ void initialize_teams(const arguments_t arg, zappy_t *zappy)
 
     for (int i = 0; i != arg.nb_teams; i++) {
         for (int j = 0; j != arg.nb_clients; j++)
-            initialize_player(arg, zappy, team->team_name);
+            initialize_player(arg, zappy, team->team_name, IS_EGG_FROM_START);
         team = TAILQ_NEXT(team, team_entries);
     }
 }

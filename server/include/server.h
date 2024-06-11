@@ -22,6 +22,11 @@
     #define COMMAND_SUCCESS 2
     #define INTERRUPTED_SYSCALL 4
 
+    #define COMMAND_KO "ko\n"
+    #define COMMAND_OK "ok\n"
+
+    #define NB_CMD 11
+
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
 
@@ -63,16 +68,19 @@ void check_players_food(server_t *, zappy_t *, const arguments_t);
 void answer_client(const int, const unsigned int);
 void free_client_commands(client_t *);
 void free_program(server_t *, zappy_t *, arguments_t *);
+void free_zappy_player(zappy_t *, player_t *);
 
 bool is_positive_number(const char *);
 size_t array_size(char **);
 void free_array(char **);
 char **word_array(char const *, char *);
 player_t *get_player(zappy_t *, const unsigned int);
+player_t *get_random_team_egg(zappy_t *, char *);
 int get_player_direction(const player_t *);
 client_t *get_graphical_client(server_t *);
 bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
+bool is_on_same_tile(const player_t *, const player_t *);
 int get_resources(resource_t *, const char *);
 void set_resources(resource_t *, const char *, int);
 bool is_a_resource(const char *);

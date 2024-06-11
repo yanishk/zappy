@@ -19,9 +19,6 @@ all:
 	mv ./gui/zappy_gui .
 	mv ./server/zappy_server .
 
-zappygui:
-	cd gui/; make re; mv ./zappy_gui ../; cd ../
-
 tests_run:
 	make tests_run -C ai
 

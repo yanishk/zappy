@@ -14,6 +14,9 @@
     #include "arguments.h"
 
     #define RIGHT_ANGLE 90
+
+    #define NB_DIRECTIONS 4
+
     #define NORTH 0
     #define EAST 90
     #define SOUTH 180
@@ -40,6 +43,18 @@
     #define PHIRAS_DEN 0.08
     #define THYSTAME_DEN 0.05
 
+typedef struct tile_numbering_s {
+    size_t direction;
+    size_t north_tile;
+    size_t north_west_tile;
+    size_t west_tile;
+    size_t south_west_tile;
+    size_t south_tile;
+    size_t south_east_tile;
+    size_t east_tile;
+    size_t north_east_tile;
+} tile_numbering_t;
+
 typedef struct resource_s {
     size_t linemate;
     size_t deraumere;
@@ -50,13 +65,19 @@ typedef struct resource_s {
     size_t food;
 } resource_t;
 
+enum PLAYER_STATUS {
+    IS_EGG_FROM_START,
+    IS_EGG_FROM_FORK,
+    IS_PLAYER
+};
+
 typedef struct player_s {
     int width;
     int height;
     int level;
     unsigned int id;
     char *team_name;
-    bool is_egg;
+    enum PLAYER_STATUS status;
     size_t direction;
     clock_t clock_begin;
     resource_t inventory;
@@ -78,10 +99,14 @@ struct direction_player {
     int direction;
 };
 
+void replace_disconnected_players(const arguments_t arg, zappy_t *zappy);
 void density_onland(const arguments_t *args, zappy_t *zappy);
 void initialize_map(const arguments_t arg, zappy_t *zappy);
 void initialize_teams(const arguments_t arg, zappy_t *zappy);
-void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name);
+void initialize_player(const arguments_t arg, zappy_t *zappy, char *team_name,
+    enum PLAYER_STATUS);
+void initialize_player_pos(const arguments_t arg, zappy_t *zappy,
+    player_t *player);
 void initialize_resources(resource_t *resource);
 void print_players_pos_and_direction(const zappy_t zappy);
 void print_players(const zappy_t zappy);

@@ -18,8 +18,9 @@ void free_client_commands(client_t *client)
         return;
     command = TAILQ_FIRST(&client->command_head);
     while (command != NULL) {
-        if (command->array != NULL)
-            free(command->array);
+        if (command->array != NULL) {
+            free_array(command->array);
+        }
         command_next = TAILQ_NEXT(command, command_entries);
         free(command);
         command = command_next;
@@ -49,6 +50,27 @@ static void free_arg_teams(arguments_t *arg)
         team_next = TAILQ_NEXT(team, team_entries);
         free(team);
         team = team_next;
+    }
+}
+
+void free_ia_command(client_t *client, command_ia_t *command)
+{
+    if (command != NULL) {
+        TAILQ_REMOVE(&client->command_head, command, command_entries);
+        if (command->array != NULL) {
+            free_array(command->array);
+        }
+        free(command);
+    }
+}
+
+void free_zappy_player(zappy_t *zappy, player_t *player)
+{
+    if (player != NULL) {
+        TAILQ_REMOVE(&zappy->player_head, player, player_entries);
+        if (player->team_name != NULL)
+            free(player->team_name);
+        free(player);
     }
 }
 

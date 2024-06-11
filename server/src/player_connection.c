@@ -10,7 +10,7 @@
 #include "command_ia.h"
 #include "command_gui.h"
 
-static unsigned int count_active_players(const server_t *server,
+static unsigned int count_eggs_remaining(const server_t *server,
     const zappy_t *zappy)
 {
     unsigned int count_eggs = 0;
@@ -18,7 +18,7 @@ static unsigned int count_active_players(const server_t *server,
 
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
         if (strcmp(server->cmd_arg_array[0], player->team_name) == 0 &&
-            player->is_egg) {
+            player->status != IS_PLAYER) {
             count_eggs++;
         }
     }
@@ -28,26 +28,22 @@ static unsigned int count_active_players(const server_t *server,
 int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
     const unsigned int client_fd)
 {
-    unsigned int active_players = 0;
-    player_t *player = NULL;
+    unsigned int count_eggs = 0;
+    player_t *chosen_egg = NULL;
 
     if (is_player_connected(zappy, client_fd))
         return UNKNOWN_COMMAND;
-    for ((player) = ((&zappy->player_head)->tqh_first); (player);
-        (player) = ((player)->player_entries.tqe_next)) {
-        if (strcmp(server->cmd_arg_array[0], player->team_name) == 0 &&
-            player->is_egg) {
-            player->id = client_fd;
-            player->is_egg = false;
-            player->clock_begin = clock();
-            active_players = count_active_players(server, zappy);
-            dprintf(client_fd, "%d %d\n%d\n", arg.height,
-                arg.width, active_players);
-            pnw_func(server, zappy, client_fd);
-            return COMMAND_SUCCESS;
-        }
-    }
-    return UNKNOWN_COMMAND;
+    chosen_egg = get_random_team_egg(zappy, server->cmd_arg_array[0]);
+    if (chosen_egg == NULL)
+        return UNKNOWN_COMMAND;
+    chosen_egg->id = client_fd;
+    chosen_egg->status = IS_PLAYER;
+    chosen_egg->clock_begin = clock();
+    count_eggs = count_eggs_remaining(server, zappy);
+    dprintf(client_fd, "%d %d\n%d\n", arg.height,
+        arg.width, count_eggs);
+    pnw_func(server, zappy, client_fd);
+    return COMMAND_SUCCESS;
 }
 
 bool is_player_connected(const zappy_t *zappy, const unsigned int client_fd)
