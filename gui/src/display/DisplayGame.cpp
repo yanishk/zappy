@@ -258,6 +258,18 @@ void DisplayGame::useServerInfo(void)
         std::cout << "Player " << cmd.at(0) << " is collecting " << cmd.at(1) << " ressources !"
             << std::endl;
     }
+    for (int i = 0; _cmd.getCommandAt("ebo", i).size() >= 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("sst", i);
+        std::cout << "Player " << cmd.at(0) << " is connected for an Egg" << std::endl;
+    }
+    for (int i = 0; _cmd.getCommandAt("sst", i).size() >= 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("ebo", i);
+        std::cout << "The time unit modification is " << cmd.at(0) << std::endl;
+    }
+    for (int i = 0; _cmd.getCommandAt("sgt", i).size() >= 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("sgt", i);
+        std::cout << "The time unit request is " << cmd.at(0) << std::endl;
+    }
 }
 
 void DisplayGame::display3D(void)
