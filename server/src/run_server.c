@@ -137,6 +137,7 @@ static int set_sockets(server_t *server)
 int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
 {
     int select_status = 0;
+    clock_t refill = clock();
 
     signal(SIGINT, handle_ctrl_c);
     signal(SIGPIPE, handle_ctrl_c);
@@ -149,6 +150,7 @@ int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
         if (check_server_socket(server) == EXIT_WITH_ERROR ||
             check_clients_sockets(server, zappy, arg) == EXIT_WITH_ERROR)
             return EXIT_WITH_ERROR;
+        refill_map(zappy, arg, &refill);
     }
     return EXIT_WITH_SUCCESS;
 }

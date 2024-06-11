@@ -17,7 +17,7 @@ void replace_disconnected_players(const arguments_t arg, zappy_t *zappy)
         (team) = ((team)->team_entries.tqe_next)) {
         count_slots = count_team_slots(zappy, team->team_name);
         while (count_slots < arg.nb_clients) {
-            initialize_egg(arg, zappy, team->team_name, EGG_FROM_START);
+            initialize_egg(arg, zappy, team->team_name);
             count_slots++;
         }
     }

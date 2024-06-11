@@ -11,6 +11,7 @@
     #include <stdlib.h>
 
     #define FOOD_TIME_UNIT 126
+    #define REFILL_MAP_TIME_UNIT 20
 
     #define NB_RESOURCES 7
 

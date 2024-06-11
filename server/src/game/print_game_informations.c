@@ -29,7 +29,6 @@ void print_eggs(const zappy_t zappy)
         printf("\tteam_name=%s\n", egg->team_name);
         printf("\tpos : height(x)=%d, width(y)=%d\n",
             egg->height, egg->width);
-        printf("\torigin:%d\n", egg->origin);
     }
 }
 

@@ -13,7 +13,7 @@ static char *get_resources_tile(int resource_decount, char *string_on_land,
 {
     char *new_string = NULL;
 
-    while (resource_decount < 0) {
+    while (resource_decount > 0) {
         new_string = realloc(string_on_land, strlen(string_on_land) +
             sizeof(" ") + sizeof(name));
         string_on_land = new_string;

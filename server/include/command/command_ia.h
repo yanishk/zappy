@@ -10,8 +10,6 @@
 
     #include "common_command.h"
 
-    #define TO_MILLI 1000
-
     #define NB_IA_CMD 12
 
     #define INVENTORY_COMMAND "Inventory"
@@ -47,6 +45,13 @@ typedef struct coordinate_s {
     int height;
     int width;
 } coordinate_t;
+
+typedef struct road_broadcast_s {
+    int width_direct;
+    int height_direct;
+    int width_undirect;
+    int height_undirect;
+} road_broadcast_t;
 
 extern int (*cmd_func_ia[NB_IA_CMD])(server_t *, zappy_t *, const arguments_t,
     client_t *);

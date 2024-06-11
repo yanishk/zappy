@@ -8,7 +8,7 @@
 CC			=	gcc
 RM			=	rm -f
 
-CFLAGS		=	-Wall -Wextra -lm
+CFLAGS		=	-Wall -Wextra -Werror -lm
 CPPFLAGS	=	-iquote ./include -iquote ./include/command/ 	\
 				-iquote ./include/game/
 FLAGS_DEBUG = 	-g
@@ -27,6 +27,7 @@ SRC			=	./src/main.c											\
 				./src/replace_disconnected_players.c 					\
 				./src/memory/free_program.c 							\
 				./src/memory/free_game.c 								\
+				./src/game/refill_map_time_unit.c						\
 				./src/game/initialize_game.c 							\
 				./src/game/initialize_teams.c 							\
 				./src/game/initialize_resources.c 						\
@@ -78,7 +79,8 @@ SRC			=	./src/main.c											\
 				./src/lib/get_resources.c								\
 				./src/lib/set_resources.c								\
 				./src/lib/is_a_resource.c								\
-				./src/lib/get_tile_index.c
+				./src/lib/get_tile_index.c								\
+				./src/lib/calculate_time_unit.c
 
 OBJ			=	$(SRC:.c=.o)
 

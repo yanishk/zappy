@@ -7,15 +7,6 @@
 
 #include "command_ia.h"
 
-static double set_food_time_unit(const int frequency)
-{
-    double food_time_unit = FOOD_TIME_UNIT;
-
-    food_time_unit /= frequency;
-    food_time_unit *= TO_MILLI;
-    return food_time_unit;
-}
-
 static void kill_player(server_t *server, zappy_t *zappy,
     const arguments_t arg, player_t *player)
 {
@@ -26,8 +17,7 @@ static void kill_player(server_t *server, zappy_t *zappy,
     if (link == NULL)
         return;
     dprintf(link->client_fd, "dead\n");
-    initialize_egg(arg, zappy, player->team_name,
-        EGG_FROM_START);
+    initialize_egg(arg, zappy, player->team_name);
     client = get_client_in_struct(server, link->client_fd);
     client->has_been_closed = true;
     close_client_socket(server, zappy, client);
@@ -36,7 +26,7 @@ static void kill_player(server_t *server, zappy_t *zappy,
 static void check_player_food(server_t *server, zappy_t *zappy,
     const arguments_t arg, player_t *player)
 {
-    double food_time_unit = set_food_time_unit(arg.freq);
+    double food_time_unit = calculate_freq(arg.freq, FOOD_TIME_UNIT);
 
     if (time_is_up(player->clock_begin, food_time_unit)) {
         if (player->inventory.food == 0) {

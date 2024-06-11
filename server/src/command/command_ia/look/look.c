@@ -79,7 +79,7 @@ static int check_width_we(const arguments_t arg, player_t *player,
 static void print_comma(int vision_x, int vision_y, player_t *player,
     client_t *client)
 {
-    if (vision_y != vision_x && vision_x == player->level)
+    if (vision_x != player->height && vision_y != player->width)
         dprintf(client->client_fd, ",");
 }
 
@@ -96,13 +96,12 @@ static void north_south_look(zappy_t *zappy, const arguments_t arg,
         vision_x_final = check_heigth_ns(arg, player, direction, vision_x);
         for (int vision_y = -vision_x; vision_y <= vision_x; vision_y++) {
             vision_y_final = check_width_ns(arg, player, vision_y);
+            print_comma(vision_x, vision_y, player, client);
             pos.height = vision_x_final;
             pos.width = vision_y_final;
             string_on_land = get_on_land(zappy, pos, client->client_fd);
             dprintf(client->client_fd, "%s", string_on_land);
-            print_comma(vision_x, vision_y, player, client);
-            if (string_on_land != NULL)
-                free(string_on_land);
+            free(string_on_land);
         }
     }
 }
@@ -125,8 +124,7 @@ static void west_east_look(zappy_t *zappy, const arguments_t arg,
             string_on_land = get_on_land(zappy, pos, client->client_fd);
             dprintf(client->client_fd, "%s", string_on_land);
             print_comma(vision_x, vision_y, player, client);
-            if (string_on_land != NULL)
-                free(string_on_land);
+            free(string_on_land);
         }
     }
 }
@@ -140,7 +138,7 @@ int look_around(server_t *, zappy_t *zappy, const arguments_t arg,
     char *string_on_land = NULL;
 
     string_on_land = get_on_land(zappy, pos, client->client_fd);
-    dprintf(client->client_fd, "[player%s,", string_on_land);
+    dprintf(client->client_fd, "[player%s", string_on_land);
     if (direction == NORTH || direction == SOUTH)
         north_south_look(zappy, arg, player, client);
     if (direction == EAST || direction == WEST)
@@ -148,5 +146,5 @@ int look_around(server_t *, zappy_t *zappy, const arguments_t arg,
     dprintf(client->client_fd, "]\n");
     if (string_on_land != NULL)
         free(string_on_land);
-    return EXIT_WITH_SUCCESS;
+    return COMMAND_SUCCESS;
 }

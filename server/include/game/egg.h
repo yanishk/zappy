@@ -11,17 +11,11 @@
 
     #include <sys/queue.h>
 
-enum EGG_ORIGIN {
-    EGG_FROM_START,
-    EGG_FROM_FORK
-};
-
 typedef struct egg_s {
     int id;
     int width;
     int height;
     char *team_name;
-    enum EGG_ORIGIN origin;
     TAILQ_ENTRY(egg_s) egg_entries;
 } egg_t;
 

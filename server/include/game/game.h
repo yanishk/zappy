@@ -21,6 +21,8 @@
 
     #define RIGHT_ANGLE 90
 
+    #define TO_MILLI 1000
+
 typedef struct game_infos_s {
     int last_player_id;
     int last_egg_id;
@@ -43,10 +45,10 @@ typedef struct zappy_s {
 void initialize_game(const arguments_t, zappy_t *);
 void init_basis_map(zappy_t *, const arguments_t *);
 void initialize_teams(const arguments_t, zappy_t *);
-void initialize_egg(const arguments_t, zappy_t *, char *,
-    enum EGG_ORIGIN origin);
+void initialize_egg(const arguments_t, zappy_t *, char *);
 void initialize_player(zappy_t *, egg_t *);
 void initialize_resources(resource_t *);
+void refill_map(zappy_t *, const arguments_t, clock_t *);
 void replace_disconnected_players(const arguments_t, zappy_t *);
 void print_players(const zappy_t);
 void print_eggs(const zappy_t);

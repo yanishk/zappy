@@ -85,8 +85,7 @@ void initialize_player(zappy_t *zappy, egg_t *egg)
     player->direction = initialize_player_direction();
 }
 
-void initialize_egg(const arguments_t arg, zappy_t *zappy, char *team_name,
-    enum EGG_ORIGIN origin)
+void initialize_egg(const arguments_t arg, zappy_t *zappy, char *team_name)
 {
     egg_t *egg = malloc(sizeof(egg_t));
 
@@ -95,7 +94,6 @@ void initialize_egg(const arguments_t arg, zappy_t *zappy, char *team_name,
     TAILQ_INSERT_TAIL(&zappy->egg_head, egg, egg_entries);
     egg->height = 0;
     egg->width = 0;
-    egg->origin = origin;
     egg->team_name = strdup(team_name);
     egg->id = get_next_id(&zappy->infos->last_egg_id);
     initialize_egg_pos(arg, zappy, egg);
@@ -110,7 +108,7 @@ void initialize_teams(const arguments_t arg, zappy_t *zappy)
     TAILQ_INIT(&zappy->link_head);
     for (int i = 0; i != arg.nb_teams; i++) {
         for (int j = 0; j != arg.nb_clients; j++)
-            initialize_egg(arg, zappy, team->team_name, EGG_FROM_START);
+            initialize_egg(arg, zappy, team->team_name);
         team = TAILQ_NEXT(team, team_entries);
     }
 }
