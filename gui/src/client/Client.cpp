@@ -35,7 +35,7 @@ void Client::startDisplay()
     std::srand(std::time(NULL));
     ParsesModelConfig parse;
     std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile = parse.parsesFile("./gui/src/display/modelConfig.cfg");
-    DisplayGame game(1920, 1080, _cmd);
+    DisplayGame game(WIN_SIZE_L, WIN_SIZE_W, _cmd);
     try {
         game.fillAllModel(parsedFile);
     } catch (const ErrorHandling& e) {
@@ -56,14 +56,12 @@ void Client::readServ()
         while (true) {
 
             asio::error_code error;
-            asio::read_until(_socket, _buff, '\n', error); // A LAISSER !
+            asio::read_until(_socket, _buff, '\n', error);
 
             if (error == asio::error::eof) {
                 std::cout << "Connection closed by server." << std::endl;
                 exit(EXIT_SUCCESS);
-            }
-
-            else if (error) {
+            } else if (error) {
                 throw asio::system_error(error);
             }
 
