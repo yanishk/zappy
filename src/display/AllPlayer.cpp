@@ -71,6 +71,16 @@ void AllPlayers::removePlayerFromIsland(int playerID)
     }
 }
 
+Vector3 AllPlayers::getPlayerRealPos(int playerID)
+{
+    for (std::size_t i = 0; i < _allPlayer.size(); i++) {
+        if (_allPlayer.at(i)._playerID == playerID) {
+            return _allPlayer.at(i)._realPos;
+        }
+    }
+    return {};
+}
+
 Vector3 AllPlayers::getSize(void)
 {
     return _size;

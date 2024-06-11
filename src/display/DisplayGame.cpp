@@ -19,6 +19,8 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd)
     _camera.projection = CAMERA_PERSPECTIVE;
     initWaterShader();
     _selectedPlayer.first = false;
+    _mapSize.first = 0;
+    _mapSize.second = 0;
 
     // std::thread reader(&Client::readServ, this);
     // writeToServ();
@@ -185,20 +187,55 @@ void DisplayGame::displayMorePlayerInfo(void)
     }
 }
 
+int DisplayGame::getNbrItemTypeOnIsland(Vector3 pos, int type)
+{
+    int nbr = 0;
+    for (std::size_t i = 0; i < _allItem.size(); i++) {
+        if (Utils::Vec3Comp(_allItem.at(i)._realPos, pos) && _allItem.at(i)._itemType == type)
+            nbr++;
+    }
+    return nbr;
+}
+
 void DisplayGame::useServerInfo(void)
 {
     if (_cmd.getCommandAt("pnw", _newPlayerIndex).size() > 1) {
         std::vector<std::string> cmd = _cmd.getCommandAt("pnw", _newPlayerIndex);
         _player.addPlayerToIsland((Vector3){std::atoi(cmd.at(1).c_str()), 1.8, std::atoi(cmd.at(2).c_str())}, std::atoi(cmd.at(0).c_str()));
-        _player.changePlayerOrientation(std::atoi(cmd.at(3).c_str()) * 90, std::atoi(cmd.at(0).c_str()));
+        _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
         _player.setPlayerTeam(cmd.at(5), std::atoi(cmd.at(0).c_str()));
         _newPlayerIndex++;
     }
     for (int i = 0; _cmd.getCommandAt("ppo", i).size() > 1; i++) {
         std::vector<std::string> cmd = _cmd.getCommandAt("ppo", i);
+        Vector3 newPos = (Vector3){std::atoi(cmd.at(1).c_str()), 1.8, std::atoi(cmd.at(2).c_str())};
 
-        _player.moovePlayerToIsland((Vector3){std::atoi(cmd.at(1).c_str()), 1.8, std::atoi(cmd.at(2).c_str())}, std::atoi(cmd.at(0).c_str()));
-        _player.changePlayerOrientation(std::atoi(cmd.at(3).c_str()) * 90, std::atoi(cmd.at(0).c_str()));
+        if (!Utils::Vec3Comp(newPos, _player.getPlayerRealPos(std::atoi(cmd.at(0).c_str()))))
+            _player.moovePlayerToIsland(newPos, std::atoi(cmd.at(0).c_str()));
+        _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
+    }
+    if (!_cmd.getCommandAt("msz", 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("msz", 0);
+
+        std::pair<int, int> mapSize;
+        mapSize.first = std::atoi(cmd.at(0).c_str());
+        mapSize.second = std::atoi(cmd.at(1).c_str());
+        if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second)
+            placeIsland(mapSize.first, mapSize.second);
+    }
+    for (int i = 0; _cmd.getCommandAt("bct", i).size() > 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("bct", i);
+        int x = std::atoi(cmd.at(0).c_str());
+        int z = std::atoi(cmd.at(1).c_str());
+        Vector3 itemPosition = (Vector3){x, 1.8, z};
+        for (std::size_t j = 2; j < cmd.size(); j++) {
+            int nbItem = std::atoi(cmd.at(j).c_str());
+            if (nbItem == getNbrItemTypeOnIsland(itemPosition, j - 2))
+                continue;
+            for (int i = 0; i < nbItem; i++) {
+                addItemToIsland(itemPosition, j - 2);
+            }
+        }
     }
 }
 

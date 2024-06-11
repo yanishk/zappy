@@ -62,6 +62,7 @@ class AllPlayers {
         void changePlayerOrientation(float direction, int playerID);
         void removePlayerFromIsland(int playerID);
         void setPlayerTeam(std::string playerTeam, int playerID);
+        Vector3 getPlayerRealPos(int playerID);
         Vector3 getSize(void);
     private:
         Model _model;

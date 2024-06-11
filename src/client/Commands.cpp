@@ -35,7 +35,7 @@ void CommandManager::receiveResponse(const std::string &response)
     std::vector<std::string> params = strToVec(response.substr(token), ' ');
 
     if (cmd.compare("msz") == 0) {
-        _mszCmd.push_back(params);
+        fillMapIsland("msz", _mszCmd, params);
     } else if (cmd.compare("bct") == 0) {
         fillMapIsland("bct", _bctCmd, params);
     } else if (cmd.compare("tna") == 0) {
@@ -164,7 +164,7 @@ std::vector<std::string> CommandManager::strToVec(const std::string &input, char
     std::vector<std::string> res;
     std::string tmp;
 
-    for (size_t t = 0; t < input.size(); t++) {
+    for (std::size_t t = 0; t < input.size(); t++) {
         if (input.at(t) == token) {
             if (!tmp.empty()) {
                 res.push_back(tmp);

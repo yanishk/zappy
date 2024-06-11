@@ -36,22 +36,10 @@ void Client::startDisplay()
     std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile = parse.parsesFile("./src/display/modelConfig.cfg");
     DisplayGame game(1920, 1080, _cmd);
     game.fillAllModel(parsedFile);
-    game.placeIsland(10, 10);
     for (int i = 0; i < 7; i++) {
         game.addItemToIsland((Vector3){1, 1.8, 1}, i);
     }
-    // game._player.addPlayerToIsland((Vector3){1, 1.8, 1}, 0);
-    // game._player.addPlayerToIsland((Vector3){8, 1.8, 1}, 1);
-    // game._player.addPlayerToIsland((Vector3){1, 1.8, 4}, 2);
-    // game._player.addPlayerToIsland((Vector3){4, 1.8, 6}, 3);
-    // game._player.changePlayerOrientation(0, 0);
-    // game._player.changePlayerOrientation(90, 1);
-    // game._player.changePlayerOrientation(180, 2);
-    // game._player.changePlayerOrientation(270, 3);
-    // game._player.setPlayerTeam("Team1", 0);
-    // game._player.setPlayerTeam("Team2", 1);
-    // game._player.setPlayerTeam("Team3", 2);
-    // game._player.setPlayerTeam("Team4", 3);
+    asio::write(_socket, asio::buffer("msz\n"));
     game.tmpLaunch();
     exit(0);
 }

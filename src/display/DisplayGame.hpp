@@ -44,7 +44,6 @@ class DisplayGame {
             PlayerType = 3
         };
         CommandManager &_cmd;
-        CommandManager &_prevCmd;
         int _screenWidth = 1920;
         int _screenHeight = 1080;
         int _cameraMode = CAMERA_FREE;
@@ -64,6 +63,7 @@ class DisplayGame {
         void initWaterShader(void);
         void displayMorePlayerInfo(void);
         void useServerInfo(void);
+        int getNbrItemTypeOnIsland(Vector3 pos, int type);
 };
 
 #endif /* !DISPLAYGAME_HPP_ */
