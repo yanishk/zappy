@@ -7,19 +7,10 @@
 
 #include "server.h"
 
-static double set_food_time_unit(const int frequency)
-{
-    double food_time_unit = FOOD_TIME_UNIT;
-
-    food_time_unit /= frequency;
-    food_time_unit *= TO_MILLI;
-    return food_time_unit;
-}
-
 static void check_player_food(server_t *server, zappy_t *zappy,
     const arguments_t arg, player_t *player)
 {
-    double food_time_unit = set_food_time_unit(arg.freq);
+    double food_time_unit = calculate_freq(arg.freq, FOOD_TIME_UNIT);
     client_t *client = NULL;
 
     if (player->status != IS_PLAYER)

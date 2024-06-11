@@ -26,6 +26,7 @@ SRC			=	./src/main.c											\
 				./src/replace_disconnected_players.c 					\
 				./src/free_program.c 									\
 				./src/map/initialize_map.c 								\
+				./src/map/refill_map_time_unit.c						\
 				./src/map/initialize_teams.c 							\
 				./src/map/initialize_resources.c 						\
 				./src/map/print_map_informations.c 						\
@@ -74,7 +75,8 @@ SRC			=	./src/main.c											\
 				./src/lib/get_resources.c								\
 				./src/lib/set_resources.c								\
 				./src/lib/is_a_resource.c								\
-				./src/lib/get_tile_index.c
+				./src/lib/get_tile_index.c								\
+				./src/lib/calculate_time_unit.c
 
 OBJ			=	$(SRC:.c=.o)
 

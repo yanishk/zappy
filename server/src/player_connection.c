@@ -40,8 +40,8 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
     chosen_egg->status = IS_PLAYER;
     chosen_egg->clock_begin = clock();
     count_eggs = count_eggs_remaining(server, zappy);
-    dprintf(client_fd, "%d %d\n%d\n", arg.height,
-        arg.width, count_eggs);
+    dprintf(client_fd, "%d %d\n%d\n", count_eggs, arg.height,
+        arg.width);
     pnw_func(server, zappy, client_fd);
     return COMMAND_SUCCESS;
 }
