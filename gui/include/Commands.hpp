@@ -64,6 +64,8 @@ class CommandManager {
         std::vector<std::vector<std::string>> _pinCmd; // Player info
         std::vector<std::vector<std::string>> _pnwCmd;
         std::vector<std::vector<std::string>> _pdiCmd;
+        std::vector<std::vector<std::string>> _pdrCmd;
+        std::vector<std::vector<std::string>> _pgtCmd;
 
 
         std::vector<std::string> _sgtCmd;

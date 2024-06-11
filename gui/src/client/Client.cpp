@@ -62,6 +62,8 @@ void Client::readServ()
 
             if (error == asio::error::eof) {
                 std::cout << "Connection closed by server." << std::endl;
+                //_isRunning = false;
+                //_socket.close();
                 exit(EXIT_SUCCESS);
             } else if (error) {
                 throw asio::system_error(error);

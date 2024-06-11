@@ -18,6 +18,8 @@ CommandManager::CommandManager()
     _cmdMap["pnw"] = _pnwCmd;
     _cmdMap["pdi"] = _pdiCmd;
     _cmdMap["ppo"] = _ppoCmd;
+    _cmdMap["pdr"] = _pdrCmd;
+    _cmdMap["pgt"] = _pgtCmd;
 }
 
 void CommandManager::sendCommand(const std::string &command)
@@ -50,6 +52,10 @@ void CommandManager::receiveResponse(const std::string &response)
         fillMapPlayerInfos("pin", _pinCmd, params);
     } else if (cmd.compare("ppo") == 0) {
         fillMapPlayerInfos("ppo", _ppoCmd, params);
+    } else if (cmd.compare("pdr") == 0) {
+        fillMapPlayerInfos("pdr", _pdrCmd, params);
+    } else if (cmd.compare("pgt") == 0) {
+        fillMapPlayerInfos("pgt", _pgtCmd, params);
     }
 
     std::cout << response << std::endl;

@@ -11,6 +11,7 @@
     #define WIN_SIZE_W 1080
     #include <asio.hpp>
     #include <thread>
+    #include <atomic>
     #include "Commands.hpp"
 
 class Client {
@@ -19,6 +20,7 @@ class Client {
 
         Client(const std::string &host, const std::string &port, CommandManager &cmd);
         void run();
+        std::atomic<bool> _isRunning = true;
 
     private:
 
@@ -30,7 +32,6 @@ class Client {
         asio::ip::tcp::socket _socket;
         asio::ip::tcp::resolver::results_type _endpoints;
         asio::streambuf _buff;
-
         CommandManager &_cmd;
 };
 

@@ -240,6 +240,24 @@ void DisplayGame::useServerInfo(void)
             }
         }
     }
+    for (int i = 0; _cmd.getCommandAt("plv", i).size() > 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("plv", i);
+        std::cout << "Player " << cmd.at(0) << " is level: " << cmd.at(1) << std::endl;
+    }
+    for (int i = 0; _cmd.getCommandAt("pdi", i).size() >= 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("pdi", i);
+        std::cout << "Player " << cmd.at(0) << " is dead !" << std::endl;
+    }
+    for (int i = 0; _cmd.getCommandAt("pdr", i).size() > 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("pdr", i);
+        std::cout << "Player " << cmd.at(0) << " is dropping " << cmd.at(1) << " ressources !"
+            << std::endl;
+    }
+    for (int i = 0; _cmd.getCommandAt("pgt", i).size() > 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("pgt", i);
+        std::cout << "Player " << cmd.at(0) << " is collecting " << cmd.at(1) << " ressources !"
+            << std::endl;
+    }
 }
 
 void DisplayGame::display3D(void)
