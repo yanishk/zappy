@@ -8,34 +8,33 @@
 #include <string.h>
 #include "server.h"
 
-static player_t **get_team_eggs(zappy_t *zappy,
-    size_t *nb_players, char *team_name)
+static egg_t **get_team_eggs(zappy_t *zappy,
+    size_t *nb_eggs, char *team_name)
 {
-    player_t *player = NULL;
-    player_t **egg_array = NULL;
+    egg_t *egg = NULL;
+    egg_t **egg_array = NULL;
 
-    for ((player) = ((&zappy->player_head)->tqh_first); (player);
-        (player) = ((player)->player_entries.tqe_next)) {
-        if (strcmp(team_name, player->team_name) == 0 &&
-            player->status != IS_PLAYER) {
-            *nb_players += 1;
-            egg_array = realloc(egg_array, sizeof(player_t *) * (*nb_players));
-            egg_array[(*nb_players) - 1] = player;
+    for ((egg) = ((&zappy->egg_head)->tqh_first); (egg);
+        (egg) = ((egg)->egg_entries.tqe_next)) {
+        if (strcmp(team_name, egg->team_name) == 0) {
+            *nb_eggs += 1;
+            egg_array = realloc(egg_array, sizeof(egg_t *) * (*nb_eggs));
+            egg_array[(*nb_eggs) - 1] = egg;
         }
     }
     return egg_array;
 }
 
-player_t *get_random_team_egg(zappy_t *zappy, char *team_name)
+egg_t *get_random_team_egg(zappy_t *zappy, char *team_name)
 {
-    player_t **egg_array = NULL;
-    player_t *random_egg = NULL;
-    size_t nb_players = 0;
+    egg_t **egg_array = NULL;
+    egg_t *random_egg = NULL;
+    size_t nb_eggs = 0;
 
-    egg_array = get_team_eggs(zappy, &nb_players, team_name);
-    if (egg_array == NULL || nb_players == 0)
+    egg_array = get_team_eggs(zappy, &nb_eggs, team_name);
+    if (egg_array == NULL || nb_eggs == 0)
         return NULL;
-    random_egg = egg_array[rand() % nb_players];
+    random_egg = egg_array[rand() % nb_eggs];
     free(egg_array);
     return random_egg;
 }

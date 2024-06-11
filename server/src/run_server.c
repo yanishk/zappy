@@ -122,7 +122,7 @@ static int set_sockets(server_t *server)
     struct timeval timeout;
 
     timeout.tv_sec = 0;
-    timeout.tv_usec = 0;
+    timeout.tv_usec = 100;
     set_clients_sockets(server, &max_fd_set);
     if (select(max_fd_set + 1, &server->readfds,
         NULL, NULL, &timeout) == -1) {

@@ -10,10 +10,9 @@
 
     #include <sys/select.h>
     #include <arpa/inet.h>
-    #include <stdbool.h>
     #include <string.h>
     #include <time.h>
-    #include "map.h"
+    #include "game.h"
 
     #define EXIT_WITH_ERROR 84
     #define EXIT_WITH_SUCCESS 0
@@ -22,15 +21,8 @@
     #define COMMAND_SUCCESS 2
     #define INTERRUPTED_SYSCALL 4
 
-    #define COMMAND_KO "ko\n"
-    #define COMMAND_OK "ok\n"
-
-    #define NB_CMD 11
-
     #define MAX_BUFFER_SIZE 1024
     #define MAX_QUEUE_COMMANDS 10
-
-    #define TO_MILLI 1000
 
 typedef struct client_s {
     struct sockaddr_in sock_addr;
@@ -59,28 +51,42 @@ void init_client(client_t *);
 int run_server(server_t *, zappy_t *, const arguments_t);
 client_t *get_client_in_struct(server_t *, const int);
 client_t *insert_client_in_struct(server_t *, const int);
+void get_user_input(server_t *, zappy_t *, const arguments_t, client_t *);
+void answer_client(const int, const unsigned int);
+void close_client_socket(server_t *, zappy_t *, client_t *);
+
+void check_players_food(server_t *, zappy_t *, const arguments_t);
 int insert_game_command_in_queue(server_t *, client_t *);
 void insert_other_command_in_queue(server_t *, client_t *);
 void check_command_queue(server_t *, zappy_t *, const arguments_t, client_t *);
-void close_client_socket(server_t *, zappy_t *, client_t *);
-void get_user_input(server_t *, zappy_t *, const arguments_t, client_t *);
-void check_players_food(server_t *, zappy_t *, const arguments_t);
-void answer_client(const int, const unsigned int);
-void free_client_commands(client_t *);
+
 void free_program(server_t *, zappy_t *, arguments_t *);
-void free_zappy_player(zappy_t *, player_t *);
+void free_client_commands(client_t *);
+void free_player(zappy_t *, player_t *);
+void free_link_by_client_fd(zappy_t *, const unsigned int);
+void free_egg(zappy_t *, egg_t *);
+void free_game(zappy_t *, const arguments_t *);
 
 bool is_positive_number(const char *);
 size_t array_size(char **);
 void free_array(char **);
 char **word_array(char const *, char *);
-player_t *get_player(zappy_t *, const unsigned int);
-player_t *get_random_team_egg(zappy_t *, char *);
+int get_next_id(int *id);
+player_t *get_player_by_fd(const zappy_t *, const unsigned int);
+player_t *get_player_by_id(const zappy_t *, const int);
+int get_client_fd(const zappy_t *, const unsigned int);
+link_t *get_link_by_client_fd(const zappy_t *, const unsigned int);
+link_t *get_link_by_player_id(const zappy_t *, const unsigned int);
+egg_t *get_random_team_egg(zappy_t *, char *);
+unsigned int count_team_eggs(const zappy_t *, const char *);
+unsigned int count_team_players(const zappy_t *, const char *);
+unsigned int count_team_slots(const zappy_t *, const char *);
 int get_player_direction(const player_t *);
 client_t *get_graphical_client(server_t *);
 bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
-bool is_on_same_tile(const player_t *, const player_t *);
+bool player_on_same_tile(const player_t *, const player_t *);
+bool egg_on_same_tile(const player_t *, const egg_t *);
 int get_resources(resource_t *, const char *);
 void set_resources(resource_t *, const char *, int);
 bool is_a_resource(const char *);

@@ -6,32 +6,19 @@
 */
 
 #include <string.h>
-#include "map.h"
-
-static void count_team_players(zappy_t *zappy, team_t *team, player_t *player,
-    int *nb_players)
-{
-    for ((player) = ((&zappy->player_head)->tqh_first); (player);
-        (player) = ((player)->player_entries.tqe_next)) {
-        if (strcmp(team->team_name, player->team_name) == 0) {
-            *nb_players += 1;
-        }
-    }
-}
+#include "server.h"
 
 void replace_disconnected_players(const arguments_t arg, zappy_t *zappy)
 {
     team_t *team = NULL;
-    player_t *player = NULL;
-    int nb_players = 0;
+    int count_slots = 0;
 
     for ((team) = ((&arg.team_head)->tqh_first); (team);
         (team) = ((team)->team_entries.tqe_next)) {
-        nb_players = 0;
-        count_team_players(zappy, team, player, &nb_players);
-        while (nb_players < arg.nb_clients) {
-            initialize_player(arg, zappy, team->team_name, IS_EGG_FROM_START);
-            nb_players++;
+        count_slots = count_team_slots(zappy, team->team_name);
+        while (count_slots < arg.nb_clients) {
+            initialize_egg(arg, zappy, team->team_name);
+            count_slots++;
         }
     }
 }

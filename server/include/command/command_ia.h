@@ -12,9 +12,6 @@
 
     #define NB_IA_CMD 12
 
-    #define COMMAND_KO "ko\n"
-    #define COMMAND_OK "ok\n"
-
     #define INVENTORY_COMMAND "Inventory"
     #define TAKE_COMMAND "Take"
     #define SET_COMMAND "Set"
@@ -41,7 +38,7 @@ typedef struct command_ia_s {
     double time_unit;
     size_t index;
     clock_t clock_begin;
-    TAILQ_ENTRY(command_ia_s) command_entries;
+    TAILQ_ENTRY(command_ia_s) command_ia_entries;
 } command_ia_t;
 
 typedef struct coordinate_s {
@@ -64,6 +61,7 @@ bool is_player_connected(const zappy_t *, const unsigned int);
 int connect_player(server_t *, zappy_t *, const arguments_t,
     const unsigned int);
 void move_player(size_t direction, player_t *, const arguments_t);
+char *get_on_land(zappy_t *, coordinate_t, unsigned int);
 void free_ia_command(client_t *, command_ia_t *);
 
 int inventory_command(server_t *, zappy_t *, const arguments_t, client_t *);
@@ -76,8 +74,6 @@ int take_object(server_t *, zappy_t *, const arguments_t, client_t *);
 int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 int eject_from_tile(server_t *, zappy_t *, const arguments_t, client_t *);
 int broadcast(server_t *, zappy_t *, const arguments_t, client_t *);
-
 int look_around(server_t *, zappy_t *, const arguments_t, client_t *);
-char *get_on_land(zappy_t *, coordinate_t, unsigned int);
 
 #endif /* !COMMAND_AI_H_ */

@@ -5,7 +5,7 @@
 ** calculate_time_unit
 */
 
-#include "server.h"
+#include "game.h"
 
 double calculate_freq(int frequency, double food_time_unit)
 {
