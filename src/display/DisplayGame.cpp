@@ -185,6 +185,23 @@ void DisplayGame::displayMorePlayerInfo(void)
     }
 }
 
+void DisplayGame::useServerInfo(void)
+{
+    if (_cmd.getCommandAt("pnw", _newPlayerIndex).size() > 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("pnw", _newPlayerIndex);
+        _player.addPlayerToIsland((Vector3){std::atoi(cmd.at(1).c_str()), 1.8, std::atoi(cmd.at(2).c_str())}, std::atoi(cmd.at(0).c_str()));
+        _player.changePlayerOrientation(std::atoi(cmd.at(3).c_str()) * 90, std::atoi(cmd.at(0).c_str()));
+        _player.setPlayerTeam(cmd.at(5), std::atoi(cmd.at(0).c_str()));
+        _newPlayerIndex++;
+    }
+    for (int i = 0; _cmd.getCommandAt("ppo", i).size() > 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("ppo", i);
+
+        _player.moovePlayerToIsland((Vector3){std::atoi(cmd.at(1).c_str()), 1.8, std::atoi(cmd.at(2).c_str())}, std::atoi(cmd.at(0).c_str()));
+        _player.changePlayerOrientation(std::atoi(cmd.at(3).c_str()) * 90, std::atoi(cmd.at(0).c_str()));
+    }
+}
+
 void DisplayGame::tmpLaunch(void)
 {
     DisableCursor();
@@ -195,32 +212,11 @@ void DisplayGame::tmpLaunch(void)
     sky.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
     float seconds = 0.0f;
     while (!WindowShouldClose()) {
+        useServerInfo();
         seconds += (GetFrameTime() / 2);
 
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);
         updateCamera();
-
-        if (IsKeyPressed(KEY_UP))
-            _player.changePlayerOrientation(180, 0);
-        if (IsKeyPressed(KEY_DOWN))
-            _player.changePlayerOrientation(0, 0);
-        if (IsKeyPressed(KEY_LEFT))
-            _player.changePlayerOrientation(270, 0);
-        if (IsKeyPressed(KEY_RIGHT))
-            _player.changePlayerOrientation(90, 0);
-        if (IsKeyPressed(KEY_KP_0))
-            placeIsland(9, 5);
-
-        Vector3 posi = _player._allPlayer.at(0)._realPos;
-        if (IsKeyPressed(KEY_KP_8))
-            _player.moovePlayerToIsland(setVector3(posi.x, posi.y, posi.z + 1), 0);
-        if (IsKeyPressed(KEY_KP_5))
-            _player.moovePlayerToIsland(setVector3(posi.x, posi.y, posi.z - 1), 0);
-        if (IsKeyPressed(KEY_KP_4))
-            _player.moovePlayerToIsland(setVector3(posi.x + 1, posi.y, posi.z), 0);
-        if (IsKeyPressed(KEY_KP_6))
-            _player.moovePlayerToIsland(setVector3(posi.x - 1, posi.y, posi.z), 0);
-
 
         BeginDrawing();
 
@@ -290,9 +286,6 @@ void DisplayGame::tmpLaunch(void)
 
         DrawRectangle(350, 5, 195, 60, Fade(SKYBLUE, 0.5f));
         DrawRectangleLines(350, 5, 195, 60, BLUE);
-        if (_cmd.getCommandAt("pnw", 0).size() > 1) {
-            std::cout << _cmd.getCommandAt("pnw", 0).at(0) << std::endl;
-        }
 
         DrawText(TextFormat("- Position: (%06.3f, %06.3f, %06.3f)", _camera.position.x, _camera.position.y, _camera.position.z), 355, 15, 10, BLACK);
         DrawText(TextFormat("- Target: (%06.3f, %06.3f, %06.3f)", _camera.target.x, _camera.target.y, _camera.target.z), 355, 30, 10, BLACK);

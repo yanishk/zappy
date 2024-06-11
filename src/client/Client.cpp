@@ -40,18 +40,18 @@ void Client::startDisplay()
     for (int i = 0; i < 7; i++) {
         game.addItemToIsland((Vector3){1, 1.8, 1}, i);
     }
-    game._player.addPlayerToIsland((Vector3){1, 1.8, 1}, 0);
-    game._player.addPlayerToIsland((Vector3){8, 1.8, 1}, 1);
-    game._player.addPlayerToIsland((Vector3){1, 1.8, 4}, 2);
-    game._player.addPlayerToIsland((Vector3){4, 1.8, 6}, 3);
-    game._player.changePlayerOrientation(0, 0);
-    game._player.changePlayerOrientation(90, 1);
-    game._player.changePlayerOrientation(180, 2);
-    game._player.changePlayerOrientation(270, 3);
-    game._player.setPlayerTeam("Team1", 0);
-    game._player.setPlayerTeam("Team2", 1);
-    game._player.setPlayerTeam("Team3", 2);
-    game._player.setPlayerTeam("Team4", 3);
+    // game._player.addPlayerToIsland((Vector3){1, 1.8, 1}, 0);
+    // game._player.addPlayerToIsland((Vector3){8, 1.8, 1}, 1);
+    // game._player.addPlayerToIsland((Vector3){1, 1.8, 4}, 2);
+    // game._player.addPlayerToIsland((Vector3){4, 1.8, 6}, 3);
+    // game._player.changePlayerOrientation(0, 0);
+    // game._player.changePlayerOrientation(90, 1);
+    // game._player.changePlayerOrientation(180, 2);
+    // game._player.changePlayerOrientation(270, 3);
+    // game._player.setPlayerTeam("Team1", 0);
+    // game._player.setPlayerTeam("Team2", 1);
+    // game._player.setPlayerTeam("Team3", 2);
+    // game._player.setPlayerTeam("Team4", 3);
     game.tmpLaunch();
     exit(0);
 }

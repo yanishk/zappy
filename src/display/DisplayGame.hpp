@@ -44,6 +44,7 @@ class DisplayGame {
             PlayerType = 3
         };
         CommandManager &_cmd;
+        CommandManager &_prevCmd;
         int _screenWidth = 1920;
         int _screenHeight = 1080;
         int _cameraMode = CAMERA_FREE;
@@ -58,9 +59,11 @@ class DisplayGame {
         std::vector<Item> _allItem;
         std::vector<Item> _allItemModel;
         std::pair<bool, std::size_t> _selectedPlayer;
+        int _newPlayerIndex = 0;
 
         void initWaterShader(void);
         void displayMorePlayerInfo(void);
+        void useServerInfo(void);
 };
 
 #endif /* !DISPLAYGAME_HPP_ */

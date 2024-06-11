@@ -138,8 +138,11 @@ std::vector<std::string> CommandManager::getCommandAt(const std::string &cmd,
 {
     auto it = _cmdMap.find(cmd);
 
-    if (it != _cmdMap.end() && index <= it->second.size()) {
+    std::vector<std::string> vide;
+    if (it != _cmdMap.end() && index < it->second.size()) {
         return it->second.at(index);
+    } else {
+        return vide;
     }
     throw std::out_of_range("Invalid index");
 }

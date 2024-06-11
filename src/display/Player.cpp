@@ -149,7 +149,6 @@ Vector3 Player::getPosition()
     if (!_isMooving)
         return _playerPosition;
     float dist = Vector2Distance((Vector2){_playerPosition.x, _playerPosition.z}, (Vector2){_destPosition.x, _destPosition.z});
-    std::cout << dist << std::endl;
     if (dist < 1) {
         _playerPosition = _destPosition;
         _isMooving = false;
