@@ -53,36 +53,34 @@ static void fill_road_broadcast(player_t *sender, player_t *receiver,
         sender->height, arg.height);
 }
 
-static int get_straight_line(road_broadcast_t *road, int i, size_t dir_diag)
+static void get_straight_line(road_broadcast_t *road, int i, size_t *dir_diag)
 {
     if (road->height_direct == 0 && road->width_direct != 0) {
         if (road->width_direct > road->width_undirect)
-            dir_diag = tile_numbering_list[i].east_tile;
+            *dir_diag = tile_numbering_list[i].east_tile;
         else
-            dir_diag = tile_numbering_list[i].west_tile;
+            *dir_diag = tile_numbering_list[i].west_tile;
     }
     if (road->width_direct == 0 && road->height_direct != 0) {
         if (road->height_direct > road->height_undirect)
-            dir_diag = tile_numbering_list[i].south_tile;
+            *dir_diag = tile_numbering_list[i].south_tile;
         else
-            dir_diag = tile_numbering_list[i].north_tile;
+            *dir_diag = tile_numbering_list[i].north_tile;
     }
-    return dir_diag;
 }
 
-static int get_diagonal_line(road_broadcast_t *road, int i, size_t dir_diag)
+static void get_diagonal_line(road_broadcast_t *road, int i, size_t *dir_diag)
 {
     if (road->height_direct != 0 && road->height_direct != 0) {
         if (road->width_direct > road->width_undirect)
-            dir_diag = tile_numbering_list[i].east_tile;
+            *dir_diag = tile_numbering_list[i].east_tile;
         else
-            dir_diag = tile_numbering_list[i].west_tile;
+            *dir_diag = tile_numbering_list[i].west_tile;
         if (road->height_direct > road->height_undirect)
-            dir_diag -= 1;
+            *dir_diag -= 1;
         else
-            dir_diag += 1;
+            *dir_diag += 1;
     }
-    return dir_diag;
 }
 
 static void find_shortest_path(server_t *server, player_t *receiver,
@@ -92,8 +90,8 @@ static void find_shortest_path(server_t *server, player_t *receiver,
 
     for (int i = 0; i < NB_DIRECTIONS; i++) {
         if (tile_numbering_list[i].direction == receiver->direction) {
-            dir_diag = get_straight_line(road, i, dir_diag);
-            dir_diag = get_diagonal_line(road, i, dir_diag);
+            get_straight_line(road, i, &dir_diag);
+            get_diagonal_line(road, i, &dir_diag);
             dprintf(receiver->id, "message %ld, %s\n", dir_diag,
                 server->cmd_arg_array[1]);
         }
