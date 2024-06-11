@@ -23,7 +23,7 @@ static void check_player_food(server_t *server, zappy_t *zappy,
     double food_time_unit = set_food_time_unit(arg.freq);
     client_t *client = NULL;
 
-    if (player->is_egg)
+    if (player->status != IS_PLAYER)
         return;
     if (time_is_up(player->clock_begin, food_time_unit)) {
         if (player->inventory.food == 0) {
@@ -32,7 +32,8 @@ static void check_player_food(server_t *server, zappy_t *zappy,
             pdi_func(server, zappy, client);
             client->has_been_closed = true;
             close_client_socket(server, zappy, client);
-            initialize_player(arg, zappy, player->team_name);
+            initialize_player(arg, zappy, player->team_name,
+                IS_EGG_FROM_START);
             return;
         }
         if (player->inventory.food > 0)

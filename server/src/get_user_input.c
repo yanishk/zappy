@@ -53,6 +53,8 @@ static void execute_graphical_command(server_t *server, zappy_t *zappy,
         dprintf(client->client_fd, "suc\n");
     if (status == EXIT_WITH_ERROR)
         dprintf(client->client_fd, "sbp\n");
+    if (server->cmd_arg_array != NULL)
+        free_array(server->cmd_arg_array);
 }
 
 static void insert_command_in_queue(server_t *server, zappy_t *zappy,
@@ -80,6 +82,7 @@ void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg,
         if (array_size(server->cmd_arg_array) == 1 &&
             strcmp(server->cmd_arg_array[0], "GRAPHIC") == 0) {
                 client->is_graphic = true;
+                free_array(server->cmd_arg_array);
                 return;
         }
     }

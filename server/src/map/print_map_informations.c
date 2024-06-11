@@ -31,6 +31,7 @@ void print_players_pos_and_direction(const zappy_t zappy)
         printf("\tdirection=%ld\n", player->direction);
         printf("\n");
     }
+    printf("\n\n\n");
 }
 
 void print_players(const zappy_t zappy)
@@ -43,12 +44,13 @@ void print_players(const zappy_t zappy)
         printf("\tteam_name=%s\n", player->team_name);
         printf("\tpos : height(x)=%d, width(y)=%d\n",
             player->height, player->width);
-        printf("\tis_egg=%d\n", player->is_egg);
+        printf("\tstatus=%d\n", player->status);
         printf("\tlevel=%d\n", player->level);
         printf("\tdirection=%ld\n", player->direction);
         print_resources(player->inventory);
         printf("\n");
     }
+    printf("\n\n\n");
 }
 
 void print_tile_resources(const unsigned int client_fd, int width, int height,
