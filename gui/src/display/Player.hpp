@@ -62,7 +62,7 @@ class AllPlayers {
         void changePlayerOrientation(float direction, int playerID);
         void removePlayerFromIsland(int playerID);
         void setPlayerTeam(std::string playerTeam, int playerID);
-        void drawPlayer(Vector3 cameraPosition);
+        void drawPlayer(Vector3 cameraPosition, bool isAnimated);
         Vector3 getPlayerRealPos(int playerID);
         Vector3 getSize(void);
         void setPlayerLevel(int playerID, int level);

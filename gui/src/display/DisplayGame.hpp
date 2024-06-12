@@ -62,6 +62,7 @@ class DisplayGame {
         int _playerEboIndex = 0;
         Model _sky;
         asio::ip::tcp::socket &_socket;
+        bool _isAnimated;
 
         void initWaterShader(void);
         void displayMorePlayerInfo(void);

@@ -41,9 +41,9 @@ class Client {
         asio::ip::tcp::socket _socket;
         asio::ip::tcp::resolver::results_type _endpoints;
         asio::streambuf _buff;
+        bool _isAnimated;
 
         CommandManager &_cmd;
-        bool isAnimated;
 };
 
 #endif // CLIENT_H

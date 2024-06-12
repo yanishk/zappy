@@ -87,9 +87,14 @@ Vector3 AllPlayers::getSize(void)
     return _size;
 }
 
-void AllPlayers::drawPlayer(Vector3 cameraPosition)
+void AllPlayers::drawPlayer(Vector3 cameraPosition, bool isAnimated)
 {
     for (auto &i: _allPlayer) {
+        if (!isAnimated) {
+            DrawModel(i._playerModel , i.getPosition(), 1, WHITE);
+            i.displayPlayerInfo(cameraPosition);
+            continue;
+        }
         i._animFrameCounter++;
         if (i._animFrameCounter >= i._playerAnimation[0].frameCount)
             i._animFrameCounter = 0;

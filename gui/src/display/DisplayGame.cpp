@@ -7,7 +7,7 @@
 
 #include "DisplayGame.hpp"
 
-DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket) : _cmd(cmd), _socket(socket)
+DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket)
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
@@ -21,6 +21,7 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
     _selectedPlayer.first = false;
     _mapSize.first = 0;
     _mapSize.second = 0;
+    _isAnimated = animation;
 }
 
 DisplayGame::~DisplayGame()
@@ -278,7 +279,7 @@ void DisplayGame::display3D(void)
         i.changeItemAnim();
         i.drawItem();
     }
-    _player.drawPlayer(_camera.position);
+    _player.drawPlayer(_camera.position, _isAnimated);
 
     for (auto &i: _allIsland) {
         DrawModel(i._islandModel , i._islandPosition, i._islandSize, WHITE);
