@@ -14,8 +14,13 @@
     #include "Network.hpp"
     #include "Ressources.hpp"
 
-    #define START_POSITION {0, 0}
+    #define INITIALIZE_MODE 0
+    #define START_POSITION {0.0, 0.0}
     #define START_LEVEL 1
+    #define START_WAIT 0
+
+    #define ERROR -1
+    #define DEAD "dead"
 
 namespace Zappy {
 
@@ -24,6 +29,14 @@ namespace Zappy {
         SOUTH,
         WEST,
         EST
+    };
+
+    enum Action {
+        Look,
+        Eat,
+        Drop,
+        Elevation,
+        Fork
     };
 
     class AAi : public IAi {
@@ -63,6 +76,8 @@ namespace Zappy {
             std::pair<double, double> _position;
             Orientation _orientation;
             std::size_t _level;
+
+            std::size_t _wait;
 
         private:
             std::size_t countMember(const std::string &line) const;
