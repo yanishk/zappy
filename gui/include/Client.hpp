@@ -9,6 +9,8 @@
     #define CLIENT_H
     #define WIN_SIZE_L 1980
     #define WIN_SIZE_W 1080
+    #define ERROR_VALUE 84
+    #define CONFIG_FILE_PATH "./gui/src/display/modelConfig.cfg"
     #include <asio.hpp>
     #include <thread>
     #include <atomic>

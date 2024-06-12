@@ -8,24 +8,21 @@
 #ifndef ISLAND_HPP_
     #define ISLAND_HPP_
 
-    #include "raylib.h"
-    #include "raymath.h"
-    #include "rlgl.h"
-    #include "string"
-    #include "iostream"
+    #include <string>
+    #include <iostream>
     #include <tuple>
     #include <vector>
     #include <stdlib.h>
     #include <ctime>
+    #include "raylib.h"
+    #include "raymath.h"
+    #include "rlgl.h"
 
 class Island {
     public:
         Model _islandModel;
         Vector3 _islandPosition;
         float _islandSize;
-
-    protected:
-    private:
 };
 
 #endif /* !ISLAND_HPP_ */

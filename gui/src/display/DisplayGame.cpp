@@ -7,7 +7,7 @@
 
 #include "DisplayGame.hpp"
 
-DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd) : _cmd(cmd)
+DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket) : _cmd(cmd), _socket(socket)
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
@@ -26,19 +26,14 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd)
 DisplayGame::~DisplayGame()
 {
     CloseWindow();
-    for (std::size_t i = 0; i < _allItemModel.size(); i++) {
-        UnloadModel(_allItemModel.at(i)._itemModel);
+    for (auto &i: _allItemModel) {
+        UnloadModel(i._itemModel);
     }
 }
 
 Vector3 DisplayGame::setVector3(float x, float y, float z)
 {
-    Vector3 vec;
-
-    vec.x = x;
-    vec.y = y;
-    vec.z = z;
-    return vec;
+    return (Vector3){x, y, z};
 }
 
 void DisplayGame::updateCamera(void)
@@ -61,32 +56,34 @@ void DisplayGame::updateCamera(void)
     UpdateCameraPro(&_camera, movement, rotation, GetMouseWheelMove() * 2.0f);
 }
 
-void DisplayGame::fillAllModel(std::vector<std::pair<std::pair<std::string, float>, int>> allPath)
+void DisplayGame::fillAllModel(ZappyModel allPath)
 {
     std::vector<std::pair<Model, float>> tmpIslandModel;
     std::vector<std::pair<Model, float>> tmpModel;
     bool hasPlayer = false;
     if (allPath.size() == 0)
         throw ErrorHandling("No or bad path to model");
-
-    for (std::size_t i = 0; i < allPath.size(); i++) {
+    for (auto &i: allPath) {
         std::pair<Model, float> tmpPair;
-        tmpPair.first = LoadModel(allPath.at(i).first.first.c_str());
-        tmpPair.second = allPath.at(i).first.second;
-        if (allPath.at(i).second == IslandType) {
-            _islandModel.push_back(tmpPair);
-        }
-        if (allPath.at(i).second == ItemType) {
-            tmpModel.push_back(tmpPair);
-
-            Item tmpItem;
-            _allItemModel.push_back(tmpItem);
-            _allItemModel.back()._itemModel = tmpModel.back().first;
-            _allItemModel.back()._itemSize = tmpModel.back().second;
-        }
-        if (allPath.at(i).second == PlayerType) {
-            _player.loadModelAndAnim(tmpPair, allPath.at(i).first.first);
-            hasPlayer = true;
+        tmpPair.first = LoadModel(i.first.first.c_str());
+        tmpPair.second = i.first.second;
+        switch (i.second) {
+            case IslandType:
+                _islandModel.push_back(tmpPair);
+                break;
+            case ItemType: {
+                tmpModel.push_back(tmpPair);
+                Item tmpItem;
+                _allItemModel.push_back(tmpItem);
+                _allItemModel.back()._itemModel = tmpModel.back().first;
+                _allItemModel.back()._itemSize = tmpModel.back().second;
+                break;
+            }
+            case PlayerType: {
+                _player.loadModelAndAnim(tmpPair, i.first.first);
+                hasPlayer = true;
+                break;
+            }
         }
     }
     _sky = LoadModel("./gui/assets/models/unreal-engine-4-sky/source/ue4sky.obj");
@@ -177,15 +174,17 @@ void DisplayGame::removeItemFromIsland(Vector3 position, int type)
 
 void DisplayGame::displayMorePlayerInfo(void)
 {
-    for (std::size_t i = 0; i < _player._allPlayer.size(); i++) {
+    int index = 0;
+    for (auto &i: _player._allPlayer) {
         Vector3 direction = Vector3Subtract(_camera.target, _camera.position);
         direction = Vector3Normalize(direction);
         Ray ray = {_camera.position, direction};
+        index++;
 
-        BoundingBox playerBox = GetMeshBoundingBox(_player._allPlayer.at(i)._playerModel.meshes[0]);
-        if (_player._allPlayer.at(i).isPlayerSelected(playerBox, ray)) {
+        BoundingBox playerBox = GetMeshBoundingBox(i._playerModel.meshes[0]);
+        if (i.isPlayerSelected(playerBox, ray)) {
             _selectedPlayer.first = true;
-            _selectedPlayer.second = i;
+            _selectedPlayer.second = index;
         }
     }
 }
@@ -193,8 +192,8 @@ void DisplayGame::displayMorePlayerInfo(void)
 int DisplayGame::getNbrItemTypeOnIsland(Vector3 pos, int type)
 {
     int nbr = 0;
-    for (std::size_t i = 0; i < _allItem.size(); i++) {
-        if (Utils::Vec3Comp(_allItem.at(i)._realPos, pos) && _allItem.at(i)._itemType == type)
+    for (auto &i: _allItem) {
+        if (Utils::Vec3Comp(i._realPos, pos) && i._itemType == type)
             nbr++;
     }
     return nbr;
@@ -235,7 +234,7 @@ void DisplayGame::useServerInfo(void)
             int nbItem = std::atoi(cmd.at(j).c_str());
             if (nbItem == getNbrItemTypeOnIsland(itemPosition, j - 2))
                 continue;
-            for (int i = 0; i < nbItem; i++) {
+            for (int k = 0; k < nbItem; k++) {
                 addItemToIsland(itemPosition, j - 2);
             }
         }
@@ -266,10 +265,6 @@ void DisplayGame::useServerInfo(void)
         std::vector<std::string> cmd = _cmd.getCommandAt("ebo", i);
         std::cout << "The time unit modification is " << cmd.at(0) << std::endl;
     }
-    for (int i = 0; _cmd.getCommandAt("sgt", i).size() >= 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("sgt", i);
-        std::cout << "The time unit request is " << cmd.at(0) << std::endl;
-    }
 }
 
 void DisplayGame::display3D(void)
@@ -290,14 +285,14 @@ void DisplayGame::display3D(void)
         DrawModel(_WaterModel, setVector3((_mapSize.first * spaceBetwenIsland) / 2, -2, (_mapSize.second * spaceBetwenIsland) / 2), 1, WHITE);
     EndShaderMode();
 
-    for (std::size_t i = 0; i < _allItem.size(); i++) {
-        _allItem.at(i).changeItemAnim();
-        _allItem.at(i).drawItem();
+    for (auto &i: _allItem) {
+        i.changeItemAnim();
+        i.drawItem();
     }
     _player.drawPlayer(_camera.position);
 
-    for (std::size_t i = 0; i < _allIsland.size(); i++) {
-        DrawModel(_allIsland.at(i)._islandModel , _allIsland.at(i)._islandPosition, _allIsland.at(i)._islandSize, WHITE);
+    for (auto &i: _allIsland) {
+        DrawModel(i._islandModel , i._islandPosition, i._islandSize, WHITE);
     }
 
     EndMode3D();
@@ -344,6 +339,9 @@ void DisplayGame::launchGame(void)
         useServerInfo();
         seconds += (GetFrameTime() / 2);
 
+        if (IsKeyPressed(KEY_KP_1)) {
+            asio::write(_socket, asio::buffer("bct 0 0\n"));
+        }
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);
         updateCamera();
 

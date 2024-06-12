@@ -25,10 +25,8 @@ void Client::run()
 {
     std::thread display(&Client::startDisplay, this);
     std::thread reader(&Client::readServ, this);
-    std::thread writer(&Client::writeToServ, this);
 
     reader.join();
-    writer.join();
     display.join();
 }
 
@@ -36,13 +34,13 @@ void Client::startDisplay()
 {
     std::srand(std::time(NULL));
     ParsesModelConfig parse;
-    std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile = parse.parsesFile("./gui/src/display/modelConfig.cfg");
-    DisplayGame game(WIN_SIZE_L, WIN_SIZE_W, _cmd);
+    std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile = parse.parsesFile(CONFIG_FILE_PATH);
+    DisplayGame game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket);
     try {
         game.fillAllModel(parsedFile);
     } catch (const ErrorHandling& e) {
         std::cerr << "unexpected error: " << e.what() << std::endl;
-        std::exit(84);
+        std::exit(ERROR_VALUE);
     }
     asio::write(_socket, asio::buffer("msz\n"));
     game.launchGame();
@@ -62,10 +60,9 @@ void Client::readServ()
 
             if (error == asio::error::eof) {
                 std::cout << "Connection closed by server." << std::endl;
-                //_isRunning = false;
-                //_socket.close();
                 exit(EXIT_SUCCESS);
-            } else if (error) {
+            }
+            if (error) {
                 throw asio::system_error(error);
             }
 

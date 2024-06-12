@@ -7,12 +7,12 @@
 
 #ifndef UTILS_HPP_
     #define UTILS_HPP_
+    #include <string>
     #include "raylib.h"
     #include "raymath.h"
     #include "rlgl.h"
-    #include <string>
 
-    static const int spaceBetwenIsland = 12;
+    #define spaceBetwenIsland 12
 
 class Utils {
     public:

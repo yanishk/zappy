@@ -8,15 +8,14 @@
 #ifndef PLAYER_HPP_
     #define PLAYER_HPP_
 
-    #include "raylib.h"
-    #include "raymath.h"
-    #include "rlgl.h"
-    #include "string"
+    #include <string>
     #include <vector>
-    #include "Utils.hpp"
     #include <iostream>
     #include <iomanip>
     #include <map>
+    #include "Utils.hpp"
+
+    #define MAX_RGB 255
 
 class Player {
     public:

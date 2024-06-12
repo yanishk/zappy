@@ -10,8 +10,14 @@
 
     #include "Utils.hpp"
 
+    #define MAX_ROTATION 360
+    #define LOWEST_POINT 1.5
+    #define HIGHTEST_POINT 2
+    #define ALTITUDE_SPEED -0.005
+
 class Item {
     public:
+        Item();
         Model _itemModel;
         Vector3 _itemPosition;
         float _itemSize;
@@ -21,8 +27,8 @@ class Item {
         void changeItemAnim(void);
         void drawItem(void);
     private:
-        float _rotation = 0;
-        float _upValue = -0.005;
+        float _rotation;
+        float _upValue;
 };
 
 #endif /* !ITEM_HPP_ */

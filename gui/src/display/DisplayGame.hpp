@@ -8,9 +8,8 @@
 #ifndef DISPLAYGAME_HPP_
     #define DISPLAYGAME_HPP_
 
-    #include "string"
-    #include "iostream"
-    #include "Island.hpp"
+    #include <string>
+    #include <iostream>
     #include <tuple>
     #include <vector>
     #include <stdlib.h>
@@ -19,15 +18,18 @@
     #include "Commands.hpp"
     #include "Client.hpp"
     #include "Item.hpp"
+    #include "Island.hpp"
+
+using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
 class DisplayGame {
     public:
-        DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd);
+        DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket);
         ~DisplayGame();
         void updateCamera(void);
         Vector3 setVector3(float x, float y, float z);
         void launchGame(void);
-        void fillAllModel(std::vector<std::pair<std::pair<std::string, float>, int>>);
+        void fillAllModel(ZappyModel);
         void addItemToIsland(Vector3 position, int type);
         void removeItemFromIsland(Vector3 position, int type);
         void placeIsland(int x, int y);
@@ -57,6 +59,7 @@ class DisplayGame {
         std::pair<bool, std::size_t> _selectedPlayer;
         int _newPlayerIndex = 0;
         Model _sky;
+        asio::ip::tcp::socket &_socket;
 
         void initWaterShader(void);
         void displayMorePlayerInfo(void);

@@ -37,13 +37,13 @@ void ParsesModelConfig::parseTypeModel(std::string &line)
 
     if (line.compare(0, modelType.length(), modelType) == 0) {
         line.erase(0, modelType.length());
-        if (line == "Item") {
+        if (line == ITEM) {
             _typeList.push_back(Item);
         }
-        else if (line == "Island") {
+        else if (line == ISLAND) {
             _typeList.push_back(Island);
         }
-        else if (line == "Player") {
+        else if (line == PLAYER) {
             _typeList.push_back(Player);
         }
         else
@@ -51,7 +51,7 @@ void ParsesModelConfig::parseTypeModel(std::string &line)
     }
 }
 
-std::vector<std::pair<std::pair<std::string, float>, int>> ParsesModelConfig::parsesFile(std::string path)
+ZappyModel ParsesModelConfig::parsesFile(std::string path)
 {
     std::ifstream file(path);
     std::string line;

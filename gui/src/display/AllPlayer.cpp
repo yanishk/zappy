@@ -18,9 +18,9 @@ void AllPlayers::loadModelAndAnim(std::pair<Model, float> modelPair, std::string
 
 void AllPlayers::moovePlayerToIsland(Vector3 position, int playerID)
 {
-    for (std::size_t i = 0; i < _allPlayer.size(); i++) {
-        if (_allPlayer.at(i)._playerID == playerID) {
-            _allPlayer.at(i).moovePlayerToIsland(position);
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.moovePlayerToIsland(position);
             break;
         }
     }
@@ -28,10 +28,10 @@ void AllPlayers::moovePlayerToIsland(Vector3 position, int playerID)
 
 void AllPlayers::changePlayerOrientation(float direction, int playerID)
 {
-    for (std::size_t i = 0; i < _allPlayer.size(); i++) {
-        if (_allPlayer.at(i)._playerID == playerID) {
-            _allPlayer.at(i)._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD*0, DEG2RAD*direction, DEG2RAD*0});
-            _allPlayer.at(i)._rotationAngle = direction;
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * direction, DEG2RAD * 0});
+            i._rotationAngle = direction;
             break;
         }
     }
@@ -39,10 +39,10 @@ void AllPlayers::changePlayerOrientation(float direction, int playerID)
 
 void AllPlayers::setPlayerTeam(std::string playerTeam, int playerID)
 {
-    for (std::size_t i = 0; i < _allPlayer.size(); i++) {
-        if (_allPlayer.at(i)._playerID == playerID) {
-            _allPlayer.at(i).setTeam(playerTeam);
-            _allPlayer.at(i).setPlayerColor();
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.setTeam(playerTeam);
+            i.setPlayerColor();
             break;
         }
     }
@@ -73,9 +73,9 @@ void AllPlayers::removePlayerFromIsland(int playerID)
 
 Vector3 AllPlayers::getPlayerRealPos(int playerID)
 {
-    for (std::size_t i = 0; i < _allPlayer.size(); i++) {
-        if (_allPlayer.at(i)._playerID == playerID) {
-            return _allPlayer.at(i)._realPos;
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            return i._realPos;
         }
     }
     return {};
@@ -88,12 +88,12 @@ Vector3 AllPlayers::getSize(void)
 
 void AllPlayers::drawPlayer(Vector3 cameraPosition)
 {
-    for (std::size_t i = 0; i < _allPlayer.size(); i++) {
-        _allPlayer.at(i)._animFrameCounter++;
-        if (_allPlayer.at(i)._animFrameCounter >= _allPlayer.at(i)._playerAnimation[0].frameCount)
-            _allPlayer.at(i)._animFrameCounter = 0;
-        UpdateModelAnimation(_allPlayer.at(i)._playerModel, _allPlayer.at(i)._playerAnimation[0], _allPlayer.at(i)._animFrameCounter);
-        DrawModelEx(_allPlayer.at(i)._playerModel , _allPlayer.at(i).getPosition(), (Vector3){ 1.0f, 0.0f, 0.0f }, 0.0f, getSize(), WHITE);
-        _allPlayer.at(i).displayPlayerInfo(cameraPosition);
+    for (auto &i: _allPlayer) {
+        i._animFrameCounter++;
+        if (i._animFrameCounter >= i._playerAnimation[0].frameCount)
+            i._animFrameCounter = 0;
+        UpdateModelAnimation(i._playerModel, i._playerAnimation[0], i._animFrameCounter);
+        DrawModelEx(i._playerModel , i.getPosition(), (Vector3){ 1.0f, 0.0f, 0.0f }, 0.0f, getSize(), WHITE);
+        i.displayPlayerInfo(cameraPosition);
     }
 }

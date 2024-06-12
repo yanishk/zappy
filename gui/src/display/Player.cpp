@@ -85,16 +85,15 @@ void Player::DrawText3D(Font font, const char *text, Vector3 position, float fon
         if (codepoint == '\n') {
             textOffsetY += scale + lineSpacing/(float)font.baseSize*scale;
             textOffsetX = 0.0f;
-        } else {
-            if ((codepoint != ' ') && (codepoint != '\t'))
-                DrawTextCodepoint3D(font, codepoint, (Vector3){ position.x + textOffsetX, position.y, position.z + textOffsetY }, scale, tint);
-
-            if (font.glyphs[index].advanceX == 0)
-                textOffsetX += (float)(font.recs[index].width + fontSpacing) / (float)font.baseSize*scale;
-            else
-                textOffsetX += (float)(font.glyphs[index].advanceX + fontSpacing) / (float)font.baseSize*scale;
+            continue;
         }
+        if ((codepoint != ' ') && (codepoint != '\t'))
+            DrawTextCodepoint3D(font, codepoint, (Vector3){ position.x + textOffsetX, position.y, position.z + textOffsetY }, scale, tint);
 
+        if (font.glyphs[index].advanceX == 0)
+            textOffsetX += (float)(font.recs[index].width + fontSpacing) / (float)font.baseSize*scale;
+        else
+            textOffsetX += (float)(font.glyphs[index].advanceX + fontSpacing) / (float)font.baseSize*scale;
     }
 }
 
@@ -137,8 +136,8 @@ void Player::setPlayerColor(void)
     for (std::size_t i = 0; i < _team.size(); i++) {
         code += _team.at(i);
     }
-    code = code % 255;
-    _playerColor.a = 255;
+    code = code % MAX_RGB;
+    _playerColor.a = MAX_RGB;
     _playerColor.r = code;
     _playerColor.g = code;
     _playerColor.b = code;
