@@ -6,6 +6,7 @@
 */
 
 #include "command_ia.h"
+#include "command_gui.h"
 
 static tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {
     {NORTH, 1, 2, 3, 4, 5, 6, 7, 8},
@@ -63,7 +64,8 @@ static int eject_players(zappy_t *zappy, const arguments_t arg,
     return status;
 }
 
-static void kill_eggs(zappy_t *zappy, player_t *current_player)
+static void kill_eggs(server_t *server, zappy_t *zappy,
+    player_t *current_player)
 {
     egg_t *egg = NULL;
     egg_t *egg_next = NULL;
@@ -74,13 +76,14 @@ static void kill_eggs(zappy_t *zappy, player_t *current_player)
     while (egg != NULL) {
         egg_next = TAILQ_NEXT(egg, egg_entries);
         if (egg_on_same_tile(current_player, egg)) {
+            edi_func(server, egg->id);
             free_egg(zappy, egg);
         }
         egg = egg_next;
     }
 }
 
-int eject_from_tile(server_t *, zappy_t *zappy, const arguments_t arg,
+int eject_from_tile(server_t *server, zappy_t *zappy, const arguments_t arg,
     client_t *client)
 {
     player_t *current_player = get_player_by_fd(zappy, client->client_fd);
@@ -89,6 +92,6 @@ int eject_from_tile(server_t *, zappy_t *zappy, const arguments_t arg,
     if (current_player == NULL)
         return EXIT_WITH_ERROR;
     status = eject_players(zappy, arg, current_player);
-    kill_eggs(zappy, current_player);
+    kill_eggs(server, zappy, current_player);
     return status;
 }
