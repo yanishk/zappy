@@ -24,7 +24,7 @@ using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
 class DisplayGame {
     public:
-        DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket);
+        DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation);
         ~DisplayGame();
         void updateCamera(void);
         Vector3 setVector3(float x, float y, float z);

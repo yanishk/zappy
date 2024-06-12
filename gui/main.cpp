@@ -13,17 +13,21 @@
 
 int main(int ac, char **av)
 {
-    if (ac != MIN_ARGS) {
+    if (ac < MIN_ARGS) {
         Gui::displayHelp();
         return EXIT_WITH_ERROR;
     }
+    bool animation = false;
     std::string port = av[2];
     std::string host = av[4];
+    if (ac > MIN_ARGS && !std::string(av[5]).compare("-a")) {
+        animation = true;
+    }
 
     CommandManager cmd;
 
     try {
-        Client client(port, host, cmd);
+        Client client(port, host, cmd, animation);
         client.run();
     } catch (std::exception& e) {
         std::cerr << "Failed on: " << e.what() << "\n";
