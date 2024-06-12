@@ -10,7 +10,7 @@
 
     #include "common_command.h"
 
-    #define NB_GUI_CMD 8
+    #define NB_GUI_CMD 9
 
     #define MSZ_COMMAND "msz"
     #define MCT_COMMAND "mct"
@@ -19,6 +19,7 @@
     #define PLV_COMMAND "plv"
     #define PPO_COMMAND "ppo"
     #define PIN_COMMAND "pin"
+    #define SGT_COMMAND "sgt"
 
 typedef struct command_infos_gui_s {
     char *name;
@@ -36,6 +37,7 @@ int tna_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int plv_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int ppo_func(server_t *, zappy_t *, const arguments_t, client_t *);
 int pin_func(server_t *, zappy_t *, const arguments_t, client_t *);
+int sgt_func(server_t *, zappy_t *, const arguments_t, client_t *);
 
 int pnw_func(server_t *, zappy_t *, const unsigned int);
 int pfk_func(server_t *, zappy_t *, const unsigned int);
