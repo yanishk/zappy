@@ -5,9 +5,7 @@
 ** time_is_up
 */
 
-#include <time.h>
-#include <stdbool.h>
-#include "server.h"
+#include "command_ia.h"
 
 bool time_is_up(clock_t begin, double time_unit)
 {

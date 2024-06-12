@@ -43,8 +43,7 @@ int main(int ac, char **av)
 
     }
 
-    std::unique_ptr<Zappy::Queen> queen = std::make_unique<Zappy::Queen>(port, name);
-    Zappy::Team &team = Zappy::Team::getTeam(Zappy::TeamOptions(name, port, std::move(queen)));
+    Zappy::Team team(name, port, std::make_unique<Zappy::Queen>(port));
 
     return team.run();
 }

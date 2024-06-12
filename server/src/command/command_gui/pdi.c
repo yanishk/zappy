@@ -7,9 +7,9 @@
 
 #include "command_gui.h"
 
-int pdi_func(server_t *server, zappy_t *zappy, client_t *client)
+int pdi_func(server_t *server, zappy_t *zappy, const unsigned int client_fd)
 {
-    player_t *player = get_player(zappy, client->client_fd);
+    player_t *player = get_player_by_fd(zappy, client_fd);
     client_t *graphical = get_graphical_client(server);
 
     if (player == NULL || graphical == NULL)

@@ -14,7 +14,7 @@ void Network::Network::sendInformationToServer(const std::string &information)
 {
     try {
 
-        asio::write(*_socket, asio::buffer(information + "\n"));
+        asio::write(*_socket, asio::buffer(information));
 
     } catch (const std::system_error &err) {
 
@@ -34,7 +34,7 @@ std::string Network::Network::getInfoFromServer()
 
         if (error == asio::error::eof) {
             std::cout << "Connection closed by server." << std::endl;
-            return std::string("dead");
+            return std::string("end");
         } else if (error) {
             throw asio::system_error(error);
             std::cerr << "error\n";
@@ -48,7 +48,6 @@ std::string Network::Network::getInfoFromServer()
     } catch (const std::exception &e) {
 
         std::cerr << e.what() << std::endl;
-        return std::string("dead");
 
     }
 

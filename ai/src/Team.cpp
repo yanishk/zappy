@@ -7,25 +7,12 @@
 
 #include "Team.hpp"
 
-Zappy::Team &Zappy::Team::getTeam(TeamOptions options)
-{
-    static Zappy::Team team(options._name, options._port, std::move(options._queen));
-
-    return team;
-}
-
 int Zappy::Team::run()
 {
     while (true) {
-
-        for (std::size_t i = 0; i < _players.size(); ++i) {
-
-            if (!_players[i].get()->run()) {
-                _players.erase(_players.begin() + i);                
-            }
-
+        for (auto &player : _players) {
+            player.get()->run();
         }
-
     }
 
     return EXIT_SUCCESS;

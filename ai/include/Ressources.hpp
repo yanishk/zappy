@@ -16,19 +16,10 @@
     #define PHIRAS "phiras"
     #define THYSTAME "thystame"
 
-    #define FOOD_DENSITY 0.5
-    #define LINEMATE_DENSITY 0.3
-    #define DERAUMERE_DENSITY 0.15
-    #define SIBUR_DENSITY 0.1
-    #define MENDIANE_DENSITY 0.1
-    #define PHIRAS_DENSITY 0.08
-    #define THYSTAME_DENSITY 0.05
-
     #define FOOD_START_VALUE 10
     #define NONE 0
 
     #include <string>
-    #include <vector>
     #include <unordered_map>
 
 namespace Zappy {
@@ -64,28 +55,9 @@ namespace Zappy {
 
             };
 
-            int operator[](const std::string &ressource) {
-                return _ressources[ressource];
-            }
-
             int getRessource(const std::string &ressource) {
                 return _ressources[ressource];
             };
-
-            bool empty() {
-
-                for (const auto &i:_ressources) {
-                    if (i.second > 0) {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            std::string indexToRessource(int index);
-
-            std::vector<int> getAllValueRessources();
 
         private:
 

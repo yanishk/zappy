@@ -41,6 +41,6 @@ int pnw_func(server_t *, zappy_t *, const unsigned int);
 int pfk_func(server_t *, zappy_t *, const unsigned int);
 int pdr_func(server_t *, zappy_t *, client_t *, char *);
 int pgt_func(server_t *, zappy_t *, client_t *, char *);
-int pdi_func(server_t *, zappy_t *, client_t *);
+int pdi_func(server_t *, zappy_t *, const unsigned int);
 
 #endif /* !COMMAND_GUI_H_ */

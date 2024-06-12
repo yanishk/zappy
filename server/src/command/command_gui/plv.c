@@ -13,9 +13,9 @@ int plv_func(server_t *server, zappy_t *zappy, const arguments_t,
     int player_id = atoi(server->cmd_arg_array[1]);
     player_t *player = NULL;
 
-    if (player_id == 0)
+    if (!is_positive_number(server->cmd_arg_array[1]))
         return EXIT_WITH_ERROR;
-    player = get_player(zappy, player_id);
+    player = get_player_by_id(zappy, player_id);
     if (player == NULL)
         return EXIT_WITH_ERROR;
     dprintf(client->client_fd, "plv %d %d\n", player->id, player->level);
