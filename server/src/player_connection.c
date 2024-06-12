@@ -34,6 +34,7 @@ int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
         return UNKNOWN_COMMAND;
     initialize_player(zappy, chosen_egg);
     link_client_and_player(zappy, client_fd, zappy->infos->last_player_id);
+    ebo_func(server, chosen_egg->id);
     free_egg(zappy, chosen_egg);
     dprintf(client_fd, "%d\n%d %d\n",
         count_team_eggs(zappy, server->cmd_arg_array[0]), arg.height,
