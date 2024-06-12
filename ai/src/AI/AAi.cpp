@@ -11,25 +11,21 @@
 bool Zappy::AAi::forward()
 {
     _network.sendInformationToServer("Forward\n");
-    _position.first -= 1;
-
-    return _network.getInfoFromServer() == "ok";
+    return true;
 }
 
 bool Zappy::AAi::right()
 {
     _network.sendInformationToServer("Right\n");
-    _position.second += 1;
 
-    return _network.getInfoFromServer() == "ok";
+    return true;
 }
 
 bool Zappy::AAi::left()
 {
     _network.sendInformationToServer("Left\n");
-    _position.second -= 1;
- 
-    return _network.getInfoFromServer() == "ok";
+
+    return true;
 }
 
 std::size_t Zappy::AAi::countMember(const std::string &line) const
@@ -48,8 +44,8 @@ std::size_t Zappy::AAi::countMember(const std::string &line) const
 std::vector<std::string> Zappy::AAi::look()
 {
     _network.sendInformationToServer("Look\n");
-    std::string information = _network.getInfoFromServer();
     std::vector<std::string> vector;
+    std::string information = _network.getInfoFromServer();
     std::size_t nbMember = countMember(information);
 
     while (vector.size() < nbMember) {
@@ -77,7 +73,6 @@ std::vector<std::string> Zappy::AAi::look()
 
     return vector;
 }
-
 bool Zappy::AAi::checkRessources(const std::vector<std::string> &newRessources)
 {
     for (const auto &i: newRessources) {
@@ -131,24 +126,19 @@ bool Zappy::AAi::broadcastText(const std::string &text)
 {
     _network.sendInformationToServer("Broadcast " + text);
 
-    return _network.getInfoFromServer() == "ok";
+    return true;
 }
 
 std::size_t Zappy::AAi::connectNumber()
 {
     _network.sendInformationToServer("Connect_nbr\n");
-    std::string val = _network.getInfoFromServer();
 
-    return std::atoi(val.c_str());
+    return std::atoi(_network.getInfoFromServer().c_str());
 }
 
 bool Zappy::AAi::fork()
 {
     _network.sendInformationToServer("Fork\n");
-
-    if (_network.getInfoFromServer() == "ko") {
-        return false;
-    }
 
     return true;
 }
@@ -196,22 +186,5 @@ bool Zappy::AAi::incantation()
 {
     _network.sendInformationToServer("Incantation\n");
 
-    return _network.getInfoFromServer() == "ok";
-}
-
-std::size_t Zappy::AAi::countObject(const std::string &objects, const std::string &type)
-{
-    if (!type.length()) {
-        return 0;
-    }
-
-    std::size_t count = 0;
-    std::size_t offset = objects.find(type);
-
-    while (offset != std::string::npos) {
-        count += 1;
-        offset = objects.find(type, offset + type.length());
-    }
-
-    return count;
+    return true;
 }

@@ -10,7 +10,7 @@
 int pnw_func(server_t *server, zappy_t *zappy,
     const unsigned int client_fd)
 {
-    player_t *player = get_player(zappy, client_fd);
+    player_t *player = get_player_by_fd(zappy, client_fd);
     client_t *graphical = get_graphical_client(server);
     int player_direction = 0;
 

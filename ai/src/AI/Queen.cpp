@@ -5,6 +5,7 @@
 ** AAi
 */
 
+#include "Team.hpp"
 #include "AI/Queen.hpp"
 
 int Zappy::Queen::run()
@@ -13,58 +14,19 @@ int Zappy::Queen::run()
         return initialize();
     }
 
-    if (_wait) {
-        _wait -= 1;
-        return EXIT_SUCCESS;
-    }
-
-    if (_network.getInfoFromServer() == DEAD) {
-        return ERROR;
-    }
-
-    while (_ressources.getRessource(FOOD) < CRITICAL_FOOD) {
-        _actions.push_back(Eat);
-    }
-
     return EXIT_SUCCESS;
 }
 
 bool Zappy::Queen::initialize()
 {
     const std::size_t maxPlayers = connectNumber();
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
 
     for (std::size_t i = 0; i < maxPlayers; i++) {
-        Zappy::Queen queen(_network.getPort(), _name);
+        Zappy::Queen queen(_network.getPort(), team.getName());
     }
 
     _level = FIRST_LEVEL;
-
-    return true;
-}
-
-bool Zappy::Queen::executeAction()
-{
-    if (_actions.empty()) {
-        return false;
-    }
-
-    if (_actions.front() == Look) {
-
-    }
-
-    if (_actions.front() == Eat) {
-
-    }
-
-    if (_actions.front() == Elevation) {
-
-    }
-
-    if (_actions.front() == Fork) {
-
-    }
-
-    _actions.erase(_actions.begin());
 
     return true;
 }

@@ -17,12 +17,11 @@ int server(int ac, const char **av)
     arguments_t arg;
     zappy_t zappy;
 
-    TAILQ_INIT(&zappy.player_head);
     srand(time(NULL));
     if (fill_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR)
         return EXIT_WITH_ERROR;
     server = init_server_struct(arg);
-    initialize_map(arg, &zappy);
+    initialize_game(arg, &zappy);
     if (server == NULL)
         return EXIT_WITH_ERROR;
     if (initialize_server(server) == EXIT_WITH_ERROR ||

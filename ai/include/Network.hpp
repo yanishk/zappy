@@ -10,8 +10,7 @@
 
     #define PORT_FLAG "-p"
     #define DEFAULT_HOME "127.0.0.1"
-    #define WELCOME "WELCOME"
- 
+
     #include <string>
     #include <asio.hpp>
     #include <iostream>
@@ -31,10 +30,8 @@ namespace Network
             Network(const Network &other): _port(other._port), _home(other._home), _io_context(asio::io_context()), _socket(std::make_shared<SOCKET>(SOCKET(_io_context))) {
 
                 try {
-
                     asio::ip::tcp::resolver resolver(_io_context);
                     asio::connect(*_socket, resolver.resolve(_home, _port));
-
                 } catch (const std::exception &e) {
                     std::cerr << e.what() << std::endl;
                 }

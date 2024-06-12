@@ -63,7 +63,7 @@ bool Zappy::Quentin::createQuentin()
 
     fork();
 
-    std::unique_ptr<Quentin> quentin = std::make_unique<Quentin>(_network.getPort(), _nbRefills - 1);
+    std::unique_ptr<Quentin> quentin = std::make_unique<Quentin>(_network.getPort(), _nbRefills - 1, team.getName());
 
     team._players.push_back(std::move(quentin));
     _wait = FORK_WAIT;
