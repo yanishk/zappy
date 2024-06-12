@@ -22,7 +22,7 @@ static int init_fork_egg(zappy_t *zappy, char *team_name, int pos_height,
     return egg->id;
 }
 
-int fork_player(server_t *server, zappy_t *zappy, const arguments_t,
+int fork_player(server_t *server, zappy_t *zappy, arguments_t *,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);

@@ -38,7 +38,7 @@ void answer_client(const int status, const unsigned int client_fd)
 }
 
 static void execute_graphical_command(server_t *server, zappy_t *zappy,
-    const arguments_t arg, client_t *client)
+    arguments_t *arg, client_t *client)
 {
     int status = UNKNOWN_COMMAND;
     size_t arguments_nb = array_size(server->cmd_arg_array);
@@ -73,7 +73,7 @@ static void insert_command_in_queue(server_t *server, zappy_t *zappy,
         insert_other_command_in_queue(server, client);
 }
 
-void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg,
+void get_user_input(server_t *server, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
     if (read_client_socket(server, client) != EXIT_WITH_SUCCESS)
