@@ -260,6 +260,25 @@ void Player::removeItem(int itemType)
     _inventory.at(itemType) -= 1;
 }
 
+void Player::resetInventory(void)
+{
+    for (auto &i: _inventory) {
+        i = 0;
+    }
+}
+
+std::vector<int> Player::getInventory(void)
+{
+    return _inventory;
+}
+
+void Player::setInventory(std::vector<int> newInv)
+{
+    for (std::size_t i = 0; i < _inventory.size(); i++) {
+        _inventory.at(i) = newInv.at(i);
+    }
+}
+
 void Player::displayInfo2D(int x, int y)
 {
     std::string text;

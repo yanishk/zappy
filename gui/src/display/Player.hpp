@@ -33,6 +33,9 @@ class Player {
         void setPlayerColor(void);
         void addItem(int itemType);
         void removeItem(int itemType);
+        void resetInventory(void);
+        std::vector<int> getInventory(void);
+        void setInventory(std::vector<int> newInv);
 
         Model _playerModel;
         ModelAnimation *_playerAnimation;
@@ -78,6 +81,9 @@ class AllPlayers {
         void displayMorePlayerInfo(int playerID, int screenWidth);
         void addItem(int playerID, int itemType);
         void removeItem(int playerID, int itemType);
+        void resetInventory(int playerID);
+        std::vector<int> getInventory(int playerID);
+        void setInventory(int playerID, std::vector<int> newInv);
     private:
         Model _model;
         Vector3 _size;

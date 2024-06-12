@@ -162,3 +162,31 @@ void AllPlayers::removeItem(int playerID, int itemType)
     }
 }
 
+void AllPlayers::resetInventory(int playerID)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.resetInventory();
+        }
+    }
+}
+
+std::vector<int> AllPlayers::getInventory(int playerID)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            return i.getInventory();
+        }
+    }
+    return {};
+}
+
+void AllPlayers::setInventory(int playerID, std::vector<int> newInv)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.setInventory(newInv);
+        }
+    }
+}
+

@@ -47,11 +47,19 @@ void UseRecivedCmd::getPlv(void)
 
 void UseRecivedCmd::getPin(void)
 {
-    // for (int i = 0; _cmd.getCommandAt("pin", _inventoryIndex).size() >= 1; i++) {
-    //     std::vector<std::string> cmd = _cmd.getCommandAt("pin", _inventoryIndex);
-    //     _player.addItem(std::atoi(cmd.at(0).c_str()), std::atoi(cmd.at(1).c_str()));
-    //     _inventoryIndex += 1;
-    // }
+    for (int i = 0; _cmd.getCommandAt("pin", _inventoryIndex).size() >= 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("pin", _inventoryIndex);
+        int playerID = std::atoi(cmd.at(0).c_str());
+        std::vector<int> actualInv = _player.getInventory(playerID);
+        std::vector<int> newInv;
+        for (std::size_t i = 0; i < actualInv.size(); i++) {
+            newInv.push_back(std::atoi(cmd.at(i + 3).c_str()));
+        }
+        if (newInv == actualInv)
+            continue;
+        _player.setInventory(playerID, newInv);
+        _inventoryIndex += 1;
+    }
 }
 
 void UseRecivedCmd::getPex(void)
