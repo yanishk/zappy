@@ -199,7 +199,7 @@ int DisplayGame::getNbrItemTypeOnIsland(Vector3 pos, int type)
 
 void DisplayGame::useServerInfo(void)
 {
-    if (_cmd.getCommandAt("pnw", _newPlayerIndex).size() > 1) {
+    while (_cmd.getCommandAt("pnw", _newPlayerIndex).size() > 1) {
         std::vector<std::string> cmd = _cmd.getCommandAt("pnw", _newPlayerIndex);
         _player.addPlayerToIsland((Vector3){std::stof(cmd.at(1).c_str()), 1.8, std::stof(cmd.at(2).c_str())}, std::atoi(cmd.at(0).c_str()));
         _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
@@ -324,6 +324,9 @@ void DisplayGame::launchGame(void)
     while (!WindowShouldClose()) {
         useServerInfo();
         seconds += (GetFrameTime() / 2);
+
+        if (IsKeyDown(KEY_KP_1))
+            asio::write(_socket, asio::buffer("mct\n"));
 
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);
         updateCamera();
