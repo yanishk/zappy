@@ -24,6 +24,7 @@
     #define PEX_CMD "pex"
     #define PBC_CMD "pbc"
     #define PIC_CMD "pic"
+    #define ENW_CMD "enw"
     #define PARAMS_ERROR_MSG "Need 2 paramaters at least."
     #define INVALID_IDX "Invalid Index."
     #include <string>
@@ -88,11 +89,13 @@ class CommandManager {
         std::vector<std::vector<std::string>> _sstCmd;
 
         std::vector<std::vector<std::string>> _eboCmd;
+        std::vector<std::vector<std::string>> _enwCmd;
 
         std::vector<std::string> _sentCommands;
         std::vector<std::string> _receivedResponses;
 
         std::unordered_map<std::string, std::vector<std::vector<std::string>>> _cmdMap {
+
             {MSZ_CMD, _mszCmd},
             {BCT_CMD, _bctCmd},
             {TNA_CMD, _tnaCmd},
@@ -109,6 +112,8 @@ class CommandManager {
             {PEX_CMD, _pexCmd},
             {PBC_CMD, _pbcCmd},
             {PIC_CMD, _picCmd},
+            {ENW_CMD, _enwCmd},
+
         };
 
         mutable std::mutex _mutex;
