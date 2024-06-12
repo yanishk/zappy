@@ -43,7 +43,7 @@ int main(int ac, char **av)
 
     }
 
-    Zappy::Team team(name, port, std::make_unique<Zappy::Queen>(port));
+    Zappy::Team team(name, port, std::make_unique<Zappy::Queen>(port, name));
 
     return team.run();
 }

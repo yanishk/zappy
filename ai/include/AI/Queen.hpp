@@ -19,7 +19,11 @@ namespace Zappy {
 
         public:
 
-            Queen(const std::string &port): AAi(port, INITIALIZE_MODE) {};
+            Queen(const std::string &port, const std::string &name): AAi(port, name, INITIALIZE_MODE) {
+                _network.sendInformationToServer(_name);
+                _network.getInfoFromServer();
+                _network.getInfoFromServer();
+            };
 
             int run();
 

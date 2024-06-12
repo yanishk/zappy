@@ -42,8 +42,13 @@ namespace Zappy
 
     class Searcher : public AAi {
         public:
-            Searcher(const std::string &port, Order order): AAi(port, INITIALIZE_MODE), _order(order) {
-                _isGoingToQueen = false;
+            Searcher(const std::string &port, Order order, const std::string &name):
+                AAi(port, name,INITIALIZE_MODE),
+                _order(order),
+                _isGoingToQueen(false) {
+                _network.sendInformationToServer(_name);
+                _network.getInfoFromServer();
+                _network.getInfoFromServer();
             };
 
             int run();

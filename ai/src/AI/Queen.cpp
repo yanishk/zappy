@@ -5,6 +5,7 @@
 ** AAi
 */
 
+#include "Team.hpp"
 #include "AI/Queen.hpp"
 
 int Zappy::Queen::run()
@@ -19,9 +20,10 @@ int Zappy::Queen::run()
 bool Zappy::Queen::initialize()
 {
     const std::size_t maxPlayers = connectNumber();
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
 
     for (std::size_t i = 0; i < maxPlayers; i++) {
-        Zappy::Queen queen(_network.getPort());
+        Zappy::Queen queen(_network.getPort(), team.getName());
     }
 
     _level = FIRST_LEVEL;

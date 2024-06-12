@@ -43,11 +43,12 @@ namespace Zappy {
 
         public:
 
-            AAi(const std::string &port, const std::size_t level = START_LEVEL): 
+            AAi(const std::string &port, const std::string &name, const std::size_t level = START_LEVEL): 
                 _network(Network::Network(port)),
                 _ressources(Ressources()),
                 _position(START_POSITION),
-                _level(level)
+                _level(level),
+                _name(name)
             {};
 
             virtual int run() = 0;
@@ -78,6 +79,7 @@ namespace Zappy {
             std::size_t _level;
 
             std::size_t _wait;
+            std::string _name;
 
         private:
             std::size_t countMember(const std::string &line) const;
