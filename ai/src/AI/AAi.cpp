@@ -187,10 +187,18 @@ bool Zappy::AAi::setObject(const std::string &object)
 bool Zappy::AAi::incantation()
 {
     _network.sendInformationToServer(INCANTATION_CMD);
+    std::string value = _network.getInfoFromServer();
 
-    if (_network.getInfoFromServer() == RESPONSE_KO) {
+    if (value == RESPONSE_KO) {
         return false;
     }
+    std::stringstream stream;
+    std::string temp;
+    std::string level;
 
+    stream << value;
+    stream >> temp >> temp >> level;
+
+    _level = std::atoi(level.c_str());
     return true;
 }
