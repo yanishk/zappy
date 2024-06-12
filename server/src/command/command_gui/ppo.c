@@ -29,6 +29,5 @@ int ppo_func(server_t *server, zappy_t *zappy, const arguments_t,
 
     if (!is_positive_number(server->cmd_arg_array[1]))
         return EXIT_WITH_ERROR;
-    ppo(server, zappy, player_id);
-    return EXIT_WITH_SUCCESS;
+    return ppo(server, zappy, player_id);
 }

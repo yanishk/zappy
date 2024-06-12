@@ -5,8 +5,6 @@
 ** turn_left
 */
 
-#include "server.h"
-#include "game.h"
 #include "command_gui.h"
 
 int turn_left(server_t *server, zappy_t *zappy, const arguments_t,
