@@ -7,8 +7,9 @@
 
 #include "server.h"
 #include "game.h"
+#include "command_gui.h"
 
-int turn_left(server_t *, zappy_t *zappy, const arguments_t,
+int turn_left(server_t *server, zappy_t *zappy, const arguments_t,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
@@ -20,5 +21,6 @@ int turn_left(server_t *, zappy_t *zappy, const arguments_t,
     } else {
         player->direction -= RIGHT_ANGLE;
     }
+    ppo(server, zappy, player->id);
     return EXIT_WITH_SUCCESS;
 }

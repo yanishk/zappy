@@ -6,8 +6,9 @@
 */
 
 #include "command_ia.h"
+#include "command_gui.h"
 
-int move_forward(server_t *, zappy_t *zappy,
+int move_forward(server_t *server, zappy_t *zappy,
     const arguments_t arg, client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
@@ -15,5 +16,6 @@ int move_forward(server_t *, zappy_t *zappy,
     if (player == NULL)
         return EXIT_WITH_ERROR;
     move_player(player->direction, player, arg);
+    ppo(server, zappy, player->id);
     return EXIT_WITH_SUCCESS;
 }
