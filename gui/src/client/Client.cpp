@@ -18,7 +18,7 @@ Client::Client(const std::string &port, const std::string &host,
     asio::ip::tcp::resolver resolver(_ioContext);
     _endpoints = resolver.resolve(host, port);
     asio::connect(_socket, _endpoints);
-    std::cout << "Connected to the server !" << std::endl;
+    std::cout << CON_SUCCESS_MSG << std::endl;
 }
 
 void Client::run()
@@ -39,10 +39,10 @@ void Client::startDisplay()
     try {
         game.fillAllModel(parsedFile);
     } catch (const ErrorHandling& e) {
-        std::cerr << "unexpected error: " << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
         std::exit(ERROR_VALUE);
     }
-    asio::write(_socket, asio::buffer("msz\n"));
+    asio::write(_socket, asio::buffer(MSZ_CMD_START));
     game.launchGame();
     exit(0);
 }
@@ -59,7 +59,7 @@ void Client::readServ()
             asio::read_until(_socket, _buff, '\n', error);
 
             if (error == asio::error::eof) {
-                std::cout << "Connection closed by server." << std::endl;
+                std::cout << CON_CLOSE_MESSAGE << std::endl;
                 exit(EXIT_SUCCESS);
             }
             if (error) {
@@ -72,18 +72,18 @@ void Client::readServ()
             if (!line.empty() && line.back() == '\r') {
                 line.pop_back();
             }
-            if (line.compare("ko") == 0) {
+            if (line.compare(KO_RESPONSE) == 0) {
                 continue;
             }
             _cmd.receiveResponse(line);
 
-            if (!line.compare("WELCOME")) {
-                asio::write(_socket, asio::buffer("GRAPHIC\n"));
+            if (!line.compare(WELCOME_RESPONSE)) {
+                asio::write(_socket, asio::buffer(GRAPHIC_MESSAGE));
             }
         }
 
     } catch (std::exception &e) {
-        std::cerr << "Reader failed: " << e.what() << "\n";
+        std::cerr << e.what() << "\n";
     }
 }
 

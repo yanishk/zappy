@@ -64,19 +64,13 @@ class CommandManager {
 
     private:
 
-        // map for GUI
-
-
-
-        // Data from Serv
-
-        std::vector<std::vector<std::string>> _mszCmd; // CORE
+        std::vector<std::vector<std::string>> _mszCmd;
         std::vector<std::vector<std::string>> _tnaCmd;
 
 
         std::vector<std::vector<std::string>> _ppoCmd;
         std::vector<std::vector<std::string>> _plvCmd;
-        std::vector<std::vector<std::string>> _pinCmd; // Player info
+        std::vector<std::vector<std::string>> _pinCmd;
         std::vector<std::vector<std::string>> _pnwCmd;
         std::vector<std::vector<std::string>> _pdiCmd;
         std::vector<std::vector<std::string>> _pdrCmd;
@@ -84,10 +78,10 @@ class CommandManager {
 
 
         std::vector<std::vector<std::string>> _sgtCmd;
-        std::vector<std::vector<std::string>> _smgCmd; // time part
+        std::vector<std::vector<std::string>> _smgCmd;
         std::vector<std::vector<std::string>> _sstCmd;
 
-        std::vector<std::vector<std::string>> _eboCmd; // egg part
+        std::vector<std::vector<std::string>> _eboCmd;
 
         std::vector<std::string> _sentCommands;
         std::vector<std::string> _receivedResponses;
