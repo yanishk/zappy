@@ -13,7 +13,7 @@
 #include <iostream>
 
 Client::Client(const std::string &port, const std::string &host,
-    CommandManager &cmd) : _socket(_ioContext), _cmd(cmd)
+    CommandManager &cmd, bool animation) : _socket(_ioContext), _cmd(cmd), _isAnimated(animation)
 {
     asio::ip::tcp::resolver resolver(_ioContext);
     _endpoints = resolver.resolve(host, port);

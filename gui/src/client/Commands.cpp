@@ -66,6 +66,15 @@ void CommandManager::receiveResponse(const std::string &response)
         {EBO_CMD, [this](const std::vector<std::string> &params) {
             fillMapPlayerInfos(EBO_CMD, _eboCmd, params);
             }},
+        {PEX_CMD, [this](const std::vector<std::string> &params) {
+        fillMapPlayerInfos(EBO_CMD, _pexCmd, params);
+            }},
+        {PBC_CMD, [this](const std::vector<std::string> &params) {
+        fillMapPlayerInfos(EBO_CMD, _pbcCmd, params);
+            }},
+        {PIC_CMD, [this](const std::vector<std::string> &params) {
+        fillMapPlayerInfos(EBO_CMD, _picCmd, params);
+            }},
     };
 
     auto it = commandMap.find(cmd);
@@ -144,11 +153,11 @@ std::vector<std::string> CommandManager::getReceivedResponses() const
     return _receivedResponses;
 }
 
-std::vector<std::vector<std::string>> CommandManager::getMszCmd() const
+/*std::vector<std::vector<std::string>> CommandManager::getMszCmd() const
 {
     std::lock_guard<std::mutex> lock(_mutex);
     return _mszCmd;
-}
+}*/
 
 std::unordered_map<std::string, std::vector<std::vector<std::string>>> CommandManager::getMap()
 {

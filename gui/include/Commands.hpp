@@ -21,6 +21,9 @@
     #define EBO_CMD "ebo"
     #define SST_CMD "sst"
     #define SGT_CMD "sgt"
+    #define PEX_CMD "pex"
+    #define PBC_CMD "pbc"
+    #define PIC_CMD "pic"
     #define PARAMS_ERROR_MSG "Need 2 paramaters at least."
     #define INVALID_IDX "Invalid Index."
     #include <string>
@@ -75,6 +78,9 @@ class CommandManager {
         std::vector<std::vector<std::string>> _pdiCmd;
         std::vector<std::vector<std::string>> _pdrCmd;
         std::vector<std::vector<std::string>> _pgtCmd;
+        std::vector<std::vector<std::string>> _pbcCmd;
+        std::vector<std::vector<std::string>> _picCmd;
+        std::vector<std::vector<std::string>> _pexCmd;
 
 
         std::vector<std::vector<std::string>> _sgtCmd;
@@ -100,6 +106,9 @@ class CommandManager {
             {SST_CMD, _sstCmd},
             {SGT_CMD, _sgtCmd},
             {EBO_CMD, _eboCmd},
+            {PEX_CMD, _pexCmd},
+            {PBC_CMD, _pbcCmd},
+            {PIC_CMD, _picCmd},
         };
 
         mutable std::mutex _mutex;
