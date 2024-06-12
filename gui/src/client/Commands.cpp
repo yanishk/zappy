@@ -10,19 +10,6 @@
 
 CommandManager::CommandManager()
 {
-    _cmdMap["msz"] = _mszCmd;
-    _cmdMap["bct"] = _bctCmd;
-    _cmdMap["tna"] = _tnaCmd;
-    _cmdMap["plv"] = _plvCmd;
-    _cmdMap["pin"] = _plvCmd;
-    _cmdMap["pnw"] = _pnwCmd;
-    _cmdMap["pdi"] = _pdiCmd;
-    _cmdMap["ppo"] = _ppoCmd;
-    _cmdMap["pdr"] = _pdrCmd;
-    _cmdMap["pgt"] = _pgtCmd;
-    _cmdMap["sst"] = _sstCmd;
-    _cmdMap["sgt"] = _sgtCmd;
-    _cmdMap["ebo"] = _eboCmd;
 }
 
 void CommandManager::sendCommand(const std::string &command)
@@ -39,36 +26,56 @@ void CommandManager::receiveResponse(const std::string &response)
     std::string cmd = response.substr(0, token);
     std::vector<std::string> params = strToVec(response.substr(token), ' ');
 
-    if (cmd.compare("msz") == 0) {
-        fillMapIsland("msz", _mszCmd, params);
-    } else if (cmd.compare("bct") == 0) {
-        fillMapIsland("bct", _bctCmd, params);
-    } else if (cmd.compare("tna") == 0) {
-        fillMapPlayerInfos("tna", _tnaCmd, params);
-    } else if (cmd.compare("pnw") == 0) {
-        fillMapPlayerInfos("pnw", _pnwCmd, params);
-    } else if (cmd.compare("pdi") == 0) {
-        fillMapPlayerInfos("pdi", _pdiCmd, params);
-    } else if (cmd.compare("plv") == 0) {
-        fillMapPlayerInfos("plv", _plvCmd, params);
-    } else if (cmd.compare("pin") == 0) {
-        fillMapPlayerInfos("pin", _pinCmd, params);
-    } else if (cmd.compare("ppo") == 0) {
-        fillMapPlayerInfos("ppo", _ppoCmd, params);
-    } else if (cmd.compare("pdr") == 0) {
-        fillMapPlayerInfos("pdr", _pdrCmd, params);
-    } else if (cmd.compare("pgt") == 0) {
-        fillMapPlayerInfos("pgt", _pgtCmd, params);
-    } else if (cmd.compare("sst") == 0) {
-        fillMapPlayerInfos("sst", _sstCmd, params);
-    } else if (cmd.compare("sgt") == 0) {
-        fillMapPlayerInfos("sgt", _sgtCmd, params);
-    } else if (cmd.compare("ebo") == 0) {
-        fillMapPlayerInfos("ebo", _eboCmd, params);
+    std::unordered_map<std::string, std::function<void(const std::vector<std::string>&)>> commandMap = {
+        {MSZ_CMD, [this](const std::vector<std::string>& params) {
+            fillMapIsland(MSZ_CMD, _mszCmd, params);
+            }},
+        {BCT_CMD, [this](const std::vector<std::string>& params) {
+            fillMapIsland(BCT_CMD, _bctCmd, params);
+            }},
+        {TNA_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(TNA_CMD, _tnaCmd, params);
+            }},
+        {PNW_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(PNW_CMD, _pnwCmd, params);
+            }},
+        {PDI_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(PDI_CMD, _pdiCmd, params);
+            }},
+        {PLV_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(PLV_CMD, _plvCmd, params);
+            }},
+        {PIN_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(PIN_CMD, _pinCmd, params);
+            }},
+        {PPO_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(PPO_CMD, _ppoCmd, params);
+            }},
+        {PDR_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(PDR_CMD, _pdrCmd, params);
+            }},
+        {PGT_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(PGT_CMD, _pgtCmd, params);
+            }},
+        {SST_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(SST_CMD, _sstCmd, params);
+            }},
+        {SGT_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(SGT_CMD, _sgtCmd, params);
+            }},
+        {EBO_CMD, [this](const std::vector<std::string> &params) {
+            fillMapPlayerInfos(EBO_CMD, _eboCmd, params);
+            }},
+    };
+
+    auto it = commandMap.find(cmd);
+    if (it != commandMap.end()) {
+        it->second(params);
     }
 
     std::cout << response << std::endl;
 }
+
 
 void CommandManager::fillMapPlayerInfos(const std::string &cmd, std::vector<std::vector<std::string>> &cmdVec, const std::vector<std::string> &params)
 {
@@ -110,7 +117,7 @@ bool CommandManager::replaceOrAdd(std::vector<std::vector<std::string>> &cmdList
     const std::vector<std::string> &params)
 {
     if (params.size() < 2) {
-        throw std::invalid_argument("params must have at least 2 elements");
+        throw std::invalid_argument(PARAMS_ERROR_MSG);
     }
 
     for (auto &item : cmdList) {
@@ -159,7 +166,7 @@ std::vector<std::string> CommandManager::getCommandAt(const std::string &cmd,
     } else {
         return vide;
     }
-    throw std::out_of_range("Invalid index");
+    throw std::out_of_range(INVALID_IDX);
 }
 
 std::string CommandManager::getCommandInfoAt(const std::string &cmd,
@@ -171,7 +178,7 @@ std::string CommandManager::getCommandInfoAt(const std::string &cmd,
         elementIndex < it->second[vectorIndex].size()) {
         return it->second.at(vectorIndex).at(elementIndex);
     }
-    throw std::out_of_range("Invalid index");
+    throw std::out_of_range(INVALID_IDX);
 }
 
 std::vector<std::string> CommandManager::strToVec(const std::string &input, char token)

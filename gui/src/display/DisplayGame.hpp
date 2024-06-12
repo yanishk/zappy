@@ -58,6 +58,8 @@ class DisplayGame {
         std::vector<Item> _allItemModel;
         std::pair<bool, std::size_t> _selectedPlayer;
         int _newPlayerIndex = 0;
+        int _playerLevelIndex = 0;
+        int _playerEboIndex = 0;
         Model _sky;
         asio::ip::tcp::socket &_socket;
 

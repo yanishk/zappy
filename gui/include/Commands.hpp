@@ -7,7 +7,22 @@
 
 #ifndef COMMANDMANAGER_H
     #define COMMANDMANAGER_H
-
+    #define MSZ_CMD "msz"
+    #define BCT_CMD "bct"
+    #define TNA_CMD "tna"
+    #define PNW_CMD "pnw"
+    #define PDI_CMD "pdi"
+    #define PLV_CMD "plv"
+    #define PIN_CMD "pin"
+    #define PPO_CMD "ppo"
+    #define PDR_CMD "pdr"
+    #define PGT_CMD "pgt"
+    #define SST_CMD "sst"
+    #define EBO_CMD "ebo"
+    #define SST_CMD "sst"
+    #define SGT_CMD "sgt"
+    #define PARAMS_ERROR_MSG "Need 2 paramaters at least."
+    #define INVALID_IDX "Invalid Index."
     #include <string>
     #include <vector>
     #include <mutex>
@@ -51,7 +66,7 @@ class CommandManager {
 
         // map for GUI
 
-        std::unordered_map<std::string, std::vector<std::vector<std::string>>> _cmdMap;
+
 
         // Data from Serv
 
@@ -76,6 +91,23 @@ class CommandManager {
 
         std::vector<std::string> _sentCommands;
         std::vector<std::string> _receivedResponses;
+
+        std::unordered_map<std::string, std::vector<std::vector<std::string>>> _cmdMap {
+            {MSZ_CMD, _mszCmd},
+            {BCT_CMD, _bctCmd},
+            {TNA_CMD, _tnaCmd},
+            {PLV_CMD, _plvCmd},
+            {PIN_CMD, _plvCmd},
+            {PNW_CMD, _pnwCmd},
+            {PDI_CMD, _pdiCmd},
+            {PPO_CMD, _ppoCmd},
+            {PDR_CMD, _pdrCmd},
+            {PGT_CMD, _pgtCmd},
+            {SST_CMD, _sstCmd},
+            {SGT_CMD, _sgtCmd},
+            {EBO_CMD, _eboCmd},
+        };
+
         mutable std::mutex _mutex;
 };
 

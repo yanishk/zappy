@@ -239,31 +239,15 @@ void DisplayGame::useServerInfo(void)
             }
         }
     }
-    for (int i = 0; _cmd.getCommandAt("plv", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("plv", i);
-        std::cout << "Player " << cmd.at(0) << " is level: " << cmd.at(1) << std::endl;
-    }
-    for (int i = 0; _cmd.getCommandAt("pdi", i).size() >= 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pdi", i);
+    for (int i = 0; _cmd.getCommandAt("pdi", _playerLevelIndex).size() >= 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("pdi", _playerLevelIndex);
         std::cout << "Player " << cmd.at(0) << " is dead !" << std::endl;
+        _playerLevelIndex += 1;
     }
-    for (int i = 0; _cmd.getCommandAt("pdr", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pdr", i);
-        std::cout << "Player " << cmd.at(0) << " is dropping " << cmd.at(1) << " ressources !"
-            << std::endl;
-    }
-    for (int i = 0; _cmd.getCommandAt("pgt", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pgt", i);
-        std::cout << "Player " << cmd.at(0) << " is collecting " << cmd.at(1) << " ressources !"
-            << std::endl;
-    }
-    for (int i = 0; _cmd.getCommandAt("ebo", i).size() >= 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("sst", i);
-        std::cout << "Player " << cmd.at(0) << " is connected for an Egg" << std::endl;
-    }
-    for (int i = 0; _cmd.getCommandAt("sst", i).size() >= 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("ebo", i);
-        std::cout << "The time unit modification is " << cmd.at(0) << std::endl;
+    for (int i = 0; _cmd.getCommandAt("ebo", _playerEboIndex).size() >= 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("ebo", _playerEboIndex);
+        std::cout << "There is " << cmd.at(0) << " Egg(s) !" << std::endl;
+        _playerEboIndex += 1;
     }
 }
 
@@ -339,9 +323,6 @@ void DisplayGame::launchGame(void)
         useServerInfo();
         seconds += (GetFrameTime() / 2);
 
-        if (IsKeyPressed(KEY_KP_1)) {
-            asio::write(_socket, asio::buffer("bct 0 0\n"));
-        }
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);
         updateCamera();
 
