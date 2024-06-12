@@ -43,5 +43,6 @@ int pdr_func(server_t *, zappy_t *, client_t *, char *);
 int pgt_func(server_t *, zappy_t *, client_t *, char *);
 int pdi_func(server_t *, zappy_t *, const unsigned int);
 int enw_func(server_t *, player_t *, const int);
+int ebo_func(server_t *, const int);
 
 #endif /* !COMMAND_GUI_H_ */
