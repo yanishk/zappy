@@ -1,33 +1,40 @@
 ##
 ## EPITECH PROJECT, 2024
-## B-YEP-400-PAR-4-1-zappy-edward.lalande
+## all_test_libray
 ## File description:
 ## Makefile
 ##
 
-CXX			=	g++
-RM			=	rm -f
+CXX		=	g++
 
-CXXFLAGS	=	-Wall -Wextra -Werror
-CPPFLAGS	=	-iquote ./include
+SRC		=	main.cpp							\
+			src/display/DisplayGame.cpp			\
+			src/display/ParsesModelConfig.cpp	\
+			src/display/Player.cpp				\
+			src/display/AllPlayer.cpp			\
+			src/client/Client.cpp				\
+			src/client/Commands.cpp				\
+			src/display/Item.cpp
 
-SRC			=	./src/Main.cpp		\
+OBJ		=	$(SRC:.cpp=.o)
 
-OBJ			=	$(SRC:.cpp=.o)
+NAME	=	zappy_gui
 
-NAME		=	zappy_gui
+CPPFLAGS	=	-Wall -Wextra -iquote include -iquote src/display
+
+LIBFLAGS	=	-lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 all:	$(NAME)
 
-$(NAME):	$(OBJ)
-	$(CXX) -o $(NAME) $(OBJ)
+$(NAME): $(OBJ)
+	$(CXX) -o $(NAME) $(OBJ) $(LIBFLAGS)
 
 clean:
 	$(RM) $(OBJ)
 
-fclean:	clean
+fclean:		clean
 	$(RM) $(NAME)
 
-re:	fclean all
+re:		fclean all
 
 .PHONY:	all clean fclean re
