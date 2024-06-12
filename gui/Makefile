@@ -20,7 +20,7 @@ OBJ		=	$(SRC:.cpp=.o)
 
 NAME	=	zappy_gui
 
-CPPFLAGS	=	-Wall -Wextra -iquote include -iquote src/display
+CPPFLAGS	=	-Wall -Wextra -Werror -iquote include -iquote src/display
 
 LIBFLAGS	=	-lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 

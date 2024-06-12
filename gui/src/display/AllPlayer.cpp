@@ -115,6 +115,7 @@ int AllPlayers::getPlayerLevel(int playerID)
             return i._level;
         }
     }
+    return -1;
 }
 
 bool AllPlayers::isPlayerAlive(int playerID)
