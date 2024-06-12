@@ -67,7 +67,7 @@ namespace Zappy {
                 _name(name)
             {};
 
-            virtual int run() = 0;
+            virtual bool run() = 0;
 
             bool forward();
             bool right();
