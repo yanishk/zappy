@@ -37,6 +37,7 @@ class Player {
         std::string getTeam(void);
         Vector3 _realPos;
         float _rotationAngle;
+        bool isAlive = true;
     private:
         Color _playerColor = WHITE;
         bool _isMooving;
@@ -64,6 +65,10 @@ class AllPlayers {
         void drawPlayer(Vector3 cameraPosition);
         Vector3 getPlayerRealPos(int playerID);
         Vector3 getSize(void);
+        void setPlayerLevel(int playerID, int level);
+        int getPlayerLevel(int playerID);
+        bool isPlayerAlive(int playerID);
+        void displayMorePlayerInfo(int playerID, int screenWidth);
     private:
         Model _model;
         Vector3 _size;

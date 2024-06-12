@@ -174,17 +174,15 @@ void DisplayGame::removeItemFromIsland(Vector3 position, int type)
 
 void DisplayGame::displayMorePlayerInfo(void)
 {
-    int index = 0;
     for (auto &i: _player._allPlayer) {
         Vector3 direction = Vector3Subtract(_camera.target, _camera.position);
         direction = Vector3Normalize(direction);
         Ray ray = {_camera.position, direction};
-        index++;
 
         BoundingBox playerBox = GetMeshBoundingBox(i._playerModel.meshes[0]);
         if (i.isPlayerSelected(playerBox, ray)) {
             _selectedPlayer.first = true;
-            _selectedPlayer.second = index;
+            _selectedPlayer.second = i._playerID;
         }
     }
 }
@@ -239,9 +237,16 @@ void DisplayGame::useServerInfo(void)
             }
         }
     }
+    for (int i = 0; _cmd.getCommandAt("plv", i).size() > 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("plv", i);
+        int playerID = std::atoi(cmd.at(0).c_str());
+        int playerLevel = std::atoi(cmd.at(1).c_str());
+        if (_player.getPlayerLevel(playerID) != playerLevel)
+            _player.setPlayerLevel(playerID, playerLevel);
+    }
     for (int i = 0; _cmd.getCommandAt("pdi", _playerLevelIndex).size() >= 1; i++) {
         std::vector<std::string> cmd = _cmd.getCommandAt("pdi", _playerLevelIndex);
-        std::cout << "Player " << cmd.at(0) << " is dead !" << std::endl;
+        _player.removePlayerFromIsland(std::atoi(cmd.at(0).c_str()));
         _playerLevelIndex += 1;
     }
     for (int i = 0; _cmd.getCommandAt("ebo", _playerEboIndex).size() >= 1; i++) {
@@ -285,10 +290,7 @@ void DisplayGame::display3D(void)
 void DisplayGame::display2D(void)
 {
     if (_selectedPlayer.first) {
-        int playerInfoBoxWidth = 400;
-        int playerInfoBoxHeight = 110;
-        DrawRectangle(_screenWidth - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, playerInfoBoxHeight, Fade(GRAY, 0.5f));
-        _player._allPlayer.at(_selectedPlayer.second).displayInfo2D(_screenWidth - playerInfoBoxWidth - 5, 5);
+        _player.displayMorePlayerInfo(_selectedPlayer.second, _screenWidth);
     }
 
     int size = 8;

@@ -269,5 +269,10 @@ void Player::displayInfo2D(int x, int y)
     text.append(std::to_string(_playerColor.g));
     text.append(" b ");
     text.append(std::to_string(_playerColor.b));
+    text.append("\nis alive : ");
+    if (isAlive)
+        text.append("true");
+    else
+        text.append("false");
     DrawText(text.c_str(), x, y, 20, BLUE);
 }
