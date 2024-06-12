@@ -106,6 +106,7 @@ void initialize_teams(const arguments_t arg, zappy_t *zappy)
     TAILQ_INIT(&zappy->egg_head);
     TAILQ_INIT(&zappy->player_head);
     TAILQ_INIT(&zappy->link_head);
+    TAILQ_INIT(&zappy->id_elevation_head);
     for (int i = 0; i != arg.nb_teams; i++) {
         for (int j = 0; j != arg.nb_clients; j++)
             initialize_egg(arg, zappy, team->team_name);

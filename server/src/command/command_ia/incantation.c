@@ -29,6 +29,8 @@ static incantation_t const elevations[NB_ELEVATIONS] = {
 };
 
 #define REQUIRED_RESOURCE elevations[player->level - 1].required_resources
+#define REQUIRED_LEVEL elevations[index].elevation_level - 1
+#define REQUIRED_PLAYER elevations[index].required_players
 
 static int check_required_resources(zappy_t *zappy, player_t *player)
 {
@@ -44,6 +46,47 @@ static int check_required_resources(zappy_t *zappy, player_t *player)
     return EXIT_WITH_SUCCESS;
 }
 
+static unsigned int command_queue_size(zappy_t *zappy)
+{
+    player_t *player_on_tile = NULL;
+    unsigned int count_commands = 0;
+
+    TAILQ_FOREACH(player_on_tile, &zappy->player_head, player_entries) {
+        count_commands++;
+    }
+    return count_commands;
+}
+
+static int fill_required_player(zappy_t *zappy, player_t *player_start)
+{
+    player_t *player_on_tile = NULL;
+    id_elevation_t *id_elevation = malloc(sizeof(id_elevation_t));
+
+    TAILQ_INSERT_TAIL(&zappy->id_elevation_head, id_elevation, id_elevation_entries);
+    id_elevation->player_id = player_start->id;
+    TAILQ_FOREACH(player_on_tile, &zappy->player_head, player_entries) {
+        if (player_on_same_tile(player_start, player_on_tile) && player_on_tile->level == player_start->level) {
+            TAILQ_INSERT_TAIL(&zappy->id_elevation_head, id_elevation, id_elevation_entries);
+            id_elevation->player_id = player_on_tile->id;
+        }
+    }
+    return EXIT_WITH_SUCCESS;
+}
+
+static int check_required_player(zappy_t *zappy, player_t *player)
+{
+    int size_queue = 0;
+
+    fill_required_player(zappy, player);
+    size_queue = command_queue_size(zappy);
+    for (int index = 0; index < NB_ELEVATIONS; index++) {
+        if (REQUIRED_LEVEL == player->level && REQUIRED_PLAYER <= size_queue) {
+            return EXIT_WITH_SUCCESS;
+        }
+    }
+    return EXIT_WITH_ERROR;
+}
+
 int incantation(server_t *, zappy_t *zappy, const arguments_t,
     client_t *client)
 {
@@ -52,6 +95,8 @@ int incantation(server_t *, zappy_t *zappy, const arguments_t,
     if (player == NULL)
         return EXIT_WITH_ERROR;
     if (check_required_resources(zappy, player) == EXIT_WITH_ERROR)
+        return EXIT_WITH_ERROR;
+    if (check_required_player(zappy, player) == EXIT_WITH_ERROR)
         return EXIT_WITH_ERROR;
     return EXIT_WITH_SUCCESS;
 }

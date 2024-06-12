@@ -41,12 +41,18 @@ typedef struct link_s {
     TAILQ_ENTRY(link_s) link_entries;
 } link_t;
 
+typedef struct id_elevation_s {
+    unsigned int player_id;
+    TAILQ_ENTRY(id_elevation_s) id_elevation_entries;
+} id_elevation_t;
+
 typedef struct zappy_s {
     resource_t **resource;
     game_infos_t *infos;
     TAILQ_HEAD(, player_s) player_head;
     TAILQ_HEAD(, egg_s) egg_head;
     TAILQ_HEAD(, link_s) link_head;
+    TAILQ_HEAD(, id_elevation_s) id_elevation_head;
 } zappy_t;
 
 void initialize_game(const arguments_t, zappy_t *);
