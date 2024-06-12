@@ -19,6 +19,7 @@
     #include "Client.hpp"
     #include "Item.hpp"
     #include "Island.hpp"
+    #include "UseRecivedCmd.hpp"
 
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
@@ -57,16 +58,13 @@ class DisplayGame {
         std::vector<Item> _allItem;
         std::vector<Item> _allItemModel;
         std::pair<bool, std::size_t> _selectedPlayer;
-        int _newPlayerIndex = 0;
-        int _playerLevelIndex = 0;
-        int _playerEboIndex = 0;
         Model _sky;
         asio::ip::tcp::socket &_socket;
         bool _isAnimated;
 
         void initWaterShader(void);
         void displayMorePlayerInfo(void);
-        void useServerInfo(void);
+        void useServerInfo(UseRecivedCmd &recivedCmd);
         int getNbrItemTypeOnIsland(Vector3 pos, int type);
         void display3D(void);
         void display2D(void);

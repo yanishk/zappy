@@ -14,7 +14,8 @@ SRC		=	main.cpp							\
 			src/display/AllPlayer.cpp			\
 			src/client/Client.cpp				\
 			src/client/Commands.cpp				\
-			src/display/Item.cpp
+			src/display/Item.cpp				\
+			src/display/UseRecivedCmd.cpp		\
 
 OBJ		=	$(SRC:.cpp=.o)
 

@@ -16,6 +16,9 @@ Player::Player(Vector3 position)
     _playerPosition.z += -2 + (rand() % 4);
     _isMooving = false;
     _rotationAngle = 0;
+    for (std::size_t i = 0; i < NBR_ITEM; i++) {
+        _inventory.push_back(0);
+    }
 }
 
 void Player::DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint)
@@ -247,9 +250,20 @@ bool Player::isPlayerSelected(BoundingBox playerBox, Ray ray)
     return false;
 }
 
+void Player::addItem(int itemType)
+{
+    _inventory.at(itemType) += 1;
+}
+
+void Player::removeItem(int itemType)
+{
+    _inventory.at(itemType) -= 1;
+}
+
 void Player::displayInfo2D(int x, int y)
 {
     std::string text;
+
     text.append("Player ID : ");
     text.append(std::to_string(_playerID));
     text.append("\nPlayer level : ");
@@ -263,16 +277,19 @@ void Player::displayInfo2D(int x, int y)
     text.append(std::to_string((int)_playerPosition.y));
     text.append(" z ");
     text.append(std::to_string((int)_playerPosition.z));
-    text.append("\ncolor : r ");
-    text.append(std::to_string(_playerColor.r));
-    text.append(" g ");
-    text.append(std::to_string(_playerColor.g));
-    text.append(" b ");
+    text.append("\nPlayer real position : x ");
+    text.append(std::to_string((int)_realPos.x));
+    text.append(" y ");
+    text.append(std::to_string((int)_realPos.y));
+    text.append(" z ");
+    text.append(std::to_string((int)_realPos.z));
     text.append(std::to_string(_playerColor.b));
-    text.append("\nis alive : ");
-    if (isAlive)
-        text.append("true");
-    else
-        text.append("false");
-    DrawText(text.c_str(), x, y, 20, BLUE);
+    text.append("\nPlayer inventory :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
+    for (std::size_t i = 0; i < NBR_ITEM; i++) {
+        text.append("|\t");
+        text.append(std::to_string(_inventory.at(i)));
+        text.append("\t");
+    }
+    text.append("|");
+    DrawText(text.c_str(), x, y, TEXT_SIZE, BLUE);
 }

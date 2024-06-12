@@ -198,23 +198,8 @@ int DisplayGame::getNbrItemTypeOnIsland(Vector3 pos, int type)
     return nbr;
 }
 
-void DisplayGame::useServerInfo(void)
+void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
 {
-    while (_cmd.getCommandAt("pnw", _newPlayerIndex).size() > 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pnw", _newPlayerIndex);
-        _player.addPlayerToIsland((Vector3){std::stof(cmd.at(1).c_str()), 1.8, std::stof(cmd.at(2).c_str())}, std::atoi(cmd.at(0).c_str()));
-        _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
-        _player.setPlayerTeam(cmd.at(5), std::atoi(cmd.at(0).c_str()));
-        _newPlayerIndex++;
-    }
-    for (int i = 0; _cmd.getCommandAt("ppo", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("ppo", i);
-        Vector3 newPos = (Vector3){std::stof(cmd.at(1).c_str()), 1.8, std::stof(cmd.at(2).c_str())};
-
-        if (!Utils::Vec3Comp(newPos, _player.getPlayerRealPos(std::atoi(cmd.at(0).c_str()))))
-            _player.moovePlayerToIsland(newPos, std::atoi(cmd.at(0).c_str()));
-        _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
-    }
     if (!_cmd.getCommandAt("msz", 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt("msz", 0);
 
@@ -231,30 +216,30 @@ void DisplayGame::useServerInfo(void)
         Vector3 itemPosition = (Vector3){x, 1.8, z};
         for (std::size_t j = 2; j < cmd.size(); j++) {
             int nbItem = std::atoi(cmd.at(j).c_str());
-            if (nbItem == getNbrItemTypeOnIsland(itemPosition, j - 2))
+            int nbItemOnIsland = getNbrItemTypeOnIsland(itemPosition, j - 2);
+            if (nbItem == nbItemOnIsland)
                 continue;
-            for (int k = 0; k < nbItem; k++) {
-                addItemToIsland(itemPosition, j - 2);
+            if (nbItem > nbItemOnIsland) {
+                for (int k = 0; k < nbItem; k++) {
+                    addItemToIsland(itemPosition, j - 2);
+                }
+            }
+            if (nbItem < nbItemOnIsland) {
+                for (int k = nbItem; k < nbItemOnIsland; k++) {
+                    removeItemFromIsland(itemPosition, j - 2);
+                }
             }
         }
     }
-    for (int i = 0; _cmd.getCommandAt("plv", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("plv", i);
-        int playerID = std::atoi(cmd.at(0).c_str());
-        int playerLevel = std::atoi(cmd.at(1).c_str());
-        if (_player.getPlayerLevel(playerID) != playerLevel)
-            _player.setPlayerLevel(playerID, playerLevel);
-    }
-    for (int i = 0; _cmd.getCommandAt("pdi", _playerLevelIndex).size() >= 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pdi", _playerLevelIndex);
-        _player.removePlayerFromIsland(std::atoi(cmd.at(0).c_str()));
-        _playerLevelIndex += 1;
-    }
-    for (int i = 0; _cmd.getCommandAt("ebo", _playerEboIndex).size() >= 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("ebo", _playerEboIndex);
-        std::cout << "There is " << cmd.at(0) << " Egg(s) !" << std::endl;
-        _playerEboIndex += 1;
-    }
+
+    recivedCmd.getPnw();
+    recivedCmd.getPpo();
+    recivedCmd.getPlv();
+    recivedCmd.getPdi();
+    recivedCmd.getEbo();
+    recivedCmd.getPgt();
+    recivedCmd.getPdr();
+    recivedCmd.getPin();
 }
 
 void DisplayGame::display3D(void)
@@ -319,11 +304,13 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
+    UseRecivedCmd recivedCmd(_cmd, _player);
 
     SetTargetFPS(60);
     float seconds = 0.0f;
     while (!WindowShouldClose()) {
-        useServerInfo();
+        useServerInfo(recivedCmd);
+
         seconds += (GetFrameTime() / 2);
 
         if (IsKeyDown(KEY_KP_1))

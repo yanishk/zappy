@@ -16,6 +16,10 @@
     #include "Utils.hpp"
 
     #define MAX_RGB 255
+    #define PLAYER_INFO_NBR_LINE 5
+    #define TEXT_SIZE 20
+    #define TEXT_LINE_SPACING_RATIO 1.30
+    #define NBR_ITEM 7
 
 class Player {
     public:
@@ -27,6 +31,8 @@ class Player {
         bool isPlayerSelected(BoundingBox playerBox, Ray ray);
         void displayInfo2D(int x, int y);
         void setPlayerColor(void);
+        void addItem(int itemType);
+        void removeItem(int itemType);
 
         Model _playerModel;
         ModelAnimation *_playerAnimation;
@@ -50,6 +56,7 @@ class Player {
         void DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint);
         BoundingBox UpdateBoundingBox(BoundingBox box, Vector3 position);
         Vector3 RotatePointAroundY(Vector3 point);
+        std::vector<int> _inventory;
 };
 
 class AllPlayers {
@@ -69,6 +76,8 @@ class AllPlayers {
         int getPlayerLevel(int playerID);
         bool isPlayerAlive(int playerID);
         void displayMorePlayerInfo(int playerID, int screenWidth);
+        void addItem(int playerID, int itemType);
+        void removeItem(int playerID, int itemType);
     private:
         Model _model;
         Vector3 _size;

@@ -136,11 +136,29 @@ bool AllPlayers::isPlayerAlive(int playerID)
 void AllPlayers::displayMorePlayerInfo(int playerID, int screenWidth)
 {
     int playerInfoBoxWidth = 400;
-    int playerInfoBoxHeight = 110;
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
-            DrawRectangle(screenWidth - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, playerInfoBoxHeight, Fade(GRAY, 0.5f));
+            DrawRectangle(screenWidth - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
             i.displayInfo2D(screenWidth - playerInfoBoxWidth - 5, 5);
         }
     }
 }
+
+void AllPlayers::addItem(int playerID, int itemType)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.addItem(itemType);
+        }
+    }
+}
+
+void AllPlayers::removeItem(int playerID, int itemType)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.removeItem(itemType);
+        }
+    }
+}
+
