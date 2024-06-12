@@ -5,7 +5,6 @@
 ** broadcast
 */
 
-#include "server.h"
 #include "command_ia.h"
 
 static tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {

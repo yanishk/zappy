@@ -10,7 +10,7 @@
 
     #include "common_command.h"
 
-    #define NB_IA_CMD 12
+    #define NB_IA_CMD 13
 
     #define INVENTORY_COMMAND "Inventory"
     #define TAKE_COMMAND "Take"
@@ -23,6 +23,7 @@
     #define EJECT_COMMAND "Eject"
     #define LOOK_COMMAND "Look"
     #define BROADCAST_COMMAND "Broadcast"
+    #define INCANTATION_COMMAND "Incantation"
 
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]
@@ -75,5 +76,6 @@ int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 int eject_from_tile(server_t *, zappy_t *, const arguments_t, client_t *);
 int broadcast(server_t *, zappy_t *, const arguments_t, client_t *);
 int look_around(server_t *, zappy_t *, const arguments_t, client_t *);
+int incantation(server_t *, zappy_t *, const arguments_t, client_t *);
 
 #endif /* !COMMAND_AI_H_ */
