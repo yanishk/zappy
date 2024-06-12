@@ -39,14 +39,11 @@ void ParsesModelConfig::parseTypeModel(std::string &line)
         line.erase(0, modelType.length());
         if (line == ITEM) {
             _typeList.push_back(Item);
-        }
-        else if (line == ISLAND) {
+        } else if (line == ISLAND) {
             _typeList.push_back(Island);
-        }
-        else if (line == PLAYER) {
+        } else if (line == PLAYER) {
             _typeList.push_back(Player);
-        }
-        else
+        } else
             throw ErrorHandling("Bad config file");
     }
 }
