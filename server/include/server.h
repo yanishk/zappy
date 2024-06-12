@@ -56,7 +56,7 @@ void answer_client(const int, const unsigned int);
 void close_client_socket(server_t *, zappy_t *, client_t *);
 
 void check_players_food(server_t *, zappy_t *, arguments_t);
-int insert_game_command_in_queue(server_t *, client_t *);
+int insert_game_command_in_queue(server_t *, arguments_t, client_t *);
 void insert_other_command_in_queue(server_t *, client_t *);
 void check_command_queue(server_t *, zappy_t *, arguments_t *, client_t *);
 
