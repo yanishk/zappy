@@ -18,7 +18,7 @@ int get_player_direction(const player_t *player)
 {
     if (player == NULL)
         return ERROR_RETURN;
-    for (size_t index = 0; index < NB_DIR; index++) {
+    for (size_t index = 0; index < NB_DIRECTIONS; index++) {
         if (direction[index].angle == player->direction)
             return direction[index].direction;
     }

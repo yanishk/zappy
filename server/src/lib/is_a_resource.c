@@ -6,7 +6,7 @@
 */
 
 #include <string.h>
-#include "map.h"
+#include "game.h"
 
 bool is_a_resource(const char *argument)
 {

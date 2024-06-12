@@ -53,6 +53,7 @@ namespace Zappy {
             };
 
             static Team &getTeam(TeamOptions options);
+            const std::string &getName();
             Players _players;
 
             int run();

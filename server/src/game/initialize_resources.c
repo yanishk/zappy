@@ -7,7 +7,7 @@
 
 #include <math.h>
 #include <time.h>
-#include "map.h"
+#include "game.h"
 #include "server.h"
 
 struct repartion_resource repartion[] = {
@@ -28,7 +28,7 @@ static void repartition_resource(const arguments_t *args, zappy_t *zappy,
     int rand_width = 0;
     int rand_height = 0;
 
-    while (index != max) {
+    while (index < max) {
         rand_width = (rand()) % args->width;
         rand_height = (rand()) % args->height;
         if (get_resources(&zappy->resource[rand_width][rand_height], name) > 0)
@@ -49,7 +49,7 @@ void initialize_resources(resource_t *resource)
     resource->thystame = 0;
 }
 
-void density_onland(const arguments_t *args, zappy_t *zappy)
+static void density_onland(const arguments_t *args, zappy_t *zappy)
 {
     for (int x = 0; x < args->width; x++) {
         for (int y = 0; y < args->height; y++) {
@@ -60,4 +60,12 @@ void density_onland(const arguments_t *args, zappy_t *zappy)
         repartition_resource(args, zappy, repartion[index].name,
             repartion[index].density);
     }
+}
+
+void init_basis_map(zappy_t *zappy, const arguments_t *arg)
+{
+    zappy->resource = malloc(sizeof(resource_t *) * arg->width);
+    for (int x = 0; x < arg->height; x++)
+        zappy->resource[x] = malloc(sizeof(resource_t) * arg->height);
+    density_onland(arg, zappy);
 }

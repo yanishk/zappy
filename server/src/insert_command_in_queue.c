@@ -24,7 +24,8 @@ int insert_game_command_in_queue(server_t *server, client_t *client)
         strcmp(server->cmd_arg_array[0], cmd_list_ia[i].name) == 0 &&
         command_arg_is_valid(server, cmd_list_ia[i].name)) {
             command = malloc(sizeof(command_ia_t));
-            TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);
+            TAILQ_INSERT_TAIL(&client->command_head, command,
+                command_ia_entries);
             command->array = server->cmd_arg_array;
             command->time_unit = cmd_list_ia[i].time_unit;
             command->index = i;
@@ -41,7 +42,7 @@ void insert_other_command_in_queue(server_t *server,
     command_ia_t *command = NULL;
 
     command = malloc(sizeof(command_ia_t));
-    TAILQ_INSERT_TAIL(&client->command_head, command, command_entries);
+    TAILQ_INSERT_TAIL(&client->command_head, command, command_ia_entries);
     command->array = server->cmd_arg_array;
     command->time_unit = 0;
     command->index = NB_IA_CMD;

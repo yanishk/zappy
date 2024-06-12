@@ -10,48 +10,45 @@
 #include "command_ia.h"
 #include "command_gui.h"
 
-static unsigned int count_eggs_remaining(const server_t *server,
-    const zappy_t *zappy)
+void link_client_and_player(zappy_t *zappy, const unsigned int client_fd,
+    const unsigned int player_id)
 {
-    unsigned int count_eggs = 0;
-    player_t *player = NULL;
+    link_t *link = malloc(sizeof(link_t));
 
-    TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
-        if (strcmp(server->cmd_arg_array[0], player->team_name) == 0 &&
-            player->status != IS_PLAYER) {
-            count_eggs++;
-        }
-    }
-    return count_eggs;
+    if (link == NULL)
+        return;
+    TAILQ_INSERT_TAIL(&zappy->link_head, link, link_entries);
+    link->client_fd = client_fd;
+    link->player_id = player_id;
 }
 
 int connect_player(server_t *server, zappy_t *zappy, const arguments_t arg,
     const unsigned int client_fd)
 {
-    unsigned int count_eggs = 0;
-    player_t *chosen_egg = NULL;
+    egg_t *chosen_egg = NULL;
 
     if (is_player_connected(zappy, client_fd))
         return UNKNOWN_COMMAND;
     chosen_egg = get_random_team_egg(zappy, server->cmd_arg_array[0]);
     if (chosen_egg == NULL)
         return UNKNOWN_COMMAND;
-    chosen_egg->id = client_fd;
-    chosen_egg->status = IS_PLAYER;
-    chosen_egg->clock_begin = clock();
-    count_eggs = count_eggs_remaining(server, zappy);
-    dprintf(client_fd, "%d %d\n%d\n", arg.height,
-        arg.width, count_eggs);
+    initialize_player(zappy, chosen_egg);
+    link_client_and_player(zappy, client_fd, zappy->infos->last_player_id);
+    ebo_func(server, chosen_egg->id);
+    free_egg(zappy, chosen_egg);
+    dprintf(client_fd, "%d\n%d %d\n",
+        count_team_eggs(zappy, server->cmd_arg_array[0]), arg.height,
+        arg.width);
     pnw_func(server, zappy, client_fd);
     return COMMAND_SUCCESS;
 }
 
 bool is_player_connected(const zappy_t *zappy, const unsigned int client_fd)
 {
-    player_t *player = NULL;
+    link_t *link = NULL;
 
-    TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
-        if (player->id == client_fd)
+    TAILQ_FOREACH(link, &zappy->link_head, link_entries) {
+        if (link->client_fd == client_fd)
             return true;
     }
     return false;

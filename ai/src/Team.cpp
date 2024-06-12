@@ -14,6 +14,11 @@ Zappy::Team &Zappy::Team::getTeam(TeamOptions options)
     return team;
 }
 
+const std::string &Zappy::Team::getName()
+{
+    return _name;
+}
+
 int Zappy::Team::run()
 {
     while (true) {

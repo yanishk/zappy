@@ -13,7 +13,7 @@ static unsigned int command_queue_size(client_t *client)
     command_ia_t *command = NULL;
     unsigned int count_commands = 0;
 
-    TAILQ_FOREACH(command, &client->command_head, command_entries)
+    TAILQ_FOREACH(command, &client->command_head, command_ia_entries)
         count_commands++;
     return count_commands;
 }
