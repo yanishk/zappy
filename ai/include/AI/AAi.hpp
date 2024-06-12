@@ -19,6 +19,22 @@
     #define START_LEVEL 1
     #define START_WAIT 0
 
+    #define FORWARD_CMD "Forward\n"
+    #define RIGHT_CMD "Right\n"
+    #define LEFT_CMD "Left\n"
+    #define LOOK_CMD "Look\n"
+    #define INVENTORY_CMD "Inventory\n"
+    #define BROADCAST_CMD "Broadcast "
+    #define CONNECT_NBR_CMD "Connect_nbr\n"
+    #define FORK_CMD "Fork\n"
+    #define EJECT_CMD "Eject\n"
+    #define TAKE_CMD "Take "
+    #define SET_CMD "Set "
+    #define INCANTATION_CMD "Incantation\n"
+
+    #define RESPONSE_OK "ok"
+    #define RESPONSE_KO "ko"
+
     #define ERROR -1
     #define DEAD "dead"
 

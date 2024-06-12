@@ -10,22 +10,23 @@
 
 bool Zappy::AAi::forward()
 {
-    _network.sendInformationToServer("Forward\n");
-    return true;
+    _network.sendInformationToServer(FORWARD_CMD);
+
+    return _network.getInfoFromServer() == RESPONSE_OK;
 }
 
 bool Zappy::AAi::right()
 {
-    _network.sendInformationToServer("Right\n");
+    _network.sendInformationToServer(RIGHT_CMD);
 
-    return true;
+    return _network.getInfoFromServer() == RESPONSE_OK;
 }
 
 bool Zappy::AAi::left()
 {
-    _network.sendInformationToServer("Left\n");
+    _network.sendInformationToServer(LEFT_CMD);
 
-    return true;
+    return _network.getInfoFromServer() == RESPONSE_OK;
 }
 
 std::size_t Zappy::AAi::countMember(const std::string &line) const
@@ -43,7 +44,7 @@ std::size_t Zappy::AAi::countMember(const std::string &line) const
 
 std::vector<std::string> Zappy::AAi::look()
 {
-    _network.sendInformationToServer("Look\n");
+    _network.sendInformationToServer(LOOK_CMD);
     std::vector<std::string> vector;
     std::string information = _network.getInfoFromServer();
     std::size_t nbMember = countMember(information);
@@ -73,6 +74,7 @@ std::vector<std::string> Zappy::AAi::look()
 
     return vector;
 }
+
 bool Zappy::AAi::checkRessources(const std::vector<std::string> &newRessources)
 {
     for (const auto &i: newRessources) {
@@ -91,7 +93,7 @@ bool Zappy::AAi::checkRessources(const std::vector<std::string> &newRessources)
 
 bool Zappy::AAi::inventory()
 {
-    _network.sendInformationToServer("Inventory\n");
+    _network.sendInformationToServer(INVENTORY_CMD);
     std::vector<std::string> vector;
     std::string information = _network.getInfoFromServer();
     std::size_t nbMember = countMember(information);
@@ -124,41 +126,41 @@ bool Zappy::AAi::inventory()
 
 bool Zappy::AAi::broadcastText(const std::string &text)
 {
-    _network.sendInformationToServer("Broadcast " + text);
+    _network.sendInformationToServer(BROADCAST_CMD + text);
 
-    return true;
+    return _network.getInfoFromServer() == RESPONSE_OK;
 }
 
 std::size_t Zappy::AAi::connectNumber()
 {
-    _network.sendInformationToServer("Connect_nbr\n");
+    _network.sendInformationToServer(CONNECT_NBR_CMD);
 
     return std::atoi(_network.getInfoFromServer().c_str());
 }
 
 bool Zappy::AAi::fork()
 {
-    _network.sendInformationToServer("Fork\n");
+    _network.sendInformationToServer(FORK_CMD);
 
-    return true;
+    return _network.getInfoFromServer() == RESPONSE_OK;
 }
 
 bool Zappy::AAi::eject()
 {
-    _network.sendInformationToServer("Eject\n");
+    _network.sendInformationToServer(EJECT_CMD);
 
     std::string response = _network.getInfoFromServer();
 
-    return response == "ok";
+    return response == RESPONSE_OK;
 }
 
 bool Zappy::AAi::takeObject(const std::string &object)
 {
-    _network.sendInformationToServer("Take" + object + "\n");
+    _network.sendInformationToServer(TAKE_CMD + object + "\n");
 
     std::string response = _network.getInfoFromServer();
 
-    if (response != "ok") {
+    if (response != RESPONSE_OK) {
         return false;
     }
 
@@ -169,11 +171,11 @@ bool Zappy::AAi::takeObject(const std::string &object)
 
 bool Zappy::AAi::setObject(const std::string &object)
 {
-    _network.sendInformationToServer("Set" + object + "\n");
+    _network.sendInformationToServer(SET_CMD + object + "\n");
 
     std::string response = _network.getInfoFromServer();
 
-    if (response != "ok") {
+    if (response != RESPONSE_OK) {
         return false;
     }
 
@@ -184,7 +186,11 @@ bool Zappy::AAi::setObject(const std::string &object)
 
 bool Zappy::AAi::incantation()
 {
-    _network.sendInformationToServer("Incantation\n");
+    _network.sendInformationToServer(INCANTATION_CMD);
+
+    if (_network.getInfoFromServer() == RESPONSE_KO) {
+        return false;
+    }
 
     return true;
 }
