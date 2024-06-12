@@ -18,6 +18,5 @@ int turn_right(server_t *server, zappy_t *zappy, const arguments_t,
         player->direction = NORTH;
     else
         player->direction += RIGHT_ANGLE;
-    ppo(server, zappy, player->id);
-    return EXIT_WITH_SUCCESS;
+    return ppo(server, zappy, player->id);
 }
