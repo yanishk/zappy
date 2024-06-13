@@ -7,6 +7,8 @@
 
 #include <sstream>
 #include "AI/AAi.hpp"
+#include "AI/Quentin.hpp"
+#include "Team.hpp"
 
 bool Zappy::AAi::forward()
 {
@@ -142,7 +144,15 @@ bool Zappy::AAi::fork()
 {
     _network.sendInformationToServer(FORK_CMD);
 
-    return _network.getInfoFromServer() == RESPONSE_OK;
+    if (_network.getInfoFromServer() == RESPONSE_KO) {
+        return false;
+    }
+
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
+
+    team._players.push_back(std::make_unique<Queen>(_network.getPort(), _name));
+
+    return true;
 }
 
 bool Zappy::AAi::eject()

@@ -22,11 +22,20 @@ namespace Zappy {
 
         public:
 
-            Quentin(const std::string &port, const size_t nbRefills, const std::string &name): AAi(port, name), _nbRefills(nbRefills) {
+            Quentin(const std::string &port, const std::string &name, const size_t nbRefills): AAi(port, name), _nbRefills(nbRefills) {
+                std::cout << "Quentin init\n";
                 _network.sendInformationToServer(_name);
+                if (_network.getInfoFromServer() == RESPONSE_KO) {
+                    std::cout << "a non\n";
+                    return;
+                }
                 _network.getInfoFromServer();
-                _network.getInfoFromServer();
+                _thread = std::thread(&Quentin::run, this);
             };
+
+            ~Quentin() {
+                _thread.join();
+            }
 
             bool run();
 
@@ -37,6 +46,7 @@ namespace Zappy {
 
             size_t _nbRefills;
             std::vector<Action> _actions;
+            std::thread _thread;
 
     };
 

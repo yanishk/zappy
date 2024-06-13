@@ -43,13 +43,18 @@ namespace Zappy
     class Searcher : public AAi {
         public:
             Searcher(const std::string &port, Order order, const std::string &name):
-                AAi(port, name,INITIALIZE_MODE),
+                AAi(port, name),
                 _order(order),
                 _isGoingToQueen(false) {
                 _network.sendInformationToServer(_name);
                 _network.getInfoFromServer();
                 _network.getInfoFromServer();
+                _thread = std::thread(&Searcher::run, this);
             };
+
+            ~Searcher () {
+                _thread.join();
+            }
 
             bool run();
 
@@ -68,6 +73,7 @@ namespace Zappy
             std::vector<Mouvement> _nextMouvment;
             std::vector<std::string> _objectToTake;
             bool _isGoingToQueen;
+            std::thread _thread;
 
             void move();
 
