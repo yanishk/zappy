@@ -61,7 +61,7 @@ class CommandManager {
         std::string getCommandInfoAt(const std::string& cmd,
             std::size_t vectorIndex, std::size_t elementIndex);
 
-        void eraseFirstCmdInMap(std::unordered_map<std::string, std::vector<std::vector<std::string>>> &cmdMap, const std::string &cmd);
+        void eraseFirstCmdInMap(const std::string &cmd);
 
         // fill for GUI
 
