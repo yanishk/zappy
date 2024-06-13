@@ -7,12 +7,12 @@
 
 #include "command_gui.h"
 
-int mct_func(server_t *, zappy_t *zappy, const arguments_t arg,
+int mct_func(server_t *, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
-    for (int i = 0; i < arg.height; i++) {
-        for (int j = 0; j < arg.width; j++) {
-            print_tile_resources(client->client_fd, i, j,
+    for (int i = 0; i < arg->height; i++) {
+        for (int j = 0; j < arg->width; j++) {
+            print_tile_resources(client->client_fd, j, i,
                 zappy->resource[i][j]);
         }
     }

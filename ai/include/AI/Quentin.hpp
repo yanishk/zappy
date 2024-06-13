@@ -22,9 +22,13 @@ namespace Zappy {
 
         public:
 
-            Quentin(const std::string &port, const size_t nbRefills): AAi(port), _nbRefills(nbRefills) {};
+            Quentin(const std::string &port, const size_t nbRefills, const std::string &name): AAi(port, name), _nbRefills(nbRefills) {
+                _network.sendInformationToServer(_name);
+                _network.getInfoFromServer();
+                _network.getInfoFromServer();
+            };
 
-            int run();
+            bool run();
 
         private:
 

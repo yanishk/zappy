@@ -10,7 +10,7 @@
 
     #include "common_command.h"
 
-    #define NB_GUI_CMD 8
+    #define NB_GUI_CMD 10
 
     #define MSZ_COMMAND "msz"
     #define MCT_COMMAND "mct"
@@ -19,23 +19,32 @@
     #define PLV_COMMAND "plv"
     #define PPO_COMMAND "ppo"
     #define PIN_COMMAND "pin"
+    #define SGT_COMMAND "sgt"
+    #define SST_COMMAND "sst"
 
 typedef struct command_infos_gui_s {
     char *name;
     size_t arg_nb;
 } command_infos_gui_t;
 
+typedef struct associate_resource_nb_s {
+    char *name;
+    int code_resource;
+} associate_resource_nb_t;
+
 extern int (*cmd_func_gui[NB_GUI_CMD])(server_t *, zappy_t *,
-    const arguments_t, client_t *);
+    arguments_t *, client_t *);
 extern command_infos_gui_t cmd_list_gui[NB_GUI_CMD];
 
-int msz_func(server_t *, zappy_t *, const arguments_t, client_t *);
-int bct_func(server_t *, zappy_t *, const arguments_t, client_t *);
-int mct_func(server_t *, zappy_t *, const arguments_t, client_t *);
-int tna_func(server_t *, zappy_t *, const arguments_t, client_t *);
-int plv_func(server_t *, zappy_t *, const arguments_t, client_t *);
-int ppo_func(server_t *, zappy_t *, const arguments_t, client_t *);
-int pin_func(server_t *, zappy_t *, const arguments_t, client_t *);
+int msz_func(server_t *, zappy_t *, arguments_t *, client_t *);
+int bct_func(server_t *, zappy_t *, arguments_t *, client_t *);
+int mct_func(server_t *, zappy_t *, arguments_t *, client_t *);
+int tna_func(server_t *, zappy_t *, arguments_t *, client_t *);
+int plv_func(server_t *, zappy_t *, arguments_t *, client_t *);
+int ppo_func(server_t *, zappy_t *, arguments_t *, client_t *);
+int pin_func(server_t *, zappy_t *, arguments_t *, client_t *);
+int sgt_func(server_t *, zappy_t *, arguments_t *, client_t *);
+int sst_func(server_t *, zappy_t *, arguments_t *, client_t *);
 
 int pnw_func(server_t *, zappy_t *, const unsigned int);
 int pfk_func(server_t *, zappy_t *, const unsigned int);
@@ -45,5 +54,8 @@ int pdi_func(server_t *, zappy_t *, const unsigned int);
 int enw_func(server_t *, player_t *, const int);
 int ebo_func(server_t *, const int);
 int edi_func(server_t *, const int);
+int pex_func(server_t *, player_t *);
+
+int ppo(server_t *, zappy_t *, const int);
 
 #endif /* !COMMAND_GUI_H_ */

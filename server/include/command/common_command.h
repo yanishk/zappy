@@ -12,6 +12,6 @@
 
     #define EXIT_COMMAND "Exit"
 
-int exit_func(server_t *, zappy_t *, const arguments_t, client_t *);
+int exit_func(server_t *, zappy_t *, arguments_t *, client_t *);
 
 #endif /* !COMMON_COMMAND_H_ */

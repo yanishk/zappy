@@ -30,7 +30,7 @@ static void handle_ctrl_c(int signal)
 }
 
 static int check_clients_sockets(server_t *server, zappy_t *zappy,
-    const arguments_t arg)
+    arguments_t *arg)
 {
     int client_fd = 0;
     client_t *client = NULL;
@@ -42,12 +42,11 @@ static int check_clients_sockets(server_t *server, zappy_t *zappy,
             get_user_input(server, zappy, arg, client);
         } else
             client = get_client_in_struct(server, client_fd);
-        check_players_food(server, zappy, arg);
+        check_players_food(server, zappy, *arg);
         if (client == NULL)
             continue;
         check_command_queue(server, zappy, arg, client);
         close_client_socket(server, zappy, client);
-        replace_disconnected_players(arg, zappy);
     }
     return EXIT_WITH_SUCCESS;
 }
@@ -134,7 +133,7 @@ static int set_sockets(server_t *server)
     return EXIT_WITH_SUCCESS;
 }
 
-int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
+int run_server(server_t *server, zappy_t *zappy, arguments_t *arg)
 {
     int select_status = 0;
     clock_t refill = clock();
@@ -150,7 +149,7 @@ int run_server(server_t *server, zappy_t *zappy, const arguments_t arg)
         if (check_server_socket(server) == EXIT_WITH_ERROR ||
             check_clients_sockets(server, zappy, arg) == EXIT_WITH_ERROR)
             return EXIT_WITH_ERROR;
-        refill_map(zappy, arg, &refill);
+        refill_map(zappy, *arg, &refill);
     }
     return EXIT_WITH_SUCCESS;
 }

@@ -8,7 +8,7 @@
 #include "command_ia.h"
 
 int (*cmd_func_ia[NB_IA_CMD])(server_t *server, zappy_t *zappy,
-    const arguments_t arg, client_t *client) = {
+    arguments_t *arg, client_t *client) = {
     &exit_func,
     &inventory_command,
     &take_object,

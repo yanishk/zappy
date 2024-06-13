@@ -42,11 +42,16 @@ namespace Zappy
 
     class Searcher : public AAi {
         public:
-            Searcher(const std::string &port, Order order): AAi(port, INITIALIZE_MODE), _order(order) {
-                _isGoingToQueen = false;
+            Searcher(const std::string &port, Order order, const std::string &name):
+                AAi(port, name,INITIALIZE_MODE),
+                _order(order),
+                _isGoingToQueen(false) {
+                _network.sendInformationToServer(_name);
+                _network.getInfoFromServer();
+                _network.getInfoFromServer();
             };
 
-            int run();
+            bool run();
 
         protected:
 
@@ -67,10 +72,10 @@ namespace Zappy
             void move();
 
             bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
-            void whereShouldIGo(std::vector<std::vector<bool>> priority);
+            void whereShouldIGo(std::vector<int> priority);
             void updateMove(std::pair<int, int> pos);
 
-            std::vector<std::vector<bool>> estimatePriority();
+            std::vector<int> estimatePriority();
             std::pair<int, int> whereIsThePriority(int index);
 
             void updateOrder();

@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-int inventory_command(server_t *, zappy_t *zappy, const arguments_t,
+int inventory_command(server_t *, zappy_t *zappy, arguments_t *,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);

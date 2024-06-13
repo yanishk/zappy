@@ -54,7 +54,7 @@ typedef struct road_broadcast_s {
     int height_undirect;
 } road_broadcast_t;
 
-extern int (*cmd_func_ia[NB_IA_CMD])(server_t *, zappy_t *, const arguments_t,
+extern int (*cmd_func_ia[NB_IA_CMD])(server_t *, zappy_t *, arguments_t *,
     client_t *);
 extern command_infos_t cmd_list_ia[NB_IA_CMD];
 
@@ -65,17 +65,17 @@ void move_player(size_t direction, player_t *, const arguments_t);
 char *get_on_land(zappy_t *, coordinate_t, unsigned int);
 void free_ia_command(client_t *, command_ia_t *);
 
-int inventory_command(server_t *, zappy_t *, const arguments_t, client_t *);
-int move_forward(server_t *, zappy_t *, const arguments_t, client_t *);
-int turn_left(server_t *, zappy_t *, const arguments_t, client_t *);
-int turn_right(server_t *, zappy_t *, const arguments_t, client_t *);
-int connect_nbr(server_t *, zappy_t *, const arguments_t, client_t *);
-int set_object(server_t *, zappy_t *, const arguments_t, client_t *);
-int take_object(server_t *, zappy_t *, const arguments_t, client_t *);
-int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
-int eject_from_tile(server_t *, zappy_t *, const arguments_t, client_t *);
-int broadcast(server_t *, zappy_t *, const arguments_t, client_t *);
-int look_around(server_t *, zappy_t *, const arguments_t, client_t *);
+int inventory_command(server_t *, zappy_t *, arguments_t *, client_t *);
+int move_forward(server_t *, zappy_t *, arguments_t *, client_t *);
+int turn_left(server_t *, zappy_t *, arguments_t *, client_t *);
+int turn_right(server_t *, zappy_t *, arguments_t *, client_t *);
+int connect_nbr(server_t *, zappy_t *, arguments_t *, client_t *);
+int set_object(server_t *, zappy_t *, arguments_t *, client_t *);
+int take_object(server_t *, zappy_t *, arguments_t *, client_t *);
+int fork_player(server_t *, zappy_t *, arguments_t *, client_t *);
+int eject_from_tile(server_t *, zappy_t *, arguments_t *, client_t *);
+int broadcast(server_t *, zappy_t *, arguments_t *, client_t *);
+int look_around(server_t *, zappy_t *, arguments_t *, client_t *);
 int check_incantation(server_t *, zappy_t *, const arguments_t, client_t *);
 int do_incantation(server_t *, zappy_t *, const arguments_t, client_t *);
 

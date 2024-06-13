@@ -8,11 +8,11 @@
 #include "command_gui.h"
 #include "arguments.h"
 
-int tna_func(server_t *, zappy_t *, const arguments_t arg, client_t *client)
+int tna_func(server_t *, zappy_t *, arguments_t *arg, client_t *client)
 {
     team_t *team = NULL;
 
-    TAILQ_FOREACH(team, &arg.team_head, team_entries)
+    TAILQ_FOREACH(team, &arg->team_head, team_entries)
         dprintf(client->client_fd, "tna %s\n", team->team_name);
     return EXIT_WITH_SUCCESS;
 }

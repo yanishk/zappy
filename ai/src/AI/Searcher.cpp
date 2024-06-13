@@ -66,14 +66,15 @@ bool Zappy::Searcher::haveIToTake(const std::string &item, std::unique_ptr<doubl
     return false;
 }
 
-std::vector<std::vector<bool>> Zappy::Searcher::estimatePriority()
+std::vector<int> Zappy::Searcher::estimatePriority()
 {
-    std::vector <std::vector<bool>> priority;
+    std::vector <int> priority;
     double objectDensity(1.0);
 
     for (std::size_t i = 0; i < _lastLook.size(); ++i) {
 
-        std::vector <bool> itemPriority;
+        int itemPriority = 0;
+
         for (std::size_t j = 0; j < _lastLook.size(); ++j) {
 
             if (j == i) {
@@ -82,7 +83,7 @@ std::vector<std::vector<bool>> Zappy::Searcher::estimatePriority()
 
             if (haveIToTake(_lastLook[i], std::make_unique<double>(objectDensity)) &&
                !haveIToTake(_lastLook[j], std::make_unique<double>(objectDensity))) {
-                itemPriority.push_back(haveIToTake(_lastLook[i], std::make_unique<double>(objectDensity)));
+                itemPriority++;
             }
 
         }
@@ -175,14 +176,14 @@ void Zappy::Searcher::updateMove(std::pair<int, int> pos)
     _nextMouvment.emplace(_nextMouvment.begin(), Take);
 }
 
-void Zappy::Searcher::whereShouldIGo(std::vector<std::vector<bool>> priority)
+void Zappy::Searcher::whereShouldIGo(std::vector<int> priority)
 {
     std::size_t biggestPriority = 0;
     int index = 0;
 
     for (const auto &i:priority) {
 
-        if (i.size() > biggestPriority) {
+        if (i > (int)biggestPriority) {
             biggestPriority = index;
         }
         index++;
@@ -198,7 +199,8 @@ void Zappy::Searcher::whereShouldIGo(std::vector<std::vector<bool>> priority)
 
     updateMove(pos);
 
-    priority[biggestPriority].clear();
+    priority.erase(priority.begin() + biggestPriority);
+
     whereShouldIGo(priority);
 }
 
@@ -284,10 +286,10 @@ void Zappy::Searcher::showMustGoOn()
 
 }
 
-int Zappy::Searcher::run()
+bool Zappy::Searcher::run()
 {
     if (_network.getInfoFromServer() == "dead") {
-        return ERROR;
+        return false;
     }
     updateOrder();
     if (_nextMouvment.empty() && !_isGoingToQueen && _order.empty()) {
@@ -311,5 +313,5 @@ int Zappy::Searcher::run()
         showMustGoOn();
     }
 
-    return EXIT_SUCCESS;
+    return true;
 }

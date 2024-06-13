@@ -130,7 +130,7 @@ static void west_east_look(zappy_t *zappy, const arguments_t arg,
     }
 }
 
-int look_around(server_t *, zappy_t *zappy, const arguments_t arg,
+int look_around(server_t *, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
@@ -141,9 +141,9 @@ int look_around(server_t *, zappy_t *zappy, const arguments_t arg,
     string_on_land = get_on_land(zappy, pos, client->client_fd);
     dprintf(client->client_fd, "[player%s,", string_on_land);
     if (direction == NORTH || direction == SOUTH)
-        north_south_look(zappy, arg, player, client);
+        north_south_look(zappy, *arg, player, client);
     if (direction == EAST || direction == WEST)
-        west_east_look(zappy, arg, player, client);
+        west_east_look(zappy, *arg, player, client);
     dprintf(client->client_fd, "]\n");
     if (string_on_land != NULL)
         free(string_on_land);

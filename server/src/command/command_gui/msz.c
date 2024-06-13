@@ -7,8 +7,8 @@
 
 #include "command_gui.h"
 
-int msz_func(server_t *, zappy_t *, const arguments_t arg, client_t *client)
+int msz_func(server_t *, zappy_t *, arguments_t *arg, client_t *client)
 {
-    dprintf(client->client_fd, "msz %d %d \n", arg.width, arg.height);
+    dprintf(client->client_fd, "msz %d %d \n", arg->width, arg->height);
     return EXIT_WITH_SUCCESS;
 }

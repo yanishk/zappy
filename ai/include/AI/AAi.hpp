@@ -19,6 +19,22 @@
     #define START_LEVEL 1
     #define START_WAIT 0
 
+    #define FORWARD_CMD "Forward\n"
+    #define RIGHT_CMD "Right\n"
+    #define LEFT_CMD "Left\n"
+    #define LOOK_CMD "Look\n"
+    #define INVENTORY_CMD "Inventory\n"
+    #define BROADCAST_CMD "Broadcast "
+    #define CONNECT_NBR_CMD "Connect_nbr\n"
+    #define FORK_CMD "Fork\n"
+    #define EJECT_CMD "Eject\n"
+    #define TAKE_CMD "Take "
+    #define SET_CMD "Set "
+    #define INCANTATION_CMD "Incantation\n"
+
+    #define RESPONSE_OK "ok"
+    #define RESPONSE_KO "ko"
+
     #define ERROR -1
     #define DEAD "dead"
 
@@ -43,14 +59,15 @@ namespace Zappy {
 
         public:
 
-            AAi(const std::string &port, const std::size_t level = START_LEVEL): 
+            AAi(const std::string &port, const std::string &name, const std::size_t level = START_LEVEL): 
                 _network(Network::Network(port)),
                 _ressources(Ressources()),
                 _position(START_POSITION),
-                _level(level)
+                _level(level),
+                _name(name)
             {};
 
-            virtual int run() = 0;
+            virtual bool run() = 0;
 
             bool forward();
             bool right();
@@ -78,6 +95,7 @@ namespace Zappy {
             std::size_t _level;
 
             std::size_t _wait;
+            std::string _name;
 
         private:
             std::size_t countMember(const std::string &line) const;
