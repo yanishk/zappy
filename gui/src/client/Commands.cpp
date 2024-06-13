@@ -88,11 +88,11 @@ void CommandManager::receiveResponse(const std::string &response)
     std::cout << response << std::endl;
 }
 
-void CommandManager::eraseFirstCmdInMap(std::unordered_map<std::string, std::vector<std::vector<std::string>>> &cmdMap, const std::string &cmd)
+void CommandManager::eraseFirstCmdInMap(const std::string &cmd)
 {
-    auto it = cmdMap.find(cmd);
+    auto it = _cmdMap.find(cmd);
 
-    if (it != cmdMap.end()) {
+    if (it != _cmdMap.end()) {
         if (!it->second.empty()) {
             it->second.erase(it->second.begin());
         } else {
