@@ -48,7 +48,6 @@ void initialize_teams(const arguments_t, zappy_t *);
 void initialize_egg(const arguments_t, zappy_t *, char *);
 void initialize_player(zappy_t *, egg_t *);
 void initialize_resources(resource_t *);
-void refill_map(zappy_t *, const arguments_t, clock_t *);
 void print_players(const zappy_t);
 void print_eggs(const zappy_t);
 void print_tile_resources(const unsigned int, int, int, const resource_t);

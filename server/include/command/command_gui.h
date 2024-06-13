@@ -57,5 +57,6 @@ int edi_func(server_t *, const int);
 int pex_func(server_t *, player_t *);
 
 int ppo(server_t *, zappy_t *, const int);
+int bct(server_t *, zappy_t *, int, int);
 
 #endif /* !COMMAND_GUI_H_ */
