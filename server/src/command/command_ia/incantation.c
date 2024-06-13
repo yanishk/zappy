@@ -29,7 +29,7 @@ static incantation_t const elevations[NB_ELEVATIONS] = {
 
 #define ELEVATION elevations[player->level -1]
 #define REQUIRED_RESOURCE ELEVATION.required_resources
-#define REQUIRED_LEVEL ELEVATION.elevations_level
+#define REQUIRED_LEVEL ELEVATION.elevation_level
 #define REQUIRED_PLAYER ELEVATION.required_players
 
 static int check_required_resources(zappy_t *zappy, player_t *player)
@@ -46,46 +46,33 @@ static int check_required_resources(zappy_t *zappy, player_t *player)
     return EXIT_WITH_SUCCESS;
 }
 
-// static unsigned int command_queue_size(zappy_t *zappy)
-// {
-//     player_t *player_on_tile = NULL;
-//     unsigned int count_commands = 0;
+static int *fill_required_player(zappy_t *zappy, player_t *player)
+{
+    player_t *player_on_tile = NULL;
+    unsigned int player_allowed = 1;
+    int *id_array = malloc(sizeof(int));
 
-//     TAILQ_FOREACH(player_on_tile, &zappy->player_head, player_entries) {
-//         count_commands++;
-//     }
-//     return count_commands;
-// }
+    id_array[0] = player->id;
+    TAILQ_FOREACH(player_on_tile, &zappy->player_head, player_entries) {
+        if (player_on_same_tile(player, player_on_tile) && player_on_tile->level == player->level) {
+            player_allowed++;
+            id_array = realloc(id_array, sizeof(int) * player_allowed + 1);
+            id_array[player_allowed - 1] = player_on_tile->id;
+        }
+    }
+    if (player_allowed < REQUIRED_LEVEL)
+        return NULL;
+    return id_array;
+}
 
-// static int fill_required_player(zappy_t *zappy, player_t *player_start)
-// {
-//     player_t *player_on_tile = NULL;
-//     id_elevation_t *id_elevation = malloc(sizeof(id_elevation_t));
+static int check_required_player(zappy_t *zappy, player_t *player)
+{
+    int *id_array = fill_required_player(zappy, player);
 
-//     TAILQ_INSERT_TAIL(&zappy->id_elevation_head, id_elevation, id_elevation_entries);
-//     id_elevation->player_id = player_start->id;
-//     TAILQ_FOREACH(player_on_tile, &zappy->player_head, player_entries) {
-//         if (player_on_same_tile(player_start, player_on_tile) && player_on_tile->level == player_start->level) {
-//             TAILQ_INSERT_TAIL(&zappy->id_elevation_head, id_elevation, id_elevation_entries);
-//             id_elevation->player_id = player_on_tile->id;
-//         }
-//     }
-//     return EXIT_WITH_SUCCESS;
-// }
-
-// static int check_required_player(zappy_t *zappy, player_t *player)
-// {
-//     int size_queue = 0;
-
-//     fill_required_player(zappy, player);
-//     size_queue = command_queue_size(zappy);
-//     for (int index = 0; index < NB_ELEVATIONS; index++) {
-//         if (REQUIRED_LEVEL == player->level && REQUIRED_PLAYER <= size_queue) {
-//             return EXIT_WITH_SUCCESS;
-//         }
-//     }
-//     return EXIT_WITH_ERROR;
-// }
+    if (id_array == NULL)
+        return EXIT_WITH_ERROR;
+    return EXIT_WITH_SUCCESS;
+}
 
 static void send_incantation_to_player(server_t *server, zappy_t *zappy,
     int player_id, char **array)
@@ -127,9 +114,9 @@ int check_incantation(server_t *server, zappy_t *zappy, const arguments_t,
 
     if (player == NULL)
         return EXIT_WITH_ERROR;
-    // if (check_required_resources(zappy, player) == EXIT_WITH_ERROR ||
-    //     check_required_player(zappy, player) == EXIT_WITH_ERROR)
-    //     return EXIT_WITH_ERROR;
+    if (check_required_resources(zappy, player) == EXIT_WITH_ERROR ||
+        check_required_player(zappy, player) == EXIT_WITH_ERROR)
+        return EXIT_WITH_ERROR;
     send_incantation_to_players(server, zappy, REQUIRED_PLAYER,
         player_id_array);
     return COMMAND_SUCCESS;
@@ -154,9 +141,9 @@ int do_incantation(server_t *server, zappy_t *zappy, const arguments_t,
 
     if (player == NULL)
         return EXIT_WITH_ERROR;
-//   if (check_required_resources(zappy, player) == EXIT_WITH_ERROR ||
-//         check_required_player(zappy, player) == EXIT_WITH_ERROR)
-//         return EXIT_WITH_ERROR;
+  if (check_required_resources(zappy, player) == EXIT_WITH_ERROR ||
+        check_required_player(zappy, player) == EXIT_WITH_ERROR)
+        return EXIT_WITH_ERROR;
     if (server->cmd_arg_array != NULL) {
         if (strcmp(server->cmd_arg_array[0], "Remove stones") == 0) {
             remove_stones_from_tile(&TILE_RESOURCE, player);
