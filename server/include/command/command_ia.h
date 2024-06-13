@@ -76,7 +76,7 @@ int fork_player(server_t *, zappy_t *, arguments_t *, client_t *);
 int eject_from_tile(server_t *, zappy_t *, arguments_t *, client_t *);
 int broadcast(server_t *, zappy_t *, arguments_t *, client_t *);
 int look_around(server_t *, zappy_t *, arguments_t *, client_t *);
-int check_incantation(server_t *, zappy_t *, arguments_t *, client_t *);
-int do_incantation(server_t *, zappy_t *, arguments_t *, client_t *);
+int start_incantation(server_t *, zappy_t *, arguments_t *, client_t *);
+int end_incantation(server_t *, zappy_t *, arguments_t *, client_t *);
 
 #endif /* !COMMAND_AI_H_ */

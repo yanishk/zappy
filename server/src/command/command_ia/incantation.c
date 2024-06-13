@@ -2,19 +2,19 @@
 ** EPITECH PROJECT, 2024
 ** zappy
 ** File description:
-** check_incantation
+** incantation
 */
 
 #include "command_ia.h"
 
 static resource_t const elevations_resources[NB_ELEVATIONS] = {
-    {1, 0, 0, 0, 0, 0, 0},
-    {1, 1, 1, 0, 0, 0, 0},
-    {2, 0, 1, 0, 2, 0, 0},
-    {1, 1, 2, 0, 1, 0, 0},
-    {1, 2, 1, 3, 0, 0, 0},
-    {1, 2, 3, 0, 1, 0, 0},
-    {2, 2, 2, 2, 2, 1, 0}
+    {0, 1, 0, 0, 0, 0, 0},
+    {0, 1, 1, 1, 0, 0, 0},
+    {0, 2, 0, 1, 0, 2, 0},
+    {0, 1, 1, 2, 0, 1, 0},
+    {0, 1, 2, 1, 3, 0, 0},
+    {0, 1, 2, 3, 0, 1, 0},
+    {0, 2, 2, 2, 2, 2, 1}
 };
 
 static incantation_t const elevations[NB_ELEVATIONS] = {
@@ -24,7 +24,7 @@ static incantation_t const elevations[NB_ELEVATIONS] = {
     {5, 4, &elevations_resources[3]},
     {6, 4, &elevations_resources[4]},
     {7, 6, &elevations_resources[5]},
-    {8, 6, &elevations_resources[6]},
+    {8, 6, &elevations_resources[6]}
 };
 
 static int check_required_resources(zappy_t *zappy, player_t *player)
@@ -33,8 +33,8 @@ static int check_required_resources(zappy_t *zappy, player_t *player)
         SIBUR, MENDIANE, PHIRAS, THYSTAME};
 
     for (size_t i = 0; i < NB_RESOURCES; i++) {
-        if (get_resources(&TILE_RESOURCE, resource_list[i])
-            < get_resources(REQUIRED_RESOURCE, resource_list[i])) {
+        if (get_resources(&TILE_RESOURCE, resource_list[i]) <
+            get_resources(REQUIRED_RESOURCES, resource_list[i])) {
                 return EXIT_WITH_ERROR;
             }
     }
@@ -58,13 +58,13 @@ static int *check_required_players(zappy_t *zappy, player_t *player)
             id_array[player_allowed - 1] = player_on_tile->id;
         }
     }
-    if (player_allowed < REQUIRED_LEVEL)
+    if (player_allowed < REQUIRED_PLAYERS)
         return NULL;
     return id_array;
 }
 
-static void send_incantation_to_player(server_t *server, zappy_t *zappy,
-    int player_id, char **array)
+static void invite_player_to_ritual(server_t *server, zappy_t *zappy,
+    int player_id)
 {
     command_ia_t *command = malloc(sizeof(command_ia_t));
     unsigned int client_fd = get_client_fd(zappy, player_id);
@@ -74,28 +74,21 @@ static void send_incantation_to_player(server_t *server, zappy_t *zappy,
         return;
     TAILQ_INSERT_HEAD(&client->command_head, command,
         command_ia_entries);
-    command->array = array;
+    command->array = NULL;
     command->time_unit = cmd_list_ia[NB_IA_CMD - 1].time_unit;
     command->index = NB_IA_CMD - 1;
     command->clock_begin = clock();
 }
 
-static void send_incantation_to_players(server_t *server, zappy_t *zappy,
+static void invite_players_to_ritual(server_t *server, zappy_t *zappy,
     int required_players, int *id_array)
 {
-    char **array = word_array("Remove stones\n", "\n");
-
-    if (array == NULL)
-        return;
     for (int i = 0; i < required_players; i++) {
-        if (i == 0)
-            send_incantation_to_player(server, zappy, id_array[i], array);
-        else
-            send_incantation_to_player(server, zappy, id_array[i], NULL);
+        invite_player_to_ritual(server, zappy, id_array[i]);
     }
 }
 
-int check_incantation(server_t *server, zappy_t *zappy, arguments_t *,
+int start_incantation(server_t *server, zappy_t *zappy, arguments_t *,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
@@ -108,7 +101,7 @@ int check_incantation(server_t *server, zappy_t *zappy, arguments_t *,
     id_array = check_required_players(zappy, player);
     if (id_array == NULL)
         return EXIT_WITH_ERROR;
-    send_incantation_to_players(server, zappy, REQUIRED_PLAYER,
+    invite_players_to_ritual(server, zappy, REQUIRED_PLAYERS,
         id_array);
     return COMMAND_SUCCESS;
 }
@@ -120,27 +113,43 @@ static void remove_stones_from_tile(resource_t *resource, player_t *player)
     int nb_resources = 0;
 
     for (size_t i = 0; i < NB_RESOURCES; i++) {
-        nb_resources = get_resources(REQUIRED_RESOURCE, resource_list[i]);
+        nb_resources = get_resources(REQUIRED_RESOURCES, resource_list[i]);
         set_resources(resource, resource_list[i], -nb_resources);
     }
 }
 
-int do_incantation(server_t *server, zappy_t *zappy, arguments_t *,
+static bool ritual_succeed(zappy_t *zappy, player_t *player,
+    bool *incantation_failed)
+{
+    *incantation_failed = false;
+    if (check_required_players(zappy, player) == NULL) {
+        *incantation_failed = true;
+        return false;
+    }
+    if (check_required_resources(zappy, player) == EXIT_WITH_ERROR) {
+        *incantation_failed = true;
+        return false;
+    }
+    remove_stones_from_tile(&TILE_RESOURCE, player);
+    return true;
+}
+
+int end_incantation(server_t *, zappy_t *zappy, arguments_t *,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
+    static bool incantation_failed = false;
+    static unsigned int count_players = 0;
 
-    if (player == NULL)
+    if (player == NULL || incantation_failed)
         return EXIT_WITH_ERROR;
-    if (check_required_resources(zappy, player) == EXIT_WITH_ERROR)
-        return EXIT_WITH_ERROR;
-    if (check_required_players(zappy, player) == NULL)
-        return EXIT_WITH_ERROR;
-    if (server->cmd_arg_array != NULL) {
-        if (strcmp(server->cmd_arg_array[0], "Remove stones") == 0) {
-            remove_stones_from_tile(&TILE_RESOURCE, player);
-        }
+    if (count_players == 0) {
+        if (!ritual_succeed(zappy, player, &incantation_failed))
+            return EXIT_WITH_ERROR;
     }
+    count_players++;
+    if (count_players == REQUIRED_PLAYERS)
+        count_players = 0;
     player->level++;
     dprintf(client->client_fd, "Current level:%d\n", player->level);
     return COMMAND_SUCCESS;

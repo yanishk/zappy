@@ -21,8 +21,8 @@ int (*cmd_func_ia[NB_IA_CMD])(server_t *server, zappy_t *zappy,
     &eject_from_tile,
     &look_around,
     &broadcast,
-    &check_incantation,
-    &do_incantation
+    &start_incantation,
+    &end_incantation
 };
 
 command_infos_t cmd_list_ia[NB_IA_CMD] = {
@@ -39,5 +39,5 @@ command_infos_t cmd_list_ia[NB_IA_CMD] = {
     {LOOK_COMMAND, 7, 1},
     {BROADCAST_COMMAND, 7, 2},
     {INCANTATION_COMMAND, 0, 1},
-    {"", 10, 1}
+    {"", 300, 1}
 };

@@ -25,9 +25,9 @@
     #define TO_MILLI 1000
 
     #define ELEVATION elevations[player->level -1]
-    #define REQUIRED_RESOURCE ELEVATION.required_resources
+    #define REQUIRED_RESOURCES ELEVATION.required_resources
     #define REQUIRED_LEVEL ELEVATION.elevation_level
-    #define REQUIRED_PLAYER ELEVATION.required_players
+    #define REQUIRED_PLAYERS ELEVATION.required_players
 
 typedef struct incantation_s {
     unsigned int elevation_level;
@@ -46,18 +46,12 @@ typedef struct link_s {
     TAILQ_ENTRY(link_s) link_entries;
 } link_t;
 
-typedef struct id_elevation_s {
-    unsigned int player_id;
-    TAILQ_ENTRY(id_elevation_s) id_elevation_entries;
-} id_elevation_t;
-
 typedef struct zappy_s {
     resource_t **resource;
     game_infos_t *infos;
     TAILQ_HEAD(, player_s) player_head;
     TAILQ_HEAD(, egg_s) egg_head;
     TAILQ_HEAD(, link_s) link_head;
-    TAILQ_HEAD(, id_elevation_s) id_elevation_head;
 } zappy_t;
 
 void initialize_game(const arguments_t, zappy_t *);
