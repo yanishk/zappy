@@ -25,7 +25,7 @@ int server(int ac, const char **av)
     if (server == NULL)
         return EXIT_WITH_ERROR;
     if (initialize_server(server) == EXIT_WITH_ERROR ||
-        run_server(server, &zappy, arg) == EXIT_WITH_ERROR)
+        run_server(server, &zappy, &arg) == EXIT_WITH_ERROR)
         return EXIT_WITH_ERROR;
     free_program(server, &zappy, &arg);
     return EXIT_WITH_SUCCESS;
