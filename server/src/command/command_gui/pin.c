@@ -20,9 +20,9 @@ int pin_func(server_t *server, zappy_t *zappy, arguments_t *,
     if (player == NULL)
         return EXIT_WITH_ERROR;
     resource = &player->inventory;
-    dprintf(client->client_fd, "pin %d %d %ld %ld %ld %ld %ld %ld %ld\n",
-    player->width, player->height, resource->food, resource->linemate,
-        resource->deraumere, resource->sibur, resource->mendiane,
-        resource->phiras, resource->thystame);
+    dprintf(client->client_fd, "pin %d %d %d %ld %ld %ld %ld %ld %ld %ld\n",
+        player->id, player->width, player->height, resource->food,
+        resource->linemate, resource->deraumere, resource->sibur,
+        resource->mendiane, resource->phiras, resource->thystame);
     return EXIT_WITH_SUCCESS;
 }
