@@ -10,7 +10,7 @@
 
     #include "common_command.h"
 
-    #define NB_IA_CMD 13
+    #define NB_IA_CMD 14
 
     #define INVENTORY_COMMAND "Inventory"
     #define TAKE_COMMAND "Take"
@@ -76,6 +76,7 @@ int fork_player(server_t *, zappy_t *, const arguments_t, client_t *);
 int eject_from_tile(server_t *, zappy_t *, const arguments_t, client_t *);
 int broadcast(server_t *, zappy_t *, const arguments_t, client_t *);
 int look_around(server_t *, zappy_t *, const arguments_t, client_t *);
-int incantation(server_t *, zappy_t *, const arguments_t, client_t *);
+int check_incantation(server_t *, zappy_t *, const arguments_t, client_t *);
+int do_incantation(server_t *, zappy_t *, const arguments_t, client_t *);
 
 #endif /* !COMMAND_AI_H_ */
