@@ -19,6 +19,7 @@ SRC			=	./src/main.c											\
 				./src/run_server.c                  					\
 				./src/insert_client_in_struct.c     					\
 				./src/get_user_input.c									\
+				./src/connect_graphical_client.c 						\
 				./src/insert_command_in_queue.c 						\
 				./src/check_command_queue.c 							\
 				./src/close_client_socket.c         					\

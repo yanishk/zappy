@@ -52,6 +52,8 @@ int run_server(server_t *, zappy_t *, arguments_t *);
 client_t *get_client_in_struct(server_t *, const int);
 client_t *insert_client_in_struct(server_t *, const int);
 void get_user_input(server_t *, zappy_t *, arguments_t *, client_t *);
+bool connect_graphical_client(server_t *, zappy_t *, arguments_t *,
+    client_t *);
 void answer_client(const int, const unsigned int);
 void close_client_socket(server_t *, zappy_t *, client_t *);
 
