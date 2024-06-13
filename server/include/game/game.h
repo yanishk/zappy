@@ -24,6 +24,11 @@
 
     #define TO_MILLI 1000
 
+    #define ELEVATION elevations[player->level -1]
+    #define REQUIRED_RESOURCE ELEVATION.required_resources
+    #define REQUIRED_LEVEL ELEVATION.elevation_level
+    #define REQUIRED_PLAYER ELEVATION.required_players
+
 typedef struct incantation_s {
     unsigned int elevation_level;
     unsigned int required_players;
