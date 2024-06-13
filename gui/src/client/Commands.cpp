@@ -27,10 +27,10 @@ void CommandManager::receiveResponse(const std::string &response)
     std::vector<std::string> params = strToVec(response.substr(token), ' ');
 
     std::unordered_map<std::string, std::function<void(const std::vector<std::string>&)>> commandMap = {
-        { MSZ_CMD, [this](const std::vector<std::string>& params) {
+        { MSZ_CMD, [this](const std::vector<std::string> &params) {
             fillMapIsland(MSZ_CMD, _mszCmd, params);
             }},
-        { BCT_CMD, [this](const std::vector<std::string>& params) {
+        { BCT_CMD, [this](const std::vector<std::string> &params) {
             fillMapIsland(BCT_CMD, _bctCmd, params);
             }},
         { TNA_CMD, [this](const std::vector<std::string> &params) {
@@ -88,6 +88,20 @@ void CommandManager::receiveResponse(const std::string &response)
     std::cout << response << std::endl;
 }
 
+void CommandManager::eraseFirstCmdInMap(std::unordered_map<std::string, std::vector<std::vector<std::string>>> &cmdMap, const std::string &cmd)
+{
+    auto it = cmdMap.find(cmd);
+
+    if (it != cmdMap.end()) {
+        if (!it->second.empty()) {
+            it->second.erase(it->second.begin());
+        } else {
+            std::cout << EMPTY_MAP_MESSAGE << std::endl;
+        }
+    } else {
+        std::cout << BAD_CMD_MAP << std::endl;
+    }
+}
 
 void CommandManager::fillMapPlayerInfos(const std::string &cmd, std::vector<std::vector<std::string>> &cmdVec, const std::vector<std::string> &params)
 {
@@ -102,12 +116,6 @@ void CommandManager::fillMapPlayerInfos(const std::string &cmd, std::vector<std:
 
 void CommandManager::fillMapIsland(const std::string &cmd, std::vector<std::vector<std::string>> &cmdVec, const std::vector<std::string> &params)
 {
-    if (replaceOrAdd(cmdVec, params) == true) {
-        _cmdMap[cmd].pop_back();
-        _cmdMap[cmd].push_back(params);
-        return;
-    }
-
     _cmdMap[cmd].push_back(params);
 }
 
@@ -155,12 +163,6 @@ std::vector<std::string> CommandManager::getReceivedResponses() const
     std::lock_guard<std::mutex> lock(_mutex);
     return _receivedResponses;
 }
-
-/*std::vector<std::vector<std::string>> CommandManager::getMszCmd() const
-{
-    std::lock_guard<std::mutex> lock(_mutex);
-    return _mszCmd;
-}*/
 
 std::unordered_map<std::string, std::vector<std::vector<std::string>>> CommandManager::getMap()
 {
