@@ -11,6 +11,7 @@
     #include <string>
     #include <vector>
     #include <memory>
+    #include <thread>
 
     #include "AI/IAi.hpp"
     #include "AI/Queen.hpp"
@@ -39,18 +40,12 @@ namespace Zappy {
 
     class Team {
 
-        using Players = std::vector<std::unique_ptr<IAi>>;
+        using Player = std::unique_ptr<IAi>;
+        using Players = std::vector<Player>;
         
         public:
 
             Team(const std::string &name, const std::string &port): _name(name), _port(port) {};
-
-            Team(const std::string &name, const std::string &port, std::unique_ptr<Queen> queen):
-                _name(name),
-                _port(port)
-            {
-                _players.push_back(std::move(queen));
-            };
 
             static Team &getTeam(TeamOptions options);
             const std::string &getName();
