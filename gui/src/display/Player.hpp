@@ -30,7 +30,7 @@ class Player {
         void setTeam(std::string team);
         bool isPlayerSelected(BoundingBox playerBox, Ray ray);
         void displayInfo2D(int x, int y);
-        void setPlayerColor(void);
+        void setPlayerColor(Color color);
         void addItem(int itemType);
         void removeItem(int itemType);
         void resetInventory(void);
@@ -65,6 +65,7 @@ class Player {
 class AllPlayers {
     public:
         std::vector<Player> _allPlayer;
+        std::vector<std::string> _allTeamName;
 
         void loadModelAndAnim(std::pair<Model, float>, std::string path);
         void addPlayerToIsland(Vector3 position, int playerID);
@@ -90,6 +91,7 @@ class AllPlayers {
         ModelAnimation *_anim;
         int _animsCount;
         std::vector<std::vector<int>> _bct;
+        Color setPlayerColor(std::string teamName);
 };
 
 #endif /* !PLAYER_HPP_ */

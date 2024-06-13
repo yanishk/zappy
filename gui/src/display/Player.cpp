@@ -133,17 +133,9 @@ std::string Player::getTeam(void)
     return _team;
 }
 
-void Player::setPlayerColor(void)
+void Player::setPlayerColor(Color color)
 {
-    int code = 0;
-    for (std::size_t i = 0; i < _team.size(); i++) {
-        code += _team.at(i);
-    }
-    code = code % MAX_RGB;
-    _playerColor.a = MAX_RGB;
-    _playerColor.r = code;
-    _playerColor.g = code;
-    _playerColor.b = code;
+    _playerColor = color;
 }
 
 Vector3 Player::getPosition()
@@ -302,7 +294,6 @@ void Player::displayInfo2D(int x, int y)
     text.append(std::to_string((int)_realPos.y));
     text.append(" z ");
     text.append(std::to_string((int)_realPos.z));
-    text.append(std::to_string(_playerColor.b));
     text.append("\nPlayer inventory :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
     for (std::size_t i = 0; i < NBR_ITEM; i++) {
         text.append("|\t");

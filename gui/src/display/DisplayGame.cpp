@@ -59,7 +59,6 @@ void DisplayGame::updateCamera(void)
 
 void DisplayGame::fillAllModel(ZappyModel allPath)
 {
-    std::vector<std::pair<Model, float>> tmpIslandModel;
     std::vector<std::pair<Model, float>> tmpModel;
     bool hasPlayer = false;
     if (allPath.size() == 0)
@@ -232,6 +231,24 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
         }
     }
 
+    if (_cmd.getCommandAt("tna", 0).size() == 0)
+        asio::write(_socket, asio::buffer("tna\n"));
+    for (int i = 0; _cmd.getCommandAt("tna", i).size() == 1; i++) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("tna", i);
+        if (_player._allTeamName.size() == 0) {
+            _player._allTeamName.push_back(cmd.front());
+            continue;
+        }
+        bool isUnique = true;
+        for (auto &i: _player._allTeamName) {
+            if (i == cmd.front())
+                isUnique = false;
+        }
+        if (isUnique) {
+            _player._allTeamName.push_back(cmd.front());
+        }
+    }
+
     recivedCmd.getPnw();
     recivedCmd.getPpo();
     recivedCmd.getPlv();
@@ -313,15 +330,12 @@ void DisplayGame::launchGame(void)
 
         seconds += (GetFrameTime() / 2);
 
-        if (IsKeyDown(KEY_KP_1))
-            asio::write(_socket, asio::buffer("mct\n"));
-
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);
         updateCamera();
 
         BeginDrawing();
 
-        ClearBackground(BLANK);
+        ClearBackground(RAYWHITE);
 
         display3D();
         display2D();

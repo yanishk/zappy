@@ -42,7 +42,7 @@ void AllPlayers::setPlayerTeam(std::string playerTeam, int playerID)
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
             i.setTeam(playerTeam);
-            i.setPlayerColor();
+            i.setPlayerColor(setPlayerColor(playerTeam));
             break;
         }
     }
@@ -190,3 +190,16 @@ void AllPlayers::setInventory(int playerID, std::vector<int> newInv)
     }
 }
 
+Color AllPlayers::setPlayerColor(std::string teamName)
+{
+    float teamIndex = 0;
+    while (teamName != _allTeamName.at(teamIndex)) {
+        teamIndex++;
+    }
+    Color color;
+    color.r = (3 / teamIndex) * 255;
+    color.g = (2 / teamIndex) * 255;
+    color.b = (1 / teamIndex) * 255;
+    color.a = 255;
+    return color;
+}
