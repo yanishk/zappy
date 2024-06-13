@@ -5,13 +5,7 @@
 ** get_user_input
 */
 
-#include <stddef.h>
-#include <string.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
-#include "server.h"
-#include "game.h"
 #include "command_ia.h"
 #include "command_gui.h"
 
@@ -80,14 +74,8 @@ void get_user_input(server_t *server, zappy_t *zappy, arguments_t *arg,
 {
     if (read_client_socket(server, zappy, client) != EXIT_WITH_SUCCESS)
         return;
-    if (!is_player_connected(zappy, client->client_fd)) {
-        if (array_size(server->cmd_arg_array) == 1 &&
-            strcmp(server->cmd_arg_array[0], "GRAPHIC") == 0) {
-                client->is_graphic = true;
-                free_array(server->cmd_arg_array);
-                return;
-        }
-    }
+    if (connect_graphical_client(server, zappy, arg, client))
+        return;
     if (client->is_graphic)
         return execute_graphical_command(server, zappy, arg, client);
     insert_command_in_queue(server, zappy, arg, client);
