@@ -54,6 +54,7 @@ int pdi_func(server_t *, zappy_t *, const unsigned int);
 int enw_func(server_t *, player_t *, const int);
 int ebo_func(server_t *, const int);
 int edi_func(server_t *, const int);
+int pex_func(server_t *, player_t *);
 
 int ppo(server_t *, zappy_t *, const int);
 
