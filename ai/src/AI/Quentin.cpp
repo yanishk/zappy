@@ -11,11 +11,11 @@
 bool Zappy::Quentin::run()
 {
     while (true) {
-        std::cout << "test quentin forward\n";
         if (!this->forward()) {
-            std::cout << "Quentin can't go forward\n";
+            return false;
         }
     }
+
     // if (_network.getInfoFromServer() == DEAD) {
         // return false;
     // }
@@ -64,7 +64,7 @@ bool Zappy::Quentin::createQuentin()
     fork();
 
     // Quentin quentin(_network.getPort(), team.getName(), _nbRefills - 1);
-// 
+//
     // team._players.push_back(std::make_shared<Quentin>(quentin));
 
     return true;

@@ -24,11 +24,8 @@ namespace Zappy {
                 }
                 _network.getInfoFromServer();
                 _thread = std::thread(&Queen::run, this);
-            };
-
-            ~Queen() {
                 _thread.join();
-            }
+            };
 
             bool run();
 

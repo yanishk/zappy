@@ -150,7 +150,7 @@ bool Zappy::AAi::fork()
 
     Zappy::Team &team = Zappy::Team::getTeam(GET);
 
-    team._players.push_back(std::make_unique<Queen>(_network.getPort(), _name));
+    team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, 3));
 
     return true;
 }
@@ -189,7 +189,7 @@ bool Zappy::AAi::setObject(const std::string &object)
         return false;
     }
 
-    _ressources.addRessources(object, 1);
+    _ressources.removeRessources(object, 1);
 
     return true;
 }

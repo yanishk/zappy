@@ -50,11 +50,8 @@ namespace Zappy
                 _network.getInfoFromServer();
                 _network.getInfoFromServer();
                 _thread = std::thread(&Searcher::run, this);
-            };
-
-            ~Searcher () {
                 _thread.join();
-            }
+            };
 
             bool run();
 
