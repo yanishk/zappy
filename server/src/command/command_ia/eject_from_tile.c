@@ -47,7 +47,7 @@ static void eject_player(const zappy_t *zappy, const player_t *current_player,
     }
 }
 
-static int eject_players(zappy_t *zappy, const arguments_t arg,
+static int eject_players(server_t *server, zappy_t *zappy, arguments_t *arg,
     player_t *current_player)
 {
     int status = EXIT_WITH_ERROR;
@@ -57,7 +57,8 @@ static int eject_players(zappy_t *zappy, const arguments_t arg,
         return status;
     TAILQ_FOREACH(player, &zappy->player_head, player_entries) {
         if (player_on_same_tile(current_player, player)) {
-            eject_player(zappy, current_player, player, arg);
+            eject_player(zappy, current_player, player, *arg);
+            ppo(server, zappy, player->id);
             status = EXIT_WITH_SUCCESS;
         }
     }
@@ -91,8 +92,8 @@ int eject_from_tile(server_t *server, zappy_t *zappy, arguments_t *arg,
 
     if (current_player == NULL)
         return EXIT_WITH_ERROR;
-    status = eject_players(zappy, *arg, current_player);
     pex_func(server, current_player);
+    status = eject_players(server, zappy, arg, current_player);
     kill_eggs(server, zappy, current_player);
     return status;
 }
