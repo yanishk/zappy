@@ -19,12 +19,12 @@ SRC			=	./src/main.c											\
 				./src/run_server.c                  					\
 				./src/insert_client_in_struct.c     					\
 				./src/get_user_input.c									\
+				./src/connect_graphical_client.c 						\
 				./src/insert_command_in_queue.c 						\
 				./src/check_command_queue.c 							\
 				./src/close_client_socket.c         					\
 				./src/player_connection.c 								\
 				./src/check_players_food.c 								\
-				./src/replace_disconnected_players.c 					\
 				./src/memory/free_program.c 							\
 				./src/memory/free_game.c 								\
 				./src/game/refill_map_time_unit.c						\
@@ -69,6 +69,9 @@ SRC			=	./src/main.c											\
 				./src/command/command_gui/enw.c							\
 				./src/command/command_gui/ebo.c							\
 				./src/command/command_gui/edi.c							\
+				./src/command/command_gui/sgt.c							\
+				./src/command/command_gui/sst.c							\
+				./src/command/command_gui/pex.c							\
 				./src/command/command_gui/commands_function_pointer.c	\
 				./src/lib/is_positive_number.c 							\
 				./src/lib/array_functions.c 							\

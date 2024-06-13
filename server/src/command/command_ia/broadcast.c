@@ -101,7 +101,7 @@ static void find_shortest_path(server_t *server, zappy_t *zappy,
     }
 }
 
-int broadcast(server_t *server, zappy_t *zappy, const arguments_t arg,
+int broadcast(server_t *server, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
     player_t *sender = get_player_by_fd(zappy, client->client_fd);
@@ -110,7 +110,7 @@ int broadcast(server_t *server, zappy_t *zappy, const arguments_t arg,
 
     TAILQ_FOREACH(receiver, &zappy->player_head, player_entries) {
         if (receiver->id != sender->id) {
-            fill_road_broadcast(sender, receiver, arg, road);
+            fill_road_broadcast(sender, receiver, *arg, road);
             find_shortest_path(server, zappy, receiver, road);
         }
     }

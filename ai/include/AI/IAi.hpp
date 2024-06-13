@@ -21,7 +21,7 @@ namespace Zappy {
 
             IAi() = default;
 
-            virtual int run() = 0;
+            virtual bool run() = 0;
 
             virtual bool forward() = 0;
             virtual bool right() = 0;

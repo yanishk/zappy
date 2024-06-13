@@ -7,9 +7,9 @@
 
 #include "game.h"
 
-double calculate_freq(int frequency, double food_time_unit)
+double calculate_freq(int frequency, double time_unit)
 {
-    food_time_unit /= frequency;
-    food_time_unit *= TO_MILLI;
-    return food_time_unit;
+    time_unit /= frequency;
+    time_unit *= TO_MILLI;
+    return time_unit;
 }
