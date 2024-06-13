@@ -286,10 +286,10 @@ void Zappy::Searcher::showMustGoOn()
 
 }
 
-int Zappy::Searcher::run()
+bool Zappy::Searcher::run()
 {
     if (_network.getInfoFromServer() == "dead") {
-        return ERROR;
+        return false;
     }
     updateOrder();
     if (_nextMouvment.empty() && !_isGoingToQueen && _order.empty()) {
@@ -313,5 +313,5 @@ int Zappy::Searcher::run()
         showMustGoOn();
     }
 
-    return EXIT_SUCCESS;
+    return true;
 }

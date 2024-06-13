@@ -24,7 +24,6 @@ SRC			=	./src/main.c											\
 				./src/close_client_socket.c         					\
 				./src/player_connection.c 								\
 				./src/check_players_food.c 								\
-				./src/replace_disconnected_players.c 					\
 				./src/memory/free_program.c 							\
 				./src/memory/free_game.c 								\
 				./src/game/refill_map_time_unit.c						\

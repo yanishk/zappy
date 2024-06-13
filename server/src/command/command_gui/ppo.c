@@ -14,7 +14,7 @@ int ppo(server_t *server, zappy_t *zappy, const int player_id)
     client_t *graphic = get_graphical_client(server);
 
     player = get_player_by_id(zappy, player_id);
-    if (player == NULL)
+    if (player == NULL || graphic == NULL)
         return EXIT_WITH_ERROR;
     player_direction = get_player_direction(player);
     dprintf(graphic->client_fd, "ppo %d %d %d %d\n", player->id,

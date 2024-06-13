@@ -8,20 +8,20 @@
 #include "AI/Quentin.hpp"
 #include "Team.hpp"
 
-int Zappy::Quentin::run()
+bool Zappy::Quentin::run()
 {
     if (_wait) {
         _wait -= 1;
-        return EXIT_SUCCESS;
+        return true;
     }
 
     if (_network.getInfoFromServer() == DEAD) {
-        return ERROR;
+        return false;
     }
 
     if (_nbRefills > ZERO_REFILL && _ressources.getRessource(FOOD) == LAST_FOOD) {
         _actions.push_back(Fork);
-        return EXIT_SUCCESS;
+        return true;
     }
 
     if (_ressources.getRessource(FOOD)) {
@@ -30,7 +30,7 @@ int Zappy::Quentin::run()
 
     executeAction();
 
-    return EXIT_SUCCESS;
+    return true;
 }
 
 bool Zappy::Quentin::executeAction()

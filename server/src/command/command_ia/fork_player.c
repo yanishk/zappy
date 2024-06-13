@@ -26,11 +26,10 @@ int fork_player(server_t *server, zappy_t *zappy, arguments_t *,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
-    int egg_id = 0;
+    int egg_id = init_fork_egg(zappy, player->team_name,
+        player->height, player->width);
 
-    egg_id = init_fork_egg(zappy, player->team_name, player->height,
-        player->width);
-    if (egg_id == ERROR_RETURN)
+    if (player == NULL || egg_id == ERROR_RETURN)
         return EXIT_WITH_ERROR;
     pfk_func(server, zappy, client->client_fd);
     enw_func(server, player, egg_id);

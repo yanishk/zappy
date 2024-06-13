@@ -28,7 +28,7 @@ namespace Zappy {
                 _network.getInfoFromServer();
             };
 
-            int run();
+            bool run();
 
         private:
 

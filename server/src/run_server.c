@@ -47,7 +47,6 @@ static int check_clients_sockets(server_t *server, zappy_t *zappy,
             continue;
         check_command_queue(server, zappy, arg, client);
         close_client_socket(server, zappy, client);
-        replace_disconnected_players(*arg, zappy);
     }
     return EXIT_WITH_SUCCESS;
 }
