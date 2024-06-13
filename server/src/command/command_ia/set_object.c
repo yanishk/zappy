@@ -24,6 +24,7 @@ int set_object(server_t *server, zappy_t *zappy, arguments_t *,
         set_resources(&TILE_RESOURCE, OBJECT_TO_TAKE, 1);
         set_resources(&player->inventory, OBJECT_TO_TAKE, -1);
         pdr_func(server, zappy, client, OBJECT_TO_TAKE);
+        bct(server, zappy, player->width, player->height);
     }
     return EXIT_WITH_SUCCESS;
 }
