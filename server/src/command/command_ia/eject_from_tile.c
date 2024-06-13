@@ -92,6 +92,7 @@ int eject_from_tile(server_t *server, zappy_t *zappy, arguments_t *arg,
     if (current_player == NULL)
         return EXIT_WITH_ERROR;
     status = eject_players(zappy, *arg, current_player);
+    pex_func(server, current_player);
     kill_eggs(server, zappy, current_player);
     return status;
 }
