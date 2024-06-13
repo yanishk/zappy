@@ -8,23 +8,21 @@
 #include "Team.hpp"
 #include "AI/Queen.hpp"
 
-int Zappy::Queen::run()
+bool Zappy::Queen::run()
 {
     if (_level == INITIALIZE_MODE) {
         return initialize();
     }
 
-    return EXIT_SUCCESS;
+    if (!this->forward()) {
+        std::cerr << "Queen can't move forward\n";
+    }
+
+    return true;
 }
 
 bool Zappy::Queen::initialize()
 {
-    const std::size_t maxPlayers = connectNumber();
-    Zappy::Team &team = Zappy::Team::getTeam(GET);
-
-    for (std::size_t i = 0; i < maxPlayers; i++) {
-        Zappy::Queen queen(_network.getPort(), team.getName());
-    }
 
     _level = FIRST_LEVEL;
 
