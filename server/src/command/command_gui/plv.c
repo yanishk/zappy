@@ -7,7 +7,7 @@
 
 #include "command_gui.h"
 
-int plv_func(server_t *server, zappy_t *zappy, const arguments_t,
+int plv_func(server_t *server, zappy_t *zappy, arguments_t *,
     client_t *client)
 {
     int player_id = atoi(server->cmd_arg_array[1]);

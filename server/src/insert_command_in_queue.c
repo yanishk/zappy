@@ -15,7 +15,8 @@ static bool command_arg_is_valid(server_t *server, const char *command_name)
     return true;
 }
 
-int insert_game_command_in_queue(server_t *server, client_t *client)
+int insert_game_command_in_queue(server_t *server, arguments_t arg,
+    client_t *client)
 {
     command_ia_t *command = NULL;
 
@@ -27,7 +28,8 @@ int insert_game_command_in_queue(server_t *server, client_t *client)
             TAILQ_INSERT_TAIL(&client->command_head, command,
                 command_ia_entries);
             command->array = server->cmd_arg_array;
-            command->time_unit = cmd_list_ia[i].time_unit;
+            command->time_unit =
+                calculate_freq(arg.freq, cmd_list_ia[i].time_unit);
             command->index = i;
             command->clock_begin = clock();
             return EXIT_WITH_SUCCESS;

@@ -69,6 +69,7 @@ SRC			=	./src/main.c											\
 				./src/command/command_gui/ebo.c							\
 				./src/command/command_gui/edi.c							\
 				./src/command/command_gui/sgt.c							\
+				./src/command/command_gui/sst.c							\
 				./src/command/command_gui/commands_function_pointer.c	\
 				./src/lib/is_positive_number.c 							\
 				./src/lib/array_functions.c 							\

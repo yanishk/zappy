@@ -40,7 +40,7 @@ void answer_client(const int status, const unsigned int client_fd)
 }
 
 static void execute_graphical_command(server_t *server, zappy_t *zappy,
-    const arguments_t arg, client_t *client)
+    arguments_t *arg, client_t *client)
 {
     int status = UNKNOWN_COMMAND;
     size_t arguments_nb = array_size(server->cmd_arg_array);
@@ -60,7 +60,7 @@ static void execute_graphical_command(server_t *server, zappy_t *zappy,
 }
 
 static void insert_command_in_queue(server_t *server, zappy_t *zappy,
-    client_t *client)
+    arguments_t *arg, client_t *client)
 {
     int status = UNKNOWN_COMMAND;
 
@@ -70,12 +70,12 @@ static void insert_command_in_queue(server_t *server, zappy_t *zappy,
         return;
     }
     if (is_player_connected(zappy, client->client_fd))
-        status = insert_game_command_in_queue(server, client);
+        status = insert_game_command_in_queue(server, *arg, client);
     if (status == UNKNOWN_COMMAND)
         insert_other_command_in_queue(server, client);
 }
 
-void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg,
+void get_user_input(server_t *server, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
     if (read_client_socket(server, zappy, client) != EXIT_WITH_SUCCESS)
@@ -90,5 +90,5 @@ void get_user_input(server_t *server, zappy_t *zappy, const arguments_t arg,
     }
     if (client->is_graphic)
         return execute_graphical_command(server, zappy, arg, client);
-    insert_command_in_queue(server, zappy, client);
+    insert_command_in_queue(server, zappy, arg, client);
 }

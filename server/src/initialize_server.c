@@ -77,14 +77,6 @@ static void init_client_struct(server_t *server)
     }
 }
 
-static void set_commands_time_unit(int frequency)
-{
-    for (size_t i = 0; i < NB_IA_CMD; i++) {
-        cmd_list_ia[i].time_unit /= frequency;
-        cmd_list_ia[i].time_unit *= TO_MILLI;
-    }
-}
-
 server_t *init_server_struct(const arguments_t arg)
 {
     server_t *server = malloc(sizeof(server_t));
@@ -99,6 +91,5 @@ server_t *init_server_struct(const arguments_t arg)
     if (server->fd_array == NULL)
         return NULL;
     init_client_struct(server);
-    set_commands_time_unit(arg.freq);
     return server;
 }

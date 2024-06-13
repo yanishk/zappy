@@ -83,7 +83,7 @@ static void kill_eggs(server_t *server, zappy_t *zappy,
     }
 }
 
-int eject_from_tile(server_t *server, zappy_t *zappy, const arguments_t arg,
+int eject_from_tile(server_t *server, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
     player_t *current_player = get_player_by_fd(zappy, client->client_fd);
@@ -91,7 +91,7 @@ int eject_from_tile(server_t *server, zappy_t *zappy, const arguments_t arg,
 
     if (current_player == NULL)
         return EXIT_WITH_ERROR;
-    status = eject_players(zappy, arg, current_player);
+    status = eject_players(zappy, *arg, current_player);
     kill_eggs(server, zappy, current_player);
     return status;
 }

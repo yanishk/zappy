@@ -8,7 +8,7 @@
 #include "command_gui.h"
 
 int (*cmd_func_gui[NB_GUI_CMD])(server_t *, zappy_t *,
-    const arguments_t, client_t *) = {
+    arguments_t *, client_t *) = {
     &exit_func,
     &msz_func,
     &bct_func,
@@ -17,7 +17,8 @@ int (*cmd_func_gui[NB_GUI_CMD])(server_t *, zappy_t *,
     &plv_func,
     &ppo_func,
     &pin_func,
-    &sgt_func
+    &sgt_func,
+    &sst_func
 };
 
 command_infos_gui_t cmd_list_gui[NB_GUI_CMD] = {
@@ -29,5 +30,6 @@ command_infos_gui_t cmd_list_gui[NB_GUI_CMD] = {
     {PLV_COMMAND, 2},
     {PPO_COMMAND, 2},
     {PIN_COMMAND, 2},
-    {SGT_COMMAND, 1}
+    {SGT_COMMAND, 1},
+    {SST_COMMAND, 2}
 };
