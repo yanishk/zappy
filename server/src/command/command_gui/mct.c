@@ -12,7 +12,7 @@ int mct_func(server_t *, zappy_t *zappy, arguments_t *arg,
 {
     for (int i = 0; i < arg->height; i++) {
         for (int j = 0; j < arg->width; j++) {
-            print_tile_resources(client->client_fd, i, j,
+            print_tile_resources(client->client_fd, j, i,
                 zappy->resource[i][j]);
         }
     }
