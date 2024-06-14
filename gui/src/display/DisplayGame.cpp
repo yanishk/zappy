@@ -27,9 +27,8 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
 DisplayGame::~DisplayGame()
 {
     CloseWindow();
-    for (auto &i: _allItemModel) {
+    for (auto &i: _allItemModel)
         UnloadModel(i._itemModel);
-    }
 }
 
 Vector3 DisplayGame::setVector3(float x, float y, float z)
@@ -42,15 +41,12 @@ void DisplayGame::updateCamera(void)
     float alltitude = 0.0;
     float speed = 0.4;
 
-    if (IsKeyDown(KEY_SPACE)) {
+    if (IsKeyDown(KEY_SPACE))
         alltitude += speed;
-    }
-    if (IsKeyDown(KEY_LEFT_SHIFT)) {
+    if (IsKeyDown(KEY_LEFT_SHIFT))
         alltitude -= speed;
-    }
-    if (IsKeyDown(KEY_LEFT_CONTROL)) {
+    if (IsKeyDown(KEY_LEFT_CONTROL))
         speed += 0.2;
-    }
     Vector3 movement = setVector3(IsKeyDown(KEY_W) * speed - IsKeyDown(KEY_S) * speed, IsKeyDown(KEY_D) * speed - IsKeyDown(KEY_A) * speed, alltitude);
     Vector3 rotation = setVector3(GetMouseDelta().x * 0.05f, GetMouseDelta().y * 0.05f, 0);
 
@@ -86,6 +82,11 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
             }
         }
     }
+    std::pair<Model, float> eggPair;
+    eggPair.first = LoadModel("./gui/assets/models/scene.gltf");
+    eggPair.second = 0.3;
+    _allEggs.loadEggModel(eggPair);
+
     _sky = LoadModel("./gui/assets/models/unreal-engine-4-sky/source/ue4sky.obj");
     Texture2D texture = LoadTexture("./gui/assets/models/unreal-engine-4-sky/textures/T_Sky_Blue.png");
     _sky.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
@@ -251,6 +252,7 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getPgt();
     recivedCmd.getPdr();
     recivedCmd.getPin();
+    recivedCmd.getEnw();
 }
 
 void DisplayGame::display3D(void)
@@ -270,6 +272,8 @@ void DisplayGame::display3D(void)
         DrawModel(_WaterModel, setVector3(_camera.position.x, -2.3, _camera.position.z), 1, WHITE);
         DrawModel(_WaterModel, setVector3((_mapSize.first * spaceBetwenIsland) / 2, -2, (_mapSize.second * spaceBetwenIsland) / 2), 1, WHITE);
     EndShaderMode();
+
+    _allEggs.drawEgg();
 
     for (auto &i: _allItem) {
         i.changeItemAnim();
@@ -315,7 +319,7 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
-    UseRecivedCmd recivedCmd(_cmd, _player, _socket);
+    UseRecivedCmd recivedCmd(_cmd, _player, _allEggs, _socket);
 
     SetTargetFPS(60);
     float seconds = 0.0f;

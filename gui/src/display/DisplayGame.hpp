@@ -20,6 +20,7 @@
     #include "Item.hpp"
     #include "Island.hpp"
     #include "UseRecivedCmd.hpp"
+    #include "Eggs.hpp"
 
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
@@ -44,6 +45,7 @@ class DisplayGame {
             IslandType = 2,
             PlayerType = 3
         };
+
         CommandManager &_cmd;
         int _screenWidth = 1920;
         int _screenHeight = 1080;
@@ -62,6 +64,7 @@ class DisplayGame {
         asio::ip::tcp::socket &_socket;
         bool _isAnimated;
 
+        AllEggs _allEggs;
         void initWaterShader(void);
         void displayMorePlayerInfo(void);
         void useServerInfo(UseRecivedCmd &recivedCmd);
