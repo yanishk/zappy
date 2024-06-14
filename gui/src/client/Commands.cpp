@@ -105,12 +105,6 @@ void CommandManager::eraseFirstCmdInMap(const std::string &cmd)
 
 void CommandManager::fillMapPlayerInfos(const std::string &cmd, std::vector<std::vector<std::string>> &cmdVec, const std::vector<std::string> &params)
 {
-    if (replaceOrAddPlayerInfos(cmdVec, params) == true) {
-        _cmdMap[cmd].pop_back();
-        _cmdMap[cmd].push_back(params);
-        return;
-    }
-
     _cmdMap[cmd].push_back(params);
 }
 
