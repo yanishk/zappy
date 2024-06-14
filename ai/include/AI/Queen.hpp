@@ -58,10 +58,14 @@ namespace Zappy {
 
         private:
 
-            bool execute();
             bool initialize();
 
+            bool checkFood();
+            bool execute();
+
             std::size_t countRessources(const std::string &ressources, const std::string &index);
+
+            Ressources _look;
 
             std::size_t _stock;
             std::thread _thread;

@@ -15,17 +15,9 @@ bool Zappy::Queen::run()
 
     while (true) {
 
-        Ressources ressources = look();
+        _look = look();
 
-        _stock = countRessources(ressources[HERE], FOOD);
-
-        while (_ressources[FOOD] < CRITICAL_FOOD && _stock) {
-            _actions.push_back(TakeFood);
-        }
-
-        if (_stock < CRITICAL_STOCK) {
-            _actions.push_back(ForkFood);
-        }
+        checkFood();
 
     }
 
@@ -38,6 +30,21 @@ bool Zappy::Queen::initialize()
 
     for (std::size_t i = 0; i < value; ++i) {
         Queen(_network.getPort(), _name);
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::checkFood()
+{
+    _stock = countRessources(_look[HERE], FOOD);
+
+    while (_ressources[FOOD] < CRITICAL_FOOD && _stock) {
+        _actions.push_back(TakeFood);
+    }
+
+    if (_stock < CRITICAL_STOCK) {
+        _actions.push_back(ForkFood);
     }
 
     return true;
