@@ -94,5 +94,6 @@ void set_resources(resource_t *, const char *, int);
 bool is_a_resource(const char *);
 int get_tile_index(const char *, const int);
 double calculate_freq(int, double);
+void refill_map(zappy_t *, const arguments_t, server_t *, clock_t *);
 
 #endif /* !SERVER_H_ */

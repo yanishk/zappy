@@ -7,6 +7,7 @@
 
 #include <math.h>
 #include "server.h"
+#include "command_gui.h"
 
 static struct repartion_resource const repartion_unit[] = {
     {FOOD, FOOD_DEN},
@@ -31,32 +32,36 @@ static size_t get_nb_resource(const arguments_t *args, zappy_t *zappy,
     return resource;
 }
 
-static void repartition_resource(const arguments_t *args, zappy_t *zappy,
-    const char *name, double density)
+static void repartition_resource(server_t *server, const arguments_t *args,
+    zappy_t *zappy, struct repartion_resource const *repartion_unit)
 {
-    size_t density_calc = round(args->width * args->height * density);
-    size_t count_resource = get_nb_resource(args, zappy, name);
+    size_t density_calc =
+        round(args->width * args->height * repartion_unit->density);
+    size_t count_resource = get_nb_resource(args, zappy, repartion_unit->name);
     int rand_width = 0;
     int rand_height = 0;
 
     while (count_resource < density_calc) {
         rand_width = (rand()) % args->width;
         rand_height = (rand()) % args->height;
-        if (get_resources(&zappy->resource[rand_width][rand_height], name) > 0)
+        if (get_resources(&zappy->resource[rand_width][rand_height],
+            repartion_unit->name) > 0)
             continue;
-        set_resources(&zappy->resource[rand_width][rand_height], name, 1);
+        set_resources(&zappy->resource[rand_width][rand_height],
+            repartion_unit->name, 1);
+        bct(server, zappy, rand_width, rand_height);
         count_resource++;
     }
 }
 
-void refill_map(zappy_t *zappy, const arguments_t arg, clock_t *refill)
+void refill_map(zappy_t *zappy, const arguments_t arg, server_t *server,
+    clock_t *refill)
 {
     double time_unit = calculate_freq(arg.freq, REFILL_MAP_TIME_UNIT);
 
     if (time_is_up(*refill, time_unit)) {
         for (int index = 0; index < NB_RESOURCES; index++) {
-            repartition_resource(&arg, zappy, repartion_unit[index].name,
-            repartion_unit[index].density);
+            repartition_resource(server, &arg, zappy, &repartion_unit[index]);
         }
         *refill = clock();
     }

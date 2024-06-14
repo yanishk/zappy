@@ -212,16 +212,19 @@ void Zappy::Searcher::move()
         case Forward:
             forward();
             _nextMouvment.erase(_nextMouvment.begin());
+            _position.first -= 1;
             break;
 
         case Left:
             left();
             _nextMouvment.erase(_nextMouvment.begin());
+            _position.second -= 1;
             break;
 
         case Right:
             right();
             _nextMouvment.erase(_nextMouvment.begin());
+            _position.second += 1;
             break;
 
         case Back:
@@ -231,6 +234,7 @@ void Zappy::Searcher::move()
             _nextMouvment.erase(_nextMouvment.begin());
             _nextMouvment.erase(_nextMouvment.begin());
             _nextMouvment.erase(_nextMouvment.begin());
+            _position.first += 1;
             break;
 
         default:

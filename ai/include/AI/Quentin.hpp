@@ -8,6 +8,8 @@
 #ifndef QUENTIN_HPP_
     #define QUENTIN_HPP_
 
+    #define INFINY 10000
+
     #define LAST_FOOD 1
     #define ZERO_REFILL 0
 
@@ -22,10 +24,14 @@ namespace Zappy {
 
         public:
 
-            Quentin(const std::string &port, const size_t nbRefills, const std::string &name): AAi(port, name), _nbRefills(nbRefills) {
+            Quentin(const std::string &port, const std::string &name, const std::size_t nbRefills): AAi(port, name), _nbRefills(nbRefills) {
                 _network.sendInformationToServer(_name);
+                if (_network.getInfoFromServer() == RESPONSE_KO) {
+                    return;
+                }
                 _network.getInfoFromServer();
-                _network.getInfoFromServer();
+                _thread = std::thread(&Quentin::run, this);
+                _thread.join();
             };
 
             bool run();
@@ -37,6 +43,7 @@ namespace Zappy {
 
             size_t _nbRefills;
             std::vector<Action> _actions;
+            std::thread _thread;
 
     };
 

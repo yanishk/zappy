@@ -19,5 +19,6 @@ int turn_left(server_t *server, zappy_t *zappy, arguments_t *,
     } else {
         player->direction -= RIGHT_ANGLE;
     }
-    return ppo(server, zappy, player->id);
+    ppo(server, zappy, player->id);
+    return EXIT_WITH_SUCCESS;
 }

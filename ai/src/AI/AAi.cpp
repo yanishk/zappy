@@ -7,6 +7,8 @@
 
 #include <sstream>
 #include "AI/AAi.hpp"
+#include "AI/Quentin.hpp"
+#include "Team.hpp"
 
 bool Zappy::AAi::forward()
 {
@@ -142,7 +144,11 @@ bool Zappy::AAi::fork()
 {
     _network.sendInformationToServer(FORK_CMD);
 
-    return _network.getInfoFromServer() == RESPONSE_OK;
+    if (_network.getInfoFromServer() == RESPONSE_KO) {
+        return false;
+    }
+
+    return true;
 }
 
 bool Zappy::AAi::eject()
@@ -179,7 +185,7 @@ bool Zappy::AAi::setObject(const std::string &object)
         return false;
     }
 
-    _ressources.addRessources(object, 1);
+    _ressources.removeRessources(object, 1);
 
     return true;
 }
