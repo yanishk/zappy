@@ -59,11 +59,11 @@ namespace Zappy {
 
         public:
 
-            AAi(const std::string &port, const std::string &name, const std::size_t level = START_LEVEL): 
+            AAi(const std::string &port, const std::string &name): 
                 _network(Network::Network(port)),
                 _ressources(Ressources()),
                 _position(START_POSITION),
-                _level(level),
+                _level(START_LEVEL),
                 _name(name)
             {};
 
@@ -94,7 +94,6 @@ namespace Zappy {
             Orientation _orientation;
             std::size_t _level;
 
-            std::size_t _wait;
             std::string _name;
 
         private:

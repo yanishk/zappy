@@ -7,6 +7,7 @@
 
 #include "server.h"
 #include "command_ia.h"
+#include "command_gui.h"
 
 static tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {
     {NORTH, 1, 2, 3, 4, 5, 6, 7, 8},
@@ -108,6 +109,7 @@ int broadcast(server_t *server, zappy_t *zappy, arguments_t *arg,
     player_t *receiver = NULL;
     road_broadcast_t *road = malloc(sizeof(road_broadcast_t));
 
+    pbc_func(server, sender->id, server->cmd_arg_array[1]);
     TAILQ_FOREACH(receiver, &zappy->player_head, player_entries) {
         if (receiver->id != sender->id) {
             fill_road_broadcast(sender, receiver, *arg, road);

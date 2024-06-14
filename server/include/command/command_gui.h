@@ -55,7 +55,10 @@ int enw_func(server_t *, player_t *, const int);
 int ebo_func(server_t *, const int);
 int edi_func(server_t *, const int);
 int pex_func(server_t *, player_t *);
+int pbc_func(server_t *, const int, const char *);
 
 int ppo(server_t *, zappy_t *, const int);
+int bct(server_t *, zappy_t *, int, int);
+int pin(server_t *, zappy_t *, const int);
 
 #endif /* !COMMAND_GUI_H_ */
