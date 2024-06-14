@@ -14,6 +14,25 @@
 
     #define spaceBetwenIsland 12
 
+    #define MSZ_CMD "msz"
+    #define BCT_CMD "bct"
+    #define TNA_CMD "tna"
+    #define PNW_CMD "pnw"
+    #define PDI_CMD "pdi"
+    #define PLV_CMD "plv"
+    #define PIN_CMD "pin"
+    #define PPO_CMD "ppo"
+    #define PDR_CMD "pdr"
+    #define PGT_CMD "pgt"
+    #define SST_CMD "sst"
+    #define EBO_CMD "ebo"
+    #define SST_CMD "sst"
+    #define SGT_CMD "sgt"
+    #define PEX_CMD "pex"
+    #define PBC_CMD "pbc"
+    #define PIC_CMD "pic"
+    #define ENW_CMD "enw"
+
 class Utils {
     public:
         static bool Vec3Comp(Vector3 vec1, Vector3 vec2)

@@ -13,12 +13,13 @@
 #include <iostream>
 
 Client::Client(const std::string &port, const std::string &host,
-    CommandManager &cmd) : _socket(_ioContext), _cmd(cmd)
+    CommandManager &cmd, bool animation) : _socket(_ioContext), _cmd(cmd)
 {
     asio::ip::tcp::resolver resolver(_ioContext);
     _endpoints = resolver.resolve(host, port);
     asio::connect(_socket, _endpoints);
     std::cout << CON_SUCCESS_MSG << std::endl;
+    _isAnimated = animation;
 }
 
 void Client::run()
@@ -35,7 +36,7 @@ void Client::startDisplay()
     std::srand(std::time(NULL));
     ParsesModelConfig parse;
     std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile = parse.parsesFile(CONFIG_FILE_PATH);
-    DisplayGame game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket);
+    DisplayGame game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket, _isAnimated);
     try {
         game.fillAllModel(parsedFile);
     } catch (const ErrorHandling& e) {

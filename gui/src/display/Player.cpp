@@ -12,10 +12,13 @@ Player::Player(Vector3 position)
     _playerHight = 1.1;
     _realPos = position;
     _playerPosition = (Vector3){(position.x + 1) * spaceBetwenIsland, 1.1, position.z * spaceBetwenIsland};
-    _playerPosition.x += -2 + (rand() % 4);
-    _playerPosition.z += -2 + (rand() % 4);
+    _playerPosition.x += -2 + (std::rand() % 4);
+    _playerPosition.z += -2 + (std::rand() % 4);
     _isMooving = false;
     _rotationAngle = 0;
+    for (std::size_t i = 0; i < NBR_ITEM; i++) {
+        _inventory.push_back(0);
+    }
 }
 
 void Player::DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint)
@@ -130,17 +133,9 @@ std::string Player::getTeam(void)
     return _team;
 }
 
-void Player::setPlayerColor(void)
+void Player::setPlayerColor(Color color)
 {
-    int code = 0;
-    for (std::size_t i = 0; i < _team.size(); i++) {
-        code += _team.at(i);
-    }
-    code = code % MAX_RGB;
-    _playerColor.a = MAX_RGB;
-    _playerColor.r = code;
-    _playerColor.g = code;
-    _playerColor.b = code;
+    _playerColor = color;
 }
 
 Vector3 Player::getPosition()
@@ -247,32 +242,48 @@ bool Player::isPlayerSelected(BoundingBox playerBox, Ray ray)
     return false;
 }
 
+void Player::addItem(int itemType)
+{
+    _inventory[itemType] += 1;
+}
+
+void Player::removeItem(int itemType)
+{
+    _inventory[itemType] -= 1;
+}
+
+void Player::resetInventory(void)
+{
+    for (auto &i: _inventory) {
+        i = 0;
+    }
+}
+
+std::vector<int> Player::getInventory(void)
+{
+    return _inventory;
+}
+
+void Player::setInventory(std::vector<int> newInv)
+{
+    for (std::size_t i = 0; i < _inventory.size(); i++) {
+        _inventory[i] = newInv[i];
+    }
+}
+
 void Player::displayInfo2D(int x, int y)
 {
     std::string text;
-    text.append("Player ID : ");
-    text.append(std::to_string(_playerID));
-    text.append("\nPlayer level : ");
-    text.append(std::to_string(_level));
-    text.append("\nPlayer Team : ");
-    text += _team;
-    text.append("\nPlayer inventory : ");
-    text.append("\nPlayer position : x ");
-    text.append(std::to_string((int)_playerPosition.x));
-    text.append(" y ");
-    text.append(std::to_string((int)_playerPosition.y));
-    text.append(" z ");
-    text.append(std::to_string((int)_playerPosition.z));
-    text.append("\ncolor : r ");
-    text.append(std::to_string(_playerColor.r));
-    text.append(" g ");
-    text.append(std::to_string(_playerColor.g));
-    text.append(" b ");
-    text.append(std::to_string(_playerColor.b));
-    text.append("\nis alive : ");
-    if (isAlive)
-        text.append("true");
-    else
-        text.append("false");
-    DrawText(text.c_str(), x, y, 20, BLUE);
+
+    text += "Player ID : " + std::to_string(_playerID) + "\n";
+    text += "Player level : " + std::to_string(_level) + "\n";
+    text += "Player Team : " + _team + "\n";
+    text += "Player position : x " + std::to_string((int)_playerPosition.x) + " y " + std::to_string((int)_playerPosition.y) + " z " + std::to_string((int)_playerPosition.z) + "\n";
+    text += "Player real position : x " + std::to_string((int)_realPos.x) + " z " + std::to_string((int)_realPos.z) + "\n";
+    text += ("Player inventory :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
+    for (std::size_t i = 0; i < NBR_ITEM; i++) {
+        text += "|\t" + std::to_string(_inventory[i]) + "\t";
+    }
+    text += "|\n";
+    DrawText(text.c_str(), x, y, TEXT_SIZE, BLUE);
 }
