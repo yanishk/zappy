@@ -8,7 +8,6 @@
 #include "server.h"
 #include "command_gui.h"
 
-
 void close_all_client(server_t *server, zappy_t *zappy)
 {
     player_t *player = NULL;
