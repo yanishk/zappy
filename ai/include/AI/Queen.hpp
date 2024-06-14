@@ -36,6 +36,20 @@ namespace Zappy {
 
         };
 
+        
+
+        enum RessourceType {
+            Food,
+            Linemate,
+            Deraumere,
+            Sibur,
+            Mendiane,
+            Phiras,
+            Thystame
+        };
+
+
+
         public:
 
             Queen(const std::string &port, const std::string &name): AAi(port, name) {
@@ -61,6 +75,7 @@ namespace Zappy {
             bool initialize();
 
             bool checkFood();
+            bool checkIncantation();
             bool execute();
 
             std::size_t countRessources(const std::string &ressources, const std::string &index);
@@ -70,6 +85,10 @@ namespace Zappy {
             std::size_t _stock;
             std::thread _thread;
             std::vector<Action> _actions;
+
+            std::vector<std::pair<size_t, Zappy::Ressources>> _incatation = {
+                { 1, Zappy::Ressources(1, 0, 0, 0, 0, 0) }
+            };
 
     };
 

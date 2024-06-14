@@ -18,6 +18,8 @@ bool Zappy::Queen::run()
         _look = look();
 
         checkFood();
+        checkIncantation();
+        execute();
 
     }
 
@@ -47,6 +49,11 @@ bool Zappy::Queen::checkFood()
         _actions.push_back(ForkFood);
     }
 
+    return true;
+}
+
+bool Zappy::Queen::checkIncantation()
+{
     return true;
 }
 

@@ -47,6 +47,18 @@ namespace Zappy {
 
         public:
 
+            Ressources(int linemate, int deraumere, int sibur, int mendiane, int phiras, int thystame)
+            {
+                _ressources[LINEMATE] = linemate;
+                _ressources[DERAUMERE] = deraumere;
+                _ressources[SIBUR] = sibur;
+                _ressources[MENDIANE] = mendiane;
+                _ressources[PHIRAS] = phiras;
+                _ressources[THYSTAME] = thystame;
+            };
+
+            Ressources() = default;
+
             bool addRessources(const std::string &ressource, int value);
             bool removeRessources(const std::string &ressource, int value);
 
@@ -66,7 +78,7 @@ namespace Zappy {
 
             int &operator[](const std::string &ressource) {
                 return _ressources[ressource];
-            }
+            };
 
             int getRessource(const std::string &ressource) {
                 return _ressources[ressource];
@@ -81,7 +93,7 @@ namespace Zappy {
                 }
 
                 return true;
-            }
+            };
 
             std::string indexToRessource(int index);
 
