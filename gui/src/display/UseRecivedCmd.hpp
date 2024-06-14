@@ -16,6 +16,7 @@
 class UseRecivedCmd {
     public:
         UseRecivedCmd(CommandManager &cmd, AllPlayers &player, asio::ip::tcp::socket &socket);
+
         void getPnw(void);
         void getPpo(void);
         void getPlv(void);
@@ -34,12 +35,6 @@ class UseRecivedCmd {
         void getSst(void);
         void getSeg(void);
     private:
-        int _newPlayerIndex = 0;
-        int _playerLevelIndex = 0;
-        int _playerEboIndex = 0;
-        int _collectingItemIndex = 0;
-        int _droppingItemIndex = 0;
-        int _inventoryIndex = 0;
         CommandManager &_cmd;
         AllPlayers &_player;
         asio::ip::tcp::socket &_socket;

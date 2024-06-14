@@ -13,43 +13,43 @@ UseRecivedCmd::UseRecivedCmd(CommandManager &cmd, AllPlayers &player, asio::ip::
 
 void UseRecivedCmd::getPnw(void)
 {
-    if (_cmd.getCommandAt("pnw", _newPlayerIndex).size() > 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pnw", _newPlayerIndex);
+    if (_cmd.getCommandAt(PNW_CMD, 0).size() > 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PNW_CMD, 0);
         _player.addPlayerToIsland((Vector3){std::stof(cmd.at(1).c_str()), 1.8, std::stof(cmd.at(2).c_str())}, std::atoi(cmd.at(0).c_str()));
         _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
         _player.setPlayerTeam(cmd.at(5), std::atoi(cmd.at(0).c_str()));
-        _cmd.eraseFirstCmdInMap("pnw");
+        _cmd.eraseFirstCmdInMap(PNW_CMD);
     }
 }
 
 void UseRecivedCmd::getPpo(void)
 {
-    if (_cmd.getCommandAt("ppo", 0).size() > 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("ppo", 0);
+    if (_cmd.getCommandAt(PPO_CMD, 0).size() > 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PPO_CMD, 0);
         Vector3 newPos = (Vector3){std::stof(cmd.at(1).c_str()), 1.8, std::stof(cmd.at(2).c_str())};
 
         if (!Utils::Vec3Comp(newPos, _player.getPlayerRealPos(std::atoi(cmd.at(0).c_str()))))
             _player.moovePlayerToIsland(newPos, std::atoi(cmd.at(0).c_str()));
         _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
-        _cmd.eraseFirstCmdInMap("ppo");
+        _cmd.eraseFirstCmdInMap(PPO_CMD);
     }
 }
 
 void UseRecivedCmd::getPlv(void)
 {
-    if (_cmd.getCommandAt("plv", 0).size() > 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("plv", 0);
+    if (_cmd.getCommandAt(PLV_CMD, 0).size() > 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PLV_CMD, 0);
         int playerID = std::atoi(cmd.at(0).c_str());
         int playerLevel = std::atoi(cmd.at(1).c_str());
         _player.setPlayerLevel(playerID, playerLevel);
-        _cmd.eraseFirstCmdInMap("plv");
+        _cmd.eraseFirstCmdInMap(PLV_CMD);
     }
 }
 
 void UseRecivedCmd::getPin(void)
 {
-    if (_cmd.getCommandAt("pin", 0).size() >= 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pin", 0);
+    if (_cmd.getCommandAt(PIN_CMD, 0).size() >= 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PIN_CMD, 0);
         int playerID = std::atoi(cmd.at(0).c_str());
         std::vector<int> actualInv = _player.getInventory(playerID);
         std::vector<int> newInv;
@@ -59,7 +59,7 @@ void UseRecivedCmd::getPin(void)
         if (newInv == actualInv)
             return;
         _player.setInventory(playerID, newInv);
-        _cmd.eraseFirstCmdInMap("pin");
+        _cmd.eraseFirstCmdInMap(PIN_CMD);
     }
 }
 
@@ -85,38 +85,32 @@ void UseRecivedCmd::getPie(void)
 
 void UseRecivedCmd::getPdr(void)
 {
-    if (_cmd.getCommandAt("pdr", 0).size() >= 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pdr", 0);
+    if (_cmd.getCommandAt(PDR_CMD, 0).size() >= 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PDR_CMD, 0);
         int playerID = std::atoi(cmd.at(0).c_str());
         int itemType = std::atoi(cmd.at(1).c_str());
         _player.removeItem(playerID, itemType);
-        Vector3 playerPos = _player.getPlayerRealPos(playerID);
-        std::string buf = "pin " + std::to_string(playerID) + "\n";
-        asio::write(_socket, asio::buffer(buf));
-        std::string buf2 = "pdr : bct " + std::to_string((int)playerPos.x) + " " + std::to_string((int)playerPos.z) + "\n";
-        std::cout << "Je send : [" << buf2 << "]" << std::endl;
-        asio::write(_socket, asio::buffer(buf2));
-        _cmd.eraseFirstCmdInMap("pdr");
+        _cmd.eraseFirstCmdInMap(PDR_CMD);
     }
 }
 
 void UseRecivedCmd::getPgt(void)
 {
-    if (_cmd.getCommandAt("pgt", 0).size() >= 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pgt", 0);
+    if (_cmd.getCommandAt(PGT_CMD, 0).size() >= 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PGT_CMD, 0);
         int playerID = std::atoi(cmd.at(0).c_str());
         int itemType = std::atoi(cmd.at(1).c_str());
         _player.addItem(playerID, itemType);
-        _cmd.eraseFirstCmdInMap("pgt");
+        _cmd.eraseFirstCmdInMap(PGT_CMD);
     }
 }
 
 void UseRecivedCmd::getPdi(void)
 {
-    while (_cmd.getCommandAt("pdi", 0).size() >= 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pdi", 0);
+    while (_cmd.getCommandAt(PDI_CMD, 0).size() >= 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PDI_CMD, 0);
         _player.removePlayerFromIsland(std::atoi(cmd.at(0).c_str()));
-        _cmd.eraseFirstCmdInMap("pdi");
+        _cmd.eraseFirstCmdInMap(PDI_CMD);
     }
 }
 
@@ -127,10 +121,10 @@ void UseRecivedCmd::getEnw(void)
 
 void UseRecivedCmd::getEbo(void)
 {
-    while (_cmd.getCommandAt("ebo", 0).size() >= 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("ebo", 0);
-        std::cout << "There is " << cmd.at(0) << " Egg(s) !" << std::endl;
-        _cmd.eraseFirstCmdInMap("ebo");
+    while (_cmd.getCommandAt(EBO_CMD, 0).size() >= 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(EBO_CMD, 0);
+        std::cout << "An egg " << cmd.at(0) << " has spawn" << std::endl;
+        _cmd.eraseFirstCmdInMap(EBO_CMD);
     }
 }
 

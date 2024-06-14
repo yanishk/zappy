@@ -199,8 +199,8 @@ int DisplayGame::getNbrItemTypeOnIsland(Vector3 pos, int type)
 
 void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
 {
-    if (!_cmd.getCommandAt("msz", 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("msz", 0);
+    if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
 
         std::pair<int, int> mapSize;
         mapSize.first = std::atoi(cmd.at(0).c_str());
@@ -208,8 +208,8 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
         if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second)
             placeIsland(mapSize.first, mapSize.second);
     }
-    while (_cmd.getCommandAt("bct", 0).size() > 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("bct", 0);
+    while (_cmd.getCommandAt(BCT_CMD, 0).size() > 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(BCT_CMD, 0);
         float x = std::stof(cmd.at(0).c_str());
         float z = std::stof(cmd.at(1).c_str());
         Vector3 itemPosition = (Vector3){x, 1.8, z};
@@ -224,10 +224,10 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
                 addItemToIsland(itemPosition, j - 2);
             }
         }
-        _cmd.eraseFirstCmdInMap("bct");
+        _cmd.eraseFirstCmdInMap(BCT_CMD);
     }
-    while (_cmd.getCommandAt("tna", 0).size() == 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("tna", 0);
+    while (_cmd.getCommandAt(TNA_CMD, 0).size() == 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(TNA_CMD, 0);
         if (_player._allTeamName.size() == 0) {
             _player._allTeamName.push_back(cmd.front());
             continue;
@@ -240,7 +240,7 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
         if (isUnique) {
             _player._allTeamName.push_back(cmd.front());
         }
-        _cmd.eraseFirstCmdInMap("tna");
+        _cmd.eraseFirstCmdInMap(TNA_CMD);
     }
 
     recivedCmd.getPnw();
