@@ -10,12 +10,15 @@
 
 bool Zappy::Queen::run()
 {
-    if (_level == INITIALIZE_MODE) {
-        return initialize();
-    }
+    initialize();
 
-    if (!this->forward()) {
-        std::cerr << "Queen can't move forward\n";
+    while (true) {
+
+        std::cout << "Queen test forward\n";
+        if (!this->forward()) {
+            std::cout << "Queen can't go forward\n";
+        }
+
     }
 
     return true;
@@ -23,8 +26,16 @@ bool Zappy::Queen::run()
 
 bool Zappy::Queen::initialize()
 {
+    const std::size_t value = connectNumber();
 
-    _level = FIRST_LEVEL;
+    for (std::size_t i = 0; i < value; ++i) {
+        Queen(_network.getPort(), _name);
+    }
+
+    if (!fork()) {
+        std::cout << "Queen can't forked\n";
+    }
+    std::cout << "Queen forked\n";
 
     return true;
 }

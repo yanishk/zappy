@@ -16,5 +16,6 @@ int move_forward(server_t *server, zappy_t *zappy,
     if (player == NULL)
         return EXIT_WITH_ERROR;
     move_player(player->direction, player, *arg);
-    return ppo(server, zappy, player->id);
+    ppo(server, zappy, player->id);
+    return EXIT_WITH_SUCCESS;
 }

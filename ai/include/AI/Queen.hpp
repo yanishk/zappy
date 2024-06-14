@@ -10,19 +10,21 @@
 
     #include "AAi.hpp"
 
-    #define INITIALIZE_MODE 0
-    #define FIRST_LEVEL 1
-
 namespace Zappy {
     
     class Queen : public AAi {
 
         public:
 
-            Queen(const std::string &port, const std::string &name): AAi(port, name, INITIALIZE_MODE) {
+            Queen(const std::string &port, const std::string &name): AAi(port, name) {
+                std::cout << "Queen initialized\n";
                 _network.sendInformationToServer(_name);
+                if (_network.getInfoFromServer() == RESPONSE_KO) {
+                    return;
+                }
                 _network.getInfoFromServer();
-                _network.getInfoFromServer();
+                _thread = std::thread(&Queen::run, this);
+                _thread.join();
             };
 
             bool run();
@@ -30,7 +32,7 @@ namespace Zappy {
         private:
 
             bool initialize();
-
+            std::thread _thread;
     };
 
 };
