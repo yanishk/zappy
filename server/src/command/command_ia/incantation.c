@@ -6,6 +6,7 @@
 */
 
 #include "command_ia.h"
+#include "command_gui.h"
 
 static resource_t const elevations_resources[NB_ELEVATIONS] = {
     {0, 1, 0, 0, 0, 0, 0},
@@ -111,6 +112,7 @@ int start_incantation(server_t *server, zappy_t *zappy, arguments_t *arg,
         return EXIT_WITH_ERROR;
     invite_players_to_ritual(server, zappy, arg,
         id_array);
+    pic_func(server, player, id_array);
     return COMMAND_SUCCESS;
 }
 

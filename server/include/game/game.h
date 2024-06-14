@@ -24,7 +24,7 @@
 
     #define TO_MILLI 1000
 
-    #define ELEVATION elevations[player->level -1]
+    #define ELEVATION elevations[player->level - 1]
     #define REQUIRED_RESOURCES ELEVATION.required_resources
     #define REQUIRED_LEVEL ELEVATION.elevation_level
     #define REQUIRED_PLAYERS ELEVATION.required_players

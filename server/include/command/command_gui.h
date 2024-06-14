@@ -57,6 +57,7 @@ int edi_func(server_t *, const int);
 int pex_func(server_t *, player_t *);
 int pbc_func(server_t *, const int, const char *);
 int seg_func(server_t *, char *);
+int pic_func(server_t *, player_t *, int *);
 
 int ppo(server_t *, zappy_t *, const int);
 int bct(server_t *, zappy_t *, int, int);
