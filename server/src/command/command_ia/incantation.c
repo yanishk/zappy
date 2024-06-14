@@ -64,7 +64,7 @@ static int *check_required_players(zappy_t *zappy, player_t *player)
 }
 
 static void invite_player_to_ritual(server_t *server, zappy_t *zappy,
-    int player_id)
+    arguments_t *arg, int player_id)
 {
     command_ia_t *command = malloc(sizeof(command_ia_t));
     unsigned int client_fd = get_client_fd(zappy, player_id);
@@ -72,23 +72,27 @@ static void invite_player_to_ritual(server_t *server, zappy_t *zappy,
 
     if (client == NULL || command == NULL)
         return;
+    dprintf(client->client_fd, "Elevation underway\n");
     TAILQ_INSERT_HEAD(&client->command_head, command,
         command_ia_entries);
     command->array = NULL;
-    command->time_unit = cmd_list_ia[NB_IA_CMD - 1].time_unit;
+    command->time_unit = calculate_freq(arg->freq,
+        cmd_list_ia[NB_IA_CMD - 1].time_unit);
     command->index = NB_IA_CMD - 1;
     command->clock_begin = clock();
 }
 
 static void invite_players_to_ritual(server_t *server, zappy_t *zappy,
-    int required_players, int *id_array)
+    arguments_t *arg, int *id_array)
 {
-    for (int i = 0; i < required_players; i++) {
-        invite_player_to_ritual(server, zappy, id_array[i]);
+    player_t *player = get_player_by_id(zappy, id_array[0]);
+
+    for (unsigned int i = 0; i < REQUIRED_PLAYERS; i++) {
+        invite_player_to_ritual(server, zappy, arg, id_array[i]);
     }
 }
 
-int start_incantation(server_t *server, zappy_t *zappy, arguments_t *,
+int start_incantation(server_t *server, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
@@ -101,7 +105,7 @@ int start_incantation(server_t *server, zappy_t *zappy, arguments_t *,
     id_array = check_required_players(zappy, player);
     if (id_array == NULL)
         return EXIT_WITH_ERROR;
-    invite_players_to_ritual(server, zappy, REQUIRED_PLAYERS,
+    invite_players_to_ritual(server, zappy, arg,
         id_array);
     return COMMAND_SUCCESS;
 }
