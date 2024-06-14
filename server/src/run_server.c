@@ -150,6 +150,9 @@ int run_server(server_t *server, zappy_t *zappy, arguments_t *arg)
             check_clients_sockets(server, zappy, arg) == EXIT_WITH_ERROR)
             return EXIT_WITH_ERROR;
         refill_map(zappy, *arg, server, &refill);
+        if (win_condition(server, zappy) != NULL) {
+            return EXIT_WITH_SUCCESS;
+        }
     }
     return EXIT_WITH_SUCCESS;
 }

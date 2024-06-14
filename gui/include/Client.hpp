@@ -26,7 +26,8 @@ class Client {
 
     public:
 
-        Client(const std::string &host, const std::string &port, CommandManager &cmd);
+        Client(const std::string &host, const std::string &port,
+            CommandManager &cmd, bool animation);
         void run();
         std::atomic<bool> _isRunning = true;
 
@@ -40,6 +41,8 @@ class Client {
         asio::ip::tcp::socket _socket;
         asio::ip::tcp::resolver::results_type _endpoints;
         asio::streambuf _buff;
+        bool _isAnimated;
+
         CommandManager &_cmd;
 };
 

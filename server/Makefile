@@ -25,6 +25,7 @@ SRC			=	./src/main.c											\
 				./src/close_client_socket.c         					\
 				./src/player_connection.c 								\
 				./src/check_players_food.c 								\
+				./src/win_condition.c									\
 				./src/memory/free_program.c 							\
 				./src/memory/free_game.c 								\
 				./src/game/refill_map_time_unit.c						\
@@ -74,6 +75,7 @@ SRC			=	./src/main.c											\
 				./src/command/command_gui/sst.c							\
 				./src/command/command_gui/pex.c							\
 				./src/command/command_gui/pbc.c							\
+				./src/command/command_gui/seg.c							\
 				./src/command/command_gui/smg.c							\
 				./src/command/command_gui/commands_function_pointer.c	\
 				./src/lib/is_positive_number.c 							\

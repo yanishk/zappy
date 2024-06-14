@@ -60,9 +60,9 @@ ZappyModel ParsesModelConfig::parsesFile(std::string path)
     }
     for (std::size_t i = 0; i < _pathList.size(); i++) {
         std::pair<std::pair<std::string, float>, int> tmpPair;
-        tmpPair.first.first = _pathList.at(i);
-        tmpPair.first.second = _sizeList.at(i);
-        tmpPair.second = _typeList.at(i);
+        tmpPair.first.first = _pathList[i];
+        tmpPair.first.second = _sizeList[i];
+        tmpPair.second = _typeList[i];
         _parsedInfo.push_back(tmpPair);
     }
     return _parsedInfo;

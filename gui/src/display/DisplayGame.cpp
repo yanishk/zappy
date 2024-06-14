@@ -7,7 +7,7 @@
 
 #include "DisplayGame.hpp"
 
-DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket) : _cmd(cmd), _socket(socket)
+DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket)
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
@@ -21,6 +21,7 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
     _selectedPlayer.first = false;
     _mapSize.first = 0;
     _mapSize.second = 0;
+    _isAnimated = animation;
 }
 
 DisplayGame::~DisplayGame()
@@ -58,7 +59,6 @@ void DisplayGame::updateCamera(void)
 
 void DisplayGame::fillAllModel(ZappyModel allPath)
 {
-    std::vector<std::pair<Model, float>> tmpIslandModel;
     std::vector<std::pair<Model, float>> tmpModel;
     bool hasPlayer = false;
     if (allPath.size() == 0)
@@ -109,10 +109,10 @@ void DisplayGame::placeIsland(int x, int y)
             std::size_t islandIndex = rand() % _islandModel.size();
             Island tmpIsland;
             _allIsland.push_back(tmpIsland);
-            _islandModel.at(islandIndex).first.transform = MatrixRotateXYZ((Vector3){ DEG2RAD*0, DEG2RAD*(std::rand() % 360), DEG2RAD*0});
-            _allIsland.back()._islandModel = _islandModel.at(islandIndex).first;
+            _islandModel[islandIndex].first.transform = MatrixRotateXYZ((Vector3){ DEG2RAD*0, DEG2RAD*(std::rand() % 360), DEG2RAD*0});
+            _allIsland.back()._islandModel = _islandModel[islandIndex].first;
             _allIsland.back()._islandPosition = setVector3(posX, -4, posY);
-            _allIsland.back()._islandSize = _islandModel.at(islandIndex).second;
+            _allIsland.back()._islandSize = _islandModel[islandIndex].second;
             posY += spaceBetwenIsland;
         }
     }
@@ -154,7 +154,7 @@ void DisplayGame::initWaterShader(void)
 
 void DisplayGame::addItemToIsland(Vector3 position, int type)
 {
-    _allItem.push_back(_allItemModel.at(type));
+    _allItem.push_back(_allItemModel[type]);
     _allItem.back()._itemPosition = setVector3((position.x + 1) * spaceBetwenIsland, 1.8, position.z * spaceBetwenIsland);
     _allItem.back()._itemPosition.x += -3 + (rand() % 6);
     _allItem.back()._itemPosition.z += -3 + (rand() % 6);
@@ -165,7 +165,7 @@ void DisplayGame::addItemToIsland(Vector3 position, int type)
 void DisplayGame::removeItemFromIsland(Vector3 position, int type)
 {
     for (std::size_t i = 0; i < _allItem.size(); i++) {
-        if (Utils::Vec3Comp(_allItem.at(i)._realPos, position) && _allItem.at(i)._itemType == type) {
+        if (Utils::Vec3Comp(_allItem[i]._realPos, position) && _allItem[i]._itemType == type) {
             _allItem.erase(_allItem.begin() + i);
             break;
         }
@@ -197,63 +197,60 @@ int DisplayGame::getNbrItemTypeOnIsland(Vector3 pos, int type)
     return nbr;
 }
 
-void DisplayGame::useServerInfo(void)
+void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
 {
-    if (_cmd.getCommandAt("pnw", _newPlayerIndex).size() > 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pnw", _newPlayerIndex);
-        _player.addPlayerToIsland((Vector3){std::stof(cmd.at(1).c_str()), 1.8, std::stof(cmd.at(2).c_str())}, std::atoi(cmd.at(0).c_str()));
-        _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
-        _player.setPlayerTeam(cmd.at(5), std::atoi(cmd.at(0).c_str()));
-        _newPlayerIndex++;
-    }
-    for (int i = 0; _cmd.getCommandAt("ppo", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("ppo", i);
-        Vector3 newPos = (Vector3){std::stof(cmd.at(1).c_str()), 1.8, std::stof(cmd.at(2).c_str())};
-
-        if (!Utils::Vec3Comp(newPos, _player.getPlayerRealPos(std::atoi(cmd.at(0).c_str()))))
-            _player.moovePlayerToIsland(newPos, std::atoi(cmd.at(0).c_str()));
-        _player.changePlayerOrientation((std::atoi(cmd.at(3).c_str()) - 1) * 90, std::atoi(cmd.at(0).c_str()));
-    }
-    if (!_cmd.getCommandAt("msz", 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("msz", 0);
+    if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
 
         std::pair<int, int> mapSize;
-        mapSize.first = std::atoi(cmd.at(0).c_str());
-        mapSize.second = std::atoi(cmd.at(1).c_str());
+        mapSize.first = std::atoi(cmd.front().c_str());
+        mapSize.second = std::atoi(cmd[1].c_str());
         if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second)
             placeIsland(mapSize.first, mapSize.second);
     }
-    for (int i = 0; _cmd.getCommandAt("bct", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("bct", i);
-        float x = std::stof(cmd.at(0).c_str());
-        float z = std::stof(cmd.at(1).c_str());
+    while (_cmd.getCommandAt(BCT_CMD, 0).size() > 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(BCT_CMD, 0);
+        float x = std::stof(cmd.front().c_str());
+        float z = std::stof(cmd[1].c_str());
         Vector3 itemPosition = (Vector3){x, 1.8, z};
         for (std::size_t j = 2; j < cmd.size(); j++) {
-            int nbItem = std::atoi(cmd.at(j).c_str());
-            if (nbItem == getNbrItemTypeOnIsland(itemPosition, j - 2))
-                continue;
+            int nbItem = std::atoi(cmd[j].c_str());
+            int nbItemOnIsland = getNbrItemTypeOnIsland(itemPosition, j - 2);
+            while (nbItemOnIsland > 0) {
+                removeItemFromIsland(itemPosition, j - 2);
+                nbItemOnIsland--;
+            }
             for (int k = 0; k < nbItem; k++) {
                 addItemToIsland(itemPosition, j - 2);
             }
         }
+        _cmd.eraseFirstCmdInMap(BCT_CMD);
     }
-    for (int i = 0; _cmd.getCommandAt("plv", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("plv", i);
-        int playerID = std::atoi(cmd.at(0).c_str());
-        int playerLevel = std::atoi(cmd.at(1).c_str());
-        if (_player.getPlayerLevel(playerID) != playerLevel)
-            _player.setPlayerLevel(playerID, playerLevel);
+    while (_cmd.getCommandAt(TNA_CMD, 0).size() == 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(TNA_CMD, 0);
+        if (_player._allTeamName.size() == 0) {
+            _player._allTeamName.push_back(cmd.front());
+            continue;
+        }
+        bool isUnique = true;
+        for (auto &i: _player._allTeamName) {
+            if (i == cmd.front())
+                isUnique = false;
+        }
+        if (isUnique) {
+            _player._allTeamName.push_back(cmd.front());
+        }
+        _cmd.eraseFirstCmdInMap(TNA_CMD);
     }
-    for (int i = 0; _cmd.getCommandAt("pdi", _playerLevelIndex).size() >= 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("pdi", _playerLevelIndex);
-        _player.removePlayerFromIsland(std::atoi(cmd.at(0).c_str()));
-        _playerLevelIndex += 1;
-    }
-    for (int i = 0; _cmd.getCommandAt("ebo", _playerEboIndex).size() >= 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("ebo", _playerEboIndex);
-        std::cout << "There is " << cmd.at(0) << " Egg(s) !" << std::endl;
-        _playerEboIndex += 1;
-    }
+
+    recivedCmd.getPnw();
+    recivedCmd.getPpo();
+    recivedCmd.getPlv();
+    recivedCmd.getPdi();
+    recivedCmd.getEbo();
+    recivedCmd.getPgt();
+    recivedCmd.getPdr();
+    recivedCmd.getPin();
 }
 
 void DisplayGame::display3D(void)
@@ -278,7 +275,7 @@ void DisplayGame::display3D(void)
         i.changeItemAnim();
         i.drawItem();
     }
-    _player.drawPlayer(_camera.position);
+    _player.drawPlayer(_camera.position, _isAnimated);
 
     for (auto &i: _allIsland) {
         DrawModel(i._islandModel , i._islandPosition, i._islandSize, WHITE);
@@ -318,11 +315,17 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
+    UseRecivedCmd recivedCmd(_cmd, _player, _socket);
 
     SetTargetFPS(60);
     float seconds = 0.0f;
+    asio::write(_socket, asio::buffer("mct\n"));
     while (!WindowShouldClose()) {
-        useServerInfo();
+        useServerInfo(recivedCmd);
+
+        if (IsKeyPressed(KEY_KP_3))
+            asio::write(_socket, asio::buffer("mct\n"));
+
         seconds += (GetFrameTime() / 2);
 
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);
@@ -330,11 +333,10 @@ void DisplayGame::launchGame(void)
 
         BeginDrawing();
 
-        ClearBackground(BLANK);
+        ClearBackground(RAYWHITE);
 
         display3D();
         display2D();
-
         EndDrawing();
     }
 }

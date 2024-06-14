@@ -42,7 +42,7 @@ void AllPlayers::setPlayerTeam(std::string playerTeam, int playerID)
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
             i.setTeam(playerTeam);
-            i.setPlayerColor();
+            i.setPlayerColor(setPlayerColor(playerTeam));
             break;
         }
     }
@@ -64,8 +64,8 @@ void AllPlayers::addPlayerToIsland(Vector3 position, int playerID)
 void AllPlayers::removePlayerFromIsland(int playerID)
 {
     for (std::size_t i = 0; i < _allPlayer.size(); i++) {
-        if (_allPlayer.at(i)._playerID == playerID) {
-            _allPlayer.at(i).isAlive = false;
+        if (_allPlayer[i]._playerID == playerID) {
+            _allPlayer[i].isAlive = false;
             _allPlayer.erase(_allPlayer.begin() + i);
             break;
         }
@@ -87,9 +87,14 @@ Vector3 AllPlayers::getSize(void)
     return _size;
 }
 
-void AllPlayers::drawPlayer(Vector3 cameraPosition)
+void AllPlayers::drawPlayer(Vector3 cameraPosition, bool isAnimated)
 {
     for (auto &i: _allPlayer) {
+        if (!isAnimated) {
+            DrawModel(i._playerModel , i.getPosition(), 1, WHITE);
+            i.displayPlayerInfo(cameraPosition);
+            continue;
+        }
         i._animFrameCounter++;
         if (i._animFrameCounter >= i._playerAnimation[0].frameCount)
             i._animFrameCounter = 0;
@@ -115,6 +120,7 @@ int AllPlayers::getPlayerLevel(int playerID)
             return i._level;
         }
     }
+    return -1;
 }
 
 bool AllPlayers::isPlayerAlive(int playerID)
@@ -130,11 +136,70 @@ bool AllPlayers::isPlayerAlive(int playerID)
 void AllPlayers::displayMorePlayerInfo(int playerID, int screenWidth)
 {
     int playerInfoBoxWidth = 400;
-    int playerInfoBoxHeight = 110;
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
-            DrawRectangle(screenWidth - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, playerInfoBoxHeight, Fade(GRAY, 0.5f));
+            DrawRectangle(screenWidth - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
             i.displayInfo2D(screenWidth - playerInfoBoxWidth - 5, 5);
         }
     }
+}
+
+void AllPlayers::addItem(int playerID, int itemType)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.addItem(itemType);
+        }
+    }
+}
+
+void AllPlayers::removeItem(int playerID, int itemType)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.removeItem(itemType);
+        }
+    }
+}
+
+void AllPlayers::resetInventory(int playerID)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.resetInventory();
+        }
+    }
+}
+
+std::vector<int> AllPlayers::getInventory(int playerID)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            return i.getInventory();
+        }
+    }
+    return {};
+}
+
+void AllPlayers::setInventory(int playerID, std::vector<int> newInv)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.setInventory(newInv);
+        }
+    }
+}
+
+Color AllPlayers::setPlayerColor(std::string teamName)
+{
+    float teamIndex = 0;
+    while (teamName != _allTeamName[teamIndex]) {
+        teamIndex++;
+    }
+    Color color;
+    color.r = (3 / teamIndex) * 255;
+    color.g = (2 / teamIndex) * 255;
+    color.b = (1 / teamIndex) * 255;
+    color.a = 255;
+    return color;
 }

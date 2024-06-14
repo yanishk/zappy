@@ -14,6 +14,6 @@ int enw_func(server_t *server, player_t *player, const int egg_id)
     if (player == NULL || graphical == NULL)
         return EXIT_WITH_ERROR;
     dprintf(graphical->client_fd, "enw %d %d %d %d\n",
-        egg_id, player->id, player->height, player->width);
+        egg_id, player->id, player->width, player->height);
     return EXIT_WITH_SUCCESS;
 }

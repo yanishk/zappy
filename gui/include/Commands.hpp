@@ -21,8 +21,14 @@
     #define EBO_CMD "ebo"
     #define SST_CMD "sst"
     #define SGT_CMD "sgt"
+    #define PEX_CMD "pex"
+    #define PBC_CMD "pbc"
+    #define PIC_CMD "pic"
+    #define ENW_CMD "enw"
     #define PARAMS_ERROR_MSG "Need 2 paramaters at least."
     #define INVALID_IDX "Invalid Index."
+    #define EMPTY_MAP_MESSAGE "The vector of vectors at this key is already empty."
+    #define BAD_CMD_MAP "This key does not exist in the map."
     #include <string>
     #include <vector>
     #include <mutex>
@@ -49,17 +55,18 @@ class CommandManager {
 
         std::vector<std::string> getSentCommands() const;
         std::vector<std::string> getReceivedResponses() const;
-        std::vector<std::vector<std::string>> getMszCmd() const;
 
         std::unordered_map<std::string, std::vector<std::vector<std::string>>> getMap();
         std::vector<std::string> getCommandAt(const std::string &cmd, std::size_t index);
         std::string getCommandInfoAt(const std::string& cmd,
             std::size_t vectorIndex, std::size_t elementIndex);
 
-        void fillMapPlayerInfos(const std::string &cmd, std::vector<std::vector<std::string>> &cmdVec,
-            const std::vector<std::string> &params);
-        void fillMapIsland(const std::string &cmd, std::vector<std::vector<std::string>> &cmdVec,
-            const std::vector<std::string> &params);
+        void eraseFirstCmdInMap(const std::string &cmd);
+
+        // fill for GUI
+
+        void fillMapPlayerInfos(const std::string &cmd, const std::vector<std::string> &params);
+        void fillMapIsland(const std::string &cmd, const std::vector<std::string> &params);
         std::vector<std::vector<std::string>> _bctCmd;
 
     private:
@@ -75,6 +82,9 @@ class CommandManager {
         std::vector<std::vector<std::string>> _pdiCmd;
         std::vector<std::vector<std::string>> _pdrCmd;
         std::vector<std::vector<std::string>> _pgtCmd;
+        std::vector<std::vector<std::string>> _pbcCmd;
+        std::vector<std::vector<std::string>> _picCmd;
+        std::vector<std::vector<std::string>> _pexCmd;
 
 
         std::vector<std::vector<std::string>> _sgtCmd;
@@ -82,11 +92,13 @@ class CommandManager {
         std::vector<std::vector<std::string>> _sstCmd;
 
         std::vector<std::vector<std::string>> _eboCmd;
+        std::vector<std::vector<std::string>> _enwCmd;
 
         std::vector<std::string> _sentCommands;
         std::vector<std::string> _receivedResponses;
 
         std::unordered_map<std::string, std::vector<std::vector<std::string>>> _cmdMap {
+
             {MSZ_CMD, _mszCmd},
             {BCT_CMD, _bctCmd},
             {TNA_CMD, _tnaCmd},
@@ -100,6 +112,11 @@ class CommandManager {
             {SST_CMD, _sstCmd},
             {SGT_CMD, _sgtCmd},
             {EBO_CMD, _eboCmd},
+            {PEX_CMD, _pexCmd},
+            {PBC_CMD, _pbcCmd},
+            {PIC_CMD, _picCmd},
+            {ENW_CMD, _enwCmd},
+
         };
 
         mutable std::mutex _mutex;
