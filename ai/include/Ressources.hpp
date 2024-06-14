@@ -24,6 +24,8 @@
     #define PHIRAS_DENSITY 0.08
     #define THYSTAME_DENSITY 0.05
 
+    #define CINT(ressource) const int ressource
+
     #define FOOD_START_VALUE 10
     #define NONE 0
 
@@ -47,7 +49,7 @@ namespace Zappy {
 
         public:
 
-            Ressources(int linemate, int deraumere, int sibur, int mendiane, int phiras, int thystame)
+            Ressources(CINT(linemate), CINT(deraumere), CINT(sibur), CINT(mendiane), CINT(phiras), CINT(thystame))
             {
                 _ressources[LINEMATE] = linemate;
                 _ressources[DERAUMERE] = deraumere;
@@ -62,46 +64,54 @@ namespace Zappy {
             bool addRessources(const std::string &ressource, int value);
             bool removeRessources(const std::string &ressource, int value);
 
-            void operator+=(const Ressources &other) {
+            void operator+=(const Ressources &other)
+            {
 
                 for (const auto &i: other._ressources) {
 
                     for (auto &j: _ressources) {
+
                         if (i.first == j.first) {
                             j.second += i.second;
                         }
+
                     }
 
                 }
 
             };
 
-            int &operator[](const std::string &ressource) {
+            int &operator[](const std::string &ressource)
+            {
                 return _ressources[ressource];
             };
 
-            int getRessource(const std::string &ressource) {
+            int getRessource(const std::string &ressource)
+            {
                 return _ressources[ressource];
             };
 
-            bool empty() {
+            bool empty()
+            {
 
                 for (const auto &i:_ressources) {
-                    if (i.second > 0) {
+
+                    if (i.second) {
                         return false;
                     }
+
                 }
 
                 return true;
             };
 
             std::string indexToRessource(int index);
-
             std::vector<int> getAllValueRessources();
 
         private:
 
             std::unordered_map<std::string, int> _ressources {
+
                 { FOOD,         FOOD_START_VALUE },
                 { LINEMATE,     NONE },
                 { DERAUMERE,    NONE },
@@ -109,6 +119,7 @@ namespace Zappy {
                 { MENDIANE,     NONE },
                 { PHIRAS,       NONE },
                 { THYSTAME,     NONE }
+
             };
 
     };
