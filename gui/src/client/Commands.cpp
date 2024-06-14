@@ -67,16 +67,16 @@ void CommandManager::receiveResponse(const std::string &response)
             fillMapPlayerInfos(EBO_CMD, params);
             }},
         { PEX_CMD, [this](const std::vector<std::string> &params) {
-        fillMapPlayerInfos(EBO_CMD, params);
+        fillMapPlayerInfos(PEX_CMD, params);
             }},
         { PBC_CMD, [this](const std::vector<std::string> &params) {
-        fillMapPlayerInfos(EBO_CMD, params);
+        fillMapPlayerInfos(PBC_CMD, params);
             }},
         { PIC_CMD, [this](const std::vector<std::string> &params) {
-        fillMapPlayerInfos(EBO_CMD, params);
+        fillMapPlayerInfos(PIC_CMD, params);
             }},
         { ENW_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(EBO_CMD, params);
+            fillMapPlayerInfos(ENW_CMD, params);
             }},
     };
 
