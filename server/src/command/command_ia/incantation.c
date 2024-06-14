@@ -47,6 +47,8 @@ static int *check_required_players(zappy_t *zappy, player_t *player)
     unsigned int player_allowed = 1;
     int *id_array = malloc(sizeof(int));
 
+    if (id_array == NULL)
+        return NULL;
     id_array[0] = player->id;
     for ((player_on_tile) = ((&zappy->player_head)->tqh_first);
         (player_on_tile); (player_on_tile) =
@@ -67,10 +69,10 @@ static void invite_player_to_ritual(server_t *server, zappy_t *zappy,
     arguments_t *arg, int player_id)
 {
     command_ia_t *command = malloc(sizeof(command_ia_t));
-    unsigned int client_fd = get_client_fd(zappy, player_id);
+    int client_fd = get_client_fd(zappy, player_id);
     client_t *client = get_client_in_struct(server, client_fd);
 
-    if (client == NULL || command == NULL)
+    if (command == NULL || client == NULL || client_fd == ERROR_RETURN)
         return;
     dprintf(client->client_fd, "Elevation underway\n");
     TAILQ_INSERT_HEAD(&client->command_head, command,
@@ -87,6 +89,8 @@ static void invite_players_to_ritual(server_t *server, zappy_t *zappy,
 {
     player_t *player = get_player_by_id(zappy, id_array[0]);
 
+    if (player == NULL)
+        return;
     for (unsigned int i = 0; i < REQUIRED_PLAYERS; i++) {
         invite_player_to_ritual(server, zappy, arg, id_array[i]);
     }

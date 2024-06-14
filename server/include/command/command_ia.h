@@ -23,7 +23,8 @@
     #define EJECT_COMMAND "Eject"
     #define LOOK_COMMAND "Look"
     #define BROADCAST_COMMAND "Broadcast"
-    #define INCANTATION_COMMAND "Incantation"
+    #define START_INCANTATION_COMMAND "Incantation"
+    #define END_INCANTATION_COMMAND ""
 
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]

@@ -38,6 +38,6 @@ command_infos_t cmd_list_ia[NB_IA_CMD] = {
     {EJECT_COMMAND, 7, 1},
     {LOOK_COMMAND, 7, 1},
     {BROADCAST_COMMAND, 7, 2},
-    {INCANTATION_COMMAND, 0, 1},
-    {"", 300, 1}
+    {START_INCANTATION_COMMAND, 0, 1},
+    {END_INCANTATION_COMMAND, 300, 1}
 };
