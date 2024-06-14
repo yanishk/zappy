@@ -76,7 +76,7 @@ void initialize_player(zappy_t *zappy, egg_t *egg)
     TAILQ_INSERT_TAIL(&zappy->player_head, player, player_entries);
     initialize_resources(&player->inventory);
     player->inventory.food = 10;
-    player->level = 8;
+    player->level = 1;
     player->height = egg->height;
     player->width = egg->width;
     player->team_name = strdup(egg->team_name);
