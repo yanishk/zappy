@@ -28,55 +28,55 @@ void CommandManager::receiveResponse(const std::string &response)
 
     std::unordered_map<std::string, std::function<void(const std::vector<std::string>&)>> commandMap = {
         { MSZ_CMD, [this](const std::vector<std::string> &params) {
-            fillMapIsland(MSZ_CMD, _mszCmd, params);
+            fillMapIsland(MSZ_CMD, params);
             }},
         { BCT_CMD, [this](const std::vector<std::string> &params) {
-            fillMapIsland(BCT_CMD, _bctCmd, params);
+            fillMapIsland(BCT_CMD, params);
             }},
         { TNA_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(TNA_CMD, _tnaCmd, params);
+            fillMapPlayerInfos(TNA_CMD, params);
             }},
         { PNW_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(PNW_CMD, _pnwCmd, params);
+            fillMapPlayerInfos(PNW_CMD, params);
             }},
         { PDI_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(PDI_CMD, _pdiCmd, params);
+            fillMapPlayerInfos(PDI_CMD, params);
             }},
         { PLV_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(PLV_CMD, _plvCmd, params);
+            fillMapPlayerInfos(PLV_CMD, params);
             }},
         { PIN_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(PIN_CMD, _pinCmd, params);
+            fillMapPlayerInfos(PIN_CMD, params);
             }},
         { PPO_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(PPO_CMD, _ppoCmd, params);
+            fillMapPlayerInfos(PPO_CMD, params);
             }},
         { PDR_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(PDR_CMD, _pdrCmd, params);
+            fillMapPlayerInfos(PDR_CMD, params);
             }},
         { PGT_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(PGT_CMD, _pgtCmd, params);
+            fillMapPlayerInfos(PGT_CMD, params);
             }},
         { SST_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(SST_CMD, _sstCmd, params);
+            fillMapPlayerInfos(SST_CMD, params);
             }},
         { SGT_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(SGT_CMD, _sgtCmd, params);
+            fillMapPlayerInfos(SGT_CMD, params);
             }},
         { EBO_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(EBO_CMD, _eboCmd, params);
+            fillMapPlayerInfos(EBO_CMD, params);
             }},
         { PEX_CMD, [this](const std::vector<std::string> &params) {
-        fillMapPlayerInfos(EBO_CMD, _pexCmd, params);
+        fillMapPlayerInfos(EBO_CMD, params);
             }},
         { PBC_CMD, [this](const std::vector<std::string> &params) {
-        fillMapPlayerInfos(EBO_CMD, _pbcCmd, params);
+        fillMapPlayerInfos(EBO_CMD, params);
             }},
         { PIC_CMD, [this](const std::vector<std::string> &params) {
-        fillMapPlayerInfos(EBO_CMD, _picCmd, params);
+        fillMapPlayerInfos(EBO_CMD, params);
             }},
         { ENW_CMD, [this](const std::vector<std::string> &params) {
-            fillMapPlayerInfos(EBO_CMD, _enwCmd, params);
+            fillMapPlayerInfos(EBO_CMD, params);
             }},
     };
 
@@ -103,12 +103,12 @@ void CommandManager::eraseFirstCmdInMap(const std::string &cmd)
     }
 }
 
-void CommandManager::fillMapPlayerInfos(const std::string &cmd, std::vector<std::vector<std::string>> &cmdVec, const std::vector<std::string> &params)
+void CommandManager::fillMapPlayerInfos(const std::string &cmd, const std::vector<std::string> &params)
 {
     _cmdMap[cmd].push_back(params);
 }
 
-void CommandManager::fillMapIsland(const std::string &cmd, std::vector<std::vector<std::string>> &cmdVec, const std::vector<std::string> &params)
+void CommandManager::fillMapIsland(const std::string &cmd, const std::vector<std::string> &params)
 {
     _cmdMap[cmd].push_back(params);
 }

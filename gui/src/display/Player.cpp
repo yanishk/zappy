@@ -275,31 +275,15 @@ void Player::displayInfo2D(int x, int y)
 {
     std::string text;
 
-    text.append("Player ID : ");
-    text.append(std::to_string(_playerID));
-    text.append("\nPlayer level : ");
-    text.append(std::to_string(_level));
-    text.append("\nPlayer Team : ");
-    text += _team;
-    text.append("\nPlayer inventory : ");
-    text.append("\nPlayer position : x ");
-    text.append(std::to_string((int)_playerPosition.x));
-    text.append(" y ");
-    text.append(std::to_string((int)_playerPosition.y));
-    text.append(" z ");
-    text.append(std::to_string((int)_playerPosition.z));
-    text.append("\nPlayer real position : x ");
-    text.append(std::to_string((int)_realPos.x));
-    text.append(" y ");
-    text.append(std::to_string((int)_realPos.y));
-    text.append(" z ");
-    text.append(std::to_string((int)_realPos.z));
-    text.append("\nPlayer inventory :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
+    text += "Player ID : " + std::to_string(_playerID) + "\n";
+    text += "Player level : " + std::to_string(_level) + "\n";
+    text += "Player Team : " + _team + "\n";
+    text += "Player position : x " + std::to_string((int)_playerPosition.x) + " y " + std::to_string((int)_playerPosition.y) + " z " + std::to_string((int)_playerPosition.z) + "\n";
+    text += "Player real position : x " + std::to_string((int)_realPos.x) + " z " + std::to_string((int)_realPos.z) + "\n";
+    text += ("Player inventory :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
     for (std::size_t i = 0; i < NBR_ITEM; i++) {
-        text.append("|\t");
-        text.append(std::to_string(_inventory.at(i)));
-        text.append("\t");
+        text += "|\t" + std::to_string(_inventory.at(i)) + "\t";
     }
-    text.append("|");
+    text += "|\n";
     DrawText(text.c_str(), x, y, TEXT_SIZE, BLUE);
 }

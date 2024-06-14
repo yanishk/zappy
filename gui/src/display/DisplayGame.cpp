@@ -208,33 +208,26 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
         if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second)
             placeIsland(mapSize.first, mapSize.second);
     }
-    for (int i = 0; _cmd.getCommandAt("bct", i).size() > 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("bct", i);
+    while (_cmd.getCommandAt("bct", 0).size() > 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("bct", 0);
         float x = std::stof(cmd.at(0).c_str());
         float z = std::stof(cmd.at(1).c_str());
         Vector3 itemPosition = (Vector3){x, 1.8, z};
         for (std::size_t j = 2; j < cmd.size(); j++) {
             int nbItem = std::atoi(cmd.at(j).c_str());
             int nbItemOnIsland = getNbrItemTypeOnIsland(itemPosition, j - 2);
-            if (nbItem == nbItemOnIsland)
-                continue;
-            if (nbItem > nbItemOnIsland) {
-                for (int k = 0; k < nbItem; k++) {
-                    addItemToIsland(itemPosition, j - 2);
-                }
+            while (nbItemOnIsland > 0) {
+                removeItemFromIsland(itemPosition, j - 2);
+                nbItemOnIsland--;
             }
-            if (nbItem < nbItemOnIsland) {
-                for (int k = nbItem; k < nbItemOnIsland; k++) {
-                    removeItemFromIsland(itemPosition, j - 2);
-                }
+            for (int k = 0; k < nbItem; k++) {
+                addItemToIsland(itemPosition, j - 2);
             }
         }
+        _cmd.eraseFirstCmdInMap("bct");
     }
-
-    if (_cmd.getCommandAt("tna", 0).size() == 0)
-        asio::write(_socket, asio::buffer("tna\n"));
-    for (int i = 0; _cmd.getCommandAt("tna", i).size() == 1; i++) {
-        std::vector<std::string> cmd = _cmd.getCommandAt("tna", i);
+    while (_cmd.getCommandAt("tna", 0).size() == 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt("tna", 0);
         if (_player._allTeamName.size() == 0) {
             _player._allTeamName.push_back(cmd.front());
             continue;
@@ -247,6 +240,7 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
         if (isUnique) {
             _player._allTeamName.push_back(cmd.front());
         }
+        _cmd.eraseFirstCmdInMap("tna");
     }
 
     recivedCmd.getPnw();
@@ -321,12 +315,16 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
-    UseRecivedCmd recivedCmd(_cmd, _player);
+    UseRecivedCmd recivedCmd(_cmd, _player, _socket);
 
     SetTargetFPS(60);
     float seconds = 0.0f;
+    asio::write(_socket, asio::buffer("mct\n"));
     while (!WindowShouldClose()) {
         useServerInfo(recivedCmd);
+
+        if (IsKeyPressed(KEY_KP_3))
+            asio::write(_socket, asio::buffer("mct\n"));
 
         seconds += (GetFrameTime() / 2);
 
@@ -339,7 +337,6 @@ void DisplayGame::launchGame(void)
 
         display3D();
         display2D();
-
         EndDrawing();
     }
 }

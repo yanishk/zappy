@@ -15,7 +15,7 @@
 
 class UseRecivedCmd {
     public:
-        UseRecivedCmd(CommandManager &cmd, AllPlayers &player);
+        UseRecivedCmd(CommandManager &cmd, AllPlayers &player, asio::ip::tcp::socket &socket);
         void getPnw(void);
         void getPpo(void);
         void getPlv(void);
@@ -42,6 +42,7 @@ class UseRecivedCmd {
         int _inventoryIndex = 0;
         CommandManager &_cmd;
         AllPlayers &_player;
+        asio::ip::tcp::socket &_socket;
 };
 
 #endif /* !USERECIVEDCMD_HPP_ */
