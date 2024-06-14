@@ -11,11 +11,12 @@
     #include "Commands.hpp"
     #include "Client.hpp"
     #include "Player.hpp"
+    #include "Eggs.hpp"
     #include "Item.hpp"
 
 class UseRecivedCmd {
     public:
-        UseRecivedCmd(CommandManager &cmd, AllPlayers &player, asio::ip::tcp::socket &socket);
+        UseRecivedCmd(CommandManager &cmd, AllPlayers &player, AllEggs &egg, asio::ip::tcp::socket &socket);
 
         void getPnw(void);
         void getPpo(void);
@@ -35,8 +36,10 @@ class UseRecivedCmd {
         void getSst(void);
         void getSeg(void);
     private:
+
         CommandManager &_cmd;
         AllPlayers &_player;
+        AllEggs &_egg;
         asio::ip::tcp::socket &_socket;
 };
 
