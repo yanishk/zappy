@@ -8,6 +8,8 @@
 #ifndef QUENTIN_HPP_
     #define QUENTIN_HPP_
 
+    #define INFINY 10000
+
     #define LAST_FOOD 1
     #define ZERO_REFILL 0
 
