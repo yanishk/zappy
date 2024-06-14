@@ -253,6 +253,7 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getPdr();
     recivedCmd.getPin();
     recivedCmd.getEnw();
+    recivedCmd.getSmg();
 }
 
 void DisplayGame::display3D(void)
