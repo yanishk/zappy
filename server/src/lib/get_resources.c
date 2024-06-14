@@ -7,7 +7,7 @@
 
 #include "command_ia.h"
 
-int get_resources(resource_t *resource, const char *name)
+int get_resources(const resource_t *resource, const char *name)
 {
     if (strcmp(name, FOOD) == 0)
         return resource->food;

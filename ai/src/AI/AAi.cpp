@@ -148,10 +148,6 @@ bool Zappy::AAi::fork()
         return false;
     }
 
-    Zappy::Team &team = Zappy::Team::getTeam(GET);
-
-    team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, 3));
-
     return true;
 }
 

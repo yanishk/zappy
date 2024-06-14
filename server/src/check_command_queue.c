@@ -15,8 +15,6 @@ void check_command_queue(server_t *server, zappy_t *zappy,
     command_ia_t *command = NULL;
     command_ia_t *command_next = NULL;
 
-    if (TAILQ_EMPTY(&client->command_head))
-        return;
     command = TAILQ_FIRST(&client->command_head);
     while (command != NULL) {
         command_next = TAILQ_NEXT(command, command_ia_entries);
@@ -28,6 +26,8 @@ void check_command_queue(server_t *server, zappy_t *zappy,
             answer_client(status, client->client_fd);
             free_ia_command(client, command);
             command = command_next;
+            continue;
         }
+        command = NULL;
     }
 }

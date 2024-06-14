@@ -91,7 +91,7 @@ bool is_command_queue_full(client_t *);
 bool time_is_up(clock_t, double);
 bool player_on_same_tile(const player_t *, const player_t *);
 bool egg_on_same_tile(const player_t *, const egg_t *);
-int get_resources(resource_t *, const char *);
+int get_resources(const resource_t *, const char *);
 void set_resources(resource_t *, const char *, int);
 bool is_a_resource(const char *);
 int get_tile_index(const char *, const int);

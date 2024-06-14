@@ -12,6 +12,7 @@
     #include "egg.h"
     #include "player.h"
 
+    #define NB_ELEVATIONS 7
     #define NB_DIRECTIONS 4
 
     #define NORTH 0
@@ -22,6 +23,17 @@
     #define RIGHT_ANGLE 90
 
     #define TO_MILLI 1000
+
+    #define ELEVATION elevations[player->level -1]
+    #define REQUIRED_RESOURCES ELEVATION.required_resources
+    #define REQUIRED_LEVEL ELEVATION.elevation_level
+    #define REQUIRED_PLAYERS ELEVATION.required_players
+
+typedef struct incantation_s {
+    unsigned int elevation_level;
+    unsigned int required_players;
+    const resource_t *required_resources;
+} incantation_t;
 
 typedef struct game_infos_s {
     int last_player_id;
