@@ -17,6 +17,11 @@
 
     #define ONE_FOOD 1
 
+    #define ONE_PLAYER 1
+    #define TWO_PLAYERS 2
+    #define FOUR_PLAYERS 4
+    #define SIX_PLAYERS 6
+
     #define NONE 0
     #define HERE 0
 
@@ -35,20 +40,6 @@ namespace Zappy {
             Incantation
 
         };
-
-        
-
-        enum RessourceType {
-            Food,
-            Linemate,
-            Deraumere,
-            Sibur,
-            Mendiane,
-            Phiras,
-            Thystame
-        };
-
-
 
         public:
 
@@ -78,6 +69,9 @@ namespace Zappy {
             bool checkIncantation();
             bool execute();
 
+            bool takeFood();
+            bool forkFood();
+
             std::size_t countRessources(const std::string &ressources, const std::string &index);
 
             Ressources _look;
@@ -86,8 +80,23 @@ namespace Zappy {
             std::thread _thread;
             std::vector<Action> _actions;
 
+            std::vector<std::pair<Action, std::function<bool()>>> _execute = {
+
+                { Action::TakeFood, [this] { return takeFood(); } },
+                { Action::ForkFood, [this] { return forkFood(); } }
+
+            };
+
             std::vector<std::pair<size_t, Zappy::Ressources>> _incatation = {
-                { 1, Zappy::Ressources(1, 0, 0, 0, 0, 0) }
+
+                { ONE_PLAYER,       Zappy::Ressources(1, NONE, NONE, NONE, NONE, NONE) },
+                { TWO_PLAYERS,      Zappy::Ressources(1, 1, 1, NONE, NONE, NONE) },
+                { TWO_PLAYERS,      Zappy::Ressources(2, NONE, 1, NONE, 2, NONE) },
+                { FOUR_PLAYERS,     Zappy::Ressources(1, 1, 2, NONE, 1, NONE) },
+                { FOUR_PLAYERS,     Zappy::Ressources(1, 2, 1, 3, NONE, NONE) },
+                { SIX_PLAYERS,      Zappy::Ressources(1, 2, 3, NONE, 1, NONE) },
+                { SIX_PLAYERS,      Zappy::Ressources(2, 2, 2, 2, 2, 1) }
+
             };
 
     };

@@ -61,27 +61,42 @@ bool Zappy::Queen::execute()
 {
     while (_actions.size()) {
 
-        if (_actions.front() == TakeFood) {
+        for (const auto &task : _execute) {
 
-            takeObject(FOOD);
-
-            _ressources[FOOD] += ONE_FOOD;
-            _stock -= ONE_FOOD;
-
-        }
-
-        if (_actions.front() == ForkFood) {
-
-            fork();
-
-            Zappy::Team &team = Zappy::Team::getTeam(GET);
-            team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, INFINY));
+            if (_actions.front() == task.first) {
+                task.second();
+            }
 
         }
 
         _actions.erase(_actions.begin());
 
     }
+
+    return true;
+}
+
+bool Zappy::Queen::takeFood()
+{
+    if (!takeObject(FOOD)) {
+        return false;
+    }
+
+    _ressources[FOOD] += ONE_FOOD;
+    _stock -= ONE_FOOD;
+
+    return true;
+}
+
+bool Zappy::Queen::forkFood()
+{
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
+
+    if (!fork()) {
+        return false;
+    }
+
+    team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, INFINY));
 
     return true;
 }
