@@ -12,8 +12,8 @@ Player::Player(Vector3 position)
     _playerHight = 1.1;
     _realPos = position;
     _playerPosition = (Vector3){(position.x + 1) * spaceBetwenIsland, 1.1, position.z * spaceBetwenIsland};
-    _playerPosition.x += -2 + (rand() % 4);
-    _playerPosition.z += -2 + (rand() % 4);
+    _playerPosition.x += -2 + (std::rand() % 4);
+    _playerPosition.z += -2 + (std::rand() % 4);
     _isMooving = false;
     _rotationAngle = 0;
     for (std::size_t i = 0; i < NBR_ITEM; i++) {
@@ -244,12 +244,12 @@ bool Player::isPlayerSelected(BoundingBox playerBox, Ray ray)
 
 void Player::addItem(int itemType)
 {
-    _inventory.at(itemType) += 1;
+    _inventory[itemType] += 1;
 }
 
 void Player::removeItem(int itemType)
 {
-    _inventory.at(itemType) -= 1;
+    _inventory[itemType] -= 1;
 }
 
 void Player::resetInventory(void)
@@ -267,7 +267,7 @@ std::vector<int> Player::getInventory(void)
 void Player::setInventory(std::vector<int> newInv)
 {
     for (std::size_t i = 0; i < _inventory.size(); i++) {
-        _inventory.at(i) = newInv.at(i);
+        _inventory[i] = newInv[i];
     }
 }
 
@@ -282,7 +282,7 @@ void Player::displayInfo2D(int x, int y)
     text += "Player real position : x " + std::to_string((int)_realPos.x) + " z " + std::to_string((int)_realPos.z) + "\n";
     text += ("Player inventory :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
     for (std::size_t i = 0; i < NBR_ITEM; i++) {
-        text += "|\t" + std::to_string(_inventory.at(i)) + "\t";
+        text += "|\t" + std::to_string(_inventory[i]) + "\t";
     }
     text += "|\n";
     DrawText(text.c_str(), x, y, TEXT_SIZE, BLUE);

@@ -109,10 +109,10 @@ void DisplayGame::placeIsland(int x, int y)
             std::size_t islandIndex = rand() % _islandModel.size();
             Island tmpIsland;
             _allIsland.push_back(tmpIsland);
-            _islandModel.at(islandIndex).first.transform = MatrixRotateXYZ((Vector3){ DEG2RAD*0, DEG2RAD*(std::rand() % 360), DEG2RAD*0});
-            _allIsland.back()._islandModel = _islandModel.at(islandIndex).first;
+            _islandModel[islandIndex].first.transform = MatrixRotateXYZ((Vector3){ DEG2RAD*0, DEG2RAD*(std::rand() % 360), DEG2RAD*0});
+            _allIsland.back()._islandModel = _islandModel[islandIndex].first;
             _allIsland.back()._islandPosition = setVector3(posX, -4, posY);
-            _allIsland.back()._islandSize = _islandModel.at(islandIndex).second;
+            _allIsland.back()._islandSize = _islandModel[islandIndex].second;
             posY += spaceBetwenIsland;
         }
     }
@@ -154,7 +154,7 @@ void DisplayGame::initWaterShader(void)
 
 void DisplayGame::addItemToIsland(Vector3 position, int type)
 {
-    _allItem.push_back(_allItemModel.at(type));
+    _allItem.push_back(_allItemModel[type]);
     _allItem.back()._itemPosition = setVector3((position.x + 1) * spaceBetwenIsland, 1.8, position.z * spaceBetwenIsland);
     _allItem.back()._itemPosition.x += -3 + (rand() % 6);
     _allItem.back()._itemPosition.z += -3 + (rand() % 6);
@@ -165,7 +165,7 @@ void DisplayGame::addItemToIsland(Vector3 position, int type)
 void DisplayGame::removeItemFromIsland(Vector3 position, int type)
 {
     for (std::size_t i = 0; i < _allItem.size(); i++) {
-        if (Utils::Vec3Comp(_allItem.at(i)._realPos, position) && _allItem.at(i)._itemType == type) {
+        if (Utils::Vec3Comp(_allItem[i]._realPos, position) && _allItem[i]._itemType == type) {
             _allItem.erase(_allItem.begin() + i);
             break;
         }
@@ -203,18 +203,18 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
         std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
 
         std::pair<int, int> mapSize;
-        mapSize.first = std::atoi(cmd.at(0).c_str());
-        mapSize.second = std::atoi(cmd.at(1).c_str());
+        mapSize.first = std::atoi(cmd.front().c_str());
+        mapSize.second = std::atoi(cmd[1].c_str());
         if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second)
             placeIsland(mapSize.first, mapSize.second);
     }
     while (_cmd.getCommandAt(BCT_CMD, 0).size() > 1) {
         std::vector<std::string> cmd = _cmd.getCommandAt(BCT_CMD, 0);
-        float x = std::stof(cmd.at(0).c_str());
-        float z = std::stof(cmd.at(1).c_str());
+        float x = std::stof(cmd.front().c_str());
+        float z = std::stof(cmd[1].c_str());
         Vector3 itemPosition = (Vector3){x, 1.8, z};
         for (std::size_t j = 2; j < cmd.size(); j++) {
-            int nbItem = std::atoi(cmd.at(j).c_str());
+            int nbItem = std::atoi(cmd[j].c_str());
             int nbItemOnIsland = getNbrItemTypeOnIsland(itemPosition, j - 2);
             while (nbItemOnIsland > 0) {
                 removeItemFromIsland(itemPosition, j - 2);

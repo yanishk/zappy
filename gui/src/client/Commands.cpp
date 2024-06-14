@@ -117,7 +117,7 @@ bool CommandManager::replaceOrAddPlayerInfos(std::vector<std::vector<std::string
     const std::vector<std::string> &params)
 {
     for (auto &item : cmdList) {
-        if (!item.empty() && item.at(0) == params.at(0)) {
+        if (!item.empty() && item.front() == params.front()) {
             item = params;
             return true;
         }
@@ -135,7 +135,7 @@ bool CommandManager::replaceOrAdd(std::vector<std::vector<std::string>> &cmdList
     }
 
     for (auto &item : cmdList) {
-        if (item.size() >= 2 && item.at(0) == params.at(0) && item.at(1) == params.at(1)) {
+        if (item.size() >= 2 && item.front() == params.front() && item[1] == params[1]) {
             item = params;
             return true;
         }
@@ -170,7 +170,7 @@ std::vector<std::string> CommandManager::getCommandAt(const std::string &cmd,
 
     std::vector<std::string> vide;
     if (it != _cmdMap.end() && index < it->second.size()) {
-        return it->second.at(index);
+        return it->second[index];
     } else {
         return vide;
     }
@@ -184,7 +184,7 @@ std::string CommandManager::getCommandInfoAt(const std::string &cmd,
 
     if (it != _cmdMap.end() && vectorIndex <= it->second.size() &&
         elementIndex < it->second[vectorIndex].size()) {
-        return it->second.at(vectorIndex).at(elementIndex);
+        return it->second[vectorIndex][elementIndex];
     }
     throw std::out_of_range(INVALID_IDX);
 }
@@ -195,7 +195,7 @@ std::vector<std::string> CommandManager::strToVec(const std::string &input, char
     std::string tmp;
 
     for (std::size_t t = 0; t < input.size(); t++) {
-        if (input.at(t) == token) {
+        if (input[t] == token) {
             if (!tmp.empty()) {
                 res.push_back(tmp);
                 tmp.clear();

@@ -64,8 +64,8 @@ void AllPlayers::addPlayerToIsland(Vector3 position, int playerID)
 void AllPlayers::removePlayerFromIsland(int playerID)
 {
     for (std::size_t i = 0; i < _allPlayer.size(); i++) {
-        if (_allPlayer.at(i)._playerID == playerID) {
-            _allPlayer.at(i).isAlive = false;
+        if (_allPlayer[i]._playerID == playerID) {
+            _allPlayer[i].isAlive = false;
             _allPlayer.erase(_allPlayer.begin() + i);
             break;
         }
@@ -193,7 +193,7 @@ void AllPlayers::setInventory(int playerID, std::vector<int> newInv)
 Color AllPlayers::setPlayerColor(std::string teamName)
 {
     float teamIndex = 0;
-    while (teamName != _allTeamName.at(teamIndex)) {
+    while (teamName != _allTeamName[teamIndex]) {
         teamIndex++;
     }
     Color color;
