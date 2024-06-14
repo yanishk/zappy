@@ -10,6 +10,8 @@
 
     #include "AAi.hpp"
 
+    #define WELCOME_QUEEN "Queen initialized\n"
+
     #define CRITICAL_FOOD 10
     #define CRITICAL_STOCK 20
 
@@ -37,14 +39,19 @@ namespace Zappy {
         public:
 
             Queen(const std::string &port, const std::string &name): AAi(port, name) {
-                std::cout << "Queen initialized\n";
+
+                std::cout << WELCOME_QUEEN;
+
                 _network.sendInformationToServer(_name);
+
                 if (_network.getInfoFromServer() == RESPONSE_KO) {
                     return;
                 }
+
                 _network.getInfoFromServer();
                 _thread = std::thread(&Queen::run, this);
                 _thread.join();
+
             };
 
             bool run();
