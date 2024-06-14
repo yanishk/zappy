@@ -78,6 +78,9 @@ void CommandManager::receiveResponse(const std::string &response)
         { ENW_CMD, [this](const std::vector<std::string> &params) {
             fillMapPlayerInfos(ENW_CMD, params);
             }},
+        { SMG_CMD, [this](const std::vector<std::string> &params) {
+            fillMapIsland(SMG_CMD, params);
+            }},
     };
 
     auto it = commandMap.find(cmd);
