@@ -10,9 +10,29 @@
 
     #include "AAi.hpp"
 
+    #define CRITICAL_FOOD 10
+    #define CRITICAL_STOCK 20
+
+    #define ONE_FOOD 1
+
+    #define NONE 0
+    #define HERE 0
+
 namespace Zappy {
     
     class Queen : public AAi {
+
+        using Ressources = std::vector<std::string>;
+
+        enum Action {
+
+            Look,
+            TakeFood,
+            ForkFood,
+            ForkSearcher,
+            Incantation
+
+        };
 
         public:
 
@@ -31,8 +51,15 @@ namespace Zappy {
 
         private:
 
+            bool execute();
             bool initialize();
+
+            std::size_t countRessources(const std::string &ressources, const std::string &index);
+
+            std::size_t _stock;
             std::thread _thread;
+            std::vector<Action> _actions;
+
     };
 
 };

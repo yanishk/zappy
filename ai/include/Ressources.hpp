@@ -64,7 +64,7 @@ namespace Zappy {
 
             };
 
-            int operator[](const std::string &ressource) {
+            int &operator[](const std::string &ressource) {
                 return _ressources[ressource];
             }
 
