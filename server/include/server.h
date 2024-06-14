@@ -39,8 +39,8 @@ typedef struct server_s {
     int port;
     int server_fd;
     int *fd_array;
-    size_t max_user;
-    size_t size;
+    size_t max_clients;
+    size_t fd_array_size;
     fd_set readfds;
     client_t **clients;
     char **cmd_arg_array;

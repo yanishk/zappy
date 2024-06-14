@@ -35,7 +35,7 @@ static int check_clients_sockets(server_t *server, zappy_t *zappy,
     int client_fd = 0;
     client_t *client = NULL;
 
-    for (size_t i = 0; i != server->size; i += 1) {
+    for (size_t i = 0; i != server->fd_array_size; i += 1) {
         client_fd = server->fd_array[i];
         if (FD_ISSET(client_fd, &server->readfds) != 0) {
             client = insert_client_in_struct(server, client_fd);
@@ -55,7 +55,7 @@ static int add_client_socket(server_t *server, int new_client_fd)
 {
     bool has_been_set = false;
 
-    for (size_t i = 0; i != server->size; i += 1) {
+    for (size_t i = 0; i != server->fd_array_size; i += 1) {
         if (server->fd_array[i] == 0) {
             server->fd_array[i] = new_client_fd;
             has_been_set = true;
@@ -63,12 +63,12 @@ static int add_client_socket(server_t *server, int new_client_fd)
         }
     }
     if (!has_been_set) {
-        server->size += 1;
+        server->fd_array_size += 1;
         server->fd_array = realloc(server->fd_array,
-            sizeof(int) * server->size);
+            sizeof(int) * server->fd_array_size);
         if (server->fd_array == NULL)
             return EXIT_WITH_ERROR;
-        server->fd_array[server->size - 1] = new_client_fd;
+        server->fd_array[server->fd_array_size - 1] = new_client_fd;
     }
     return EXIT_WITH_SUCCESS;
 }
@@ -106,7 +106,7 @@ static void set_clients_sockets(server_t *server, unsigned int *max_fd_set)
     unsigned int client_fd = 0;
 
     *max_fd_set = server->server_fd;
-    for (size_t i = 0; i != server->size; i += 1) {
+    for (size_t i = 0; i != server->fd_array_size; i += 1) {
         client_fd = server->fd_array[i];
         if (client_fd != 0)
             FD_SET(client_fd, &server->readfds);
@@ -118,10 +118,10 @@ static void set_clients_sockets(server_t *server, unsigned int *max_fd_set)
 static int set_sockets(server_t *server)
 {
     static unsigned int max_fd_set = 0;
-    struct timeval timeout;
+    struct timeval timeout = {0};
 
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 0;
+    FD_ZERO(&server->readfds);
+    FD_SET(server->server_fd, &server->readfds);
     set_clients_sockets(server, &max_fd_set);
     if (select(max_fd_set + 1, &server->readfds,
         NULL, NULL, &timeout) == -1) {
@@ -141,8 +141,6 @@ int run_server(server_t *server, zappy_t *zappy, arguments_t *arg)
     signal(SIGINT, handle_ctrl_c);
     signal(SIGPIPE, handle_ctrl_c);
     while (handle_server(1)) {
-        FD_ZERO(&server->readfds);
-        FD_SET(server->server_fd, &server->readfds);
         select_status = set_sockets(server);
         if (select_status != EXIT_WITH_SUCCESS)
             return select_status;
@@ -150,9 +148,8 @@ int run_server(server_t *server, zappy_t *zappy, arguments_t *arg)
             check_clients_sockets(server, zappy, arg) == EXIT_WITH_ERROR)
             return EXIT_WITH_ERROR;
         refill_map(zappy, *arg, server, &refill);
-        if (win_condition(server, zappy) != NULL) {
+        if (win_condition(server, zappy) != NULL)
             return EXIT_WITH_SUCCESS;
-        }
     }
     return EXIT_WITH_SUCCESS;
 }

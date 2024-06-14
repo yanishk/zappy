@@ -40,9 +40,9 @@ static void free_ia_commands(client_t *client)
 static void free_server(server_t *server)
 {
     close(server->server_fd);
-    for (size_t i = 0; i != server->max_user; i += 1)
+    for (size_t i = 0; i != server->max_clients; i += 1)
         free_ia_commands(server->clients[i]);
-    for (size_t i = 0; i != server->max_user; i += 1)
+    for (size_t i = 0; i != server->max_clients; i += 1)
         free(server->clients[i]);
     free(server->clients);
     free(server->fd_array);

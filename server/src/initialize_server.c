@@ -70,8 +70,8 @@ void init_client(client_t *client)
 
 static void init_client_struct(server_t *server)
 {
-    server->clients = malloc(sizeof(client_t) * (server->max_user));
-    for (size_t i = 0; i != server->max_user; i += 1) {
+    server->clients = malloc(sizeof(client_t) * (server->max_clients));
+    for (size_t i = 0; i != server->max_clients; i += 1) {
         server->clients[i] = malloc(sizeof(client_t));
         init_client(server->clients[i]);
     }
@@ -85,9 +85,9 @@ server_t *init_server_struct(const arguments_t arg)
         return NULL;
     server->port = arg.port;
     server->server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    server->size = 1;
-    server->fd_array = create_int_array(server->size);
-    server->max_user = 1;
+    server->fd_array_size = 1;
+    server->fd_array = create_int_array(server->fd_array_size);
+    server->max_clients = 1;
     if (server->fd_array == NULL)
         return NULL;
     init_client_struct(server);
