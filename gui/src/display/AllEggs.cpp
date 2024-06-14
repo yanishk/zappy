@@ -19,7 +19,7 @@ void AllEggs::addEggToIsland(Vector3 position, int eggID)
 
     tmpEgg._eggModel = _model;
     tmpEgg._eggID = eggID;
-    tmpEgg._eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * 90, DEG2RAD
+    tmpEgg._eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * 115, DEG2RAD
         * (std::rand() % 360), DEG2RAD * 0});
     _allEggs.push_back(tmpEgg);
 }

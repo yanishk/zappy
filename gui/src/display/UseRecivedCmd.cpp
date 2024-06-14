@@ -134,6 +134,16 @@ void UseRecivedCmd::getEbo(void)
     }
 }
 
+void UseRecivedCmd::getSmg(void)
+{
+    while (_cmd.getCommandAt(SMG_CMD, 0).size() >= 1) {
+        std::vector<std::string> tmpCmd = _cmd.getCommandAt(SMG_CMD, 0);
+        _egg.addEggToIsland((Vector3){std::stof(tmpCmd.at(2).c_str()), 1.0,
+            std::stof(tmpCmd.at(3).c_str())}, std::stoi(tmpCmd[1]));
+        _cmd.eraseFirstCmdInMap(SMG_CMD);
+    }
+}
+
 void UseRecivedCmd::getEdi(void)
 {
 

@@ -35,6 +35,8 @@ class UseRecivedCmd {
         void getSgt(void);
         void getSst(void);
         void getSeg(void);
+        void getSmg(void);
+
     private:
 
         CommandManager &_cmd;
