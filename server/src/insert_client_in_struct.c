@@ -5,9 +5,6 @@
 ** insert_client_in_struct
 */
 
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
 #include "server.h"
 
 client_t *get_client_in_struct(server_t *server, const int client_fd)

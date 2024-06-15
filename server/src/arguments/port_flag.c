@@ -5,8 +5,6 @@
 ** port_flag
 */
 
-#include <string.h>
-#include <stdlib.h>
 #include "server.h"
 
 int port_flag(const char **av, int i, bool *is_a_team_name, arguments_t *arg)

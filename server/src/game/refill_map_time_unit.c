@@ -6,7 +6,6 @@
 */
 
 #include <math.h>
-#include "server.h"
 #include "command_gui.h"
 
 static struct repartion_resource const repartion_unit[] = {

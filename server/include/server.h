@@ -8,10 +8,9 @@
 #ifndef SERVER_H_
     #define SERVER_H_
 
-    #include <sys/select.h>
     #include <arpa/inet.h>
-    #include <string.h>
     #include <time.h>
+    #include <string.h>
     #include "game.h"
 
     #define EXIT_WITH_ERROR 84

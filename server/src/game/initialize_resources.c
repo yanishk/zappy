@@ -6,8 +6,6 @@
 */
 
 #include <math.h>
-#include <time.h>
-#include "game.h"
 #include "server.h"
 
 struct repartion_resource repartion[] = {

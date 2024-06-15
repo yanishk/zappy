@@ -5,8 +5,6 @@
 ** init_arg_struct
 */
 
-#include <string.h>
-#include <stdlib.h>
 #include "server.h"
 
 struct flag_occurence flags[] = {

@@ -5,11 +5,7 @@
 ** initialize_server
 */
 
-#include <netinet/ip.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "server.h"
-#include "command_ia.h"
 
 static int check_socket_creation(server_t *server)
 {

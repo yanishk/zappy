@@ -5,7 +5,6 @@
 ** check_command_queue
 */
 
-#include "server.h"
 #include "command_ia.h"
 
 void check_command_queue(server_t *server, zappy_t *zappy,
