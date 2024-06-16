@@ -7,11 +7,9 @@
 
 #include "server.h"
 
-int team_name_flag(const char **av, int i, bool *is_a_team_name, arguments_t *)
+int team_name_flag(const char **, int *i, bool *is_a_team_name, arguments_t *)
 {
-    if (strcmp(av[i], "-n") == 0) {
-        *is_a_team_name = true;
-        i++;
-    }
+    *is_a_team_name = true;
+    *i += 1;
     return EXIT_WITH_SUCCESS;
 }

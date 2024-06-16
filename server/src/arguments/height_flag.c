@@ -7,15 +7,15 @@
 
 #include "server.h"
 
-int height_flag(const char **av, int i, bool *is_a_team_name, arguments_t *arg)
+int height_flag(const char **av, int *i, bool *is_a_team_name,
+    arguments_t *arg)
 {
-    if (strcmp(av[i], "-y") == 0) {
-        *is_a_team_name = false;
-        arg->height = atoi(av[i + 1]);
-        if (arg->height <= 0) {
-            fprintf(stderr, INVALID_HEIGHT);
-            return EXIT_WITH_ERROR;
-        }
+    *is_a_team_name = false;
+    if (!is_positive_number(av[*i + 1])) {
+        fprintf(stderr, INVALID_HEIGHT);
+        return EXIT_WITH_ERROR;
     }
+    arg->height = atoi(av[*i + 1]);
+    *i += 1;
     return EXIT_WITH_SUCCESS;
 }

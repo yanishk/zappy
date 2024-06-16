@@ -7,32 +7,14 @@
 
 #include "server.h"
 
-struct flag_occurence flags[] = {
-    {"-n", 0},
-    {"-p", 0},
-    {"-x", 0},
-    {"-y", 0},
-    {"-c", 0},
-    {"-f", 0},
+static struct flag_occurence flags[] = {
+    {"-n", 0, &team_name_flag},
+    {"-p", 0, &port_flag},
+    {"-x", 0, &width_flag},
+    {"-y", 0, &height_flag},
+    {"-c", 0, &nb_clients_flag},
+    {"-f", 0, &frequency_flag}
 };
-
-int (*flag_func[])(const char **av, int i,
-    bool *is_a_team_name, arguments_t *arg) = {
-    &team_name_flag,
-    &port_flag,
-    &width_flag,
-    &height_flag,
-    &nb_clients_flag,
-    &frequency_flag
-};
-
-static void increment_flag_occurence(const char *team_name_flagame)
-{
-    for (size_t i = 0; i != NB_FLAGS; i++) {
-        if (strcmp(flags[i].name, team_name_flagame) == 0)
-            flags[i].occurence++;
-    }
-}
 
 static int check_flags_occurences(arguments_t *arg)
 {
@@ -59,7 +41,7 @@ static void fill_team_name(const char *team_name, const bool is_a_team_name,
 {
     team_t *team = NULL;
 
-    if (is_a_team_name && strcmp(team_name, "-n") != 0) {
+    if (is_a_team_name) {
         team = malloc(sizeof(team_t));
         TAILQ_INSERT_TAIL(&arg->team_head, team, team_entries);
         team->team_name = strdup(team_name);
@@ -85,12 +67,18 @@ static int check_arg_values(arguments_t *arg)
     return EXIT_WITH_SUCCESS;
 }
 
-static int call_flag(const char **av, int i,
+static int call_flag(const char **av, int *i,
     bool *is_a_team_name, arguments_t *arg)
 {
-    for (size_t y = 0; y < NB_FLAGS; y++) {
-        if (flag_func[y](av, i, is_a_team_name, arg) == EXIT_WITH_ERROR)
-            return EXIT_WITH_ERROR;
+    unsigned int status = EXIT_WITH_SUCCESS;
+
+    for (size_t j = 0; j < NB_FLAGS; j++) {
+        if (strcmp(flags[j].name, av[*i]) == 0) {
+            status = flags[j].func(av, i, is_a_team_name, arg);
+            flags[j].occurence++;
+        }
+        if (status == EXIT_WITH_ERROR)
+            return status;
     }
     return EXIT_WITH_SUCCESS;
 }
@@ -109,13 +97,12 @@ static void init_arg_struct(arguments_t *arg)
 int fill_arg_struct(int ac, const char **av, arguments_t *arg)
 {
     bool is_a_team_name = false;
-    unsigned int status = 0;
+    unsigned int status = EXIT_WITH_SUCCESS;
 
     init_arg_struct(arg);
     for (int i = 1; i != ac; i++) {
-        increment_flag_occurence(av[i]);
-        if (i < ac - 1)
-            status = call_flag(av, i, &is_a_team_name, arg);
+        if (i < (ac - 1))
+            status = call_flag(av, &i, &is_a_team_name, arg);
         if (status == EXIT_WITH_ERROR)
             return status;
         fill_team_name(av[i], is_a_team_name, arg);

@@ -7,15 +7,14 @@
 
 #include "server.h"
 
-int port_flag(const char **av, int i, bool *is_a_team_name, arguments_t *arg)
+int port_flag(const char **av, int *i, bool *is_a_team_name, arguments_t *arg)
 {
-    if (strcmp(av[i], "-p") == 0) {
-        *is_a_team_name = false;
-        arg->port = atoi(av[i + 1]);
-        if (arg->port <= 0) {
-            fprintf(stderr, INVALID_PORT);
-            return EXIT_WITH_ERROR;
-        }
+    *is_a_team_name = false;
+    if (!is_positive_number(av[*i + 1])) {
+        fprintf(stderr, INVALID_PORT);
+        return EXIT_WITH_ERROR;
     }
+    arg->port = atoi(av[*i + 1]);
+    *i += 1;
     return EXIT_WITH_SUCCESS;
 }

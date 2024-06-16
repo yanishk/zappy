@@ -23,11 +23,6 @@
     #define INVALID_FREQUENCY "frequency must be a number > 0\n"
     #define UNSPECIFIED_ARG_VALUE "all flags must be followed by a value\n"
 
-struct flag_occurence {
-    char *name;
-    int occurence;
-};
-
 typedef struct team_s {
     char *team_name;
     TAILQ_ENTRY(team_s) team_entries;
@@ -43,12 +38,18 @@ typedef struct arguments_s {
     TAILQ_HEAD(, team_s) team_head;
 } arguments_t;
 
-int team_name_flag(const char **, int, bool *, arguments_t *);
-int port_flag(const char **, int, bool *, arguments_t *);
-int width_flag(const char **, int, bool *, arguments_t *);
-int height_flag(const char **, int, bool *, arguments_t *);
-int nb_clients_flag(const char **, int, bool *, arguments_t *);
-int frequency_flag(const char **, int, bool *, arguments_t *);
+struct flag_occurence {
+    char *name;
+    int occurence;
+    int (*func)(const char **, int *, bool *, arguments_t *);
+};
+
+int team_name_flag(const char **, int *, bool *, arguments_t *);
+int port_flag(const char **, int *, bool *, arguments_t *);
+int width_flag(const char **, int *, bool *, arguments_t *);
+int height_flag(const char **, int *, bool *, arguments_t *);
+int nb_clients_flag(const char **, int *, bool *, arguments_t *);
+int frequency_flag(const char **, int *, bool *, arguments_t *);
 
 int fill_arg_struct(int, const char **, arguments_t *);
 void print_arg_struct(const arguments_t);
