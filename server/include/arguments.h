@@ -16,12 +16,19 @@
     #define MIN_ARGS 11
     #define NB_FLAGS 6
 
-    #define INVALID_PORT "port must be a number > 0\n"
-    #define INVALID_WIDTH "width must be a number > 0\n"
-    #define INVALID_HEIGHT "height must be a number > 0\n"
-    #define INVALID_NB_CLIENTS "nb of clients must be a number > 0\n"
-    #define INVALID_FREQUENCY "frequency must be a number > 0\n"
-    #define UNSPECIFIED_ARG_VALUE "all flags must be followed by a value\n"
+    #define DEFAULT_FREQUENCE_VALUE 100
+
+    #define PORT "port"
+    #define WIDTH "width"
+    #define HEIGHT "height"
+    #define NB_CLIENTS "nb of clients"
+    #define FREQUENCY "frequency"
+
+    #define NO_TEAM_PROVIDED "no team provided\n"
+    #define INVALID_FLAG_ARGUMENT(flag) "%s must be a number > 0\n", flag
+    #define UNRECOGNIZED_FLAG(flag) "unrecognized flag %s\n", flag
+    #define SPECIFY_FLAG_ONCE(flag) "flag %s must be specified once\n", flag
+    #define FLAG_NOT_SPECIFIED(flag) "flag %s not specified\n", flag
 
 typedef struct team_s {
     char *team_name;
@@ -41,15 +48,17 @@ typedef struct arguments_s {
 struct flag_occurence {
     char *name;
     int occurence;
-    int (*func)(const char **, int *, bool *, arguments_t *);
+    int (*func)(int, const char **, int *, arguments_t *);
 };
 
-int team_name_flag(const char **, int *, bool *, arguments_t *);
-int port_flag(const char **, int *, bool *, arguments_t *);
-int width_flag(const char **, int *, bool *, arguments_t *);
-int height_flag(const char **, int *, bool *, arguments_t *);
-int nb_clients_flag(const char **, int *, bool *, arguments_t *);
-int frequency_flag(const char **, int *, bool *, arguments_t *);
+extern struct flag_occurence flags[NB_FLAGS];
+
+int team_name_flag(int, const char **, int *, arguments_t *);
+int port_flag(int, const char **, int *, arguments_t *);
+int width_flag(int, const char **, int *, arguments_t *);
+int height_flag(int, const char **, int *, arguments_t *);
+int nb_clients_flag(int, const char **, int *, arguments_t *);
+int frequency_flag(int, const char **, int *, arguments_t *);
 
 int fill_arg_struct(int, const char **, arguments_t *);
 void print_arg_struct(const arguments_t);

@@ -8,6 +8,7 @@
 #ifndef SERVER_H_
     #define SERVER_H_
 
+    #include <sys/select.h>
     #include <arpa/inet.h>
     #include <time.h>
     #include <string.h>

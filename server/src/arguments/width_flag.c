@@ -7,14 +7,17 @@
 
 #include "server.h"
 
-int width_flag(const char **av, int *i, bool *is_a_team_name, arguments_t *arg)
+int width_flag(int, const char **av, int *i, arguments_t *arg)
 {
-    *is_a_team_name = false;
     if (!is_positive_number(av[*i + 1])) {
-        fprintf(stderr, INVALID_WIDTH);
+        fprintf(stderr, INVALID_FLAG_ARGUMENT(WIDTH));
         return EXIT_WITH_ERROR;
     }
     arg->width = atoi(av[*i + 1]);
+    if (arg->width == 0) {
+        fprintf(stderr, INVALID_FLAG_ARGUMENT(WIDTH));
+        return EXIT_WITH_ERROR;
+    }
     *i += 1;
     return EXIT_WITH_SUCCESS;
 }
