@@ -9,9 +9,9 @@
 
 Egg::Egg(Vector3 position)
 {
-    _eggHight = 1.3;
+    _eggHight = 1.2;
     _realPos = position;
-    _eggPosition = (Vector3){(position.x + 1) * spaceBetwenIsland, 1.1, position.z * spaceBetwenIsland};
+    _eggPosition = (Vector3){(position.x + 1) * spaceBetwenIsland, _eggHight, position.z * spaceBetwenIsland};
     _eggPosition.x += -2 + (std::rand() % 4);
     _eggPosition.z += -2 + (std::rand() % 4);
 }
