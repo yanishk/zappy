@@ -117,8 +117,8 @@ void UseRecivedCmd::getEnw(void)
 {
     while (_cmd.getCommandAt(ENW_CMD, 0).size() >= 1) {
         std::vector<std::string> tmpCmd = _cmd.getCommandAt(ENW_CMD, 0);
-        _egg.addEggToIsland((Vector3){std::stof(tmpCmd.at(2).c_str()), 1.0,
-            std::stof(tmpCmd.at(3).c_str())}, std::stoi(tmpCmd[0]));
+        _egg.addEggToIsland((Vector3){std::stof(tmpCmd[2].c_str()), 1.0,
+            std::stof(tmpCmd[3].c_str())}, std::stoi(tmpCmd[0]));
         _cmd.eraseFirstCmdInMap(ENW_CMD);
     }
 }
@@ -136,8 +136,8 @@ void UseRecivedCmd::getSmg(void)
 {
     while (_cmd.getCommandAt(SMG_CMD, 0).size() >= 1) {
         std::vector<std::string> tmpCmd = _cmd.getCommandAt(SMG_CMD, 0);
-        _egg.addEggToIsland((Vector3){std::stof(tmpCmd.at(2).c_str()), 1.0,
-            std::stof(tmpCmd.at(3).c_str())}, std::stoi(tmpCmd[1]));
+        _egg.addEggToIsland((Vector3){std::stof(tmpCmd[2].c_str()), 1.0,
+            std::stof(tmpCmd[3].c_str())}, std::stoi(tmpCmd[1]));
         _cmd.eraseFirstCmdInMap(SMG_CMD);
     }
 }
@@ -151,7 +151,7 @@ void UseRecivedCmd::getSgt(void)
 {
     if (!_cmd.getCommandAt(SGT_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(SGT_CMD, 0);
-        _sgtValue = std::stoi(cmd.at(0));
+        _sgtValue = std::stoi(cmd[0]);
         _cmd.eraseFirstCmdInMap(SGT_CMD);
     }
 }
