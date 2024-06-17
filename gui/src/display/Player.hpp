@@ -21,6 +21,8 @@
     #define TEXT_SIZE 20
     #define TEXT_LINE_SPACING_RATIO 1.30
     #define NBR_ITEM 7
+    #define TEXT_TEAM "\nTeam : "
+    #define TEXT_LEVEL "Level : "
 
 class Player {
     public:

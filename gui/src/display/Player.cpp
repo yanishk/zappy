@@ -111,9 +111,9 @@ void Player::displayPlayerInfo(Vector3 camPosition)
     float angle = atan2f(cameraToText.x, cameraToText.z) * RAD2DEG;
 
     std::string textToDisplay;
-    textToDisplay.append("Level : ");
+    textToDisplay.append(TEXT_LEVEL);
     textToDisplay.append(std::to_string(_level));
-    textToDisplay.append("\nTeam : ");
+    textToDisplay.append(TEXT_TEAM);
     textToDisplay += _team;
 
     rlPushMatrix();

@@ -30,7 +30,7 @@ void AllPlayers::changePlayerOrientation(float direction, int playerID)
 {
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
-            i._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * direction, DEG2RAD * 0});
+            i._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * (-direction), DEG2RAD * 0});
             i._rotationAngle = direction;
             break;
         }
