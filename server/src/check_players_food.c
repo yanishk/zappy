@@ -35,7 +35,7 @@ static void check_player_food(server_t *server, zappy_t *zappy,
             kill_player(server, zappy, arg, player);
             return;
         }
-        if (player->inventory.food > 0) {
+        if (player->inventory.food > 0 && !arg.immortal) {
             player->inventory.food--;
             pin(server, zappy, player->id);
         }
