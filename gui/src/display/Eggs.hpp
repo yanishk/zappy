@@ -35,9 +35,8 @@ class Egg {
 
     private:
 
-        Color _playerColor = WHITE;
         Vector3 _eggPosition;
-        float _playerHight;
+        float _eggHight;
 };
 
 class AllEggs {
