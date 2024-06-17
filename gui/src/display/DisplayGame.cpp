@@ -11,7 +11,7 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
-    InitWindow(screenWidth, screenHeight, "Zappy_gui");
+    InitWindow(screenWidth, screenHeight, WINDOW_NAME);
     _camera.position = setVector3(70.0, 40.0, -50.0);
     _camera.target = setVector3(70.0, 18.0, -0.0);
     _camera.up = setVector3(0.0, 1.0, 0.0);
@@ -58,7 +58,7 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
     std::vector<std::pair<Model, float>> tmpModel;
     bool hasPlayer = false;
     if (allPath.size() == 0)
-        throw ErrorHandling("No or bad path to model");
+        throw ErrorHandling(ERROR_NO_MODEL);
     for (auto &i: allPath) {
         std::pair<Model, float> tmpPair;
         tmpPair.first = LoadModel(i.first.first.c_str());
@@ -91,9 +91,9 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
     Texture2D texture = LoadTexture("./gui/assets/models/unreal-engine-4-sky/textures/T_Sky_Blue.png");
     _sky.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
     if (!hasPlayer)
-        throw ErrorHandling("No player model");
+        throw ErrorHandling(ERROR_NO_PLAYER_MODEL);
     if (_allItemModel.size() < 7)
-        throw ErrorHandling("Not enough item model");
+        throw ErrorHandling(ERROR_NOT_ENOUTH_ITEM_MODEL);
 }
 
 void DisplayGame::placeIsland(int x, int y)
@@ -331,13 +331,8 @@ void DisplayGame::launchGame(void)
     SetTargetFPS(60);
     float seconds = 0.0f;
 
-    asio::write(_socket, asio::buffer("mct\n"));
-
     while (!WindowShouldClose()) {
         useServerInfo(recivedCmd);
-
-        if (IsKeyPressed(KEY_KP_3))
-            asio::write(_socket, asio::buffer("mct\n"));
 
         seconds += (GetFrameTime() / 2);
 
