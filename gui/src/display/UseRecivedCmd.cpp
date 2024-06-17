@@ -49,7 +49,7 @@ void UseRecivedCmd::getPlv(void)
 
 void UseRecivedCmd::getPin(void)
 {
-    if (_cmd.getCommandAt(PIN_CMD, 0).size() >= 1) {
+    while (_cmd.getCommandAt(PIN_CMD, 0).size() >= 1) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PIN_CMD, 0);
         int playerID = std::atoi(cmd.front().c_str());
         std::vector<int> actualInv = _player.getInventory(playerID);
@@ -57,8 +57,6 @@ void UseRecivedCmd::getPin(void)
         for (std::size_t i = 0; i < actualInv.size(); i++) {
             newInv.push_back(std::atoi(cmd[i + 3].c_str()));
         }
-        if (newInv == actualInv)
-            return;
         _player.setInventory(playerID, newInv);
         _cmd.eraseFirstCmdInMap(PIN_CMD);
     }
