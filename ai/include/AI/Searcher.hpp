@@ -85,10 +85,9 @@ namespace Zappy
 
             bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
             void whereShouldIGo(std::vector<int> priority);
-            void updateMove(std::pair<int, int> pos);
 
             std::vector<int> estimatePriority();
-            std::pair<int, int> whereIsThePriority(int index);
+            void whereIsThePriority(int index);
 
             void dropItem();
             void updateOrder();
