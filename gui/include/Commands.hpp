@@ -26,6 +26,7 @@
     #define PIC_CMD "pic"
     #define ENW_CMD "enw"
     #define SMG_CMD "smg"
+    #define EDI_CMD "edi"
     #define PARAMS_ERROR_MSG "Need 2 paramaters at least."
     #define INVALID_IDX "Invalid Index."
     #define EMPTY_MAP_MESSAGE "The vector of vectors at this key is already empty."
@@ -94,6 +95,7 @@ class CommandManager {
 
         std::vector<std::vector<std::string>> _eboCmd;
         std::vector<std::vector<std::string>> _enwCmd;
+        std::vector<std::vector<std::string>> _ediCmd;
 
         std::vector<std::string> _sentCommands;
         std::vector<std::string> _receivedResponses;
@@ -118,6 +120,7 @@ class CommandManager {
             {PIC_CMD, _picCmd},
             {ENW_CMD, _enwCmd},
             {SMG_CMD, _smgCmd},
+            {EDI_CMD, _ediCmd},
 
         };
 
