@@ -125,15 +125,12 @@ std::pair<int, int> Zappy::Searcher::whereIsThePriority(int index)
         MIDDLE_SEVEN_LEVEL
     };
 
-    std::pair<int, int> where(ERROR, ERROR);
+    std::pair<int, int> where(0, 0);
     int upper = 0;
 
     for (const auto &i: lookMap) {
 
         if (sides[upper] == index) {
-            if (where.first == ERROR) {
-                where.first = 0;
-            }
             where.first += 1;
         }
         if (index >= i.first && index <= i.second) {
@@ -145,6 +142,7 @@ std::pair<int, int> Zappy::Searcher::whereIsThePriority(int index)
                     sidesGoing -= 1;
                 }
 
+                where.first += 1;
                 where.second = sidesGoing;
             }
 
@@ -155,6 +153,7 @@ std::pair<int, int> Zappy::Searcher::whereIsThePriority(int index)
                     sidesGoing += 1;
                 }
 
+                where.first += 1;
                 where.second = sidesGoing;
             }
 
@@ -168,10 +167,6 @@ std::pair<int, int> Zappy::Searcher::whereIsThePriority(int index)
 
 void Zappy::Searcher::updateMove(std::pair<int, int> pos)
 {
-    if (pos == std::make_pair<int, int>(ERROR, ERROR)) {
-        return;
-    }
-
     while (pos.first > 0) {
         _nextMouvment.emplace(_nextMouvment.begin(), Forward);
         pos.first -= 1;
@@ -216,35 +211,42 @@ void Zappy::Searcher::whereShouldIGo(std::vector<int> priority)
     }
 
     std::pair<int, int> pos = whereIsThePriority(biggestPriority);
+
     updateMove(pos);
 
     priority.erase(priority.begin() + biggestPriority);
 
-    updateMove(pos);
     whereShouldIGo(priority);
 }
 
 void Zappy::Searcher::printMovement()
 {
+    std::cout << "Mouvement are {\n";
 
     for (const auto &i: _nextMouvment) {
         if (i == Zappy::Mouvement::Forward) {
+            std::cout << "\tForward,\n";
         }
         if (i == Zappy::Mouvement::Left) {
+            std::cout << "\tLeft,\n";
         }
         if (i == Zappy::Mouvement::Right) {
+            std::cout << "\tRight,\n";
         }
         if (i == Zappy::Mouvement::Back) {
+            std::cout << "\tBack,\n";
         }
         if (i == Zappy::Mouvement::Take) {
+            std::cout << "\tTake,\n";
         }
     }
+
+    std::cout << "}\n";
 }
 
 void Zappy::Searcher::move()
 {
     Mouvement nextMove = _nextMouvment.back();
-
 
     switch (nextMove) {
         case Forward:
@@ -370,8 +372,6 @@ bool Zappy::Searcher::run()
             _isGoingToQueen = true;
         } else if (_nextMouvment.empty() && !_isGoingToQueen && !_order.empty()) {
             _lastLook = look();
-            for (std::size_t i = 0; i < _lastLook.size(); ++i) {
-            }
             auto priority = estimatePriority();
             whereShouldIGo(priority);
             if (_nextMouvment.size() == 0 && _howManySameMove != NB_SAME_MOVE_MAX) {
