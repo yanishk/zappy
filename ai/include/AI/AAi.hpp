@@ -97,7 +97,7 @@ namespace Zappy {
             std::string _name;
 
         private:
-            std::size_t countMember(const std::string &line) const;
+
             bool checkRessources(const std::vector<std::string> &newRessources);
 
     };

@@ -19,7 +19,8 @@ static sig_atomic_t handle_server(const volatile sig_atomic_t new_status)
 {
     static volatile sig_atomic_t status = 1;
 
-    status = new_status;
+    if (new_status != 1)
+        status = new_status;
     return status;
 }
 
