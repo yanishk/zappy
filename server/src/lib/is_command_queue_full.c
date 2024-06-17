@@ -5,7 +5,6 @@
 ** is_command_queue_full
 */
 
-#include "server.h"
 #include "command_ia.h"
 
 static unsigned int command_queue_size(client_t *client)

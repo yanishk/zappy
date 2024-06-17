@@ -5,20 +5,19 @@
 ** frequency_flag
 */
 
-#include <string.h>
-#include <stdlib.h>
 #include "server.h"
 
-int frequency_flag(const char **av, int i, bool *is_a_team_name,
-    arguments_t *arg)
+int frequency_flag(int, const char **av, int *i, arguments_t *arg)
 {
-    if (strcmp(av[i], "-f") == 0) {
-        *is_a_team_name = false;
-        arg->freq = atoi(av[i + 1]);
-        if (arg->freq <= 0) {
-            fprintf(stderr, INVALID_FREQUENCY);
-            return EXIT_WITH_ERROR;
-        }
+    if (!is_positive_number(av[*i + 1])) {
+        fprintf(stderr, INVALID_FLAG_ARGUMENT(FREQUENCY));
+        return EXIT_WITH_ERROR;
     }
+    arg->freq = atoi(av[*i + 1]);
+    if (arg->freq == 0) {
+        fprintf(stderr, INVALID_FLAG_ARGUMENT(FREQUENCY));
+        return EXIT_WITH_ERROR;
+    }
+    *i += 1;
     return EXIT_WITH_SUCCESS;
 }

@@ -7,29 +7,15 @@
 
 #include "command_gui.h"
 
-int (*cmd_func_gui[NB_GUI_CMD])(server_t *, zappy_t *,
-    arguments_t *, client_t *) = {
-    &exit_func,
-    &msz_func,
-    &bct_func,
-    &mct_func,
-    &tna_func,
-    &plv_func,
-    &ppo_func,
-    &pin_func,
-    &sgt_func,
-    &sst_func
-};
-
 command_infos_gui_t cmd_list_gui[NB_GUI_CMD] = {
-    {EXIT_COMMAND, 1},
-    {MSZ_COMMAND, 1},
-    {BCT_COMMAND, 3},
-    {MCT_COMMAND, 1},
-    {TNA_COMMAND, 1},
-    {PLV_COMMAND, 2},
-    {PPO_COMMAND, 2},
-    {PIN_COMMAND, 2},
-    {SGT_COMMAND, 1},
-    {SST_COMMAND, 2}
+    {EXIT_COMMAND, 1, &exit_func},
+    {MSZ_COMMAND, 1, &msz_func},
+    {BCT_COMMAND, 3, &bct_func},
+    {MCT_COMMAND, 1, &mct_func},
+    {TNA_COMMAND, 1, &tna_func},
+    {PLV_COMMAND, 2, &plv_func},
+    {PPO_COMMAND, 2, &ppo_func},
+    {PIN_COMMAND, 2, &pin_func},
+    {SGT_COMMAND, 1, &sgt_func},
+    {SST_COMMAND, 2, &sst_func}
 };

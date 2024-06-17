@@ -25,15 +25,9 @@
 typedef struct command_infos_gui_s {
     char *name;
     size_t arg_nb;
+    int (*func)(server_t *, zappy_t *, arguments_t *, client_t *);
 } command_infos_gui_t;
 
-typedef struct associate_resource_nb_s {
-    char *name;
-    int code_resource;
-} associate_resource_nb_t;
-
-extern int (*cmd_func_gui[NB_GUI_CMD])(server_t *, zappy_t *,
-    arguments_t *, client_t *);
 extern command_infos_gui_t cmd_list_gui[NB_GUI_CMD];
 
 int msz_func(server_t *, zappy_t *, arguments_t *, client_t *);
@@ -57,6 +51,7 @@ int edi_func(server_t *, const int);
 int pex_func(server_t *, player_t *);
 int pbc_func(server_t *, const int, const char *);
 int seg_func(server_t *, char *);
+int smg_func(server_t *, const char *);
 int pic_func(server_t *, player_t *, int *);
 int pie_func(server_t *, player_t *, bool);
 

@@ -6,11 +6,9 @@
 */
 
 #include <math.h>
-#include <time.h>
-#include "game.h"
 #include "server.h"
 
-struct repartion_resource repartion[] = {
+struct repartion_resource const repartion_unit[NB_RESOURCES] = {
     {FOOD, FOOD_DEN},
     {LINEMATE, LINEMATE_DEN},
     {DERAUMERE, DERAUMERE_DEN},
@@ -29,11 +27,11 @@ static void repartition_resource(const arguments_t *args, zappy_t *zappy,
     int rand_height = 0;
 
     while (index < max) {
-        rand_width = (rand()) % args->width;
         rand_height = (rand()) % args->height;
-        if (get_resources(&zappy->resource[rand_width][rand_height], name) > 0)
+        rand_width = (rand()) % args->width;
+        if (get_resources(&zappy->resource[rand_height][rand_width], name) > 0)
             continue;
-        set_resources(&zappy->resource[rand_width][rand_height], name, 1);
+        set_resources(&zappy->resource[rand_height][rand_width], name, 1);
         index++;
     }
 }
@@ -51,21 +49,21 @@ void initialize_resources(resource_t *resource)
 
 static void density_onland(const arguments_t *args, zappy_t *zappy)
 {
-    for (int x = 0; x < args->width; x++) {
-        for (int y = 0; y < args->height; y++) {
+    for (int x = 0; x < args->height; x++) {
+        for (int y = 0; y < args->width; y++) {
             initialize_resources(&zappy->resource[x][y]);
         }
     }
     for (int index = 0; index < NB_RESOURCES; index++) {
-        repartition_resource(args, zappy, repartion[index].name,
-            repartion[index].density);
+        repartition_resource(args, zappy, repartion_unit[index].name,
+            repartion_unit[index].density);
     }
 }
 
 void init_basis_map(zappy_t *zappy, const arguments_t *arg)
 {
-    zappy->resource = malloc(sizeof(resource_t *) * arg->width);
+    zappy->resource = malloc(sizeof(resource_t *) * arg->height);
     for (int x = 0; x < arg->height; x++)
-        zappy->resource[x] = malloc(sizeof(resource_t) * arg->height);
+        zappy->resource[x] = malloc(sizeof(resource_t) * arg->width);
     density_onland(arg, zappy);
 }

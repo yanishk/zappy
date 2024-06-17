@@ -6,18 +6,7 @@
 */
 
 #include <math.h>
-#include "server.h"
 #include "command_gui.h"
-
-static struct repartion_resource const repartion_unit[] = {
-    {FOOD, FOOD_DEN},
-    {LINEMATE, LINEMATE_DEN},
-    {DERAUMERE, DERAUMERE_DEN},
-    {SIBUR, SIBUR_DEN},
-    {MENDIANE, MENDIANE_DEN},
-    {PHIRAS, PHIRAS_DEN},
-    {THYSTAME, THYSTAME_DEN},
-};
 
 static size_t get_nb_resource(const arguments_t *args, zappy_t *zappy,
     const char *name)
@@ -42,12 +31,12 @@ static void repartition_resource(server_t *server, const arguments_t *args,
     int rand_height = 0;
 
     while (count_resource < density_calc) {
-        rand_width = (rand()) % args->width;
         rand_height = (rand()) % args->height;
-        if (get_resources(&zappy->resource[rand_width][rand_height],
+        rand_width = (rand()) % args->width;
+        if (get_resources(&zappy->resource[rand_height][rand_width],
             repartion_unit->name) > 0)
             continue;
-        set_resources(&zappy->resource[rand_width][rand_height],
+        set_resources(&zappy->resource[rand_height][rand_width],
             repartion_unit->name, 1);
         bct(server, zappy, rand_width, rand_height);
         count_resource++;

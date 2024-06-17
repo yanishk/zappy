@@ -41,5 +41,4 @@ typedef struct tile_numbering_s {
     size_t north_east_tile;
 } tile_numbering_t;
 
-
 #endif /* !PLAYER_H_ */
