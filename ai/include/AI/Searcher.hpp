@@ -80,7 +80,7 @@ namespace Zappy
             std::thread _thread;
 
 
-            void move();
+            bool move();
             void printMovement();
 
             bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
@@ -89,7 +89,8 @@ namespace Zappy
             std::vector<int> estimatePriority();
             void whereIsThePriority(int index);
 
-            void dropItem();
+            bool dropItem();
+
             void updateOrder();
             void searchFood();
             void showMustGoOn();

@@ -28,7 +28,7 @@ bool Zappy::AAi::left()
 {
     _network.sendInformationToServer(LEFT_CMD);
 
-    return  _network.getInfoFromServer() == RESPONSE_OK;
+    return _network.getInfoFromServer() == RESPONSE_OK;
 }
 
 std::vector<std::string> Zappy::AAi::look()
@@ -172,6 +172,7 @@ bool Zappy::AAi::setObject(const std::string &object)
 
 bool Zappy::AAi::incantation()
 {
+    std::cout << "Incantation\n";
     _network.sendInformationToServer(INCANTATION_CMD);
     std::string value = _network.getInfoFromServer();
 
