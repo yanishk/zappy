@@ -43,6 +43,9 @@ class UseRecivedCmd {
         AllPlayers &_player;
         AllEggs &_egg;
         asio::ip::tcp::socket &_socket;
+
+        int _sgtValue;
+
 };
 
 #endif /* !USERECIVEDCMD_HPP_ */
