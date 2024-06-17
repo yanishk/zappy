@@ -11,7 +11,7 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
-    InitWindow(screenWidth, screenHeight, "Zappy_gui");
+    InitWindow(screenWidth, screenHeight, WINDOW_NAME);
     _camera.position = setVector3(70.0, 40.0, -50.0);
     _camera.target = setVector3(70.0, 18.0, -0.0);
     _camera.up = setVector3(0.0, 1.0, 0.0);
@@ -27,9 +27,8 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
 DisplayGame::~DisplayGame()
 {
     CloseWindow();
-    for (auto &i: _allItemModel) {
+    for (auto &i: _allItemModel)
         UnloadModel(i._itemModel);
-    }
 }
 
 Vector3 DisplayGame::setVector3(float x, float y, float z)
@@ -42,15 +41,12 @@ void DisplayGame::updateCamera(void)
     float alltitude = 0.0;
     float speed = 0.4;
 
-    if (IsKeyDown(KEY_SPACE)) {
+    if (IsKeyDown(KEY_SPACE))
         alltitude += speed;
-    }
-    if (IsKeyDown(KEY_LEFT_SHIFT)) {
+    if (IsKeyDown(KEY_LEFT_SHIFT))
         alltitude -= speed;
-    }
-    if (IsKeyDown(KEY_LEFT_CONTROL)) {
+    if (IsKeyDown(KEY_LEFT_CONTROL))
         speed += 0.2;
-    }
     Vector3 movement = setVector3(IsKeyDown(KEY_W) * speed - IsKeyDown(KEY_S) * speed, IsKeyDown(KEY_D) * speed - IsKeyDown(KEY_A) * speed, alltitude);
     Vector3 rotation = setVector3(GetMouseDelta().x * 0.05f, GetMouseDelta().y * 0.05f, 0);
 
@@ -62,7 +58,7 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
     std::vector<std::pair<Model, float>> tmpModel;
     bool hasPlayer = false;
     if (allPath.size() == 0)
-        throw ErrorHandling("No or bad path to model");
+        throw ErrorHandling(ERROR_NO_MODEL);
     for (auto &i: allPath) {
         std::pair<Model, float> tmpPair;
         tmpPair.first = LoadModel(i.first.first.c_str());
@@ -86,13 +82,18 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
             }
         }
     }
+    std::pair<Model, float> eggPair;
+    eggPair.first = LoadModel(EGG_MOD_PATH);
+    eggPair.second = 0.3;
+    _allEggs.loadEggModel(eggPair);
+
     _sky = LoadModel("./gui/assets/models/unreal-engine-4-sky/source/ue4sky.obj");
     Texture2D texture = LoadTexture("./gui/assets/models/unreal-engine-4-sky/textures/T_Sky_Blue.png");
     _sky.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
     if (!hasPlayer)
-        throw ErrorHandling("No player model");
+        throw ErrorHandling(ERROR_NO_PLAYER_MODEL);
     if (_allItemModel.size() < 7)
-        throw ErrorHandling("Not enough item model");
+        throw ErrorHandling(ERROR_NOT_ENOUTH_ITEM_MODEL);
 }
 
 void DisplayGame::placeIsland(int x, int y)
@@ -251,6 +252,11 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getPgt();
     recivedCmd.getPdr();
     recivedCmd.getPin();
+    recivedCmd.getEnw();
+    recivedCmd.getSmg();
+    recivedCmd.getPbc(_camera.position);
+    recivedCmd.getSgt();
+    recivedCmd.getSst();
 }
 
 void DisplayGame::display3D(void)
@@ -271,14 +277,19 @@ void DisplayGame::display3D(void)
         DrawModel(_WaterModel, setVector3((_mapSize.first * spaceBetwenIsland) / 2, -2, (_mapSize.second * spaceBetwenIsland) / 2), 1, WHITE);
     EndShaderMode();
 
+    _allEggs.drawEgg();
+
     for (auto &i: _allItem) {
         i.changeItemAnim();
         i.drawItem();
     }
-    _player.drawPlayer(_camera.position, _isAnimated);
+    _player.drawPlayer(_isAnimated);
 
     for (auto &i: _allIsland) {
         DrawModel(i._islandModel , i._islandPosition, i._islandSize, WHITE);
+    }
+    for (auto &i: _player._allPlayer) {
+        i.displayPlayerInfo(_camera.position);
     }
 
     EndMode3D();
@@ -315,16 +326,13 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
-    UseRecivedCmd recivedCmd(_cmd, _player, _socket);
+    UseRecivedCmd recivedCmd(_cmd, _player, _allEggs, _socket);
 
     SetTargetFPS(60);
     float seconds = 0.0f;
-    asio::write(_socket, asio::buffer("mct\n"));
+
     while (!WindowShouldClose()) {
         useServerInfo(recivedCmd);
-
-        if (IsKeyPressed(KEY_KP_3))
-            asio::write(_socket, asio::buffer("mct\n"));
 
         seconds += (GetFrameTime() / 2);
 

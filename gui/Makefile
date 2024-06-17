@@ -16,6 +16,8 @@ SRC		=	main.cpp							\
 			src/client/Commands.cpp				\
 			src/display/Item.cpp				\
 			src/display/UseRecivedCmd.cpp		\
+			src/display/Eggs.cpp				\
+			src/display/AllEggs.cpp				\
 
 OBJ		=	$(SRC:.cpp=.o)
 

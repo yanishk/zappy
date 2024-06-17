@@ -25,6 +25,7 @@
     #define PBC_CMD "pbc"
     #define PIC_CMD "pic"
     #define ENW_CMD "enw"
+    #define SMG_CMD "smg"
     #define PARAMS_ERROR_MSG "Need 2 paramaters at least."
     #define INVALID_IDX "Invalid Index."
     #define EMPTY_MAP_MESSAGE "The vector of vectors at this key is already empty."
@@ -116,6 +117,7 @@ class CommandManager {
             {PBC_CMD, _pbcCmd},
             {PIC_CMD, _picCmd},
             {ENW_CMD, _enwCmd},
+            {SMG_CMD, _smgCmd},
 
         };
 

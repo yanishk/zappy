@@ -15,10 +15,12 @@ Player::Player(Vector3 position)
     _playerPosition.x += -2 + (std::rand() % 4);
     _playerPosition.z += -2 + (std::rand() % 4);
     _isMooving = false;
+    _isTimerStart = false;
     _rotationAngle = 0;
     for (std::size_t i = 0; i < NBR_ITEM; i++) {
         _inventory.push_back(0);
     }
+    _infoBackground = LoadModelFromMesh(GenMeshPlane(2, 0.7, 2, 2));
 }
 
 void Player::DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint)
@@ -109,18 +111,25 @@ void Player::displayPlayerInfo(Vector3 camPosition)
     float angle = atan2f(cameraToText.x, cameraToText.z) * RAD2DEG;
 
     std::string textToDisplay;
-    textToDisplay.append("Level : ");
+    textToDisplay.append(TEXT_LEVEL);
     textToDisplay.append(std::to_string(_level));
-    textToDisplay.append("\nTeam : ");
+    textToDisplay.append(TEXT_TEAM);
     textToDisplay += _team;
 
     rlPushMatrix();
         rlTranslatef(_playerPosition.x, _playerPosition.y + 3, _playerPosition.z);
         rlRotatef(angle, 0.0f, 1.0f, 0.0f);
         rlRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-        DrawText3D(font, textToDisplay.c_str(), (Vector3){ 0.0f, 0.0f, 0.0f }, 3.0f, 0.5f, -1.0f, _playerColor);
+        DrawText3D(font, textToDisplay.c_str(), (Vector3){ -0.9f, 0.1f, 0.0f }, 3.0f, 0.5f, -1.0f, _playerColor);
     rlPopMatrix();
     UnloadFont(font);
+
+    _infoBackground.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 90, DEG2RAD * 0, DEG2RAD * -angle});
+    DrawModel(_infoBackground, (Vector3){_playerPosition.x, _playerPosition.y + 2.65f, _playerPosition.z}, 1, Fade(getNegativeColor(_playerColor), 0.5f));
+
+    if (_isTimerStart) {
+        drawMessage(_broadcastMsg, camPosition);
+    }
 }
 
 void Player::setTeam(std::string team)
@@ -286,4 +295,49 @@ void Player::displayInfo2D(int x, int y)
     }
     text += "|\n";
     DrawText(text.c_str(), x, y, TEXT_SIZE, BLUE);
+}
+
+void Player::drawMessage(std::string msg, Vector3 camPosition)
+{
+    Font font = GetFontDefault();
+    Vector3 cameraToText = Vector3Subtract(camPosition, _playerPosition);
+    std::chrono::time_point<std::chrono::system_clock> timer = std::chrono::system_clock::now();
+    cameraToText.y = 0.0f;
+
+    float angle = atan2f(cameraToText.x, cameraToText.z) * RAD2DEG;
+
+    rlPushMatrix();
+        rlTranslatef(_playerPosition.x, _playerPosition.y + 4, _playerPosition.z);
+        rlRotatef(angle, 0.0f, 1.0f, 0.0f);
+        rlRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+        float decalage = msg.size() * 4;
+        decalage /= 40;
+        DrawText3D(font, msg.c_str(), (Vector3){-decalage, 0.1f, 0.0f }, 4.0f, 0.5f, -1.0f, _playerColor);
+    rlPopMatrix();
+    UnloadFont(font);
+
+    if (!_isTimerStart) {
+        _startTime = std::chrono::system_clock::now();
+        _isTimerStart = true;
+        _broadcastMsg = msg;
+        float backgroundWight = msg.size() * 9;
+        backgroundWight /= 40;
+        _broadcastBackground = LoadModelFromMesh(GenMeshPlane(backgroundWight, 0.5, 1, 2));
+    }
+    if (std::chrono::duration_cast<std::chrono::seconds>(timer - _startTime).count() >= 5) {
+        _isTimerStart = false;
+        _broadcastMsg.erase();
+    }
+    _broadcastBackground.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 90, DEG2RAD * 0, DEG2RAD * -angle});
+    DrawModel(_broadcastBackground, (Vector3){_playerPosition.x, _playerPosition.y + 3.83f, _playerPosition.z}, 1, Fade(getNegativeColor(_playerColor), 0.5f));
+}
+
+Color Player::getNegativeColor(Color color)
+{
+    Color newColor;
+    newColor.r = 255 - color.r;
+    newColor.g = 255 - color.g;
+    newColor.b = 255 - color.b;
+    newColor.a = color.a;
+    return newColor;
 }

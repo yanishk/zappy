@@ -20,6 +20,12 @@
     #include "Item.hpp"
     #include "Island.hpp"
     #include "UseRecivedCmd.hpp"
+    #include "Eggs.hpp"
+
+    #define WINDOW_NAME "Zappy_gui"
+    #define ERROR_NO_MODEL "No or bad path to model"
+    #define ERROR_NO_PLAYER_MODEL "No player model"
+    #define ERROR_NOT_ENOUTH_ITEM_MODEL "Not enough item model"
 
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
@@ -35,7 +41,6 @@ class DisplayGame {
         void removeItemFromIsland(Vector3 position, int type);
         void placeIsland(int x, int y);
 
-        AllPlayers _player;
     private:
         enum ModelType
         {
@@ -44,22 +49,25 @@ class DisplayGame {
             IslandType = 2,
             PlayerType = 3
         };
+
         CommandManager &_cmd;
+        Camera _camera;
+        Shader _waterShader;
+        Model _WaterModel;
+        Model _sky;
         int _screenWidth = 1920;
         int _screenHeight = 1080;
         int _cameraMode = CAMERA_FREE;
-        Camera _camera;
-        Shader _waterShader;
         int _secondLoc;
-        Model _WaterModel;
         std::vector<std::pair<Model, float>> _islandModel;
         std::pair<int, int> _mapSize;
         std::vector<Island> _allIsland;
         std::vector<Item> _allItem;
         std::vector<Item> _allItemModel;
         std::pair<bool, std::size_t> _selectedPlayer;
-        Model _sky;
         asio::ip::tcp::socket &_socket;
+        AllPlayers _player;
+        AllEggs _allEggs;
         bool _isAnimated;
 
         void initWaterShader(void);

@@ -30,7 +30,7 @@ void AllPlayers::changePlayerOrientation(float direction, int playerID)
 {
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
-            i._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * direction, DEG2RAD * 0});
+            i._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * (-direction), DEG2RAD * 0});
             i._rotationAngle = direction;
             break;
         }
@@ -87,12 +87,11 @@ Vector3 AllPlayers::getSize(void)
     return _size;
 }
 
-void AllPlayers::drawPlayer(Vector3 cameraPosition, bool isAnimated)
+void AllPlayers::drawPlayer(bool isAnimated)
 {
     for (auto &i: _allPlayer) {
         if (!isAnimated) {
             DrawModel(i._playerModel , i.getPosition(), 1, WHITE);
-            i.displayPlayerInfo(cameraPosition);
             continue;
         }
         i._animFrameCounter++;
@@ -100,7 +99,6 @@ void AllPlayers::drawPlayer(Vector3 cameraPosition, bool isAnimated)
             i._animFrameCounter = 0;
         UpdateModelAnimation(i._playerModel, i._playerAnimation[0], i._animFrameCounter);
         DrawModelEx(i._playerModel , i.getPosition(), (Vector3){ 1.0f, 0.0f, 0.0f }, 0.0f, getSize(), WHITE);
-        i.displayPlayerInfo(cameraPosition);
     }
 }
 
@@ -202,4 +200,13 @@ Color AllPlayers::setPlayerColor(std::string teamName)
     color.b = (1 / teamIndex) * 255;
     color.a = 255;
     return color;
+}
+
+void AllPlayers::drawMessage(int playerID, std::string msg, Vector3 camPosition)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.drawMessage(msg, camPosition);
+        }
+    }
 }

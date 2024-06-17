@@ -11,18 +11,19 @@
     #include "Commands.hpp"
     #include "Client.hpp"
     #include "Player.hpp"
+    #include "Eggs.hpp"
     #include "Item.hpp"
 
 class UseRecivedCmd {
     public:
-        UseRecivedCmd(CommandManager &cmd, AllPlayers &player, asio::ip::tcp::socket &socket);
+        UseRecivedCmd(CommandManager &cmd, AllPlayers &player, AllEggs &egg, asio::ip::tcp::socket &socket);
 
         void getPnw(void);
         void getPpo(void);
         void getPlv(void);
         void getPin(void);
         void getPex(void);
-        void getPbc(void);
+        void getPbc(Vector3 camPosition);
         void getPic(void);
         void getPie(void);
         void getPdr(void);
@@ -34,10 +35,17 @@ class UseRecivedCmd {
         void getSgt(void);
         void getSst(void);
         void getSeg(void);
+        void getSmg(void);
+
     private:
+
         CommandManager &_cmd;
         AllPlayers &_player;
+        AllEggs &_egg;
         asio::ip::tcp::socket &_socket;
+
+        int _sgtValue;
+
 };
 
 #endif /* !USERECIVEDCMD_HPP_ */
