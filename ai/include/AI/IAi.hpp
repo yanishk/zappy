@@ -15,6 +15,12 @@
 
 namespace Zappy {
 
+    enum Response {
+        Ok,
+        Ko,
+        Dead
+    };
+
     class IAi {
 
         public:
@@ -23,21 +29,21 @@ namespace Zappy {
 
             virtual bool run() = 0;
 
-            virtual bool forward() = 0;
-            virtual bool right() = 0;
-            virtual bool left() = 0;
+            virtual Response forward() = 0;
+            virtual Response right() = 0;
+            virtual Response left() = 0;
 
             virtual std::vector<std::string> look() = 0;
             virtual bool inventory() = 0;
-            virtual bool broadcastText(const std::string &text) = 0;
+            virtual Response broadcastText(const std::string &text) = 0;
 
             virtual std::size_t connectNumber() = 0;
-            virtual bool fork() = 0;
-            virtual bool eject() = 0;
+            virtual Response fork() = 0;
+            virtual Response eject() = 0;
 
-            virtual bool takeObject(const std::string &object) = 0;
-            virtual bool setObject(const std::string &object) = 0;
-            virtual bool incantation() = 0;
+            virtual Response takeObject(const std::string &object) = 0;
+            virtual Response setObject(const std::string &object) = 0;
+            virtual Response incantation() = 0;
 
     };
 

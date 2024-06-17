@@ -213,45 +213,68 @@ void Zappy::Searcher::printMovement()
     std::cout << "}\n";
 }
 
-bool Zappy::Searcher::move()
+Zappy::Response Zappy::Searcher::move()
 {
     Mouvement nextMove = _nextMouvment.back();
+    Zappy::Response rep;
 
     switch (nextMove) {
         case Forward:
-            if (!forward()) {
-                return false;
+            rep = forward();
+            if (rep == Response::Ko) {
+                return Response::Ko;
+            } else if (rep == Response::Dead) {
+                return Response::Dead;
             }
             _nextMouvment.pop_back();
             _position.first -= 1;
             break;
 
         case Left:
-            if (!left()) {
-                return false;
+            rep = left();
+            if (rep == Response::Ko) {
+                return Response::Ko;
+            } else if (rep == Response::Dead) {
+                return Response::Dead;
             }
             _nextMouvment.pop_back();
             _position.second -= 1;
             break;
 
         case Right:
-            if (!right()) {
-                return false;
+            rep = right();
+            if (rep == Response::Ko) {
+                return Response::Ko;
+            } else if (rep == Response::Dead) {
+                return Response::Dead;
             }
+
             _nextMouvment.pop_back();
             _position.second += 1;
             break;
 
         case Back:
-            if (!left()) {
-                return false;
+            rep = left();
+            if (rep == Response::Ko) {
+                return Response::Ko;
+            } else if (rep == Response::Dead) {
+                return Response::Dead;
             }
-            if (!left()) {
-                return false;
+
+            rep = left();
+            if (rep == Response::Ko) {
+                return Response::Ko;
+            } else if (rep == Response::Dead) {
+                return Response::Dead;
             }
-            if (!forward()) {
-                return false;
+
+            rep = forward();
+            if (rep == Response::Ko) {
+                return Response::Ko;
+            } else if (rep == Response::Dead) {
+                return Response::Dead;
             }
+
             _nextMouvment.pop_back();
             _nextMouvment.pop_back();
             _nextMouvment.pop_back();
@@ -265,7 +288,7 @@ bool Zappy::Searcher::move()
                 std::cout << "Take " << object << "\n";
                 _order.removeRessources(object, 1);
             } else {
-                return false;
+                return Response::Ko;
             }
 
             _objectToTake.erase(_objectToTake.begin());
@@ -280,7 +303,7 @@ bool Zappy::Searcher::move()
         std::cout << "Go back to queen\n";
     }
 
-    return true;
+    return Response::Ok;
 }
 
 void Zappy::Searcher::searchFood()
@@ -301,7 +324,7 @@ void Zappy::Searcher::searchFood()
 }
 
 
-bool Zappy::Searcher::dropItem()
+Zappy::Response Zappy::Searcher::dropItem()
 {
     std::unordered_map<std::string, int> ressource = _ressources.getRessources();
 
@@ -313,18 +336,18 @@ bool Zappy::Searcher::dropItem()
         }
 
         for (int j = 0; j < i.second; ++j) {
-            setObject(i.first);
+            Zappy::Response rep = setObject(i.first);
+            if (rep == Response::Dead) {
+                return Response::Dead;
+            } else if (rep == Response::Ko) {
+                continue;
+            }
             std::cout << "\nSet " << i.first << "\n";
         }
     }
     std::cout << "}\n";
 
-    if (!incantation()) {
-        _isGoingToQueen = false;
-        return false;
-    }
-    _isGoingToQueen = false;
-    return true;
+    return incantation();
 }
 
 void Zappy::Searcher::showMustGoOn()
@@ -362,7 +385,11 @@ bool Zappy::Searcher::run()
 
         if (_position == std::make_pair<double, double>(0.0, 0.0)
         &&  _isGoingToQueen == true) {
-            dropItem();
+
+            if (dropItem() == Response::Dead) {
+                break;
+            }
+
         }
 
         if (_nextMouvment.empty() && !_isGoingToQueen) {
@@ -386,7 +413,13 @@ bool Zappy::Searcher::run()
             printMovement();
         }
 
-        move();
+        Response rep = move();
+        if (rep == Response::Ko) {
+            std::cout << "Unable to move\n";
+        } else if (rep == Response::Dead) {
+            std::cout << "Player is Dead\n";
+            break;
+        }
 
         if (_ressources.getRessource(FOOD) < MIN_FOOD) {
             searchFood();

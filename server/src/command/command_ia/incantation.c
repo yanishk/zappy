@@ -6,8 +6,9 @@
 */
 
 #include "command_ia.h"
+#include "command_gui.h"
 
-static resource_t const elevations_resources[NB_ELEVATIONS] = {
+resource_t const elevations_resources[NB_ELEVATIONS] = {
     {0, 1, 0, 0, 0, 0, 0},
     {0, 1, 1, 1, 0, 0, 0},
     {0, 2, 0, 1, 0, 2, 0},
@@ -17,7 +18,7 @@ static resource_t const elevations_resources[NB_ELEVATIONS] = {
     {0, 2, 2, 2, 2, 2, 1}
 };
 
-static incantation_t const elevations[NB_ELEVATIONS] = {
+incantation_t const elevations[NB_ELEVATIONS] = {
     {2, 1, &elevations_resources[0]},
     {3, 2, &elevations_resources[1]},
     {4, 2, &elevations_resources[2]},
@@ -111,6 +112,7 @@ int start_incantation(server_t *server, zappy_t *zappy, arguments_t *arg,
         return EXIT_WITH_ERROR;
     invite_players_to_ritual(server, zappy, arg,
         id_array);
+    pic_func(server, player, id_array);
     return COMMAND_SUCCESS;
 }
 
@@ -142,23 +144,27 @@ static bool ritual_succeed(zappy_t *zappy, player_t *player,
     return true;
 }
 
-int end_incantation(server_t *, zappy_t *zappy, arguments_t *,
+int end_incantation(server_t *server, zappy_t *zappy, arguments_t *,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
     static bool incantation_failed = false;
     static unsigned int count_players = 0;
+    bool is_success = false;
 
     if (player == NULL || incantation_failed)
         return EXIT_WITH_ERROR;
     if (count_players == 0) {
-        if (!ritual_succeed(zappy, player, &incantation_failed))
+        is_success = ritual_succeed(zappy, player, &incantation_failed);
+        if (!is_success)
             return EXIT_WITH_ERROR;
+        pie_func(server, player, is_success);
     }
     count_players++;
     if (count_players == REQUIRED_PLAYERS)
         count_players = 0;
     player->level++;
+    plv(server, zappy, player->id);
     dprintf(client->client_fd, "Current level:%d\n", player->level);
     return COMMAND_SUCCESS;
 }

@@ -25,6 +25,7 @@
     #define MAX_QUEUE_COMMANDS 10
 
     #define WIN_LEVEL 8
+    #define REQUIRED_WINNER 6
 
 typedef struct client_s {
     struct sockaddr_in sock_addr;
@@ -97,6 +98,6 @@ bool is_a_resource(const char *);
 int get_tile_index(const char *, const int);
 double calculate_freq(int, double);
 void refill_map(zappy_t *, const arguments_t, server_t *, clock_t *);
-char *win_condition(server_t *, zappy_t *);
+char *win_condition(server_t *, zappy_t *, arguments_t *);
 
 #endif /* !SERVER_H_ */

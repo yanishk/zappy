@@ -52,9 +52,12 @@ int pex_func(server_t *, player_t *);
 int pbc_func(server_t *, const int, const char *);
 int seg_func(server_t *, char *);
 int smg_func(server_t *, const char *);
+int pic_func(server_t *, player_t *, int *);
+int pie_func(server_t *, player_t *, bool);
 
 int ppo(server_t *, zappy_t *, const int);
 int bct(server_t *, zappy_t *, int, int);
 int pin(server_t *, zappy_t *, const int);
+int plv(server_t *, zappy_t *, const int);
 
 #endif /* !COMMAND_GUI_H_ */

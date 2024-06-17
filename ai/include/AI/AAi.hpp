@@ -69,21 +69,24 @@ namespace Zappy {
 
             virtual bool run() = 0;
 
-            bool forward();
-            bool right();
-            bool left();
+            Response forward();
+            Response right();
+            Response left();
 
             std::vector<std::string> look();
             bool inventory();
-            bool broadcastText(const std::string &text);
+            Response broadcastText(const std::string &text);
 
             std::size_t connectNumber();
-            bool fork();
-            bool eject();
+            Response fork();
+            Response eject();
 
-            bool takeObject(const std::string &object);
-            bool setObject(const std::string &object);
-            bool incantation();
+            Response takeObject(const std::string &object);
+            Response setObject(const std::string &object);
+            Response incantation();
+
+            std::pair<double, double> getPosition();
+            std::size_t getLevel();
 
         protected:
 
