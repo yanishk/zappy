@@ -20,8 +20,8 @@ void AllEggs::addEggToIsland(Vector3 position, int eggID)
     tmpEgg._eggModel = _model;
     tmpEgg._eggID = eggID;
     tmpEgg.RngRotate = std::rand() % (210 - 159 + 1) + 159;
-    tmpEgg._eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * 100, DEG2RAD
-        * tmpEgg.RngRotate, DEG2RAD * 0});
+    float tiltAngle = (std::rand() % 40) + 80;
+    tmpEgg._eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * tiltAngle, DEG2RAD * tmpEgg.RngRotate, DEG2RAD * 0});
     _allEggs.push_back(tmpEgg);
 }
 
