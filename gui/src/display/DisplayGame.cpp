@@ -83,7 +83,7 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
         }
     }
     std::pair<Model, float> eggPair;
-    eggPair.first = LoadModel("./gui/assets/models/scene.gltf");
+    eggPair.first = LoadModel(EGG_MOD_PATH);
     eggPair.second = 0.3;
     _allEggs.loadEggModel(eggPair);
 

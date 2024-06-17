@@ -19,16 +19,17 @@ void AllEggs::addEggToIsland(Vector3 position, int eggID)
 
     tmpEgg._eggModel = _model;
     tmpEgg._eggID = eggID;
-    tmpEgg._eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * 115, DEG2RAD
-        * (std::rand() % 360), DEG2RAD * 0});
+    tmpEgg.RngRotate = std::rand() % (210 - 159 + 1) + 159;
+    tmpEgg._eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * 100, DEG2RAD
+        * tmpEgg.RngRotate, DEG2RAD * 0});
     _allEggs.push_back(tmpEgg);
 }
 
 void AllEggs::removeEggFromIsland(int eggID)
 {
-    for (std::size_t i = 0; i < _allEggs.size(); i++) {
-        if (_allEggs.at(i)._eggID == eggID) {
-            _allEggs.erase(_allEggs.begin() + i);
+    for (auto it = _allEggs.begin(); it != _allEggs.end(); ++it) {
+        if (it->_eggID == eggID) {
+            _allEggs.erase(it);
             break;
         }
     }

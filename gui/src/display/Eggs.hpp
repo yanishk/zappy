@@ -29,6 +29,8 @@ class Egg {
 
         Model _eggModel;
         int _eggID;
+        int RngRotate;
+
         Vector3 _realPos;
 
     private:
