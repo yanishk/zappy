@@ -67,9 +67,14 @@ void UseRecivedCmd::getPex(void)
 
 }
 
-void UseRecivedCmd::getPbc(void)
+void UseRecivedCmd::getPbc(Vector3 camPosition)
 {
-
+    if (_cmd.getCommandAt(PBC_CMD, 0).size() > 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PBC_CMD, 0);
+        int playerID = std::atoi(cmd.front().c_str());
+        _player.drawMessage(playerID, cmd[1], camPosition);
+        _cmd.eraseFirstCmdInMap(PBC_CMD);
+    }
 }
 
 void UseRecivedCmd::getPic(void)

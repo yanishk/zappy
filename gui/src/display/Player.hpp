@@ -13,6 +13,7 @@
     #include <iostream>
     #include <iomanip>
     #include <map>
+    #include <chrono>
     #include "Utils.hpp"
 
     #define MAX_RGB 255
@@ -36,6 +37,7 @@ class Player {
         void resetInventory(void);
         std::vector<int> getInventory(void);
         void setInventory(std::vector<int> newInv);
+        void drawMessage(std::string msg, Vector3 camPosition);
 
         Model _playerModel;
         ModelAnimation *_playerAnimation;
@@ -59,7 +61,13 @@ class Player {
         void DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint);
         BoundingBox UpdateBoundingBox(BoundingBox box, Vector3 position);
         Vector3 RotatePointAroundY(Vector3 point);
+        Color getNegativeColor(Color color);
         std::vector<int> _inventory;
+        std::string _broadcastMsg;
+        std::chrono::time_point<std::chrono::system_clock> _startTime;
+        Model _infoBackground;
+        Model _broadcastBackground;
+        bool _isTimerStart;
 };
 
 class AllPlayers {
@@ -73,7 +81,7 @@ class AllPlayers {
         void changePlayerOrientation(float direction, int playerID);
         void removePlayerFromIsland(int playerID);
         void setPlayerTeam(std::string playerTeam, int playerID);
-        void drawPlayer(Vector3 cameraPosition, bool isAnimated);
+        void drawPlayer(bool isAnimated);
         Vector3 getPlayerRealPos(int playerID);
         Vector3 getSize(void);
         void setPlayerLevel(int playerID, int level);
@@ -85,6 +93,7 @@ class AllPlayers {
         void resetInventory(int playerID);
         std::vector<int> getInventory(int playerID);
         void setInventory(int playerID, std::vector<int> newInv);
+        void drawMessage(int playerID, std::string msg, Vector3 camPosition);
     private:
         Model _model;
         Vector3 _size;

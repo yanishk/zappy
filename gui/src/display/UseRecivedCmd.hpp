@@ -23,7 +23,7 @@ class UseRecivedCmd {
         void getPlv(void);
         void getPin(void);
         void getPex(void);
-        void getPbc(void);
+        void getPbc(Vector3 camPosition);
         void getPic(void);
         void getPie(void);
         void getPdr(void);

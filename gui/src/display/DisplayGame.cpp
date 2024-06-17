@@ -254,6 +254,7 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getPin();
     recivedCmd.getEnw();
     recivedCmd.getSmg();
+    recivedCmd.getPbc(_camera.position);
     recivedCmd.getSgt();
     recivedCmd.getSst();
 }
@@ -282,10 +283,13 @@ void DisplayGame::display3D(void)
         i.changeItemAnim();
         i.drawItem();
     }
-    _player.drawPlayer(_camera.position, _isAnimated);
+    _player.drawPlayer(_isAnimated);
 
     for (auto &i: _allIsland) {
         DrawModel(i._islandModel , i._islandPosition, i._islandSize, WHITE);
+    }
+    for (auto &i: _player._allPlayer) {
+        i.displayPlayerInfo(_camera.position);
     }
 
     EndMode3D();
