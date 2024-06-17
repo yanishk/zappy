@@ -6,7 +6,6 @@
 */
 
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 
 size_t array_size(char **array)

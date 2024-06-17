@@ -5,7 +5,6 @@
 ** choose_random_egg
 */
 
-#include <string.h>
 #include "server.h"
 
 static egg_t **get_team_eggs(zappy_t *zappy,
