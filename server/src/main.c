@@ -5,9 +5,6 @@
 ** main
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "server.h"
 
 static void display_help(void)
@@ -26,6 +23,12 @@ static void display_help(void)
 
 int main(int ac, const char **av)
 {
+    if (ac == 2) {
+        if (strcmp(av[1], "-help") == 0) {
+            display_help();
+            return EXIT_WITH_SUCCESS;
+        }
+    }
     if (ac < MIN_ARGS) {
         display_help();
         return EXIT_WITH_ERROR;

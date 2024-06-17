@@ -5,10 +5,6 @@
 ** server
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
 #include "server.h"
 
 int server(int ac, const char **av)

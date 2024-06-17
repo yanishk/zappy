@@ -5,17 +5,12 @@
 ** close_client_socket
 */
 
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
 #include <unistd.h>
 #include "server.h"
 
 static void remove_client_socket(server_t *server, const int client_fd)
 {
-    for (size_t i = 0; i != server->size; i += 1) {
+    for (size_t i = 0; i != server->fd_array_size; i += 1) {
         if (server->fd_array[i] == client_fd) {
             server->fd_array[i] = 0;
             break;

@@ -5,7 +5,6 @@
 ** check_command_queue
 */
 
-#include "server.h"
 #include "command_ia.h"
 
 void check_command_queue(server_t *server, zappy_t *zappy,
@@ -22,7 +21,7 @@ void check_command_queue(server_t *server, zappy_t *zappy,
             server->cmd_arg_array = command->array;
             status = command->index == NB_IA_CMD ?
             connect_player(server, zappy, *arg, client->client_fd) :
-            cmd_func_ia[command->index](server, zappy, arg, client);
+            cmd_list_ia[command->index].func(server, zappy, arg, client);
             answer_client(status, client->client_fd);
             free_ia_command(client, command);
             command = command_next;

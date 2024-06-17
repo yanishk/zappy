@@ -7,37 +7,19 @@
 
 #include "command_ia.h"
 
-int (*cmd_func_ia[NB_IA_CMD])(server_t *server, zappy_t *zappy,
-    arguments_t *arg, client_t *client) = {
-    &exit_func,
-    &inventory_command,
-    &take_object,
-    &set_object,
-    &move_forward,
-    &turn_left,
-    &turn_right,
-    &connect_nbr,
-    &fork_player,
-    &eject_from_tile,
-    &look_around,
-    &broadcast,
-    &start_incantation,
-    &end_incantation
-};
-
-command_infos_t cmd_list_ia[NB_IA_CMD] = {
-    {EXIT_COMMAND, 0, 1},
-    {INVENTORY_COMMAND, 1, 1},
-    {TAKE_COMMAND, 7, 2},
-    {SET_COMMAND, 7, 2},
-    {FORWARD_COMMAND, 7, 1},
-    {LEFT_COMMAND, 7, 1},
-    {RIGHT_COMMAND, 7, 1},
-    {CONNECT_NBR_COMMAND, 0, 1},
-    {FORK_COMMAND, 42, 1},
-    {EJECT_COMMAND, 7, 1},
-    {LOOK_COMMAND, 7, 1},
-    {BROADCAST_COMMAND, 7, 2},
-    {START_INCANTATION_COMMAND, 0, 1},
-    {END_INCANTATION_COMMAND, 300, 1}
+command_infos_ia_t cmd_list_ia[NB_IA_CMD] = {
+    {EXIT_COMMAND, 0, 1, &exit_func},
+    {INVENTORY_COMMAND, 1, 1, &inventory_command},
+    {TAKE_COMMAND, 7, 2, &take_object},
+    {SET_COMMAND, 7, 2, &set_object},
+    {FORWARD_COMMAND, 7, 1, &move_forward},
+    {LEFT_COMMAND, 7, 1, &turn_left},
+    {RIGHT_COMMAND, 7, 1, &turn_right},
+    {CONNECT_NBR_COMMAND, 0, 1, &connect_nbr},
+    {FORK_COMMAND, 42, 1, &fork_player},
+    {EJECT_COMMAND, 7, 1, &eject_from_tile},
+    {LOOK_COMMAND, 7, 1, &look_around},
+    {BROADCAST_COMMAND, 7, 2, &broadcast},
+    {START_INCANTATION_COMMAND, 0, 1, &start_incantation},
+    {END_INCANTATION_COMMAND, 300, 1, &end_incantation}
 };
