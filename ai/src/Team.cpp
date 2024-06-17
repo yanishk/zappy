@@ -5,6 +5,7 @@
 ** Team
 */
 
+#include "AI/Searcher.hpp"
 #include "Team.hpp"
 
 Zappy::Team &Zappy::Team::getTeam(TeamOptions options)
@@ -21,7 +22,10 @@ const std::string &Zappy::Team::getName()
 
 int Zappy::Team::run()
 {
-    _players.push_back(std::make_unique<Queen>(_port, _name));
+    Ressources ress;
+    ress.addRessources(LINEMATE, 1);
+    _players.push_back(std::make_unique<Searcher>(_port, _name, Order(2, ress)));
+    // _players.push_back(std::make_unique<Queen>(_port, _name));
 
     return EXIT_SUCCESS;
 }

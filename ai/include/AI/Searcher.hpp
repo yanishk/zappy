@@ -24,7 +24,9 @@
     #define MIDDLE_SIX_LEVEL        42
     #define MIDDLE_SEVEN_LEVEL      56
 
-    #define MIN_FOOD 10
+    #define NB_SAME_MOVE_MAX        4
+
+    #define MIN_FOOD                10
 
     #include <map>
     #include "AAi.hpp"
@@ -42,37 +44,44 @@ namespace Zappy
 
     class Searcher : public AAi {
         public:
-            Searcher(const std::string &port, Order order, const std::string &name):
+            Searcher(const std::string &port, const std::string &name, Order order):
                 AAi(port, name),
                 _order(order),
-                _isGoingToQueen(false) {
-                _network.sendInformationToServer(_name);
-                _network.getInfoFromServer();
-                _network.getInfoFromServer();
-                _thread = std::thread(&Searcher::run, this);
-                _thread.join();
+                _isGoingToQueen(false)
+                {
+                    _network.sendInformationToServer(_name);
+                    if (_network.getInfoFromServer() == "none") {
+                        return;
+                    }
+                    if (_network.getInfoFromServer() == "none") {
+                        return;
+                    }
+                    _thread = std::thread(&Searcher::run, this);
+                    _thread.join();
             };
 
             bool run();
 
-        protected:
-
-            Network::Network _network;
-            Ressources _ressources;
-
-            std::pair<double, double> _position;
-            Orientation _orientation;
-            std::size_t _level;
+            bool addOrder(Order order) {
+                if (!_order.empty()) {
+                    return false;
+                }
+                _order = order;
+                return true;
+            }
 
         private:
             Order _order;
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
             std::vector<std::string> _objectToTake;
+            int _howManySameMove;
             bool _isGoingToQueen;
             std::thread _thread;
 
+
             void move();
+            void printMovement();
 
             bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
             void whereShouldIGo(std::vector<int> priority);
@@ -81,6 +90,7 @@ namespace Zappy
             std::vector<int> estimatePriority();
             std::pair<int, int> whereIsThePriority(int index);
 
+            void dropItem();
             void updateOrder();
             void searchFood();
             void showMustGoOn();

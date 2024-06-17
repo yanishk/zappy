@@ -28,25 +28,11 @@ bool Zappy::Searcher::haveIToTake(const std::string &item, std::unique_ptr<doubl
 {
     if (item == FOOD && _ressources.getRessource(FOOD) < MIN_FOOD) {
         return true;
-    } else if (item == FOOD) {
+    } else if (item == FOOD || item == PLAYER) {
         return false;
     }
 
-    std::vector<std::string> itemDesired = {
-        DERAUMERE,
-        SIBUR,
-        MENDIANE,
-        PHIRAS,
-        THYSTAME
-    };
-    std::vector<RessourceType> itemType = {
-        Deraumere,
-        Sibur,
-        Mendiane,
-        Phiras,
-        Thystame
-    };
-    std::vector<double> itemDensity = {
+    std::vector<double> density = {
         DERAUMERE_DENSITY,
         SIBUR_DENSITY,
         MENDIANE_DENSITY,
@@ -54,10 +40,9 @@ bool Zappy::Searcher::haveIToTake(const std::string &item, std::unique_ptr<doubl
         THYSTAME_DENSITY
     };
 
-    for (std::size_t i = 0; i < itemDesired.size() && i < itemType.size() && i < itemDensity.size(); ++i) {
-
-        if (_order.getRessources().getAllValueRessources()[itemType[i]] > _ressources.getRessource(itemDesired[i])
-         && *lastDensityObject > itemDensity[i]) {
+    for (const auto &i: density) {
+        if (_order[item] > _ressources[item] && *lastDensityObject > density[i]) {
+            *lastDensityObject = density[i];
             return true;
         }
 
@@ -81,8 +66,32 @@ std::vector<int> Zappy::Searcher::estimatePriority()
                 continue;
             }
 
+            if (_lastLook[i].find(" ")) {
+                std::string temp(_lastLook[i]);
+                while (temp.size()) {
+                    std::string actualItem(temp, 0, temp.find(" "));
+
+                    if (actualItem.size() == 0) {
+                        break;
+                    }
+
+                    if (actualItem.size() == temp.size()) {
+                        temp.erase(temp.begin(), temp.begin() + actualItem.size());
+                    } else {
+                        temp.erase(temp.begin(), temp.begin() + actualItem.size() + 1);
+                    }
+                    if (haveIToTake(actualItem, std::make_unique<double>(objectDensity)) &&
+                       !haveIToTake(_lastLook[j], std::make_unique<double>(objectDensity))) {
+                        _objectToTake.push_back(actualItem);
+                        itemPriority++;
+                    }
+
+                }
+            }
+
             if (haveIToTake(_lastLook[i], std::make_unique<double>(objectDensity)) &&
                !haveIToTake(_lastLook[j], std::make_unique<double>(objectDensity))) {
+                _objectToTake.push_back(_lastLook[i]);
                 itemPriority++;
             }
 
@@ -121,8 +130,14 @@ std::pair<int, int> Zappy::Searcher::whereIsThePriority(int index)
 
     for (const auto &i: lookMap) {
 
+        if (sides[upper] == index) {
+            if (where.first == ERROR) {
+                where.first = 0;
+            }
+            where.first += 1;
+        }
         if (index >= i.first && index <= i.second) {
-            where.first = index + 1;
+
             if (sides[upper] > index) {
                 int sidesGoing = 0;
 
@@ -157,23 +172,30 @@ void Zappy::Searcher::updateMove(std::pair<int, int> pos)
         return;
     }
 
+    while (pos.first > 0) {
+        _nextMouvment.emplace(_nextMouvment.begin(), Forward);
+        pos.first -= 1;
+    }
+
     if (pos.second < 0) {
 
-        for (int i = 0; i > pos.second; --i) {
+        while (pos.second < 0) {
             _nextMouvment.emplace(_nextMouvment.begin(), Left);
+            pos.second += 1;
         }
 
     } else {
-        for (int i = 0; i < pos.second; ++i) {
+
+        while (pos.second > 0) {
             _nextMouvment.emplace(_nextMouvment.begin(), Right);
+            pos.second -= 1;
         }
+
     }
 
-    for (int i = 0; i < pos.first; ++i) {
-        _nextMouvment.emplace(_nextMouvment.begin(), Forward);
+    if (pos.first == 0 || pos.second == 0) {
+        _nextMouvment.emplace(_nextMouvment.begin(), Take);
     }
-
-    _nextMouvment.emplace(_nextMouvment.begin(), Take);
 }
 
 void Zappy::Searcher::whereShouldIGo(std::vector<int> priority)
@@ -193,37 +215,53 @@ void Zappy::Searcher::whereShouldIGo(std::vector<int> priority)
         return;
     }
 
-    _objectToTake.push_back(_lastLook[biggestPriority]);
-
-    std::pair<int, int> pos = whereIsThePriority(index);
-
+    std::pair<int, int> pos = whereIsThePriority(biggestPriority);
     updateMove(pos);
 
     priority.erase(priority.begin() + biggestPriority);
 
+    updateMove(pos);
     whereShouldIGo(priority);
+}
+
+void Zappy::Searcher::printMovement()
+{
+
+    for (const auto &i: _nextMouvment) {
+        if (i == Zappy::Mouvement::Forward) {
+        }
+        if (i == Zappy::Mouvement::Left) {
+        }
+        if (i == Zappy::Mouvement::Right) {
+        }
+        if (i == Zappy::Mouvement::Back) {
+        }
+        if (i == Zappy::Mouvement::Take) {
+        }
+    }
 }
 
 void Zappy::Searcher::move()
 {
-    Mouvement nextMove = _nextMouvment.front();
+    Mouvement nextMove = _nextMouvment.back();
+
 
     switch (nextMove) {
         case Forward:
             forward();
-            _nextMouvment.erase(_nextMouvment.begin());
+            _nextMouvment.pop_back();
             _position.first -= 1;
             break;
 
         case Left:
             left();
-            _nextMouvment.erase(_nextMouvment.begin());
+            _nextMouvment.pop_back();
             _position.second -= 1;
             break;
 
         case Right:
             right();
-            _nextMouvment.erase(_nextMouvment.begin());
+            _nextMouvment.pop_back();
             _position.second += 1;
             break;
 
@@ -231,17 +269,27 @@ void Zappy::Searcher::move()
             left();
             left();
             forward();
-            _nextMouvment.erase(_nextMouvment.begin());
-            _nextMouvment.erase(_nextMouvment.begin());
-            _nextMouvment.erase(_nextMouvment.begin());
+            _nextMouvment.pop_back();
+            _nextMouvment.pop_back();
+            _nextMouvment.pop_back();
             _position.first += 1;
             break;
 
         default:
-            takeObject(_objectToTake.front());
+            std::string object = _objectToTake.front();
+            if (takeObject(object)) {
+                _order.removeRessources(object, 1);
+            }
             _objectToTake.erase(_objectToTake.begin());
+            _nextMouvment.pop_back();
             break;
     }
+
+    if (_order.empty()) {
+        _nextMouvment.clear();
+        _isGoingToQueen = true;
+    }
+
 }
 
 void Zappy::Searcher::searchFood()
@@ -260,6 +308,24 @@ void Zappy::Searcher::searchFood()
 
     std::pair<int, int> pos = whereIsThePriority(priority);
     updateMove(pos);
+}
+
+
+void Zappy::Searcher::dropItem()
+{
+    std::unordered_map<std::string, int> ressource = _ressources.getRessources();
+
+    for (const auto &i: ressource) {
+
+        if (i.first == FOOD) {
+            continue;
+        }
+
+        for (int j = 0; j < i.second; ++j) {
+            setObject(i.first);
+        }
+    }
+    incantation();
 }
 
 void Zappy::Searcher::showMustGoOn()
@@ -292,29 +358,51 @@ void Zappy::Searcher::showMustGoOn()
 
 bool Zappy::Searcher::run()
 {
-    if (_network.getInfoFromServer() == "dead") {
-        return false;
-    }
-    updateOrder();
-    if (_nextMouvment.empty() && !_isGoingToQueen && _order.empty()) {
-        _isGoingToQueen = true;
-    } else if (_nextMouvment.empty() && !_isGoingToQueen && !_order.empty()) {
-        _lastLook = look();
-        auto priority = estimatePriority();
-        whereShouldIGo(priority);
-    }
 
-    move();
+    while (true) {
+    
+        if (_position == std::make_pair<double, double>(0.0, 0.0)
+        &&  _isGoingToQueen == true) {
+            dropItem();
+        }
 
-    if (_ressources.getRessource(FOOD) < MIN_FOOD) {
-        searchFood();
-    }
+        if (_nextMouvment.empty() && !_isGoingToQueen && _order.empty()) {
+            _isGoingToQueen = true;
+        } else if (_nextMouvment.empty() && !_isGoingToQueen && !_order.empty()) {
+            _lastLook = look();
+            for (std::size_t i = 0; i < _lastLook.size(); ++i) {
+            }
+            auto priority = estimatePriority();
+            whereShouldIGo(priority);
+            if (_nextMouvment.size() == 0 && _howManySameMove != NB_SAME_MOVE_MAX) {
+                _nextMouvment.push_back(Left);
+                _howManySameMove++;
+            } else if (_howManySameMove == NB_SAME_MOVE_MAX) {
+                _nextMouvment.push_back(Forward);
+            }
+            printMovement();
+        }
 
-    updateOrder();
-    if (_nextMouvment.empty() && !_isGoingToQueen) {
-        _lastLook.clear();
-    } else if (_nextMouvment.empty() && _isGoingToQueen) {
-        showMustGoOn();
+        if (_nextMouvment.size() == 0) {
+            continue;
+        }
+
+        move();
+
+        if (_ressources.getRessource(FOOD) < MIN_FOOD) {
+            searchFood();
+        }
+
+        updateOrder();
+        if (_nextMouvment.empty() && !_isGoingToQueen) {
+            _lastLook.clear();
+        } else if (_nextMouvment.empty() && _isGoingToQueen) {
+            showMustGoOn();
+        }
+
+        if (_network.getInfoFromServer() == "dead") {
+            return false;
+        }
     }
 
     return true;

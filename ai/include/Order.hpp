@@ -27,6 +27,10 @@ namespace Zappy
                 return _ressourcesNeeded;
             }
 
+            int operator[](const std::string &value) {
+                return _ressourcesNeeded[value];
+            }
+
             bool empty() {
                 return _ressourcesNeeded.empty();
             }
