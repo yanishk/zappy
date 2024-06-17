@@ -32,10 +32,11 @@ static bool is_a_flag(const char **av, int *i)
 int team_name_flag(int ac, const char **av, int *i, arguments_t *arg)
 {
     *i += 1;
-    for (; *i < ac; *i += 1) {
+    while (*i < ac) {
         if (is_a_flag(av, i))
             return EXIT_WITH_SUCCESS;
         add_new_team(av[*i], arg);
+        *i += 1;
     }
     return EXIT_WITH_SUCCESS;
 }
