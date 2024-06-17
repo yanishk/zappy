@@ -32,6 +32,9 @@
     #define PBC_CMD "pbc"
     #define PIC_CMD "pic"
     #define ENW_CMD "enw"
+    #define NEW_L "\n"
+    #define SPACE_C " "
+    #define SST_CHANGE 25
 
 class Utils {
     public:
