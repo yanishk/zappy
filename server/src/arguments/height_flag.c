@@ -5,19 +5,19 @@
 ** height_flag
 */
 
-#include <string.h>
-#include <stdlib.h>
 #include "server.h"
 
-int height_flag(const char **av, int i, bool *is_a_team_name, arguments_t *arg)
+int height_flag(int, const char **av, int *i, arguments_t *arg)
 {
-    if (strcmp(av[i], "-y") == 0) {
-        *is_a_team_name = false;
-        arg->height = atoi(av[i + 1]);
-        if (arg->height <= 0) {
-            fprintf(stderr, INVALID_HEIGHT);
-            return EXIT_WITH_ERROR;
-        }
+    if (!is_positive_number(av[*i + 1])) {
+        fprintf(stderr, INVALID_FLAG_ARGUMENT(HEIGHT));
+        return EXIT_WITH_ERROR;
     }
+    arg->height = atoi(av[*i + 1]);
+    if (arg->height == 0) {
+        fprintf(stderr, INVALID_FLAG_ARGUMENT(HEIGHT));
+        return EXIT_WITH_ERROR;
+    }
+    *i += 1;
     return EXIT_WITH_SUCCESS;
 }

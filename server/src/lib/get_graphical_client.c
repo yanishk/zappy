@@ -9,7 +9,7 @@
 
 client_t *get_graphical_client(server_t *server)
 {
-    for (size_t i = 0; i != server->max_user; i += 1) {
+    for (size_t i = 0; i != server->max_clients; i += 1) {
         if (server->clients[i]->is_graphic)
             return server->clients[i];
     }

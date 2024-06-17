@@ -31,47 +31,30 @@ bool Zappy::AAi::left()
     return _network.getInfoFromServer() == RESPONSE_OK;
 }
 
-std::size_t Zappy::AAi::countMember(const std::string &line) const
-{
-    std::size_t count = 0;
-
-    for (std::size_t i = 0; i < line.size(); ++i) {
-        if (line[i] == ',') {
-            count++;
-        }
-    }
-
-    return count;
-}
-
 std::vector<std::string> Zappy::AAi::look()
 {
     _network.sendInformationToServer(LOOK_CMD);
     std::vector<std::string> vector;
     std::string information = _network.getInfoFromServer();
-    std::size_t nbMember = countMember(information);
 
-    while (vector.size() < nbMember) {
-        std::istringstream stream(information);
-        std::string line;
-
-        std::getline(stream, line, ',');
-
-        if (line[0] == '[') {
-            line.erase(line.begin());
-        }
-
-        vector.push_back(line);
-        information.erase(information.begin(), information.begin() + line.size() + 2);
+    if (!information.empty() && information[0] == '[') {
+        information.erase(information.begin());
+    }
+    if (!information.empty() && information.back() == ']') {
+        information.pop_back();
     }
 
-    information.pop_back();
-    vector.push_back(information);
-    for (auto &i:vector) {
-
-        if (i[0] == ' ') {
-            i.erase(i.begin());
+    std::istringstream stream(information);
+    std::string line;
+    while (std::getline(stream, line, ',')) {
+        if (!line.empty() && line[0] == ' ') {
+            line.erase(line.begin());
         }
+        vector.push_back(line);
+    }
+
+    if (information.back() == ',') {
+        vector.push_back("");
     }
 
     return vector;
@@ -98,29 +81,26 @@ bool Zappy::AAi::inventory()
     _network.sendInformationToServer(INVENTORY_CMD);
     std::vector<std::string> vector;
     std::string information = _network.getInfoFromServer();
-    std::size_t nbMember = countMember(information);
 
-    while (vector.size() < nbMember) {
-        std::istringstream stream(information);
-        std::string line;
 
-        std::getline(stream, line, ',');
-
-        if (line[0] == '[') {
-            line.erase(line.begin());
-        }
-
-        vector.push_back(line);
-        information.erase(information.begin(), information.begin() + line.size() + 2);
+    if (!information.empty() && information[0] == '[') {
+        information.erase(information.begin());
+    }
+    if (!information.empty() && information.back() == ']') {
+        information.pop_back();
     }
 
-    information.pop_back();
-    vector.push_back(information);
-    for (auto &i:vector) {
-
-        if (i[0] == ' ') {
-            i.erase(i.begin());
+    std::istringstream stream(information);
+    std::string line;
+    while (std::getline(stream, line, ',')) {
+        if (!line.empty() && line[0] == ' ') {
+            line.erase(line.begin());
         }
+        vector.push_back(line);
+    }
+
+    if (information.back() == ',') {
+        vector.push_back("");
     }
 
     return checkRessources(vector);
@@ -192,6 +172,7 @@ bool Zappy::AAi::setObject(const std::string &object)
 
 bool Zappy::AAi::incantation()
 {
+    std::cout << "Incantation\n";
     _network.sendInformationToServer(INCANTATION_CMD);
     std::string value = _network.getInfoFromServer();
 
