@@ -39,14 +39,14 @@ static char *loop_winner(zappy_t *zappy, char *team_name)
 char *win_condition(server_t *server, zappy_t *zappy, arguments_t *arg)
 {
     team_t *team = NULL;
-    char *winnner_team = NULL;
+    char *winner_team = NULL;
 
     TAILQ_FOREACH(team, &arg->team_head, team_entries) {
-        winnner_team = loop_winner(zappy, team->team_name);
-        if (winnner_team != NULL) {
-            seg_func(server, winnner_team);
+        winner_team = loop_winner(zappy, team->team_name);
+        if (winner_team != NULL) {
+            seg_func(server, winner_team);
             close_all_client(server, zappy);
-            return winnner_team;
+            return winner_team;
         }
     }
     return NULL;
