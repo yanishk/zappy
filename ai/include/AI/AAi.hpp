@@ -85,6 +85,9 @@ namespace Zappy {
             Response setObject(const std::string &object);
             Response incantation();
 
+            std::pair<double, double> getPosition();
+            std::size_t getLevel();
+
         protected:
 
             Network::Network _network;

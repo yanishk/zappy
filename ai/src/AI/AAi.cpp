@@ -10,6 +10,16 @@
 #include "AI/Quentin.hpp"
 #include "Team.hpp"
 
+std::pair<double, double> Zappy::AAi::getPosition()
+{
+    return _position;
+}
+
+std::size_t Zappy::AAi::getLevel()
+{
+    return _level;
+}
+
 Zappy::Response Zappy::AAi::forward()
 {
     _network.sendInformationToServer(FORWARD_CMD);
