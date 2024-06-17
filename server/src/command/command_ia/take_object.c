@@ -5,7 +5,6 @@
 ** take_command
 */
 
-#include "server.h"
 #include "command_ia.h"
 #include "command_gui.h"
 

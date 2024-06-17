@@ -25,15 +25,9 @@
 typedef struct command_infos_gui_s {
     char *name;
     size_t arg_nb;
+    int (*func)(server_t *, zappy_t *, arguments_t *, client_t *);
 } command_infos_gui_t;
 
-typedef struct associate_resource_nb_s {
-    char *name;
-    int code_resource;
-} associate_resource_nb_t;
-
-extern int (*cmd_func_gui[NB_GUI_CMD])(server_t *, zappy_t *,
-    arguments_t *, client_t *);
 extern command_infos_gui_t cmd_list_gui[NB_GUI_CMD];
 
 int msz_func(server_t *, zappy_t *, arguments_t *, client_t *);

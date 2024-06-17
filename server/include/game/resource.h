@@ -41,9 +41,16 @@ typedef struct resource_s {
     size_t thystame;
 } resource_t;
 
+typedef struct associate_resource_nb_s {
+    char *name;
+    int code_resource;
+} associate_resource_nb_t;
+
 struct repartion_resource {
     char *name;
     double density;
 };
+
+extern struct repartion_resource const repartion_unit[NB_RESOURCES];
 
 #endif /* !RESOURCE_H_ */

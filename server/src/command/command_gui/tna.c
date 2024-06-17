@@ -6,7 +6,6 @@
 */
 
 #include "command_gui.h"
-#include "arguments.h"
 
 int tna_func(server_t *, zappy_t *, arguments_t *arg, client_t *client)
 {

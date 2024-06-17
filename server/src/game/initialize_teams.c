@@ -5,9 +5,7 @@
 ** initialize_teams
 */
 
-#include <string.h>
 #include "server.h"
-#include "game.h"
 
 static bool has_already_a_player(zappy_t *zappy, int height, int width)
 {

@@ -29,11 +29,12 @@
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]
 
-typedef struct command_infos_s {
+typedef struct command_infos_ia_s {
     char *name;
     double time_unit;
     size_t arg_nb;
-} command_infos_t;
+    int (*func)(server_t *, zappy_t *, arguments_t *, client_t *);
+} command_infos_ia_t;
 
 typedef struct command_ia_s {
     char **array;
@@ -55,9 +56,7 @@ typedef struct road_broadcast_s {
     int height_undirect;
 } road_broadcast_t;
 
-extern int (*cmd_func_ia[NB_IA_CMD])(server_t *, zappy_t *, arguments_t *,
-    client_t *);
-extern command_infos_t cmd_list_ia[NB_IA_CMD];
+extern command_infos_ia_t cmd_list_ia[NB_IA_CMD];
 
 bool is_player_connected(const zappy_t *, const unsigned int);
 int connect_player(server_t *, zappy_t *, const arguments_t,

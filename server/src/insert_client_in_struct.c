@@ -5,14 +5,11 @@
 ** insert_client_in_struct
 */
 
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
 #include "server.h"
 
 client_t *get_client_in_struct(server_t *server, const int client_fd)
 {
-    for (size_t i = 0; i != server->max_user; i += 1) {
+    for (size_t i = 0; i != server->max_clients; i += 1) {
         if (server->clients[i]->client_fd == client_fd) {
             return server->clients[i];
         }
@@ -22,15 +19,15 @@ client_t *get_client_in_struct(server_t *server, const int client_fd)
 
 static client_t *realloc_client_struct(server_t *server, const int client_fd)
 {
-    server->max_user += 1;
+    server->max_clients += 1;
     server->clients = realloc(server->clients,
-        sizeof(client_t) * server->max_user);
+        sizeof(client_t) * server->max_clients);
     if (server->clients == NULL)
         return NULL;
-    server->clients[server->max_user - 1] = malloc(sizeof(client_t));
-    init_client(server->clients[server->max_user - 1]);
-    server->clients[server->max_user - 1]->client_fd = client_fd;
-    return server->clients[server->max_user - 1];
+    server->clients[server->max_clients - 1] = malloc(sizeof(client_t));
+    init_client(server->clients[server->max_clients - 1]);
+    server->clients[server->max_clients - 1]->client_fd = client_fd;
+    return server->clients[server->max_clients - 1];
 }
 
 client_t *insert_client_in_struct(server_t *server, const int client_fd)
@@ -39,7 +36,7 @@ client_t *insert_client_in_struct(server_t *server, const int client_fd)
 
     if (client != NULL)
         return client;
-    for (size_t i = 0; i != server->max_user; i += 1) {
+    for (size_t i = 0; i != server->max_clients; i += 1) {
         if (server->clients[i]->client_fd == 0) {
             server->clients[i]->client_fd = client_fd;
             return server->clients[i];

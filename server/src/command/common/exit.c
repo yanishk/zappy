@@ -5,7 +5,6 @@
 ** exit
 */
 
-#include <stdlib.h>
 #include "server.h"
 
 int exit_func(server_t *, zappy_t *, arguments_t *, client_t *client)
