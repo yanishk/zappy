@@ -257,6 +257,7 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getPbc(_camera.position);
     recivedCmd.getSgt();
     recivedCmd.getSst();
+    recivedCmd.getEdi();
 }
 
 void DisplayGame::display3D(void)

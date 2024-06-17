@@ -149,7 +149,11 @@ void UseRecivedCmd::getSmg(void)
 
 void UseRecivedCmd::getEdi(void)
 {
-
+    while (!_cmd.getCommandAt(EDI_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(EDI_CMD, 0);
+        _egg.removeEggFromIsland(std::stoi(cmd[0]));
+        _cmd.eraseFirstCmdInMap(EDI_CMD);
+    }
 }
 
 void UseRecivedCmd::getSgt(void)
