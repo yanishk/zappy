@@ -56,6 +56,8 @@ typedef struct road_broadcast_s {
     int height_undirect;
 } road_broadcast_t;
 
+extern resource_t const elevations_resources[NB_ELEVATIONS];
+extern incantation_t const elevations[NB_ELEVATIONS];
 extern command_infos_ia_t cmd_list_ia[NB_IA_CMD];
 
 bool is_player_connected(const zappy_t *, const unsigned int);
