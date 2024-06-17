@@ -8,7 +8,7 @@
 #include <math.h>
 #include "server.h"
 
-struct repartion_resource repartion[] = {
+struct repartion_resource const repartion_unit[NB_RESOURCES] = {
     {FOOD, FOOD_DEN},
     {LINEMATE, LINEMATE_DEN},
     {DERAUMERE, DERAUMERE_DEN},
@@ -55,8 +55,8 @@ static void density_onland(const arguments_t *args, zappy_t *zappy)
         }
     }
     for (int index = 0; index < NB_RESOURCES; index++) {
-        repartition_resource(args, zappy, repartion[index].name,
-            repartion[index].density);
+        repartition_resource(args, zappy, repartion_unit[index].name,
+            repartion_unit[index].density);
     }
 }
 

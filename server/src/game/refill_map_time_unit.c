@@ -8,16 +8,6 @@
 #include <math.h>
 #include "command_gui.h"
 
-static struct repartion_resource const repartion_unit[] = {
-    {FOOD, FOOD_DEN},
-    {LINEMATE, LINEMATE_DEN},
-    {DERAUMERE, DERAUMERE_DEN},
-    {SIBUR, SIBUR_DEN},
-    {MENDIANE, MENDIANE_DEN},
-    {PHIRAS, PHIRAS_DEN},
-    {THYSTAME, THYSTAME_DEN},
-};
-
 static size_t get_nb_resource(const arguments_t *args, zappy_t *zappy,
     const char *name)
 {

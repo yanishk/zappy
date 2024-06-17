@@ -51,4 +51,6 @@ struct repartion_resource {
     double density;
 };
 
+extern struct repartion_resource const repartion_unit[NB_RESOURCES];
+
 #endif /* !RESOURCE_H_ */
