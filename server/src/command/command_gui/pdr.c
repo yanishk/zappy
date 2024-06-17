@@ -7,7 +7,7 @@
 
 #include "command_gui.h"
 
-struct associate_resource_nb_s set_resource[] = {
+static struct associate_resource_nb_s const set_resource[NB_RESOURCES] = {
     {FOOD, 0},
     {LINEMATE, 1},
     {DERAUMERE, 2},
