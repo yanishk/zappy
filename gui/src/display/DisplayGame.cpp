@@ -254,6 +254,8 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getPin();
     recivedCmd.getEnw();
     recivedCmd.getSmg();
+    recivedCmd.getSgt();
+    recivedCmd.getSst();
 }
 
 void DisplayGame::display3D(void)
@@ -324,7 +326,10 @@ void DisplayGame::launchGame(void)
 
     SetTargetFPS(60);
     float seconds = 0.0f;
+
     asio::write(_socket, asio::buffer("mct\n"));
+    asio::write(_socket, asio::buffer("sgt\n"));
+
     while (!WindowShouldClose()) {
         useServerInfo(recivedCmd);
 
