@@ -8,7 +8,7 @@
 #include "command_ia.h"
 #include "command_gui.h"
 
-static resource_t const elevations_resources[NB_ELEVATIONS] = {
+resource_t const elevations_resources[NB_ELEVATIONS] = {
     {0, 1, 0, 0, 0, 0, 0},
     {0, 1, 1, 1, 0, 0, 0},
     {0, 2, 0, 1, 0, 2, 0},
@@ -18,7 +18,7 @@ static resource_t const elevations_resources[NB_ELEVATIONS] = {
     {0, 2, 2, 2, 2, 2, 1}
 };
 
-static incantation_t const elevations[NB_ELEVATIONS] = {
+incantation_t const elevations[NB_ELEVATIONS] = {
     {2, 1, &elevations_resources[0]},
     {3, 2, &elevations_resources[1]},
     {4, 2, &elevations_resources[2]},

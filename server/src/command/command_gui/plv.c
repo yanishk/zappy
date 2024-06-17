@@ -9,10 +9,9 @@
 
 int plv(server_t *server, zappy_t *zappy, const int player_id)
 {
-    player_t *player = NULL;
+    player_t *player = get_player_by_id(zappy, player_id);
     client_t *graphical = get_graphical_client(server);
 
-    player = get_player_by_id(zappy, player_id);
     if (player == NULL || graphical == NULL)
         return EXIT_WITH_ERROR;
     dprintf(graphical->client_fd, "plv %d %d\n", player->id, player->level);
