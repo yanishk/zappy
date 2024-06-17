@@ -32,6 +32,7 @@ static void send_game_info_to_graphic(server_t *server, zappy_t *zappy,
     arguments_t *arg, client_t *client)
 {
     msz_func(server, zappy, arg, client);
+    sgt_func(server, zappy, arg, client);
     mct_func(server, zappy, arg, client);
     tna_func(server, zappy, arg, client);
     pnw_for_existing_players(server, zappy);
