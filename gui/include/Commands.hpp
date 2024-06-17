@@ -27,6 +27,7 @@
     #define ENW_CMD "enw"
     #define SMG_CMD "smg"
     #define EDI_CMD "edi"
+    #define PIE_CMD "pie"
     #define PARAMS_ERROR_MSG "Need 2 paramaters at least."
     #define INVALID_IDX "Invalid Index."
     #define EMPTY_MAP_MESSAGE "The vector of vectors at this key is already empty."
@@ -86,6 +87,7 @@ class CommandManager {
         std::vector<std::vector<std::string>> _pgtCmd;
         std::vector<std::vector<std::string>> _pbcCmd;
         std::vector<std::vector<std::string>> _picCmd;
+        std::vector<std::vector<std::string>> _pieCmd;
         std::vector<std::vector<std::string>> _pexCmd;
 
 
@@ -121,6 +123,7 @@ class CommandManager {
             {ENW_CMD, _enwCmd},
             {SMG_CMD, _smgCmd},
             {EDI_CMD, _ediCmd},
+            {PIE_CMD, _pieCmd},
 
         };
 

@@ -84,6 +84,9 @@ void CommandManager::receiveResponse(const std::string &response)
         { EDI_CMD, [this](const std::vector<std::string> &params) {
             fillMapIsland(EDI_CMD, params);
             }},
+        { PIE_CMD, [this](const std::vector<std::string> &params) {
+        fillMapPlayerInfos(PIE_CMD, params);
+            }},
     };
 
     auto it = commandMap.find(cmd);
