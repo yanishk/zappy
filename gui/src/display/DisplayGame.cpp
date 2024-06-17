@@ -332,7 +332,6 @@ void DisplayGame::launchGame(void)
     float seconds = 0.0f;
 
     asio::write(_socket, asio::buffer("mct\n"));
-    asio::write(_socket, asio::buffer("sgt\n"));
 
     while (!WindowShouldClose()) {
         useServerInfo(recivedCmd);
