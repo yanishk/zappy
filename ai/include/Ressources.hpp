@@ -8,21 +8,22 @@
 #ifndef RESSOURCES_HPP_
     #define RESSOURCES_HPP_
 
-    #define FOOD "food"
-    #define LINEMATE "linemate"
-    #define DERAUMERE "deraumere"
-    #define SIBUR "sibur"
-    #define MENDIANE "mendiane"
-    #define PHIRAS "phiras"
-    #define THYSTAME "thystame"
+    #define FOOD                "food"
+    #define LINEMATE            "linemate"
+    #define DERAUMERE           "deraumere"
+    #define SIBUR               "sibur"
+    #define MENDIANE            "mendiane"
+    #define PHIRAS              "phiras"
+    #define THYSTAME            "thystame"
+    #define PLAYER              "player"
 
-    #define FOOD_DENSITY 0.5
-    #define LINEMATE_DENSITY 0.3
-    #define DERAUMERE_DENSITY 0.15
-    #define SIBUR_DENSITY 0.1
-    #define MENDIANE_DENSITY 0.1
-    #define PHIRAS_DENSITY 0.08
-    #define THYSTAME_DENSITY 0.05
+    #define FOOD_DENSITY        0.5
+    #define LINEMATE_DENSITY    0.3
+    #define DERAUMERE_DENSITY   0.15
+    #define SIBUR_DENSITY       0.1
+    #define MENDIANE_DENSITY    0.1
+    #define PHIRAS_DENSITY      0.08
+    #define THYSTAME_DENSITY    0.05
 
     #define CINT(ressource) const int ressource
 
@@ -91,12 +92,17 @@ namespace Zappy {
                 return _ressources[ressource];
             };
 
+            std::unordered_map<std::string, int> getRessources()
+            {
+                return _ressources;
+            }
+
             bool empty()
             {
 
                 for (const auto &i:_ressources) {
 
-                    if (i.second) {
+                    if (i.second > 0) {
                         return false;
                     }
 
