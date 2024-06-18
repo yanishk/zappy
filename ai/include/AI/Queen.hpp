@@ -16,6 +16,7 @@
     #define CRITICAL_STOCK 20
 
     #define ONE_FOOD 1
+    #define LEVEL_INDEX 1
 
     #define ONE_PLAYER 1
     #define TWO_PLAYERS 2
@@ -66,7 +67,11 @@ namespace Zappy {
             bool initialize();
 
             bool checkFood();
+
             bool checkIncantation();
+            bool checkRessources();
+            bool checkPlayers();
+
             bool execute();
 
             bool takeFood();

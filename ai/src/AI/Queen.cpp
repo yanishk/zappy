@@ -20,7 +20,6 @@ bool Zappy::Queen::run()
         checkFood();
         checkIncantation();
         execute();
-
     }
 
     return true;
@@ -54,6 +53,41 @@ bool Zappy::Queen::checkFood()
 
 bool Zappy::Queen::checkIncantation()
 {
+    if (!checkRessources()) {
+        return false;
+    }
+
+    if (!checkPlayers()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::checkRessources()
+{
+    std::vector<std::string> ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
+
+    for (std::size_t i = 0; i < _incatation.size(); i++) {
+
+        for (std::size_t j = 0; j < ressources.size(); j++) {
+
+            std::size_t ressourcesCount = countRessources(_look[HERE], ressources[j]);
+            std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressources[j]];
+
+            if (ressourcesCount < ressourcesNeed) {
+                return false;
+            }
+
+        }
+
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::checkPlayers()
+{
     return true;
 }
 
@@ -66,11 +100,9 @@ bool Zappy::Queen::execute()
             if (_actions.front() == task.first) {
                 task.second();
             }
-
         }
 
         _actions.erase(_actions.begin());
-
     }
 
     return true;
