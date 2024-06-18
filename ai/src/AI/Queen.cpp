@@ -53,13 +53,12 @@ bool Zappy::Queen::checkFood()
 
 bool Zappy::Queen::checkIncantation()
 {
-    if (!checkRessources()) {
+    if (!checkPlayers() || !checkRessources()) {
+        _actions.push_back(ForkSearcher);
         return false;
     }
 
-    if (!checkPlayers()) {
-        return false;
-    }
+    _actions.push_back(Incantation);
 
     return true;
 }
@@ -89,7 +88,7 @@ bool Zappy::Queen::checkRessources()
 bool Zappy::Queen::checkPlayers()
 {
     Zappy::Team &team = Zappy::Team::getTeam(GET);
-    std::size_t count = 0;
+    std::size_t count = INITIAL_COUNT;
 
     for (auto &player: team._players) {
 
@@ -97,7 +96,7 @@ bool Zappy::Queen::checkPlayers()
         bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
 
         if (checkLevel && checkPosition) {
-            count += 1;
+            count += ONE_COUNT;
         }
 
     }
@@ -151,6 +150,63 @@ bool Zappy::Queen::forkFood()
     return true;
 }
 
+bool Zappy::Queen::setIncantation()
+{
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
+    std::size_t count = _incatation[_level - LEVEL_INDEX].first;
+
+    for (auto &player: team._players) {
+
+        bool checkLevel = (player.get()->getLevel() == _level);
+        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
+
+        if (count && checkLevel && checkPosition) {
+            count -= ONE_COUNT;
+            player.get()->setIsIncantation(true);
+        }
+
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::removeIncantation()
+{
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
+    std::size_t count = _incatation[_level - LEVEL_INDEX].first;
+
+    std::size_t level = _level;
+
+    for (auto &player: team._players) {
+
+        bool checkLevel = (player.get()->getLevel() == level);
+        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
+        bool isIncantation = player.get()->getIsIncantation();
+
+        if (count && checkLevel && checkPosition && isIncantation) {
+            count -= ONE_COUNT;
+            player.get()->setIsIncantation(false);
+            player.get()->setLevel(player.get()->getLevel() + ONE_LEVEL);
+        }
+
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::makeIncantation()
+{
+    setIncantation();
+
+    if (!incantation()) {
+        return false;
+    }
+
+    removeIncantation();
+
+    return true;
+}
+
 std::size_t Zappy::Queen::countRessources(const std::string &ressources, const std::string &index)
 {
     if (!index.length()) {
@@ -161,7 +217,7 @@ std::size_t Zappy::Queen::countRessources(const std::string &ressources, const s
     std::size_t offset = ressources.find(index);
 
     while (offset != std::string::npos) {
-        count += 1;
+        count += ONE_COUNT;
         offset = ressources.find(index, offset + index.length());
     }
 

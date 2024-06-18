@@ -16,6 +16,8 @@
     #define CRITICAL_STOCK 20
 
     #define ONE_FOOD 1
+    #define ONE_LEVEL 1
+    #define ONE_COUNT 1
     #define LEVEL_INDEX 1
 
     #define ONE_PLAYER 1
@@ -27,6 +29,7 @@
 
     #define NONE 0
     #define HERE 0
+    #define INITIAL_COUNT 0
 
 namespace Zappy {
     
@@ -79,6 +82,10 @@ namespace Zappy {
             bool takeFood();
             bool forkFood();
 
+            bool makeIncantation();
+            bool setIncantation();
+            bool removeIncantation();
+
             std::size_t countRessources(const std::string &ressources, const std::string &index);
 
             Ressources _look;
@@ -89,8 +96,9 @@ namespace Zappy {
 
             std::vector<std::pair<Action, std::function<bool()>>> _execute = {
 
-                { Action::TakeFood, [this] { return takeFood(); } },
-                { Action::ForkFood, [this] { return forkFood(); } }
+                { Action::TakeFood,     [this] { return takeFood();          } },
+                { Action::ForkFood,     [this] { return forkFood();          } },
+                { Action::Incantation,  [this] { return makeIncantation();   } },
 
             };
 
