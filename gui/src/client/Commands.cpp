@@ -85,7 +85,10 @@ void CommandManager::receiveResponse(const std::string &response)
             fillMapIsland(EDI_CMD, params);
             }},
         { PIE_CMD, [this](const std::vector<std::string> &params) {
-        fillMapPlayerInfos(PIE_CMD, params);
+            fillMapPlayerInfos(PIE_CMD, params);
+            }},
+        { SEG_CMD, [this](const std::vector<std::string> &params) {
+            fillMapIsland(SEG_CMD, params);
             }},
     };
 
