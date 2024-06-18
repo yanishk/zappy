@@ -88,6 +88,24 @@ bool Zappy::Queen::checkRessources()
 
 bool Zappy::Queen::checkPlayers()
 {
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
+    std::size_t count = 0;
+
+    for (auto &player: team._players) {
+
+        bool checkLevel = (player.get()->getLevel() == _level);
+        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
+
+        if (checkLevel && checkPosition) {
+            count += 1;
+        }
+
+    }
+
+    if (count < _incatation[_level - LEVEL_INDEX].first) {
+        return false;
+    }
+
     return true;
 }
 

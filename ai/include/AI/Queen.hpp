@@ -23,6 +23,8 @@
     #define FOUR_PLAYERS 4
     #define SIX_PLAYERS 6
 
+    #define POSITION(a,b) std::make_pair<double, double>(a, b)
+
     #define NONE 0
     #define HERE 0
 
