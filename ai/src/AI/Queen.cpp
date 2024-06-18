@@ -65,19 +65,15 @@ bool Zappy::Queen::checkIncantation()
 
 bool Zappy::Queen::checkRessources()
 {
-    std::vector<std::string> ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
+    const std::vector<std::string> ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
 
-    for (std::size_t i = 0; i < _incatation.size(); i++) {
+    for (std::size_t i = 0; i < ressources.size(); i++) {
 
-        for (std::size_t j = 0; j < ressources.size(); j++) {
+        std::size_t ressourcesCount = countRessources(_look[HERE], ressources[i]);
+        std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressources[i]];
 
-            std::size_t ressourcesCount = countRessources(_look[HERE], ressources[j]);
-            std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressources[j]];
-
-            if (ressourcesCount < ressourcesNeed) {
-                return false;
-            }
-
+        if (ressourcesCount < ressourcesNeed) {
+            return false;
         }
 
     }
@@ -144,6 +140,34 @@ bool Zappy::Queen::forkFood()
     if (!fork()) {
         return false;
     }
+
+    team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, INFINY));
+
+    return true;
+}
+
+bool Zappy::Queen::forkSearcher()
+{
+    const std::vector<std::string> ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
+
+    if (!fork()) {
+        return false;
+    }
+
+    for (std::size_t i = 0; i < ressources.size(); i++) {
+
+        std::size_t ressourcesCount = countRessources(_look[HERE], ressources[i]);
+        std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressources[i]];
+
+        (void)ressourcesCount;
+        (void)ressourcesNeed;
+
+        // compter pour appeler un chercheur avec _commands //
+
+    }
+
+    // appeler le chercheur et pas un quentin avec la commande //
 
     team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, INFINY));
 

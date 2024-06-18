@@ -86,6 +86,8 @@ namespace Zappy {
             bool setIncantation();
             bool removeIncantation();
 
+            bool forkSearcher();
+
             std::size_t countRessources(const std::string &ressources, const std::string &index);
 
             Ressources _look;
@@ -96,11 +98,15 @@ namespace Zappy {
 
             std::vector<std::pair<Action, std::function<bool()>>> _execute = {
 
-                { Action::TakeFood,     [this] { return takeFood();          } },
-                { Action::ForkFood,     [this] { return forkFood();          } },
-                { Action::Incantation,  [this] { return makeIncantation();   } },
+                { Action::TakeFood,     [this] { return takeFood();         } },
+                { Action::ForkFood,     [this] { return forkFood();         } },
+                { Action::ForkSearcher, [this] { return forkSearcher();     } },
+                { Action::Incantation,  [this] { return makeIncantation();  } }
 
             };
+
+            Zappy::Ressources _commands;
+            std::size_t _nbCommands;
 
             std::vector<std::pair<size_t, Zappy::Ressources>> _incatation = {
 
