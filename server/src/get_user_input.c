@@ -74,7 +74,11 @@ static void insert_command_in_queue(server_t *server, zappy_t *zappy,
     }
     if (is_player_connected(zappy, client->client_fd))
         status = insert_game_command_in_queue(server, *arg, client);
-        // ici
+    if (connect_player(server, zappy, *arg, client->client_fd)
+        == COMMAND_SUCCESS) {
+        free_array(server->cmd_arg_array);
+        return;
+    }
     if (status == UNKNOWN_COMMAND)
         insert_other_command_in_queue(server, client);
 }
