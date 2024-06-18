@@ -9,29 +9,33 @@
 #include "command_ia.h"
 #include "command_gui.h"
 
+static char **split_commands(const char *read_buffer)
+{
+    static char final_buffer[MAX_BUFFER_SIZE] = {'\0'};
+    char **tmp_commands_array = NULL;
+
+    strcat(final_buffer, read_buffer);
+    if (!has_backslash(read_buffer))
+        return NULL;
+    tmp_commands_array = word_array(final_buffer, "\n");
+    memset(final_buffer, '\0', sizeof(final_buffer));
+    return tmp_commands_array;
+}
+
 static char **read_client_socket(server_t *server, zappy_t *zappy,
     client_t *client)
 {
     char read_buffer[MAX_BUFFER_SIZE] = {'\0'};
-    static char final_buffer[MAX_BUFFER_SIZE] = {'\0'};
-    char **tmp_commands_array = NULL;
 
     if (read(client->client_fd, read_buffer, MAX_BUFFER_SIZE) == 0) {
         pdi_func(server, zappy, client->client_fd);
         client->has_been_closed = true;
         return NULL;
     }
-    strcat(final_buffer, read_buffer);
-    if (!has_backslash(read_buffer))
+    if (strlen(read_buffer) == 0)
         return NULL;
-    tmp_commands_array = word_array(final_buffer, "\n");
-    memset(final_buffer, '\0', sizeof(final_buffer));
-    if (array_size(tmp_commands_array) == 1 &&
-        strlen(tmp_commands_array[0]) == 0) {
-        free_array(tmp_commands_array);
-        return NULL;
-    }
-    return tmp_commands_array;
+    read_buffer[MAX_BUFFER_SIZE - 1] = '\0';
+    return split_commands(read_buffer);
 }
 
 void answer_client(const int status, const unsigned int client_fd)
