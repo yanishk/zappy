@@ -86,8 +86,10 @@ namespace Zappy {
             Response setObject(const std::string &object);
             Response incantation();
 
-            std::pair<double, double> getPosition();
-            std::size_t getLevel();
+            std::pair<double, double> getPosition() const { return _position; };
+
+            std::size_t getLevel() const { return _level; };
+            void setLevel(std::size_t level) { _level = level; };
 
             bool getIsIncantation() const { return _isIncantation; };
             void setIsIncantation(bool isIncantation) { _isIncantation = isIncantation; };
