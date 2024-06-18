@@ -59,7 +59,8 @@ namespace Zappy {
 
         public:
 
-            AAi(const std::string &port, const std::string &name): 
+            AAi(const std::string &port, const std::string &name):
+                _isIncantation(false),
                 _network(Network::Network(port)),
                 _ressources(Ressources()),
                 _position(START_POSITION),
@@ -85,10 +86,17 @@ namespace Zappy {
             Response setObject(const std::string &object);
             Response incantation();
 
-            std::pair<double, double> getPosition();
-            std::size_t getLevel();
+            std::pair<double, double> getPosition() const { return _position; };
+
+            std::size_t getLevel() const { return _level; };
+            void setLevel(std::size_t level) { _level = level; };
+
+            bool getIsIncantation() const { return _isIncantation; };
+            void setIsIncantation(bool isIncantation) { _isIncantation = isIncantation; };
 
         protected:
+
+            bool _isIncantation;
 
             Network::Network _network;
             Ressources _ressources;
