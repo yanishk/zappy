@@ -14,7 +14,7 @@
     #include <sys/queue.h>
 
     #define MIN_ARGS 11
-    #define NB_FLAGS 6
+    #define NB_FLAGS 7
 
     #define DEFAULT_FREQUENCE_VALUE 100
 
@@ -23,9 +23,11 @@
     #define HEIGHT "height"
     #define NB_CLIENTS "nb of clients"
     #define FREQUENCY "frequency"
+    #define IMMORTAL "immortal"
 
     #define NO_TEAM_PROVIDED "no team provided\n"
-    #define INVALID_FLAG_ARGUMENT(flag) "%s must be a number > 0\n", flag
+    #define INVALID_FLAG_ARGUMENT(flag) "invalid %s argument\n", flag
+    #define ARG_MUST_BE_A_NUMBER(flag) "%s must be a number > 0\n", flag
     #define UNRECOGNIZED_FLAG(flag) "unrecognized flag %s\n", flag
     #define SPECIFY_FLAG_ONCE(flag) "flag %s must be specified once\n", flag
     #define FLAG_NOT_SPECIFIED(flag) "flag %s not specified\n", flag
@@ -42,6 +44,7 @@ typedef struct arguments_s {
     int freq;
     int nb_clients;
     int nb_teams;
+    bool immortal;
     TAILQ_HEAD(, team_s) team_head;
 } arguments_t;
 
@@ -59,6 +62,7 @@ int width_flag(int, const char **, int *, arguments_t *);
 int height_flag(int, const char **, int *, arguments_t *);
 int nb_clients_flag(int, const char **, int *, arguments_t *);
 int frequency_flag(int, const char **, int *, arguments_t *);
+int immortal_flag(int, const char **, int *, arguments_t *);
 
 int fill_arg_struct(int, const char **, arguments_t *);
 void print_arg_struct(const arguments_t);
