@@ -45,6 +45,12 @@ namespace Zappy {
             virtual Response setObject(const std::string &object) = 0;
             virtual Response incantation() = 0;
 
+            virtual std::pair<double, double> getPosition() = 0;
+            virtual std::size_t getLevel() = 0;
+
+            virtual bool getIsIncantation() const = 0;
+            virtual void setIsIncantation(bool isIncantation) = 0;
+
     };
 
 };
