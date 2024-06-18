@@ -47,7 +47,6 @@ bool connect_graphical_client(server_t *server, zappy_t *zappy,
             strcmp(server->cmd_arg_array[0], "GRAPHIC") == 0) {
                 client->is_graphic = true;
                 send_game_info_to_graphic(server, zappy, arg, client);
-                free_array(server->cmd_arg_array);
                 return true;
         }
     }
