@@ -10,12 +10,12 @@
 int nb_clients_flag(int, const char **av, int *i, arguments_t *arg)
 {
     if (!is_positive_number(av[*i + 1])) {
-        fprintf(stderr, INVALID_FLAG_ARGUMENT(NB_CLIENTS));
+        fprintf(stderr, ARG_MUST_BE_A_NUMBER(NB_CLIENTS));
         return EXIT_WITH_ERROR;
     }
     arg->nb_clients = atoi(av[*i + 1]);
     if (arg->nb_clients == 0) {
-        fprintf(stderr, INVALID_FLAG_ARGUMENT(NB_CLIENTS));
+        fprintf(stderr, ARG_MUST_BE_A_NUMBER(NB_CLIENTS));
         return EXIT_WITH_ERROR;
     }
     *i += 1;

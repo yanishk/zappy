@@ -13,13 +13,15 @@ struct flag_occurence flags[NB_FLAGS] = {
     {"-x", 0, &width_flag},
     {"-y", 0, &height_flag},
     {"-c", 0, &nb_clients_flag},
-    {"-f", 0, &frequency_flag}
+    {"-f", 0, &frequency_flag},
+    {"--immortal", 0, &immortal_flag}
 };
 
 static int check_flags_occurences(void)
 {
     for (size_t i = 0; i < NB_FLAGS; i++) {
-        if (flags[i].occurence < 1 && strcmp(flags[i].name, "-f") != 0) {
+        if (flags[i].occurence < 1 && strcmp(flags[i].name, "-f") != 0
+        && strcmp(flags[i].name, "--immortal") != 0) {
             fprintf(stderr, FLAG_NOT_SPECIFIED(flags[i].name));
             return EXIT_WITH_ERROR;
         }
@@ -66,6 +68,7 @@ static void init_arg_struct(arguments_t *arg)
     arg->freq = 0;
     arg->nb_clients = 0;
     arg->nb_teams = 0;
+    arg->immortal = false;
 }
 
 int fill_arg_struct(int ac, const char **av, arguments_t *arg)
@@ -102,4 +105,5 @@ void print_arg_struct(const arguments_t arg)
     printf("height:%d\n", arg.height);
     printf("nb_clients:%d\n", arg.nb_clients);
     printf("freq:%d\n", arg.freq);
+    printf("immortal:%d\n", arg.immortal);
 }

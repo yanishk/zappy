@@ -40,6 +40,7 @@ SRC			=	./src/main.c											\
 				./src/arguments/port_flag.c  							\
 				./src/arguments/width_flag.c  							\
 				./src/arguments/height_flag.c  							\
+				./src/arguments/immortal_flag.c 						\
 				./src/command/common/exit.c								\
 				./src/command/command_ia/inventory.c 					\
 				./src/command/command_ia/take_object.c					\

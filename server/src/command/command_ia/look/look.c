@@ -75,11 +75,10 @@ static int check_width_we(const arguments_t arg, player_t *player,
     return vision_y_final;
 }
 
-static void print_comma(int vision_x, int vision_y, player_t *player,
+static void print_comma(int vision_y, player_t *player,
     client_t *client)
 {
-    if (vision_x != player->height && vision_y != player->width
-        && vision_x != vision_y)
+    if (vision_y != player->level)
         dprintf(client->client_fd, ",");
 }
 
@@ -100,7 +99,7 @@ static void north_south_look(zappy_t *zappy, const arguments_t arg,
             pos.width = vision_y_final;
             string_on_land = get_on_land(zappy, pos, client->client_fd);
             dprintf(client->client_fd, "%s", string_on_land);
-            print_comma(vision_x, vision_y, player, client);
+            print_comma(vision_y, player, client);
             free(string_on_land);
         }
     }
@@ -123,7 +122,7 @@ static void west_east_look(zappy_t *zappy, const arguments_t arg,
             pos.width = vision_y_final;
             string_on_land = get_on_land(zappy, pos, client->client_fd);
             dprintf(client->client_fd, "%s", string_on_land);
-            print_comma(vision_x, vision_y, player, client);
+            print_comma(vision_x, player, client);
             free(string_on_land);
         }
     }
