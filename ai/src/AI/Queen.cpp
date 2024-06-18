@@ -18,9 +18,16 @@ bool Zappy::Queen::run()
     while (true) {
 
         _look = look();
+        _nbTours += NB_TOURS_LOOK;
+
+        if (_nbTours > NB_TOURS_MAX) {
+            _ressources[FOOD] -= ONE_COUNT;
+            _nbTours = INITIAL_COUNT;
+        }
 
         checkFood();
         checkIncantation();
+
         execute();
     }
 
@@ -41,6 +48,9 @@ bool Zappy::Queen::initialize()
 bool Zappy::Queen::checkFood()
 {
     _stock = countRessources(_look[HERE], FOOD);
+
+    std::cout << QUEEN_FOOD(_ressources[FOOD]);
+    std::cout << QUEEN_FOOD_STOCK(_stock);
 
     while (_ressources[FOOD] < CRITICAL_FOOD && _stock) {
         _actions.push_back(TakeFood);
@@ -115,6 +125,7 @@ bool Zappy::Queen::execute()
             if (_actions.front() == task.first) {
                 task.second();
             }
+
         }
 
         _actions.erase(_actions.begin());
@@ -129,8 +140,12 @@ bool Zappy::Queen::takeFood()
         return false;
     }
 
+    std::cout << QUEEN_TAKE_FOOD;
+
     _ressources[FOOD] += ONE_FOOD;
     _stock -= ONE_FOOD;
+    
+    _nbTours += NB_TOURS_FOOD;
 
     return true;
 }
@@ -143,7 +158,11 @@ bool Zappy::Queen::forkFood()
         return false;
     }
 
+    std::cout << QUEEN_FORK_FOOD;
+
     team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, INFINY));
+
+    _nbTours += NB_TOURS_FORK;
 
     return true;
 }
@@ -215,7 +234,13 @@ bool Zappy::Queen::forkSearcher()
         return false;
     }
 
+    std::cout << QUEEN_FORK_SEARCHER;
+    std::cout << SEARCHER_LEVEL(order.getLevel());
+    order.getRessources().dump();
+
     team._players.push_back(std::make_unique<Searcher>(_network.getPort(), _name, order));
+
+    _nbTours += NB_TOURS_FORK;
 
     return true;
 }
@@ -272,7 +297,10 @@ bool Zappy::Queen::makeIncantation()
         return false;
     }
 
+    std::cout << QUEEN_INCANTATION;
+
     _nbCommands = INITIAL_COUNT;
+    _nbTours += NB_TOURS_INCANTATION;
 
     removeIncantation();
 
@@ -285,7 +313,7 @@ std::size_t Zappy::Queen::countRessources(const std::string &ressources, const s
         return NONE;
     }
 
-    std::size_t count = 0;
+    std::size_t count = INITIAL_COUNT;
     std::size_t offset = ressources.find(index);
 
     while (offset != std::string::npos) {
