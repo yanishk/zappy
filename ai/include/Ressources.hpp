@@ -32,6 +32,7 @@
 
     #include <string>
     #include <vector>
+    #include <iostream>
     #include <unordered_map>
 
 namespace Zappy {
