@@ -20,6 +20,10 @@
     #define ONE_COUNT 1
     #define LEVEL_INDEX 1
 
+    #define MAX_ORDER 3
+    #define LONG_COMMAND 5
+    #define POSITIVE 0
+
     #define ONE_PLAYER 1
     #define TWO_PLAYERS 2
     #define FOUR_PLAYERS 4
@@ -87,6 +91,7 @@ namespace Zappy {
             bool removeIncantation();
 
             bool forkSearcher();
+            Zappy::Ressources getCommand(bool already);
 
             std::size_t countRessources(const std::string &ressources, const std::string &index);
 
@@ -105,7 +110,6 @@ namespace Zappy {
 
             };
 
-            Zappy::Ressources _commands;
             std::size_t _nbCommands;
 
             std::vector<std::pair<size_t, Zappy::Ressources>> _incatation = {

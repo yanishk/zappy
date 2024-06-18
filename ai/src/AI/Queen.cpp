@@ -6,8 +6,10 @@
 */
 
 #include "Team.hpp"
+#include "Order.hpp"
 #include "AI/Queen.hpp"
 #include "AI/Quentin.hpp"
+#include "AI/Searcher.hpp"
 
 bool Zappy::Queen::run()
 {
@@ -146,30 +148,74 @@ bool Zappy::Queen::forkFood()
     return true;
 }
 
-bool Zappy::Queen::forkSearcher()
+Zappy::Ressources Zappy::Queen::getCommand(bool already)
 {
     const std::vector<std::string> ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
-    Zappy::Team &team = Zappy::Team::getTeam(GET);
+    double start = _nbCommands * MAX_ORDER;
+    std::size_t count = INITIAL_COUNT;
 
-    if (!fork()) {
-        return false;
-    }
+    Zappy::Ressources command;
 
     for (std::size_t i = 0; i < ressources.size(); i++) {
 
         std::size_t ressourcesCount = countRessources(_look[HERE], ressources[i]);
         std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressources[i]];
 
-        (void)ressourcesCount;
-        (void)ressourcesNeed;
+        std::size_t ressourcesToSearch = ressourcesNeed - ressourcesCount;
 
-        // compter pour appeler un chercheur avec _commands //
+        while ((already || start > POSITIVE) && ressourcesToSearch) {
+
+            start -= ONE_COUNT;
+            ressourcesToSearch -= ONE_COUNT;
+
+        }
+
+        if (!already && start > POSITIVE) {
+            continue;
+        }
+
+        while (ressourcesToSearch && count < MAX_ORDER) {
+
+            command[ressources[i]] += ONE_COUNT;
+            ressourcesToSearch += ONE_COUNT;
+
+        }
 
     }
 
-    // appeler le chercheur et pas un quentin avec la commande //
+    if (!count) {
+        return getCommand(true);
+    }
 
-    team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, INFINY));
+    return command;
+
+}
+
+bool Zappy::Queen::forkSearcher()
+{
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
+
+    Zappy::Ressources command = getCommand(false);
+    std::size_t levelToReach = START_LEVEL;
+
+    if (_nbCommands > LONG_COMMAND) {
+        levelToReach = _incatation[_level - LEVEL_INDEX].first;
+    }
+
+    if (_nbCommands < _incatation[_level - LEVEL_INDEX].first) {
+        levelToReach = _incatation[_level - LEVEL_INDEX].first;
+    }
+
+    command[FOOD] -= FOOD_START_VALUE;
+    _nbCommands += ONE_COUNT;
+
+    Order order(levelToReach, command);
+
+    if (!fork()) {
+        return false;
+    }
+
+    team._players.push_back(std::make_unique<Searcher>(_network.getPort(), _name, order));
 
     return true;
 }
@@ -225,6 +271,8 @@ bool Zappy::Queen::makeIncantation()
     if (!incantation()) {
         return false;
     }
+
+    _nbCommands = INITIAL_COUNT;
 
     removeIncantation();
 
