@@ -217,9 +217,12 @@ Zappy::Response Zappy::Searcher::move()
 {
     Mouvement nextMove = _nextMouvment.back();
     Zappy::Response rep;
+    std::string object;
 
     switch (nextMove) {
+
         case Forward:
+            std::cout << "Forward\n";
             rep = forward();
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -231,6 +234,7 @@ Zappy::Response Zappy::Searcher::move()
             break;
 
         case Left:
+            std::cout << "Left\n";
             rep = left();
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -242,6 +246,7 @@ Zappy::Response Zappy::Searcher::move()
             break;
 
         case Right:
+            std::cout << "Right\n";
             rep = right();
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -254,6 +259,7 @@ Zappy::Response Zappy::Searcher::move()
             break;
 
         case Back:
+            std::cout << "Back\n";
             rep = left();
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -282,19 +288,22 @@ Zappy::Response Zappy::Searcher::move()
             break;
 
         default:
-            std::string object = _objectToTake.front();
-
-            if (takeObject(object)) {
+            object = _objectToTake.front();
+            rep = takeObject(object);
+            if (rep == Response::Ok) {
                 std::cout << "Take " << object << "\n";
                 _order.removeRessources(object, 1);
-            } else {
+                _objectToTake.erase(_objectToTake.begin());
+                _nextMouvment.pop_back();
+                updateOrder();
+                break;
+            } else if (rep == Response::Ko){
                 return Response::Ko;
+            } else {
+                return Response::Dead;
             }
+        break;
 
-            _objectToTake.erase(_objectToTake.begin());
-            _nextMouvment.pop_back();
-            updateOrder();
-            break;
     }
 
     if (_order.empty()) {
@@ -354,13 +363,13 @@ void Zappy::Searcher::showMustGoOn()
 {
     double x = _position.first;
     double y = _position.second;
-
+    _nextMouvment.clear();
     if (x < 0) {
-        for (double i = 0; i > x; --i) {
+        _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Back);
+        for (double i = -1; i > x; --i) {
             _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Forward);
         }
     } else {
-        _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Back);
         for (; x > 0; --x) {
             _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Forward);
         }
@@ -375,7 +384,9 @@ void Zappy::Searcher::showMustGoOn()
             _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Left);
         }
     }
+    _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Forward);
 
+    printMovement();
 }
 
 bool Zappy::Searcher::run()
