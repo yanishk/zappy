@@ -132,10 +132,15 @@ int look_around(server_t *, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
     player_t *player = get_player_by_fd(zappy, client->client_fd);
-    coordinate_t pos = {player->height, player->width};
-    size_t direction = player->direction;
+    coordinate_t pos;
+    size_t direction = 0;
     char *string_on_land = NULL;
 
+    if (player == NULL)
+        return EXIT_WITH_ERROR;
+    pos.height = player->height;
+    pos.width = player->width;
+    direction = player->direction;
     string_on_land = get_on_land(zappy, pos, client->client_fd);
     dprintf(client->client_fd, "[player%s,", string_on_land);
     if (direction == NORTH || direction == SOUTH)

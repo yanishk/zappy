@@ -40,7 +40,8 @@ static int check_clients_sockets(server_t *server, zappy_t *zappy,
         check_players_food(server, zappy, *arg);
         if (client == NULL)
             continue;
-        check_command_queue(server, zappy, arg, client);
+        if (client->client_fd != 0)
+            check_command_queue(server, zappy, arg, client);
         close_client_socket(server, zappy, client);
     }
     return EXIT_WITH_SUCCESS;
