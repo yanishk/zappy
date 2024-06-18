@@ -10,7 +10,7 @@
 static void display_help(void)
 {
     dprintf(2, "USAGE: ./zappy_server -p port -x width -y height -n name1");
-    dprintf(2, " name2 ... -c clientsNb -f freq\n");
+    dprintf(2, " name2 ... -c clientsNb -f freq --immortal isImmortal\n");
     dprintf(2, "\t\tport\t\tis the port number\n");
     dprintf(2, "\t\twidth\t\tis the width of the world\n");
     dprintf(2, "\t\theight\t\tis the height of the world\n");
@@ -18,7 +18,9 @@ static void display_help(void)
     dprintf(2, "\t\tclientsNb\tis the number of authorized clients per ");
     dprintf(2, "team\n");
     dprintf(2, "\t\tfreq\t\tis the reciprocal of time unit for execution");
-    dprintf(2, " of actions (optional)\n");
+    dprintf(2, " of actions (optional, set to 100 by default)\n");
+    dprintf(2, "\t\tisImmortal\tis the state of immortality for the players ");
+    dprintf(2, "(optional, set to false by default)\n");
 }
 
 int main(int ac, const char **av)
