@@ -77,6 +77,7 @@ size_t array_size(char **);
 void free_array(char **);
 char **word_array(char const *, char *);
 int get_next_id(int *id);
+bool has_backslash(const char *);
 player_t *get_player_by_fd(const zappy_t *, const unsigned int);
 player_t *get_player_by_id(const zappy_t *, const int);
 int get_client_fd(const zappy_t *, const unsigned int);

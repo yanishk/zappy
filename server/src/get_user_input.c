@@ -9,44 +9,22 @@
 #include "command_ia.h"
 #include "command_gui.h"
 
-/*
-au niveau du buffer après avoir read, détecter si dans le buffer on a un ou plusieurs \n
--> fonction has_backslash qui return true ou false
-si on a bien au moins un \n, word_array le buffer avec \n et on peut reset le buffer
-sinon nouveau tour de boucle et on ne reset pas le buffer
-*/
-
-/*
-dans un deuxième temps, word_array avec espace
-*/
-
-static bool has_backslash(const char *str)
-{
-    for (int i = 0; str[i] != '\0'; i++)
-        if (str[i] == '\n')
-            return true;
-    return false;
-}
-
 static int read_client_socket(server_t *server, zappy_t *zappy,
     client_t *client)
 {
-    static char buffer[MAX_BUFFER_SIZE] = {'\0'};
+    char buffer[MAX_BUFFER_SIZE] = {'\0'};
+    static char tmp_buffer[MAX_BUFFER_SIZE] = {'\0'};
 
     if (read(client->client_fd, buffer, MAX_BUFFER_SIZE) == 0) {
         pdi_func(server, zappy, client->client_fd);
         client->has_been_closed = true;
         return EXIT_WITH_ERROR;
     }
-    printf("buffer:[%s]\n", buffer);
-    if (!has_backslash(buffer)) {
-        printf("buffer concaténé:[%s]\n", buffer);
+    strcat(tmp_buffer, buffer);
+    if (!has_backslash(buffer))
         return UNKNOWN_COMMAND;
-    }
-    server->cmd_arg_array = word_array(buffer, "\n ");
-    printf("buffer avant le reset:[%s]\n", buffer);
-    memset(buffer, '\0', sizeof(buffer));
-    printf("buffer après le reset:[%s]\n", buffer);
+    server->cmd_arg_array = word_array(tmp_buffer, "\n ");
+    memset(tmp_buffer, '\0', sizeof(tmp_buffer));
     if (strlen(server->cmd_arg_array[0]) == 0)
         return UNKNOWN_COMMAND;
     return EXIT_WITH_SUCCESS;
