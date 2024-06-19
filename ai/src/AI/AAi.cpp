@@ -14,9 +14,11 @@ Zappy::Response Zappy::AAi::forward()
 {
     _network.sendInformationToServer(FORWARD_CMD);
 
-    if (_network.getInfoFromServer() == RESPONSE_OK) {
+    std::string response = _network.getInfoFromServer();
+
+    if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (_network.getInfoFromServer() == RESPONSE_KO) {
+    } else if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
@@ -27,9 +29,11 @@ Zappy::Response Zappy::AAi::right()
 {
     _network.sendInformationToServer(RIGHT_CMD);
 
-    if (_network.getInfoFromServer() == RESPONSE_OK) {
+    std::string response = _network.getInfoFromServer();
+
+    if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (_network.getInfoFromServer() == RESPONSE_KO) {
+    } else if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
@@ -40,9 +44,11 @@ Zappy::Response Zappy::AAi::left()
 {
     _network.sendInformationToServer(LEFT_CMD);
 
-    if (_network.getInfoFromServer() == RESPONSE_OK) {
+    std::string response = _network.getInfoFromServer();
+
+    if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (_network.getInfoFromServer() == RESPONSE_KO) {
+    } else if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
@@ -135,9 +141,11 @@ Zappy::Response Zappy::AAi::broadcastText(const std::string &text)
 {
     _network.sendInformationToServer(BROADCAST_CMD + text);
 
-    if (_network.getInfoFromServer() == RESPONSE_OK) {
+    std::string response = _network.getInfoFromServer();
+
+    if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (_network.getInfoFromServer() == RESPONSE_KO) {
+    } else if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
@@ -155,9 +163,11 @@ Zappy::Response Zappy::AAi::fork()
 {
     _network.sendInformationToServer(FORK_CMD);
 
-    if (_network.getInfoFromServer() == RESPONSE_OK) {
+    std::string response = _network.getInfoFromServer();
+
+    if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (_network.getInfoFromServer() == RESPONSE_KO) {
+    } else if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
@@ -170,9 +180,9 @@ Zappy::Response Zappy::AAi::eject()
 
     std::string response = _network.getInfoFromServer();
 
-    if (_network.getInfoFromServer() == RESPONSE_OK) {
+    if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (_network.getInfoFromServer() == RESPONSE_KO) {
+    } else if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
@@ -185,9 +195,9 @@ Zappy::Response Zappy::AAi::takeObject(const std::string &object)
 
     std::string response = _network.getInfoFromServer();
 
-    if (_network.getInfoFromServer() == RESPONSE_OK) {
+    if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (_network.getInfoFromServer() == RESPONSE_KO) {
+    } else if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
@@ -200,10 +210,10 @@ Zappy::Response Zappy::AAi::setObject(const std::string &object)
 
     std::string response = _network.getInfoFromServer();
 
-    if (_network.getInfoFromServer() == RESPONSE_OK) {
+    if (response == RESPONSE_OK) {
         _ressources.removeRessources(object, 1);
         return Response::Ok;
-    } else if (_network.getInfoFromServer() == RESPONSE_KO) {
+    } else if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 

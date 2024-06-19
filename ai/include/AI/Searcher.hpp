@@ -62,6 +62,8 @@ namespace Zappy
 
             bool run();
 
+            bool runUntilLevelWanted();
+
             bool addOrder(Order order) {
                 if (!_order.empty()) {
                     return false;
