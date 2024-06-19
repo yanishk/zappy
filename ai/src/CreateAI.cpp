@@ -12,14 +12,16 @@ Zappy::Threads &Zappy::createAI(const std::string &name, const std::string &port
 {
     static Threads threads;
 
-    threads.push_back(std::thread(Zappy::run, name, port));
+    threads.emplace_back(&Zappy::run, name, port);
 
-    return std::ref(threads);
+    return threads;
 }
 
 void Zappy::join(Zappy::Threads &threads)
 {
     for (auto &thread: threads) {
-        thread.join();
+        if (thread.joinable()) {
+           thread.join();
+        }
     }
 }

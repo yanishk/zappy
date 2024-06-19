@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+#include "Run.hpp"
 #include "Zappy.hpp"
 #include "CreateAI.hpp"
 

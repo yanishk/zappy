@@ -11,27 +11,30 @@
 
 bool Zappy::run(const std::string &name, const std::string &port) 
 {
-    static int id = 0;
-
-    id += 1;
-
     Network::Network network(port);
 
-    network.sendInformationToServer(name);
-    network.getInfoFromServer();
-    network.getInfoFromServer();
+    network.sendInformationToServer(name + "\n");
+
+    std::string welcome = network.getInfoFromServer();
+    std::string info1 = network.getInfoFromServer();
+
+    bool hasFork = false;
 
     while (true) {
 
+        if (!hasFork) {
+            network.sendInformationToServer("Fork\n");
+            std::string forkResult = network.getInfoFromServer();
+            std::cout << std::this_thread::get_id() << ": Fork -> " << forkResult << "\n";
+
+            Zappy::createAI(name, port);
+            hasFork = true;
+        }
+
         network.sendInformationToServer("Forward\n");
         std::string forwardResult = network.getInfoFromServer();
-        std::cout << id << ": Forward -> " << forwardResult << "\n";
-
-        network.sendInformationToServer("Fork\n");
-        std::string forkResult = network.getInfoFromServer();
-        std::cout << id << ": Forkl -> " << forkResult << "\n";
-
-        //Zappy::createAI(name, port);
+        std::cout << std::this_thread::get_id() << ": Forward -> " << forwardResult << "\n";
+    
     }
 
     return true;
