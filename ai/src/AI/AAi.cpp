@@ -10,11 +10,44 @@
 #include "AI/Quentin.hpp"
 #include "Team.hpp"
 
+std::string Zappy::AAi::handlingMessage()
+{
+    std::cout << "go handling some msg\n";
+    std::string response = _network.getInfoFromServer();
+    std::cout << "rep: (" << response << ")\n";
+    std::string value;
+    std::string orientation;
+    std::string message;
+    std::stringstream stream;
+
+    if (response == RESPONSE_OK || response == RESPONSE_KO || response == DEAD) {
+        return response;
+    }
+
+    while (response != RESPONSE_OK || response != RESPONSE_KO || response != DEAD) {
+        if (!response.compare(0, MESSAGE_LEN, MESSAGE)) {
+            stream << response;
+            stream >> value >> orientation >> message;
+
+            _orientation = getOrientation(std::atoi(orientation.c_str()));
+            _message.emplace(_message.begin(), message);
+        }
+
+        response = _network.getInfoFromServer();
+
+        if (response == RESPONSE_OK || response == RESPONSE_KO || response == DEAD) {
+            return response;
+        }
+    }
+
+    return response;
+}
+
 Zappy::Response Zappy::AAi::forward()
 {
     _network.sendInformationToServer(FORWARD_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage();
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
@@ -29,7 +62,7 @@ Zappy::Response Zappy::AAi::right()
 {
     _network.sendInformationToServer(RIGHT_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage();
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
@@ -44,7 +77,7 @@ Zappy::Response Zappy::AAi::left()
 {
     _network.sendInformationToServer(LEFT_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage();
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
@@ -140,7 +173,7 @@ Zappy::Response Zappy::AAi::broadcastText(const std::string &text)
 {
     _network.sendInformationToServer(BROADCAST_CMD + text);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage();
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
@@ -183,27 +216,6 @@ Zappy::Orientation Zappy::AAi::getOrientation(int value)
     return UNDEFINED;
 }
 
-std::string Zappy::AAi::handlingMessage()
-{
-    std::string response = _network.getInfoFromServer();
-    std::string value;
-    std::string orientation;
-    std::string message;
-    std::stringstream stream;
-
-    stream << response;
-    stream >> value >> orientation >> message;
-
-    if (value != "message") {
-        return response;
-    }
-
-    _orientation = getOrientation(std::atoi(orientation.c_str()));
-    _message = message;
-
-    return "";
-}
-
 std::size_t Zappy::AAi::connectNumber()
 {
     _network.sendInformationToServer(CONNECT_NBR_CMD);
@@ -215,7 +227,7 @@ Zappy::Response Zappy::AAi::fork()
 {
     _network.sendInformationToServer(FORK_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage();
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
@@ -230,7 +242,7 @@ Zappy::Response Zappy::AAi::eject()
 {
     _network.sendInformationToServer(EJECT_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage();
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
@@ -245,7 +257,7 @@ Zappy::Response Zappy::AAi::takeObject(const std::string &object)
 {
     _network.sendInformationToServer(TAKE_CMD + object + "\n");
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage();
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
@@ -260,7 +272,7 @@ Zappy::Response Zappy::AAi::setObject(const std::string &object)
 {
     _network.sendInformationToServer(SET_CMD + object + "\n");
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage();
 
     if (response == RESPONSE_OK) {
         _ressources.removeRessources(object, 1);

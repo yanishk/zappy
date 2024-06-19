@@ -24,9 +24,10 @@ namespace Zappy {
 
         public:
 
-            TeamOptions(const std::string &name, const std::string &port, std::unique_ptr<Queen> queen):
+            TeamOptions(const std::string &name, const std::string &port, const std::string &home,std::unique_ptr<Queen> queen):
                 _name(name),
                 _port(port),
+                _home(home),
                 _queen(std::move(queen))
             {};
 
@@ -34,6 +35,7 @@ namespace Zappy {
 
             std::string _name;
             std::string _port;
+            std::string _home;
             std::unique_ptr<Queen> _queen;
 
     };
@@ -45,7 +47,7 @@ namespace Zappy {
         
         public:
 
-            Team(const std::string &name, const std::string &port): _name(name), _port(port) {};
+            Team(const std::string &name, const std::string &port, const std::string &home): _name(name), _port(port), _home(home) {};
 
             static Team &getTeam(TeamOptions options);
             const std::string &getName();
@@ -57,6 +59,7 @@ namespace Zappy {
 
             std::string _name;
             std::string _port;
+            std::string _home;
 
     };
 

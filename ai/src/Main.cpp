@@ -30,6 +30,7 @@ int main(int ac, char **av)
 
     std::string port;
     std::string name;
+    std::string home;
 
     for (std::size_t i = 0; av[i] != NULL; i++) {
 
@@ -40,10 +41,12 @@ int main(int ac, char **av)
         if (!strcmp(av[i], NAME_FLAG) && av[i + 1] != NULL) {
             name = std::string(av[i + 1]);
         }
-
+        if (!strcmp(av[i], MACHINE_FLAG) && av[i + 1] != NULL) {
+            home = std::string(av[i + 1]);
+        }
     }
 
-    Zappy::Team team(name, port);
+    Zappy::Team team(name, port, home);
 
     return team.run();
 }

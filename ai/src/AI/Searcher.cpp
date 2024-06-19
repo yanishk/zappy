@@ -198,29 +198,29 @@ void Zappy::Searcher::whereShouldIGo(std::vector<int> priority)
     whereShouldIGo(priority);
 }
 
-void Zappy::Searcher::printMovement()
+void Zappy::Searcher::dumpMovement()
 {
-    std::cout << "Mouvement {\n";
+    std::cerr << "Mouvement {\n";
 
     for (const auto &i: _nextMouvment) {
         if (i == Zappy::Mouvement::Forward) {
-            std::cout << "\tForward,\n";
+            std::cerr << "\tForward,\n";
         }
         if (i == Zappy::Mouvement::Left) {
-            std::cout << "\tLeft,\n";
+            std::cerr << "\tLeft,\n";
         }
         if (i == Zappy::Mouvement::Right) {
-            std::cout << "\tRight,\n";
+            std::cerr << "\tRight,\n";
         }
         if (i == Zappy::Mouvement::Back) {
-            std::cout << "\tBack,\n";
+            std::cerr << "\tBack,\n";
         }
         if (i == Zappy::Mouvement::Take) {
-            std::cout << "\tTake,\n";
+            std::cerr << "\tTake,\n";
         }
     }
 
-    std::cout << "}\n";
+    std::cerr << "}\n";
 }
 
 Zappy::Response Zappy::Searcher::move()
@@ -232,7 +232,7 @@ Zappy::Response Zappy::Searcher::move()
 
     switch (nextMove) {
         case Forward:
-            std::cout << "Forward\n";
+            std::cerr << "Forward\n";
             rep = forward();
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -244,7 +244,7 @@ Zappy::Response Zappy::Searcher::move()
             break;
 
         case Left:
-            std::cout << "Left\n";
+            std::cerr << "Left\n";
             rep = left();
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -256,7 +256,7 @@ Zappy::Response Zappy::Searcher::move()
             break;
 
         case Right:
-            std::cout << "Right\n";
+            std::cerr << "Right\n";
             rep = right();
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -269,7 +269,7 @@ Zappy::Response Zappy::Searcher::move()
             break;
 
         case Back:
-            std::cout << "Back\n";
+            std::cerr << "Back\n";
             rep = left();
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -301,13 +301,13 @@ Zappy::Response Zappy::Searcher::move()
 
             object = _objectToTake.front();
             temp = look();
-            std::cout << "Look {\n";
+            std::cerr << "Look {\n";
             for (const auto &i: temp) {
-                std::cout << "\t" + i << "\n";
+                std::cerr << "\t" + i << "\n";
             }
-            std::cout << "}\n";
+            std::cerr << "}\n";
             if (takeObject(object) == Response::Ok) {
-                std::cout << "Take " << object << "\n";
+                std::cerr << "Take " << object << "\n";
                 _order.removeRessources(object, 1);
             } else {
                 return Response::Ko;
@@ -325,7 +325,7 @@ Zappy::Response Zappy::Searcher::move()
     if (_order.empty()) {
         _nextMouvment.clear();
         _isGoingToQueen = true;
-        std::cout << "Go back to queen\n";
+        std::cerr << "Go back to queen\n";
     }
 
     return Response::Ok;
@@ -353,7 +353,7 @@ Zappy::Response Zappy::Searcher::dropItem()
 {
     std::unordered_map<std::string, int> ressource = _ressources.getRessources();
 
-    std::cout << "Give {\n";
+    std::cerr << "Give {\n";
     for (const auto &i: ressource) {
 
         if (i.first == FOOD) {
@@ -367,10 +367,10 @@ Zappy::Response Zappy::Searcher::dropItem()
             } else if (rep == Response::Ko) {
                 continue;
             }
-            std::cout << "\nSet " << i.first << "\n";
+            std::cerr << "\nSet " << i.first << "\n";
         }
     }
-    std::cout << "}\n";
+    std::cerr << "}\n";
 
     incantation();
     return Response::Ok;
@@ -437,7 +437,7 @@ bool Zappy::Searcher::runUntilLevelWanted()
         } else if (_howManySameMove == NB_SAME_MOVE_MAX) {
             _nextMouvment.push_back(Forward);
         }
-        printMovement();
+        dumpMovement();
     }
 
     Response rep = move();
@@ -455,7 +455,6 @@ bool Zappy::Searcher::runUntilLevelWanted()
 
 bool Zappy::Searcher::run()
 {
-
     while (true) {
 
         if ((int)_level != _order.getLevel()) {
@@ -486,11 +485,11 @@ bool Zappy::Searcher::run()
         } else if (_nextMouvment.empty() && !_isGoingToQueen && !_order.empty()) {
 
             _lastLook = look();
-            std::cout << "look {\n";
+            std::cerr << "look {\n";
             for (const auto &i: _lastLook) {
-                std::cout << "\t" + i << "\n";
+                std::cerr << "\t" + i << "\n";
             }
-            std::cout << "}\n";
+            std::cerr << "}\n";
 
             std::vector<int> priority = estimatePriority();
 
@@ -506,7 +505,7 @@ bool Zappy::Searcher::run()
                 _nextMouvment.push_back(Forward);
 
             }
-            printMovement();
+            dumpMovement();
         }
 
         Response rep = move();

@@ -34,6 +34,8 @@
 
     #define RESPONSE_OK "ok"
     #define RESPONSE_KO "ko"
+    #define MESSAGE "message"
+    #define MESSAGE_LEN 7
 
     #define ERROR -1
     #define DEAD "dead"
@@ -115,7 +117,7 @@ namespace Zappy {
 
             std::string _name;
 
-            std::string _message;
+            std::vector<std::string> _message;
 
         private:
 
