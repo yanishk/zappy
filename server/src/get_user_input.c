@@ -9,20 +9,34 @@
 #include "command_ia.h"
 #include "command_gui.h"
 
-static int read_client_socket(server_t *server, zappy_t *zappy,
+static char **split_commands(const char *read_buffer)
+{
+    static char final_buffer[MAX_BUFFER_SIZE] = {'\0'};
+    char **tmp_commands_array = NULL;
+
+    final_buffer[MAX_BUFFER_SIZE - 1] = '\0';
+    strcat(final_buffer, read_buffer);
+    if (!has_backslash(read_buffer))
+        return NULL;
+    tmp_commands_array = word_array(final_buffer, "\n");
+    memset(final_buffer, '\0', sizeof(final_buffer));
+    return tmp_commands_array;
+}
+
+static char **read_client_socket(server_t *server, zappy_t *zappy,
     client_t *client)
 {
-    char buffer[MAX_BUFFER_SIZE] = {0};
+    char read_buffer[MAX_BUFFER_SIZE] = {'\0'};
 
-    if (read(client->client_fd, buffer, MAX_BUFFER_SIZE) == 0) {
+    if (read(client->client_fd, read_buffer, MAX_BUFFER_SIZE) == 0) {
         pdi_func(server, zappy, client->client_fd);
         client->has_been_closed = true;
-        return EXIT_WITH_ERROR;
+        return NULL;
     }
-    server->cmd_arg_array = word_array(buffer, "\n ");
-    if (strlen(server->cmd_arg_array[0]) == 0)
-        return UNKNOWN_COMMAND;
-    return EXIT_WITH_SUCCESS;
+    if (strlen(read_buffer) == 0)
+        return NULL;
+    read_buffer[MAX_BUFFER_SIZE - 1] = '\0';
+    return split_commands(read_buffer);
 }
 
 void answer_client(const int status, const unsigned int client_fd)
@@ -65,6 +79,11 @@ static void insert_command_in_queue(server_t *server, zappy_t *zappy,
     }
     if (is_player_connected(zappy, client->client_fd))
         status = insert_game_command_in_queue(server, *arg, client);
+    if (connect_player(server, zappy, *arg, client->client_fd)
+        == COMMAND_SUCCESS) {
+        free_array(server->cmd_arg_array);
+        return;
+    }
     if (status == UNKNOWN_COMMAND)
         insert_other_command_in_queue(server, client);
 }
@@ -72,11 +91,22 @@ static void insert_command_in_queue(server_t *server, zappy_t *zappy,
 void get_user_input(server_t *server, zappy_t *zappy, arguments_t *arg,
     client_t *client)
 {
-    if (read_client_socket(server, zappy, client) != EXIT_WITH_SUCCESS)
+    char **tmp_commands_array = read_client_socket(server, zappy, client);
+
+    if (tmp_commands_array == NULL)
         return;
-    if (connect_graphical_client(server, zappy, arg, client))
-        return;
-    if (client->is_graphic)
-        return execute_graphical_command(server, zappy, arg, client);
-    insert_command_in_queue(server, zappy, arg, client);
+    for (size_t i = 0; tmp_commands_array[i] != NULL; i++) {
+        server->cmd_arg_array = word_array(tmp_commands_array[i], " ");
+        if (strlen(server->cmd_arg_array[0]) == 0 ||
+            connect_graphical_client(server, zappy, arg, client)) {
+            free_array(server->cmd_arg_array);
+            continue;
+        }
+        if (client->is_graphic) {
+            execute_graphical_command(server, zappy, arg, client);
+        } else {
+            insert_command_in_queue(server, zappy, arg, client);
+        }
+    }
+    free_array(tmp_commands_array);
 }

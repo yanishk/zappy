@@ -19,8 +19,7 @@ void check_command_queue(server_t *server, zappy_t *zappy,
         command_next = TAILQ_NEXT(command, command_ia_entries);
         if (time_is_up(command->clock_begin, command->time_unit)) {
             server->cmd_arg_array = command->array;
-            status = command->index == NB_IA_CMD ?
-            connect_player(server, zappy, *arg, client->client_fd) :
+            status = command->index == NB_IA_CMD ? UNKNOWN_COMMAND :
             cmd_list_ia[command->index].func(server, zappy, arg, client);
             answer_client(status, client->client_fd);
             free_ia_command(client, command);
