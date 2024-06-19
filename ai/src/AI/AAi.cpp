@@ -12,13 +12,7 @@
 
 std::string Zappy::AAi::handlingMessage()
 {
-    std::cout << "go handling some msg\n";
     std::string response = _network.getInfoFromServer();
-    std::cout << "rep: (" << response << ")\n";
-    std::string value;
-    std::string orientation;
-    std::string message;
-    std::stringstream stream;
 
     if (response == RESPONSE_OK || response == RESPONSE_KO || response == DEAD) {
         return response;
@@ -26,6 +20,11 @@ std::string Zappy::AAi::handlingMessage()
 
     while (response != RESPONSE_OK || response != RESPONSE_KO || response != DEAD) {
         if (!response.compare(0, MESSAGE_LEN, MESSAGE)) {
+            std::string value;
+            std::string orientation;
+            std::string message;
+            std::stringstream stream;
+
             stream << response;
             stream >> value >> orientation >> message;
 
@@ -94,6 +93,24 @@ std::vector<std::string> Zappy::AAi::look()
     std::vector<std::string> vector;
     std::string information = _network.getInfoFromServer();
 
+    if (!information.compare(0, MESSAGE_LEN, MESSAGE)) {
+        std::string value;
+        std::string orientation;
+        std::string message;
+        std::stringstream stream;
+
+        stream << information;
+        stream >> value >> orientation >> message;
+
+        _orientation = getOrientation(std::atoi(orientation.c_str()));
+        _message.emplace(_message.begin(), message);
+        look();
+    }
+
+    if (information == RESPONSE_OK) {
+        look();
+    }
+
     if (information == RESPONSE_KO || information == DEAD) {
         return {};
     }
@@ -126,6 +143,24 @@ std::vector<std::string> Zappy::AAi::inventory()
     _network.sendInformationToServer(INVENTORY_CMD);
     std::vector<std::string> vector;
     std::string information = _network.getInfoFromServer();
+
+    if (!information.compare(0, MESSAGE_LEN, MESSAGE)) {
+        std::string value;
+        std::string orientation;
+        std::string message;
+        std::stringstream stream;
+
+        stream << information;
+        stream >> value >> orientation >> message;
+
+        _orientation = getOrientation(std::atoi(orientation.c_str()));
+        _message.emplace(_message.begin(), message);
+        inventory();
+    }
+
+    if (information == RESPONSE_OK) {
+        inventory();
+    }
 
     if (information == RESPONSE_KO || information == DEAD) {
         return {};
