@@ -7,10 +7,10 @@
 
 #include "command_ia.h"
 
-static char *get_resources_tile(int resource_decount,
-    const char *name, char *string_on_land)
+static char *get_resources_tile(int resource_decount, char *string_on_land,
+    const char *name)
 {
-    int len = 0;
+    size_t len = 0;
 
     while (resource_decount > 0) {
         if (string_on_land != NULL)
@@ -19,8 +19,6 @@ static char *get_resources_tile(int resource_decount,
             (len + strlen(" ") + strlen(name) + 1));
         if (len == 0)
             memset(string_on_land, '\0', strlen(" ") + strlen(name));
-        else
-            string_on_land[strlen(string_on_land)] = '\0';
         strcat(string_on_land, " ");
         strcat(string_on_land, name);
         resource_decount--;
@@ -28,23 +26,34 @@ static char *get_resources_tile(int resource_decount,
     return string_on_land;
 }
 
+static void add_player_to_string(char **string_on_land)
+{
+    char *player_string = " player";
+    size_t len = 0;
+
+    if (*string_on_land != NULL)
+        len = strlen(*string_on_land);
+    *string_on_land = realloc(*string_on_land, sizeof(char) *
+        (len + strlen(player_string)) + 1);
+    if (len == 0)
+        memset(*string_on_land, '\0', strlen(player_string));
+    strcat(*string_on_land, player_string);
+}
+
 static char *find_player_tile(zappy_t *zappy, coordinate_t pos,
     const unsigned int client_fd)
 {
     player_t *current_player = get_player_by_fd(zappy, client_fd);
     player_t *player = NULL;
-    char *player_string = " player";
     char *string_on_land = NULL;
 
-    if (current_player != NULL)
+    if (current_player == NULL)
         return NULL;
     for ((player) = ((&zappy->player_head)->tqh_first); (player);
         (player) = ((player)->player_entries.tqe_next)) {
         if (player->height == pos.height && player->width == pos.width
             && player->id != current_player->id) {
-            string_on_land = realloc(string_on_land, sizeof(char) *
-                (strlen(string_on_land) + strlen(player_string)) + 1);
-            strcat(string_on_land, player_string);
+            add_player_to_string(&string_on_land);
         }
     }
     return string_on_land;
@@ -63,7 +72,7 @@ char *get_on_land(zappy_t *zappy, coordinate_t pos,
             get_resources(&zappy->resource[pos.height][pos.width],
             resource_list[i]);
         string_on_land = get_resources_tile(resource_decount,
-            resource_list[i], string_on_land);
+            string_on_land, resource_list[i]);
     }
     if (string_on_land == NULL) {
         string_on_land = malloc(sizeof(char) * strlen("\0") + 1);
