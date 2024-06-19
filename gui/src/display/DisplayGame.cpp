@@ -261,6 +261,7 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getPic();
     recivedCmd.getPie();
     recivedCmd.getSeg();
+    recivedCmd.getPex();
 }
 
 void DisplayGame::display3D(void)
@@ -295,6 +296,7 @@ void DisplayGame::display3D(void)
     for (auto &i: _player._allPlayer) {
         i.displayPlayerInfo(_camera.position);
         i.drawIncantation();
+        i.drawExpulsion();
     }
 
     EndMode3D();
@@ -327,7 +329,6 @@ void DisplayGame::display2D(void)
     DrawText(TextFormat("- Target: (%06.3f, %06.3f, %06.3f)", _camera.target.x, _camera.target.y, _camera.target.z), 355, 30, 10, BLACK);
     DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", _camera.up.x, _camera.up.y, _camera.up.z), 355, 45, 10, BLACK);
 }
-
 
 void DisplayGame::launchGame(void)
 {

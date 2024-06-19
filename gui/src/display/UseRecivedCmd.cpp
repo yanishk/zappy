@@ -64,7 +64,12 @@ void UseRecivedCmd::getPin(void)
 
 void UseRecivedCmd::getPex(void)
 {
-
+    while (!_cmd.getCommandAt(PEX_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PEX_CMD, 0);
+        int playerID = std::atoi(cmd[0].c_str());
+        _player.playerExpulsion(playerID);
+        _cmd.eraseFirstCmdInMap(PEX_CMD);
+    }
 }
 
 void UseRecivedCmd::getPbc(Vector3 camPosition)

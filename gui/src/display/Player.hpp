@@ -24,6 +24,7 @@
     #define TEXT_TEAM "\nTeam : "
     #define TEXT_LEVEL "Level : "
     #define INCANTATION_PATH "./gui/assets/models/subatomic_particle_fx.glb"
+    #define EXPULSION_PATH "./gui/assets/models/sun.glb"
 
 class Player {
     public:
@@ -45,6 +46,8 @@ class Player {
         Vector2 getIncantationPos(void);
         Vector3 getPosition();
         std::vector<int> getInventory(void);
+        void playerExpulsion(void);
+        void drawExpulsion(void);
 
         Model _playerModel;
         ModelAnimation *_playerAnimation;
@@ -57,6 +60,7 @@ class Player {
         float _rotationAngle;
         bool isAlive = true;
         Model _incantationModel;
+        Model _expulsionModel;
         std::string _team;
     private:
         void DrawText3D(Font font, const char *text, Vector3 position, float fontSize, float fontSpacing, float lineSpacing, Color tint);
@@ -83,6 +87,13 @@ class Player {
         bool _isMooving;
         bool _isIncantation;
         bool _isTimerStart;
+        float _incantationSize = 0.1;
+        float _incantationOpacity = 0.5;
+        bool _isIncantationExpload = false;
+
+        float _expulsionSize = 0.1;
+        float _expulsionOrientation = 0;
+        bool _isExpulsion = false;
 };
 
 class AllPlayers {
@@ -113,9 +124,11 @@ class AllPlayers {
         void drawMessage(int playerID, std::string msg, Vector3 camPosition);
         void disableIncantationMode(Vector2 pos);
         void enableIncantationMode(int playerID, Vector2 pos);
+        void playerExpulsion(int playerID);
     private:
         Model _model;
         Model _incantationModel;
+        Model _expulsionModel;
         Vector3 _size;
         ModelAnimation *_anim;
         int _animsCount;

@@ -361,7 +361,19 @@ void Player::drawIncantation(void)
     _incantAngle.y += _speedY;
     _incantAngle.z += _speedZ;
     _incantationModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * _incantAngle.x, DEG2RAD * _incantAngle.y, DEG2RAD * _incantAngle.z});
-    DrawModel(_incantationModel, _playerPosition, 0.1, Fade(_playerColor, 0.5f));
+    Vector3 pos = _playerPosition;
+    pos.y += 2;
+    if (_isIncantationExpload) {
+        _incantationSize += 0.01;
+        _incantationOpacity -= 0.05;
+    }
+    if (_incantationSize >= 0.2) {
+        _isIncantationExpload = false;
+        _isIncantation = false;
+        _incantationSize = 0.1;
+        _incantationOpacity = 0.5;
+    }
+    DrawModel(_incantationModel, pos, _incantationSize, Fade(_playerColor, _incantationOpacity));
 }
 
 void Player::enableIncantationMode(Vector2 pos)
@@ -372,10 +384,32 @@ void Player::enableIncantationMode(Vector2 pos)
 
 void Player::disableIncantationMode(void)
 {
-    _isIncantation = false;
+    _isIncantationExpload = true;
 }
 
 Vector2 Player::getIncantationPos(void)
 {
     return _incantPos;
+}
+
+void Player::playerExpulsion(void)
+{
+    _isExpulsion = true;
+    _expulsionSize = 0.1;
+    _expulsionOrientation = 0;
+}
+
+void Player::drawExpulsion(void)
+{
+    if (!_isExpulsion)
+        return;
+    _expulsionModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * _expulsionOrientation, DEG2RAD * 0});
+    _expulsionOrientation += 10;
+    Vector3 pos = _playerPosition;
+    pos.y += 2;
+    _expulsionSize += 0.05;
+    if (_expulsionSize >= 0.8) {
+        _isExpulsion = false;
+    }
+    DrawModel(_expulsionModel, pos, _expulsionSize, WHITE);
 }
