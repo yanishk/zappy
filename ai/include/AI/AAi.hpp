@@ -80,9 +80,10 @@ namespace Zappy {
             Response left();
 
             std::vector<std::string> look();
-            bool inventory();
-            Response broadcastText(const std::string &text);
+            std::vector<std::string> inventory();
+            void updateInventory();
 
+            Response broadcastText(const std::string &text);
             std::string handlingMessage();
 
             std::size_t connectNumber();

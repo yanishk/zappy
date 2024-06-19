@@ -88,30 +88,14 @@ std::vector<std::string> Zappy::AAi::look()
     return vector;
 }
 
-bool Zappy::AAi::checkRessources(const std::vector<std::string> &newRessources)
-{
-    for (const auto &i: newRessources) {
-        std::stringstream stream;
-        stream << i;
-        std::string ressources;
-        std::string quantity;
-        stream >> ressources >> quantity;
-        if (_ressources.getRessource(ressources) != std::atoi(quantity.c_str())) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool Zappy::AAi::inventory()
+std::vector<std::string> Zappy::AAi::inventory()
 {
     _network.sendInformationToServer(INVENTORY_CMD);
     std::vector<std::string> vector;
     std::string information = _network.getInfoFromServer();
 
     if (information == RESPONSE_KO || information == DEAD) {
-        return false;
+        return {};
     }
 
     if (!information.empty() && information[0] == '[') {
@@ -134,7 +118,22 @@ bool Zappy::AAi::inventory()
         vector.push_back("");
     }
 
-    return checkRessources(vector);
+    return vector;
+}
+
+void Zappy::AAi::updateInventory()
+{
+    std::vector<std::string> newInventory = inventory();
+
+    for (const auto &i: newInventory) {
+        std::stringstream stream;
+        stream << i;
+        std::string ressource;
+        std::string quantity;
+        stream >> ressource >> quantity;
+        _ressources.updateRessources(ressource, std::atoi(quantity.c_str()));
+    }
+
 }
 
 Zappy::Response Zappy::AAi::broadcastText(const std::string &text)

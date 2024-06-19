@@ -522,6 +522,7 @@ bool Zappy::Searcher::run()
         }
 
         updateOrder();
+        updateInventory();
 
     }
 
