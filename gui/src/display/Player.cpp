@@ -21,6 +21,13 @@ Player::Player(Vector3 position)
         _inventory.push_back(0);
     }
     _infoBackground = LoadModelFromMesh(GenMeshPlane(2, 0.7, 2, 2));
+    _isIncantation = false;
+    _speedX = (float)((std::rand() % 100) - 50) / 50;
+    _speedY = (float)((std::rand() % 200) - 100) / 100;
+    _speedZ = (float)((std::rand() % 100) - 50) / 50;
+    if (_speedY < _speedX || _speedY < _speedZ)
+        _speedY += (_speedX + _speedZ) / 2;
+    _incantAngle = (Vector3){_speedX, _speedY, -90};
 }
 
 void Player::DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint)
@@ -340,4 +347,35 @@ Color Player::getNegativeColor(Color color)
     newColor.b = 255 - color.b;
     newColor.a = color.a;
     return newColor;
+}
+
+void Player::drawIncantation(void)
+{
+    if (!_isIncantation)
+        return;
+    if (_incantAngle.z > 30 || _incantAngle.z < -30)
+        _speedZ = (-_speedZ);
+    if (_incantAngle.x > 30 || _incantAngle.x < -30)
+        _speedX = (-_speedX);
+    _incantAngle.x += _speedX;
+    _incantAngle.y += _speedY;
+    _incantAngle.z += _speedZ;
+    _incantationModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * _incantAngle.x, DEG2RAD * _incantAngle.y, DEG2RAD * _incantAngle.z});
+    DrawModel(_incantationModel, _playerPosition, 0.1, Fade(_playerColor, 0.5f));
+}
+
+void Player::enableIncantationMode(Vector2 pos)
+{
+    _incantPos = pos;
+    _isIncantation = true;
+}
+
+void Player::disableIncantationMode(void)
+{
+    _isIncantation = false;
+}
+
+Vector2 Player::getIncantationPos(void)
+{
+    return _incantPos;
 }

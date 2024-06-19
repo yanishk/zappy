@@ -23,11 +23,11 @@
     #define NBR_ITEM 7
     #define TEXT_TEAM "\nTeam : "
     #define TEXT_LEVEL "Level : "
+    #define INCANTATION_PATH "./gui/assets/models/subatomic_particle_fx.glb"
 
 class Player {
     public:
         Player(Vector3 position);
-        Vector3 getPosition();
         void moovePlayerToIsland(Vector3 position);
         void displayPlayerInfo(Vector3 camPosition);
         void setTeam(std::string team);
@@ -37,9 +37,14 @@ class Player {
         void addItem(int itemType);
         void removeItem(int itemType);
         void resetInventory(void);
-        std::vector<int> getInventory(void);
         void setInventory(std::vector<int> newInv);
         void drawMessage(std::string msg, Vector3 camPosition);
+        void enableIncantationMode(Vector2 pos);
+        void drawIncantation(void);
+        void disableIncantationMode(void);
+        Vector2 getIncantationPos(void);
+        Vector3 getPosition();
+        std::vector<int> getInventory(void);
 
         Model _playerModel;
         ModelAnimation *_playerAnimation;
@@ -51,24 +56,32 @@ class Player {
         Vector3 _realPos;
         float _rotationAngle;
         bool isAlive = true;
+        Model _incantationModel;
         std::string _team;
     private:
-        Color _playerColor = WHITE;
-        bool _isMooving;
-        Vector3 _playerPosition;
-        Vector3 _destPosition;
-        float _distanceBetweenPos;
-        float _playerHight;
         void DrawText3D(Font font, const char *text, Vector3 position, float fontSize, float fontSpacing, float lineSpacing, Color tint);
         void DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint);
         BoundingBox UpdateBoundingBox(BoundingBox box, Vector3 position);
         Vector3 RotatePointAroundY(Vector3 point);
         Color getNegativeColor(Color color);
-        std::vector<int> _inventory;
-        std::string _broadcastMsg;
-        std::chrono::time_point<std::chrono::system_clock> _startTime;
+
+        Color _playerColor = WHITE;
         Model _infoBackground;
         Model _broadcastBackground;
+        Vector3 _incantAngle;
+        Vector3 _playerPosition;
+        Vector3 _destPosition;
+        Vector2 _incantPos;
+        float _distanceBetweenPos;
+        float _playerHight;
+        float _speedX;
+        float _speedY;
+        float _speedZ;
+        std::string _broadcastMsg;
+        std::vector<int> _inventory;
+        std::chrono::time_point<std::chrono::system_clock> _startTime;
+        bool _isMooving;
+        bool _isIncantation;
         bool _isTimerStart;
 };
 
@@ -98,9 +111,11 @@ class AllPlayers {
         std::vector<int> getInventory(int playerID);
         void setInventory(int playerID, std::vector<int> newInv);
         void drawMessage(int playerID, std::string msg, Vector3 camPosition);
-
+        void disableIncantationMode(Vector2 pos);
+        void enableIncantationMode(int playerID, Vector2 pos);
     private:
         Model _model;
+        Model _incantationModel;
         Vector3 _size;
         ModelAnimation *_anim;
         int _animsCount;

@@ -258,6 +258,8 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getSgt();
     recivedCmd.getSst();
     recivedCmd.getEdi();
+    recivedCmd.getPic();
+    recivedCmd.getPie();
     recivedCmd.getSeg();
 }
 
@@ -292,6 +294,7 @@ void DisplayGame::display3D(void)
     }
     for (auto &i: _player._allPlayer) {
         i.displayPlayerInfo(_camera.position);
+        i.drawIncantation();
     }
 
     EndMode3D();

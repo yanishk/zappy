@@ -79,12 +79,25 @@ void UseRecivedCmd::getPbc(Vector3 camPosition)
 
 void UseRecivedCmd::getPic(void)
 {
-
+    while (!_cmd.getCommandAt(PIC_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PIC_CMD, 0);
+        Vector2 pos = (Vector2){std::stof(cmd[0].c_str()), std::stof(cmd[1].c_str())};
+        for (std::size_t i = 3; i < cmd.size(); i++) {
+            int playerID = std::atoi(cmd[i].c_str());
+            _player.enableIncantationMode(playerID, pos);
+        }
+        _cmd.eraseFirstCmdInMap(PIC_CMD);
+    }
 }
 
 void UseRecivedCmd::getPie(void)
 {
-
+    while (!_cmd.getCommandAt(PIE_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PIE_CMD, 0);
+        Vector2 pos = (Vector2){std::stof(cmd[0].c_str()), std::stof(cmd[1].c_str())};
+        _player.disableIncantationMode(pos);
+        _cmd.eraseFirstCmdInMap(PIE_CMD);
+    }
 }
 
 void UseRecivedCmd::getPdr(void)
