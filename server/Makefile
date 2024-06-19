@@ -97,7 +97,8 @@ SRC			=	./src/main.c											\
 				./src/lib/set_resources.c								\
 				./src/lib/is_a_resource.c								\
 				./src/lib/get_tile_index.c								\
-				./src/lib/calculate_time_unit.c
+				./src/lib/calculate_time_unit.c							\
+				./src/lib/has_backslash.c
 
 OBJ			=	$(SRC:.c=.o)
 
