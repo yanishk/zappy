@@ -50,12 +50,15 @@ namespace Zappy
                 _isGoingToQueen(false)
                 {
                     _network.sendInformationToServer(_name);
+
                     if (_network.getInfoFromServer() == "none") {
                         return;
                     }
+
                     if (_network.getInfoFromServer() == "none") {
                         return;
                     }
+
                     _thread = std::thread(&Searcher::run, this);
                     _thread.join();
             };
@@ -64,7 +67,7 @@ namespace Zappy
 
             bool runUntilLevelWanted();
 
-            bool addOrder(Order order) {
+            bool addOrder(const Order &order) {
                 if (!_order.empty()) {
                     return false;
                 }
@@ -83,7 +86,7 @@ namespace Zappy
 
 
             Zappy::Response move();
-            void printMovement();
+            void dumpMovement();
 
             bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
             void whereShouldIGo(std::vector<int> priority);

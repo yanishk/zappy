@@ -34,6 +34,8 @@
 
     #define RESPONSE_OK "ok"
     #define RESPONSE_KO "ko"
+    #define MESSAGE "message"
+    #define MESSAGE_LEN 7
 
     #define ERROR -1
     #define DEAD "dead"
@@ -41,10 +43,15 @@
 namespace Zappy {
 
     enum Orientation {
-        NORTH,
-        SOUTH,
-        WEST,
-        EST
+        FRONT = 1,
+        FRONT_LEFT,
+        LEFT,
+        BACK_LEFT,
+        BACK,
+        BACK_RIGHT,
+        RIGHT,
+        FRONT_RIGHT,
+        UNDEFINED
     };
 
     enum Action {
@@ -75,8 +82,11 @@ namespace Zappy {
             Response left();
 
             std::vector<std::string> look();
-            bool inventory();
+            std::vector<std::string> inventory();
+            void updateInventory();
+
             Response broadcastText(const std::string &text);
+            std::string handlingMessage();
 
             std::size_t connectNumber();
             Response fork();
@@ -107,8 +117,11 @@ namespace Zappy {
 
             std::string _name;
 
+            std::vector<std::string> _message;
+
         private:
 
+            Orientation getOrientation(int value);
             bool checkRessources(const std::vector<std::string> &newRessources);
 
     };
