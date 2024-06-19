@@ -22,8 +22,7 @@ const std::string &Zappy::Team::getName()
 
 int Zappy::Team::run()
 {
-    _players.push_back(std::make_unique<Searcher>(_port, _name, Order(1, Ressources(1, 0, 0, 0, 0, 0))));
-    // _players.push_back(std::make_unique<Queen>(_port, _name));
+    _players.push_back(std::make_unique<Queen>(_port, _name));
 
     return EXIT_SUCCESS;
 }

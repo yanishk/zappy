@@ -32,6 +32,7 @@
 
     #include <string>
     #include <vector>
+    #include <iostream>
     #include <unordered_map>
 
 namespace Zappy {
@@ -85,6 +86,17 @@ namespace Zappy {
             int &operator[](const std::string &ressource)
             {
                 return _ressources[ressource];
+            };
+
+            void dump() {
+
+                std::cout << "Linemate: " << _ressources[LINEMATE] << "\n";
+                std::cout << "Deraumere: " << _ressources[DERAUMERE] << "\n";
+                std::cout << "Sibur: " << _ressources[SIBUR] << "\n";
+                std::cout << "Mendiane: " << _ressources[MENDIANE] << "\n";
+                std::cout << "Phiras: " << _ressources[PHIRAS] << "\n";
+                std::cout << "Thystame: " << _ressources[THYSTAME] << "\n";
+
             };
 
             int getRessource(const std::string &ressource)
