@@ -152,6 +152,59 @@ Zappy::Response Zappy::AAi::broadcastText(const std::string &text)
     return Response::Dead;
 }
 
+Zappy::Orientation Zappy::AAi::getOrientation(int value)
+{
+    switch (value) {
+        case FRONT:
+            return FRONT;
+            break;
+        case FRONT_LEFT:
+            return FRONT_LEFT;
+            break;
+        case LEFT:
+            return LEFT;
+            break;
+        case BACK_LEFT:
+            return BACK_LEFT;
+            break;
+        case BACK:
+            return BACK;
+            break;
+        case BACK_RIGHT:
+            return BACK_RIGHT;
+            break;
+        case RIGHT:
+            return RIGHT;
+            break;
+        default:
+            return FRONT_RIGHT;
+            break;
+    }
+
+    return UNDEFINED;
+}
+
+std::string Zappy::AAi::handlingMessage()
+{
+    std::string response = _network.getInfoFromServer();
+    std::string value;
+    std::string orientation;
+    std::string message;
+    std::stringstream stream;
+
+    stream << response;
+    stream >> value >> orientation >> message;
+
+    if (value != "message") {
+        return response;
+    }
+
+    _orientation = getOrientation(std::atoi(orientation.c_str()));
+    _message = message;
+
+    return "";
+}
+
 std::size_t Zappy::AAi::connectNumber()
 {
     _network.sendInformationToServer(CONNECT_NBR_CMD);

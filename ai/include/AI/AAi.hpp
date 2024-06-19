@@ -41,10 +41,15 @@
 namespace Zappy {
 
     enum Orientation {
-        NORTH,
-        SOUTH,
-        WEST,
-        EST
+        FRONT = 1,
+        FRONT_LEFT,
+        LEFT,
+        BACK_LEFT,
+        BACK,
+        BACK_RIGHT,
+        RIGHT,
+        FRONT_RIGHT,
+        UNDEFINED
     };
 
     enum Action {
@@ -78,6 +83,8 @@ namespace Zappy {
             bool inventory();
             Response broadcastText(const std::string &text);
 
+            std::string handlingMessage();
+
             std::size_t connectNumber();
             Response fork();
             Response eject();
@@ -107,8 +114,11 @@ namespace Zappy {
 
             std::string _name;
 
+            std::string _message;
+
         private:
 
+            Orientation getOrientation(int value);
             bool checkRessources(const std::vector<std::string> &newRessources);
 
     };

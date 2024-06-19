@@ -8,6 +8,7 @@
 #ifndef ORDER_HPP_
     #define ORDER_HPP_
 
+    #include <map>
     #include "Ressources.hpp"
 
 namespace Zappy

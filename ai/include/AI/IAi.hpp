@@ -37,6 +37,8 @@ namespace Zappy {
             virtual bool inventory() = 0;
             virtual Response broadcastText(const std::string &text) = 0;
 
+            virtual std::string handlingMessage() = 0;
+
             virtual std::size_t connectNumber() = 0;
             virtual Response fork() = 0;
             virtual Response eject() = 0;
