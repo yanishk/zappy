@@ -11,25 +11,21 @@
 bool Zappy::Quentin::run()
 {
     while (true) {
-        if (!this->forward()) {
-            return false;
-        }
-    }
 
-    // if (_network.getInfoFromServer() == DEAD) {
-        // return false;
-    // }
-// 
-    // if (_nbRefills > ZERO_REFILL && _ressources.getRessource(FOOD) == LAST_FOOD) {
-        // _actions.push_back(Fork);
-        // return true;
-    // }
-// 
-    // if (_ressources.getRessource(FOOD)) {
-        // _actions.push_back(Drop);
-    // }
-// 
-    // executeAction();
+        std::cout << "QUENTIN STEP RUN\n";
+
+        if (_nbRefills > ZERO_REFILL && _ressources[FOOD] == LAST_FOOD) {
+            _actions.push_back(Fork);
+            return true;
+        }
+
+        if (_ressources[FOOD]) {
+            _actions.push_back(Drop);
+        }
+
+        executeAction();
+
+    }
 
     return true;
 }
@@ -42,6 +38,8 @@ bool Zappy::Quentin::executeAction()
 
     if (_actions.front() == Drop) {
         setObject(FOOD);
+        _ressources[FOOD] -= ONE_COUNT;
+        std::cout << QUENTIN_DROP;
     }
 
     if (_actions.front() == Fork) {
@@ -49,23 +47,25 @@ bool Zappy::Quentin::executeAction()
     }
 
     _actions.erase(_actions.begin());
-    forward();
+
     return true;
 }
 
 bool Zappy::Quentin::createQuentin()
 {
-    // Zappy::Team &team = Zappy::Team::getTeam(GET);
+    Zappy::Team &team = Zappy::Team::getTeam(GET);
 
     if (_nbRefills == ZERO_REFILL) {
         return false;
     }
 
-    fork();
+    if (!fork()) {
+        return false;
+    }
 
-    // Quentin quentin(_network.getPort(), team.getName(), _nbRefills - 1);
-//
-    // team._players.push_back(std::make_shared<Quentin>(quentin));
+    team._players.push_back(std::make_shared<Quentin>(_network.getPort(), team.getName(), _nbRefills - 1));
+
+    std::cout << QUENTIN_FORK;
 
     return true;
 }

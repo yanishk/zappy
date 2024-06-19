@@ -8,6 +8,8 @@
 #ifndef SEARCHER_HPP_
     #define SEARCHER_HPP_
 
+    #define SEARCHER_WELCOME "Searcher initialized.\n"
+
     #define FIRST_LEVEL_RANGE       1, 3
     #define SECOND_LEVEL_RANGE      4, 8
     #define THISRT_LEVEL_RANGE      9, 15
@@ -49,6 +51,7 @@ namespace Zappy
                 _order(order),
                 _isGoingToQueen(false)
                 {
+                    std::cout << SEARCHER_WELCOME;
                     _network.sendInformationToServer(_name);
                     if (_network.getInfoFromServer() == "none") {
                         return;

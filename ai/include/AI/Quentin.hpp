@@ -10,6 +10,10 @@
 
     #define INFINY 10000
 
+    #define QUENTIN_WELCOME "Quentin initialized.\n"
+    #define QUENTIN_FORK "Quentin fork.\n"
+    #define QUENTIN_DROP "Quentin drop food.\n"
+
     #define LAST_FOOD 1
     #define ZERO_REFILL 0
 
@@ -25,6 +29,7 @@ namespace Zappy {
         public:
 
             Quentin(const std::string &port, const std::string &name, const std::size_t nbRefills): AAi(port, name), _nbRefills(nbRefills) {
+                std::cout << QUENTIN_WELCOME;
                 _network.sendInformationToServer(_name);
                 if (_network.getInfoFromServer() == RESPONSE_KO) {
                     return;

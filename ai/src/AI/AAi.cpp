@@ -6,9 +6,9 @@
 */
 
 #include <sstream>
+
 #include "AI/AAi.hpp"
 #include "AI/Quentin.hpp"
-#include "Team.hpp"
 
 Zappy::Response Zappy::AAi::forward()
 {
@@ -56,7 +56,7 @@ std::vector<std::string> Zappy::AAi::look()
     std::string information = _network.getInfoFromServer();
 
     if (information == RESPONSE_KO || information == DEAD) {
-        return {};
+        return { DEAD };
     }
 
     if (!information.empty() && information[0] == '[') {

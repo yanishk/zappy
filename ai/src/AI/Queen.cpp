@@ -17,7 +17,21 @@ bool Zappy::Queen::run()
 
     while (true) {
 
+        std::cout << QUEEN_START;
+
         _look = look();
+
+        if (_look[HERE] == DEAD) {
+            std::cout << QUEEN_DEAD;
+            return false;
+        }
+
+        std::cout << QUEEN_LOOK;
+        
+        for (std::size_t i = 0; i < _look.size(); i++) {
+            std::cout << QUEEN_LOOK_ITEM(_look[i]);
+        }
+
         _nbTours += NB_TOURS_LOOK;
 
         if (_nbTours > NB_TOURS_MAX) {
@@ -25,10 +39,15 @@ bool Zappy::Queen::run()
             _nbTours = INITIAL_COUNT;
         }
 
+        std::cout << QUEEN_CHECK_FOOD;
         checkFood();
+
+        std::cout << QUEEN_CHECK_INCANTATION;
         checkIncantation();
 
+        std::cout << QUEEN_EXECUTE;
         execute();
+
     }
 
     return true;
@@ -38,8 +57,10 @@ bool Zappy::Queen::initialize()
 {
     const std::size_t value = connectNumber();
 
+    std::cout << QUEEN_INITIALIZE(value);
+
     for (std::size_t i = 0; i < value; ++i) {
-        Queen(_network.getPort(), _name);
+        Queen(_network.getPort(), _name, false);
     }
 
     return true;
@@ -118,18 +139,20 @@ bool Zappy::Queen::checkPlayers()
 
 bool Zappy::Queen::execute()
 {
-    while (_actions.size()) {
+    for (std::size_t i = 0; i < _actions.size(); i++) {
 
         for (const auto &task : _execute) {
 
-            if (_actions.front() == task.first) {
+            if (_actions[i] == task.first) {
                 task.second();
+                break;
             }
 
         }
 
-        _actions.erase(_actions.begin());
     }
+
+    _actions.clear();
 
     return true;
 }
@@ -160,7 +183,7 @@ bool Zappy::Queen::forkFood()
 
     std::cout << QUEEN_FORK_FOOD;
 
-    team._players.push_back(std::make_unique<Quentin>(_network.getPort(), _name, INFINY));
+    team._players.push_back(std::make_shared<Quentin>(_network.getPort(), _name, INFINY));
 
     _nbTours += NB_TOURS_FORK;
 
@@ -238,7 +261,7 @@ bool Zappy::Queen::forkSearcher()
     std::cout << SEARCHER_LEVEL(order.getLevel());
     order.getRessources().dump();
 
-    team._players.push_back(std::make_unique<Searcher>(_network.getPort(), _name, order));
+    team._players.push_back(std::make_shared<Searcher>(_network.getPort(), _name, order));
 
     _nbTours += NB_TOURS_FORK;
 

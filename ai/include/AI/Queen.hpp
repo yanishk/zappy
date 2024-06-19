@@ -11,13 +11,22 @@
     #include "AAi.hpp"
 
     #define WELCOME_QUEEN "Queen initialized.\n"
+    #define QUEEN_DISCONNECTED "Queen disconnected.\n"
+    #define QUEEN_DEAD "Queen is dead.\n"
+    #define QUEEN_INITIALIZE(x) "Queen create " << x << " fakes queens.\n"
+    #define QUEEN_START "Queen start.\n"
+    #define QUEEN_LOOK "Queen look:\n"
+    #define QUEEN_LOOK_ITEM(x) "- " << x << "\n"
     #define QUEEN_FOOD(x) "Queen has " << x << " food left.\n"
     #define QUEEN_FOOD_STOCK(x) "There are " << x << " food at floor.\n"
+    #define QUEEN_CHECK_FOOD "Queen check food.\n"
     #define QUEEN_TAKE_FOOD "Queen take food.\n"
     #define QUEEN_FORK_FOOD "Queen fork food.\n"
+    #define QUEEN_CHECK_INCANTATION "Queen check fork.\n"
     #define QUEEN_FORK_SEARCHER "Queen fork a searcher:\n"
     #define SEARCHER_LEVEL(x) "Level: " << x << "\n"
     #define QUEEN_INCANTATION "Queen incantation.\n"
+    #define QUEEN_EXECUTE "Queen execute.\n"
 
     #define CRITICAL_FOOD 10
     #define CRITICAL_STOCK 20
@@ -67,21 +76,25 @@ namespace Zappy {
 
         public:
 
-            Queen(const std::string &port, const std::string &name): AAi(port, name) {
+            Queen(const std::string &port, const std::string &name, bool isRun = true): AAi(port, name) {
 
                 std::cout << WELCOME_QUEEN;
 
-                _network.sendInformationToServer(_name);
+                _network.sendInformationToServer(name);
 
                 if (_network.getInfoFromServer() == RESPONSE_KO) {
                     return;
                 }
 
                 _network.getInfoFromServer();
-                _thread = std::thread(&Queen::run, this);
-                _thread.join();
+
+                if (isRun) {
+                    run();
+                }
 
             };
+
+            ~Queen() { std::cout << QUEEN_DISCONNECTED; };
 
             bool run();
 
