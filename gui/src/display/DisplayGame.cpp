@@ -258,6 +258,7 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getSgt();
     recivedCmd.getSst();
     recivedCmd.getEdi();
+    recivedCmd.getSeg();
 }
 
 void DisplayGame::display3D(void)
@@ -324,6 +325,7 @@ void DisplayGame::display2D(void)
     DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", _camera.up.x, _camera.up.y, _camera.up.z), 355, 45, 10, BLACK);
 }
 
+
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
@@ -334,7 +336,6 @@ void DisplayGame::launchGame(void)
 
     while (!WindowShouldClose()) {
         useServerInfo(recivedCmd);
-
         seconds += (GetFrameTime() / 2);
 
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);

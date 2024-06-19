@@ -37,6 +37,8 @@ class UseRecivedCmd {
         void getSeg(void);
         void getSmg(void);
 
+        bool getGameStatus(void);
+
     private:
 
         CommandManager &_cmd;
@@ -44,6 +46,7 @@ class UseRecivedCmd {
         AllEggs &_egg;
         asio::ip::tcp::socket &_socket;
 
+        bool _isFinished = false;
         int _sgtValue;
 
 };

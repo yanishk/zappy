@@ -51,6 +51,7 @@ class Player {
         Vector3 _realPos;
         float _rotationAngle;
         bool isAlive = true;
+        std::string _team;
     private:
         Color _playerColor = WHITE;
         bool _isMooving;
@@ -58,7 +59,6 @@ class Player {
         Vector3 _destPosition;
         float _distanceBetweenPos;
         float _playerHight;
-        std::string _team;
         void DrawText3D(Font font, const char *text, Vector3 position, float fontSize, float fontSpacing, float lineSpacing, Color tint);
         void DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint);
         BoundingBox UpdateBoundingBox(BoundingBox box, Vector3 position);
@@ -73,7 +73,9 @@ class Player {
 };
 
 class AllPlayers {
+
     public:
+
         std::vector<Player> _allPlayer;
         std::vector<std::string> _allTeamName;
 
@@ -96,6 +98,7 @@ class AllPlayers {
         std::vector<int> getInventory(int playerID);
         void setInventory(int playerID, std::vector<int> newInv);
         void drawMessage(int playerID, std::string msg, Vector3 camPosition);
+
     private:
         Model _model;
         Vector3 _size;

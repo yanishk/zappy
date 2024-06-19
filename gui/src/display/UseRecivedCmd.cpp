@@ -186,7 +186,14 @@ void UseRecivedCmd::getSst(void)
     }
 }
 
+bool UseRecivedCmd::getGameStatus()
+{
+    return _isFinished;
+}
+
 void UseRecivedCmd::getSeg(void)
 {
-
+    if (!_cmd.getCommandAt(SEG_CMD, 0).empty()) {
+        _isFinished = true;
+    }
 }
