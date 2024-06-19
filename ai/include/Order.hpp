@@ -39,6 +39,24 @@ namespace Zappy
                 return _ressourcesNeeded.removeRessources(ressource, value);
             }
 
+            void setRessources(const Ressources &ressource) {
+                _ressourcesNeeded = ressource;
+            }
+
+            Ressources getLevelRessources(int level) {
+                std::map<int, Ressources> ressourcesForLevel {
+                    {1, Ressources(1, 0, 0, 0, 0, 0)},
+                    {2, Ressources(1, 1, 1, 0, 0, 0)},
+                    {3, Ressources(2, 0, 1, 0, 2, 0)},
+                    {4, Ressources(1, 1, 2, 0, 1, 0)},
+                    {5, Ressources(1, 2, 1, 3, 0, 0)},
+                    {6, Ressources(1, 2, 3, 0, 1, 0)},
+                    {7, Ressources(2, 2, 2, 2, 2, 1)},
+                };
+
+                return ressourcesForLevel[level];
+            }
+
         private:
             int _levelToReach;
             Ressources _ressourcesNeeded;
