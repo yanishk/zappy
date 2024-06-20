@@ -29,6 +29,10 @@ bool Zappy::Queen::run(Network::Network &network)
 
         _look = look(network);
 
+        if (_look.empty()) {
+            break;
+        }
+
         std::cout << QUEEN_LOOK;
 
         for (const auto &items: _look) {
