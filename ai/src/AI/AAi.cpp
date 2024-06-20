@@ -28,7 +28,7 @@ std::string Zappy::AAi::handlingMessage(Network::Network &network)
         stream << response;
         stream >> value >> orientation >> message;
 
-        _messages.emplace(_messages.begin(), std::make_pair(getOrientation(std::atoi(orientation.c_str())), message));
+        _messages.emplace(_messages.begin(), std::make_pair(message, getOrientation(std::atoi(orientation.c_str()))));
 
     }
 
