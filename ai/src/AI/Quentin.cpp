@@ -12,6 +12,11 @@ bool Zappy::Quentin::run(Network::Network &network)
 {
     std::cout << QUENTIN_WELCOME(_id);
 
+    if (!updateInventory(network)) {
+        std::cout << QUENTIN_DEAD(_id);
+        return false;
+    }
+
     while (_ressources[FOOD] > LAST_FOOD) {
 
         if (setObject(network, FOOD) != Response::Ok) {
