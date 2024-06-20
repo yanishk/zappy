@@ -21,8 +21,6 @@ bool Zappy::Queen::run(Network::Network &network)
 
     while (true) {
 
-        std::cout << "START BOUCLE QUEEN.\n";
-
         if (!updateInventory(network)) {
             break;
         }
