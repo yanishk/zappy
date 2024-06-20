@@ -25,15 +25,6 @@ Zappy::Orientation Zappy::Searcher::getOrientationToQueen(Network::Network &netw
         return getOrientationToQueen(network);
     }
 
-    int id = START_ID;
-
-    position += prefix.length();
-    id = std::stoul(message.first.substr(position));
-
-    if (id != _id) {
-        return getOrientationToQueen(network);
-    }
-
     return message.second;
 }
 
