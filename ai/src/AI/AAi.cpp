@@ -44,6 +44,7 @@ Zappy::Response Zappy::AAi::forward(Network::Network &network)
     std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
+        std::cout << "Forward\n";
         return Response::Ok;
     }
     
@@ -192,7 +193,7 @@ bool Zappy::AAi::updateInventory(Network::Network &network)
 
 Zappy::Response Zappy::AAi::broadcastText(Network::Network &network, const std::string &text)
 {
-    network.sendInformationToServer(BROADCAST_CMD + text + "\n");
+    network.sendInformationToServer(BROADCAST_CMD + text);
 
     std::string response = handlingMessage(network);
 

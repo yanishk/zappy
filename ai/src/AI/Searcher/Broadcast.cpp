@@ -7,68 +7,93 @@
 
 #include "AI/Searcher.hpp"
 
-void Zappy::Searcher::goToBroadcast(Network::Network &network)
+Zappy::Searcher::Message Zappy::Searcher::createMessage(const std::string &content)
 {
-    if (_messages[0].second == IN_CASE) {
-        return;
+    std::string value;
+    std::string orientation;
+    std::string message;
+    std::stringstream stream;
+
+    stream << content;
+    stream >> value >> orientation >> message;
+
+    return Message(message, getOrientation(std::atoi(orientation.c_str())));
+}
+
+bool Zappy::Searcher::checkAskAssistants(Network::Network &network)
+{
+    const std::string prefix = PREFIX_ASK_ASSISTANT;
+
+    if (_messages.empty()) {
+        return true;
     }
 
-    switch (_messages[0].second) {
-        case FRONT:
-            std::cout << _id << " go Front\n";
-            forward(network);
-            break;
+    for (std::size_t i = 0; i < MAX_LAST_MESSAGE && i < _messages.size(); i++) {
 
-        case FRONT_LEFT:
-            std::cout << _id << " go Front Left\n";
-            forward(network);
-            left(network);
-            break;
+        std::size_t position = _messages[i].first.find(prefix);
+        std::size_t level = START_LEVEL;
 
-        case LEFT:
-            std::cout << _id << " go Left\n";
-            left(network);
-            break;
+        if (position == std::string::npos) {
+            continue;
+        }
 
-        case BACK_LEFT:
-            std::cout << _id << " go Back Left\n";
-            left(network);
-            left(network);
-            forward(network);
-            left(network);
-            break;
+        position += prefix.length();
+        level = std::stoul(_messages[i].first.substr(position));
 
-        case BACK:
-            std::cout << _id << " go Back\n";
-            left(network);
-            left(network);
-            forward(network);
-            break;
+        if (level != _level - ONE_LEVEL) {
+            continue;
+        }
 
-        case BACK_RIGHT:
-            std::cout << _id << " go Back Right\n";
-            left(network);
-            left(network);
-            forward(network);
-            right(network);
-            break;
+        if (broadcastText(network, RESPONSE_ASK(_id)) != Response::Ok) {
+            return false;
+        }
 
-        case RIGHT:
-            std::cout << _id << " go Right\n";
-            right(network);
-            break;
+        waitAskResponse(network);
 
-        case FRONT_RIGHT:
-            std::cout << _id << " go Front Right\n";
-            forward(network);
-            right(network);
-            break;
-
-        default:
-            return;
     }
 
-    handlingMessage(network);
+    return true;
+}
 
-    goToBroadcast(network);
+bool Zappy::Searcher::waitAskResponse(Network::Network &network)
+{
+    std::string response = network.getInfoFromServer();
+
+    Message message = createMessage(response);
+
+    const std::string herePrefix = PREFIX_ASK_RESPONSE_HERE;
+    const std::string noPrefix = PREFIX_ASK_RESPONSE_HERE;
+
+    std::size_t herePosition = message.first.find(herePrefix);
+    std::size_t noPosition = message.first.find(noPrefix);
+    int id = START_ID;
+
+    if (herePosition == std::string::npos && noPosition == std::string::npos) {
+        return waitAskResponse(network);
+    }
+
+    if (herePosition != std::string::npos) {
+
+        herePosition += herePrefix.length();
+        id = std::stoul(message.first.substr(herePosition));
+
+        if (id != _id) {
+            return waitAskResponse(network);
+        }
+
+        _goBackToQueen = true;
+        _messages.clear();
+
+        return true;
+
+    }
+
+    noPosition += noPrefix.length();
+    id = std::stoul(response.substr(noPosition));
+
+    if (id != _id) {
+        return waitAskResponse(network);
+    }
+
+    return true;
 }

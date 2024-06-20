@@ -46,7 +46,6 @@ Zappy::Response Zappy::Searcher::dropItem(Network::Network &network)
 {
     std::unordered_map<std::string, int> ressource = _ressources.getRessources();
 
-    std::cerr << "Give {\n";
     for (const auto &i: ressource) {
 
         if (i.first == FOOD) {
@@ -60,10 +59,9 @@ Zappy::Response Zappy::Searcher::dropItem(Network::Network &network)
             } else if (rep == Response::Ko) {
                 continue;
             }
-            std::cerr << "\nSet " << i.first << "\n";
+            std::cerr << "Searcher : " << _id << " Set " << i.first << "\n";
         }
     }
-    std::cerr << "}\n";
 
     return Response::Ok;
 }
@@ -113,108 +111,83 @@ bool Zappy::Searcher::checkComingIsGood()
     return false;
 }
 
-Zappy::Orientation Zappy::Searcher::checkAskingAssistant(Network::Network &network)
+void Zappy::Searcher::checkQueenLevel(Network::Network &network)
 {
-    int size = 0;
+    std::string response = network.getInfoFromServer();
+    std::istringstream stream(response);
+    std::string otherId("");
+    std::string message("");
+    std::string value("");
 
-    for (auto &i: _messages) {
-        if (size > MAX_CHECK_MESSAGE) {
-            break;
-        }
-        std::istringstream stream(i.first);
-        std::string otherId("");
-        std::string message("");
-        std::string value("");
-        std::getline(stream, otherId, ':');
-        std::getline(stream, message, ':');
-        std::getline(stream, value, ':');
-
-        if (otherId == QUEEN && _order.getLevel() == std::atoi(value.c_str()) - 1 && _order.empty()
-        &&  message == ASK_ASSISTANT) {
-            broadcastText(network, COMING + std::to_string(_id));
-            return i.second;
-        }
-        size += 1;
+    std::getline(stream, otherId, ':');
+    std::getline(stream, message, ':');
+    std::getline(stream, value, ':');
+    std::cout << "\t\tMESSAGE: " << message << "\n";
+    std::cout << "\t\tid: " << otherId << "\n";
+    std::cout << "\t\tvalue: " << value << "\n";
+    if (otherId == QUEEN && message == LEVEL) {
+        _order.setRessources(_order.getLevelRessources(std::atoi(value.c_str())));
+        _order.setLevel(std::atoi(value.c_str()));
+        _inDelivery = true;
     }
-
-    return Orientation::UNDEFINED;
 }
 
 bool Zappy::Searcher::run(Network::Network &network)
 {
+    checkQueenLevel(network);
+    std::cout << "order linemate: " << _order.getLevelRessources(1)["linemate"] << "\n";
     while (true) {
 
-        Zappy::Orientation orientation = checkAskingAssistant(network);
+        checkAskAssistants(network);
 
-        if (orientation != UNDEFINED && checkComingIsGood() && _order.empty()) {
-            goToBroadcast(network);
-            dropItem(network);
-            _queenLevel = checkQueenLevel();
-        }
-
-        if (_order.empty() && orientation == UNDEFINED) {
-            dropItem(network);
-            if (incantation(network) == Response::Ok) {
-                _order.setRessources(_order.getLevelRessources(_level));
-            }
-        }
-
-        if (_nextMouvment.empty() && !_order.empty()) {
-
-            _lastLook = look(network);
-            std::cerr << "look {\n";
-            for (const auto &i: _lastLook) {
-                std::cerr << "\t" + i << "\n";
-            }
-            std::cerr << "}\n";
-
-            std::vector<int> priority = estimatePriority();
-
-            whereShouldIGo(priority);
-
-            if (_nextMouvment.size() == 0 && _howManySameMove != NB_SAME_MOVE_MAX) {
-
-                _nextMouvment.push_back(Left);
-                _howManySameMove++;
-
-            } else if (_howManySameMove == NB_SAME_MOVE_MAX) {
-
-                _nextMouvment.push_back(Forward);
-
-            }
-            dumpMovement();
-        }
-
-        Response rep = move(network);
-
-        if (rep == Response::Ko) {
-            std::cout << "Unable to move\n";
-
-            if (_nextMouvment.size() == 0 && _howManySameMove != NB_SAME_MOVE_MAX) {
-
-                _nextMouvment.push_back(Left);
-                _howManySameMove++;
-
-            } else if (_howManySameMove == NB_SAME_MOVE_MAX) {
-
-                _nextMouvment.push_back(Forward);
-
-            }
-            dumpMovement();
-
-        } else if (rep == Response::Dead) {
-            std::cout << "Player is Dead\n";
+        if (_goBackToQueen && !backToQueen(network, true)) {
             break;
         }
 
-        if (_ressources.getRessource(FOOD) < MIN_FOOD) {
-            searchFood(network);
+        _lastLook = look(network);
+        std::cout << "Searcher : " << _id << " Look: {\n";
+        for (const auto &i: _lastLook) {
+            std::cout << "\t" << i << "\n";
+        }
+        std::cout << "}\n";
+        if (_lastLook.empty()) {
+            break;
+        }
+        std::vector<int> priority = estimatePriority();
+        for (const auto &i: priority) {
+            std::cout << "\t -  " << i << "\n";
+        }
+        whereShouldIGo(priority);
+        if (_nextMouvment.empty()) {
+            if (_howManySameMove < 4) {
+                _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Left);
+                _howManySameMove += 1;
+            } else {
+                _howManySameMove = 0;
+                _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Forward);
+            }
+            continue;
         }
 
-        updateOrder();
-        updateInventory(network);
+        dumpMovement();
+
+        if (move(network) != Response::Ok) {
+            break;
+        }
+
+        if (_order.empty()) {
+
+            if (!backToQueen(network, false)) {
+                break;
+            }
+
+            if (dropItem(network) != Response::Ok) {
+                break;
+            }
+
+        }
 
     }
-
+    std::cout << "Searcher : " << _id << " is dead\n";
     return true;
 }

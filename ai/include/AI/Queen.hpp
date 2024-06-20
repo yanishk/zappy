@@ -50,7 +50,7 @@
     #define QUEEN_EXECUTE "Queen execute.\n"
 
     #define CRITICAL_FOOD 20
-    #define CRITICAL_STOCK 50
+    #define CRITICAL_STOCK 10
 
     #define MAX_LAST_MESSAGE 50
 

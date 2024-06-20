@@ -24,6 +24,10 @@ namespace Zappy
                 return _levelToReach;
             }
 
+            void setLevel(int levelToReach) {
+                _levelToReach = levelToReach;
+            }
+
             Ressources getRessources() const {
                 return _ressourcesNeeded;
             }
