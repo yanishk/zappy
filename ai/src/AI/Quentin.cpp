@@ -19,8 +19,6 @@ bool Zappy::Quentin::run(Network::Network &network)
             return false;
         }
 
-        _ressources[FOOD] -= ONE_COUNT;
-
         std::cout << QUENTIN_DROP(_id);
 
     }

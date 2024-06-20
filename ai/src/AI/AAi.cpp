@@ -30,6 +30,8 @@ std::string Zappy::AAi::handlingMessage(Network::Network &network)
 
         _messages.emplace(_messages.begin(), std::make_pair(message, getOrientation(std::atoi(orientation.c_str()))));
 
+        response = network.getInfoFromServer();
+
     }
 
     return response;
