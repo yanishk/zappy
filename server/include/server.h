@@ -71,6 +71,7 @@ void free_player(zappy_t *, player_t *);
 void free_link_by_client_fd(zappy_t *, const unsigned int);
 void free_egg(zappy_t *, egg_t *);
 void free_game(zappy_t *, const arguments_t *);
+void free_arg_teams(arguments_t *);
 
 bool is_positive_number(const char *);
 size_t array_size(char **);

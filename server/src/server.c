@@ -14,8 +14,10 @@ int server(int ac, const char **av)
     zappy_t zappy;
 
     srand(time(NULL));
-    if (fill_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR)
+    if (fill_arg_struct(ac, av, &arg) == EXIT_WITH_ERROR) {
+        free_arg_teams(&arg);
         return EXIT_WITH_ERROR;
+    }
     server = init_server_struct(arg);
     initialize_game(arg, &zappy);
     if (server == NULL)

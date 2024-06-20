@@ -49,7 +49,7 @@ static void free_server(server_t *server)
     free(server);
 }
 
-static void free_arg_teams(arguments_t *arg)
+void free_arg_teams(arguments_t *arg)
 {
     team_t *team = TAILQ_FIRST(&arg->team_head);
     team_t *team_next = NULL;
