@@ -91,19 +91,3 @@ int fill_arg_struct(int ac, const char **av, arguments_t *arg)
         return EXIT_WITH_ERROR;
     return EXIT_WITH_SUCCESS;
 }
-
-void print_arg_struct(const arguments_t arg)
-{
-    team_t *team = NULL;
-
-    printf("teams:\n");
-    TAILQ_FOREACH(team, &arg.team_head, team_entries)
-        printf("team %s\n", team->team_name);
-    printf("\n");
-    printf("port:%d\n", arg.port);
-    printf("width:%d\n", arg.width);
-    printf("height:%d\n", arg.height);
-    printf("nb_clients:%d\n", arg.nb_clients);
-    printf("freq:%d\n", arg.freq);
-    printf("immortal:%d\n", arg.immortal);
-}

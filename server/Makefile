@@ -32,7 +32,6 @@ SRC			=	./src/main.c											\
 				./src/game/initialize_game.c 							\
 				./src/game/initialize_teams.c 							\
 				./src/game/initialize_resources.c 						\
-				./src/game/print_game_informations.c 					\
 				./src/arguments/init_arg_struct.c 						\
 				./src/arguments/nb_clients_flag.c 						\
 				./src/arguments/frequency_flag.c  						\
@@ -96,6 +95,7 @@ SRC			=	./src/main.c											\
 				./src/lib/get_resources.c								\
 				./src/lib/set_resources.c								\
 				./src/lib/is_a_resource.c								\
+				./src/lib/print_tile_resources.c 						\
 				./src/lib/get_tile_index.c								\
 				./src/lib/calculate_time_unit.c							\
 				./src/lib/has_backslash.c

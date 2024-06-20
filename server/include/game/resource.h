@@ -53,4 +53,6 @@ struct repartion_resource {
 
 extern struct repartion_resource const repartion_unit[NB_RESOURCES];
 
+void print_tile_resources(const unsigned int, int, int, const resource_t);
+
 #endif /* !RESOURCE_H_ */
