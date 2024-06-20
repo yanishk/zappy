@@ -5,67 +5,39 @@
 ** Quentin
 */
 
+#include "CreateAI.hpp"
 #include "AI/Quentin.hpp"
-#include "Team.hpp"
 
-bool Zappy::Quentin::run()
+bool Zappy::Quentin::run(Network::Network &network)
 {
-    while (true) {
-        if (!this->forward()) {
+    std::cout << QUENTIN_WELCOME(_id);
+
+    while (_ressources[FOOD] > LAST_FOOD) {
+
+        if (setObject(network, FOOD) != Response::Ok) {
+            std::cout << QUENTIN_DEAD(_id);
             return false;
         }
+
+        std::cout << QUENTIN_DROP(_id);
+
     }
 
-    // if (_network.getInfoFromServer() == DEAD) {
-        // return false;
-    // }
-// 
-    // if (_nbRefills > ZERO_REFILL && _ressources.getRessource(FOOD) == LAST_FOOD) {
-        // _actions.push_back(Fork);
-        // return true;
-    // }
-// 
-    // if (_ressources.getRessource(FOOD)) {
-        // _actions.push_back(Drop);
-    // }
-// 
-    // executeAction();
-
-    return true;
+    return forkQuentin(network);
 }
 
-bool Zappy::Quentin::executeAction()
+bool Zappy::Quentin::forkQuentin(Network::Network &network)
 {
-    if (_actions.empty()) {
+    if (fork(network) != Response::Ok) {
+        std::cout << QUENTIN_DEAD(_id);
         return false;
     }
 
-    if (_actions.front() == Drop) {
-        setObject(FOOD);
-    }
+    std::cout << QUENTIN_FORK(_id);
 
-    if (_actions.front() == Fork) {
-        createQuentin();
-    }
+    Zappy::createAI(network.getName(), network.getPort(), network.getHome());
 
-    _actions.erase(_actions.begin());
-    forward();
-    return true;
-}
-
-bool Zappy::Quentin::createQuentin()
-{
-    // Zappy::Team &team = Zappy::Team::getTeam(GET);
-
-    if (_nbRefills == ZERO_REFILL) {
-        return false;
-    }
-
-    fork();
-
-    // Quentin quentin(_network.getPort(), team.getName(), _nbRefills - 1);
-//
-    // team._players.push_back(std::make_shared<Quentin>(quentin));
+    std::cout << QUENTIN_DEAD(_id);
 
     return true;
 }

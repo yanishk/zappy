@@ -10,11 +10,13 @@
 
     #define INFINY 10000
 
-    #define LAST_FOOD 1
-    #define ZERO_REFILL 0
+    #define QUENTIN_WELCOME(x) "Quentin " << x << " welcome.\n"
+    #define QUENTIN_DEAD(x) "Quentin " << x << " is dead.\n"
+    #define QUENTIN_FORK(x) "Quentin " << x << " fork.\n"
+    #define QUENTIN_DROP(x) "Quentin " << x << " drop food.\n"
 
-    #define FORK_WAIT 42
-    #define DROP_WAIT 7
+    #define LAST_FOOD 1
+    #define ONE_COUNT 1
 
     #include "AAi.hpp"
 
@@ -24,26 +26,21 @@ namespace Zappy {
 
         public:
 
-            Quentin(const std::string &port, const std::string &name, const std::size_t nbRefills): AAi(port, name), _nbRefills(nbRefills) {
-                _network.sendInformationToServer(_name);
-                if (_network.getInfoFromServer() == RESPONSE_KO) {
-                    return;
-                }
-                _network.getInfoFromServer();
-                _thread = std::thread(&Quentin::run, this);
-                _thread.join();
+            Quentin(): AAi() {
+
+                static int id = 0;
+
+                _id = id++;
+
             };
 
-            bool run();
+            bool run(Network::Network &network);
 
         private:
 
-            bool executeAction();
-            bool createQuentin();
+            bool forkQuentin(Network::Network &network);
 
-            size_t _nbRefills;
-            std::vector<Action> _actions;
-            std::thread _thread;
+            std::size_t _id;
 
     };
 

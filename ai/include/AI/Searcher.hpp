@@ -8,6 +8,8 @@
 #ifndef SEARCHER_HPP_
     #define SEARCHER_HPP_
 
+    #define SEARCHER_WELCOME "Searcher initialized.\n"
+
     #define FIRST_LEVEL_RANGE       1, 3
     #define SECOND_LEVEL_RANGE      4, 8
     #define THISRT_LEVEL_RANGE      9, 15
@@ -43,47 +45,21 @@ namespace Zappy
     };
 
     class Searcher : public AAi {
+
         public:
-            Searcher(const std::string &port, const std::string &name, Order order):
-                AAi(port, name),
-                _order(order),
-                _isGoingToQueen(false)
-                {
-                    _network.sendInformationToServer(_name);
 
-                    if (_network.getInfoFromServer() == "none") {
-                        return;
-                    }
-
-                    if (_network.getInfoFromServer() == "none") {
-                        return;
-                    }
-
-                    _thread = std::thread(&Searcher::run, this);
-                    _thread.join();
-            };
+            Searcher(): AAi() {};
 
             bool run();
 
             bool runUntilLevelWanted();
 
-            bool addOrder(const Order &order) {
-                if (!_order.empty()) {
-                    return false;
-                }
-                _order = order;
-                return true;
-            }
-
         private:
-            Order _order;
+
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
             std::vector<std::string> _objectToTake;
             int _howManySameMove;
-            bool _isGoingToQueen;
-            std::thread _thread;
-
 
             Zappy::Response move();
             void dumpMovement();
