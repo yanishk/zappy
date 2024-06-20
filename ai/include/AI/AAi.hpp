@@ -43,7 +43,8 @@
 namespace Zappy {
 
     enum Orientation {
-        FRONT = 1,
+        IN_CASE,
+        FRONT,
         FRONT_LEFT,
         LEFT,
         BACK_LEFT,
@@ -104,6 +105,8 @@ namespace Zappy {
             bool getIsIncantation() const { return _isIncantation; };
             void setIsIncantation(bool isIncantation) { _isIncantation = isIncantation; };
 
+            Orientation getOrientation(int value);
+
         protected:
 
             bool _isIncantation;
@@ -118,11 +121,6 @@ namespace Zappy {
             std::string _name;
 
             std::vector<std::string> _message;
-
-        private:
-
-            Orientation getOrientation(int value);
-            bool checkRessources(const std::vector<std::string> &newRessources);
 
     };
 

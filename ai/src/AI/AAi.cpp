@@ -20,13 +20,19 @@ std::string Zappy::AAi::handlingMessage()
 
     while (response != RESPONSE_OK || response != RESPONSE_KO || response != DEAD) {
         if (!response.compare(0, MESSAGE_LEN, MESSAGE)) {
-            std::string value;
-            std::string orientation;
-            std::string message;
+            std::string value("");
+            std::string orientation("");
+            std::string message("");
             std::stringstream stream;
 
             stream << response;
             stream >> value >> orientation >> message;
+            std::istringstream findTeam(message);
+            std::string team("");
+            std::getline(findTeam, team, '|');
+            if (team != _name) {
+                continue;
+            }
 
             _orientation = getOrientation(std::atoi(orientation.c_str()));
             _message.emplace(_message.begin(), message);
@@ -243,8 +249,10 @@ Zappy::Orientation Zappy::AAi::getOrientation(int value)
         case RIGHT:
             return RIGHT;
             break;
-        default:
+        case FRONT_RIGHT:
             return FRONT_RIGHT;
+        default:
+            return IN_CASE;
             break;
     }
 

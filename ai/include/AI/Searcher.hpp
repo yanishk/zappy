@@ -29,6 +29,8 @@
     #define MIN_FOOD                10
 
     #include <map>
+    #include <iostream>
+    #include <thread>
     #include "AAi.hpp"
     #include "Order.hpp"
 
@@ -44,11 +46,14 @@ namespace Zappy
 
     class Searcher : public AAi {
         public:
-            Searcher(const std::string &port, const std::string &name, Order order):
+            Searcher(const std::string &port, const std::string &name, const Order &order):
                 AAi(port, name),
                 _order(order),
-                _isGoingToQueen(false)
+                _isGoingToBroadcast(false)
                 {
+                    static int id = 0;
+                    _id = id++;
+
                     _network.sendInformationToServer(_name);
 
                     if (_network.getInfoFromServer() == "none") {
@@ -67,26 +72,22 @@ namespace Zappy
 
             bool runUntilLevelWanted();
 
-            bool addOrder(const Order &order) {
-                if (!_order.empty()) {
-                    return false;
-                }
-                _order = order;
-                return true;
-            }
-
         private:
+
             Order _order;
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
             std::vector<std::string> _objectToTake;
             int _howManySameMove;
-            bool _isGoingToQueen;
+            bool _isGoingToBroadcast;
             std::thread _thread;
-
+            std::string _idToReach;
+            int _id;
 
             Zappy::Response move();
             void dumpMovement();
+
+            void goToBroadcast();
 
             bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
             void whereShouldIGo(std::vector<int> priority);
@@ -98,7 +99,7 @@ namespace Zappy
 
             void updateOrder();
             void searchFood();
-            void showMustGoOn();
+
     };
 
 }
