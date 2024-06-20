@@ -21,6 +21,13 @@ Player::Player(Vector3 position)
         _inventory.push_back(0);
     }
     _infoBackground = LoadModelFromMesh(GenMeshPlane(2, 0.7, 2, 2));
+    _isIncantation = false;
+    _speedX = (float)((std::rand() % 100) - 50) / 50;
+    _speedY = (float)((std::rand() % 200) - 100) / 100;
+    _speedZ = (float)((std::rand() % 100) - 50) / 50;
+    if (_speedY < _speedX || _speedY < _speedZ)
+        _speedY += (_speedX + _speedZ) / 2;
+    _incantAngle = (Vector3){_speedX, _speedY, -90};
 }
 
 void Player::DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint)
@@ -340,4 +347,69 @@ Color Player::getNegativeColor(Color color)
     newColor.b = 255 - color.b;
     newColor.a = color.a;
     return newColor;
+}
+
+void Player::drawIncantation(void)
+{
+    if (!_isIncantation)
+        return;
+    if (_incantAngle.z > 30 || _incantAngle.z < -30)
+        _speedZ = (-_speedZ);
+    if (_incantAngle.x > 30 || _incantAngle.x < -30)
+        _speedX = (-_speedX);
+    _incantAngle.x += _speedX;
+    _incantAngle.y += _speedY;
+    _incantAngle.z += _speedZ;
+    _incantationModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * _incantAngle.x, DEG2RAD * _incantAngle.y, DEG2RAD * _incantAngle.z});
+    Vector3 pos = _playerPosition;
+    pos.y += 2;
+    if (_isIncantationExpload) {
+        _incantationSize += 0.01;
+        _incantationOpacity -= 0.05;
+    }
+    if (_incantationSize >= 0.2) {
+        _isIncantationExpload = false;
+        _isIncantation = false;
+        _incantationSize = 0.1;
+        _incantationOpacity = 0.5;
+    }
+    DrawModel(_incantationModel, pos, _incantationSize, Fade(_playerColor, _incantationOpacity));
+}
+
+void Player::enableIncantationMode(Vector2 pos)
+{
+    _incantPos = pos;
+    _isIncantation = true;
+}
+
+void Player::disableIncantationMode(void)
+{
+    _isIncantationExpload = true;
+}
+
+Vector2 Player::getIncantationPos(void)
+{
+    return _incantPos;
+}
+
+void Player::playerExpulsion(void)
+{
+    _isExpulsion = true;
+    _expulsionSize = 0.1;
+    _expulsionOrientation = 0;
+}
+
+void Player::drawExpulsion(void)
+{
+    if (!_isExpulsion)
+        return;
+    _expulsionModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * _expulsionOrientation, DEG2RAD * 0});
+    _expulsionOrientation += 10;
+    Vector3 pos = _playerPosition;
+    pos.y += 2;
+    _expulsionSize += 0.05;
+    if (_expulsionSize >= 0.8) {
+        _isExpulsion = false;
+    }
+    DrawModel(_expulsionModel, pos, _expulsionSize, WHITE);
 }

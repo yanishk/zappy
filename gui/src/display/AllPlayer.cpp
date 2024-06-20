@@ -13,6 +13,8 @@ void AllPlayers::loadModelAndAnim(std::pair<Model, float> modelPair, std::string
     float size = modelPair.second;
     _size = (Vector3){size, size, size};
     _anim = LoadModelAnimations(path.c_str(), &_animsCount);
+    _incantationModel = LoadModel(INCANTATION_PATH);
+    _expulsionModel = LoadModel(EXPULSION_PATH);
     _animsCount = 0;
 }
 
@@ -58,6 +60,8 @@ void AllPlayers::addPlayerToIsland(Vector3 position, int playerID)
     tmpPlayer._playerID = playerID;
     tmpPlayer._animsCount = 0;
     tmpPlayer._animFrameCounter = 0;
+    tmpPlayer._incantationModel = _incantationModel;
+    tmpPlayer._expulsionModel = _expulsionModel;
     _allPlayer.push_back(tmpPlayer);
 }
 
@@ -207,6 +211,34 @@ void AllPlayers::drawMessage(int playerID, std::string msg, Vector3 camPosition)
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
             i.drawMessage(msg, camPosition);
+        }
+    }
+}
+
+void AllPlayers::enableIncantationMode(int playerID, Vector2 pos)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.enableIncantationMode(pos);
+        }
+    }
+}
+
+void AllPlayers::disableIncantationMode(Vector2 pos)
+{
+    for (auto &i: _allPlayer) {
+        Vector2 incantPos = i.getIncantationPos();
+        if (incantPos.x == pos.x && incantPos.y == pos.y) {
+            i.disableIncantationMode();
+        }
+    }
+}
+
+void AllPlayers::playerExpulsion(int playerID)
+{
+    for (auto &i: _allPlayer) {
+        if (i._playerID == playerID) {
+            i.playerExpulsion();
         }
     }
 }

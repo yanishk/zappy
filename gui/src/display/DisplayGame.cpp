@@ -257,6 +257,11 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
     recivedCmd.getPbc(_camera.position);
     recivedCmd.getSgt();
     recivedCmd.getSst();
+    recivedCmd.getEdi();
+    recivedCmd.getPic();
+    recivedCmd.getPie();
+    recivedCmd.getSeg();
+    recivedCmd.getPex();
 }
 
 void DisplayGame::display3D(void)
@@ -290,6 +295,8 @@ void DisplayGame::display3D(void)
     }
     for (auto &i: _player._allPlayer) {
         i.displayPlayerInfo(_camera.position);
+        i.drawIncantation();
+        i.drawExpulsion();
     }
 
     EndMode3D();
@@ -333,7 +340,6 @@ void DisplayGame::launchGame(void)
 
     while (!WindowShouldClose()) {
         useServerInfo(recivedCmd);
-
         seconds += (GetFrameTime() / 2);
 
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);

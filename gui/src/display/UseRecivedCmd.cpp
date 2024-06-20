@@ -64,7 +64,12 @@ void UseRecivedCmd::getPin(void)
 
 void UseRecivedCmd::getPex(void)
 {
-
+    while (!_cmd.getCommandAt(PEX_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PEX_CMD, 0);
+        int playerID = std::atoi(cmd[0].c_str());
+        _player.playerExpulsion(playerID);
+        _cmd.eraseFirstCmdInMap(PEX_CMD);
+    }
 }
 
 void UseRecivedCmd::getPbc(Vector3 camPosition)
@@ -79,12 +84,25 @@ void UseRecivedCmd::getPbc(Vector3 camPosition)
 
 void UseRecivedCmd::getPic(void)
 {
-
+    while (!_cmd.getCommandAt(PIC_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PIC_CMD, 0);
+        Vector2 pos = (Vector2){std::stof(cmd[0].c_str()), std::stof(cmd[1].c_str())};
+        for (std::size_t i = 3; i < cmd.size(); i++) {
+            int playerID = std::atoi(cmd[i].c_str());
+            _player.enableIncantationMode(playerID, pos);
+        }
+        _cmd.eraseFirstCmdInMap(PIC_CMD);
+    }
 }
 
 void UseRecivedCmd::getPie(void)
 {
-
+    while (!_cmd.getCommandAt(PIE_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PIE_CMD, 0);
+        Vector2 pos = (Vector2){std::stof(cmd[0].c_str()), std::stof(cmd[1].c_str())};
+        _player.disableIncantationMode(pos);
+        _cmd.eraseFirstCmdInMap(PIE_CMD);
+    }
 }
 
 void UseRecivedCmd::getPdr(void)
@@ -149,7 +167,11 @@ void UseRecivedCmd::getSmg(void)
 
 void UseRecivedCmd::getEdi(void)
 {
-
+    while (!_cmd.getCommandAt(EDI_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(EDI_CMD, 0);
+        _egg.removeEggFromIsland(std::stoi(cmd[0]));
+        _cmd.eraseFirstCmdInMap(EDI_CMD);
+    }
 }
 
 void UseRecivedCmd::getSgt(void)
@@ -182,7 +204,14 @@ void UseRecivedCmd::getSst(void)
     }
 }
 
+bool UseRecivedCmd::getGameStatus()
+{
+    return _isFinished;
+}
+
 void UseRecivedCmd::getSeg(void)
 {
-
+    if (!_cmd.getCommandAt(SEG_CMD, 0).empty()) {
+        _isFinished = true;
+    }
 }
