@@ -14,12 +14,6 @@
     #include <map>
     #include "Utils.hpp"
 
-    #define MAX_RGB 255
-    #define PLAYER_INFO_NBR_LINE 5
-    #define TEXT_SIZE 20
-    #define TEXT_LINE_SPACING_RATIO 1.30
-    #define NBR_ITEM 7
-
 class Egg {
 
     public:

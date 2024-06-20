@@ -305,7 +305,7 @@ void DisplayGame::display3D(void)
 void DisplayGame::display2D(void)
 {
     if (_selectedPlayer.first) {
-        _player.displayMorePlayerInfo(_selectedPlayer.second, _screenWidth);
+        _player.displayMorePlayerInfo(_selectedPlayer.second, _screenWidth, _allItem);
     }
 
     int size = 8;

@@ -135,13 +135,14 @@ bool AllPlayers::isPlayerAlive(int playerID)
     return false;
 }
 
-void AllPlayers::displayMorePlayerInfo(int playerID, int screenWidth)
+void AllPlayers::displayMorePlayerInfo(int playerID, int screenWidth, std::vector<Item> &_allItem)
 {
     int playerInfoBoxWidth = 400;
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
-            DrawRectangle(screenWidth - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
-            i.displayInfo2D(screenWidth - playerInfoBoxWidth - 5, 5);
+            DrawRectangle(screenWidth - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth,
+                (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
+            i.displayInfo2D(screenWidth - playerInfoBoxWidth - 5, 5, _allItem);
         }
     }
 }

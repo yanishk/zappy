@@ -15,9 +15,10 @@
     #include <map>
     #include <chrono>
     #include "Utils.hpp"
+    #include "Item.hpp"
 
     #define MAX_RGB 255
-    #define PLAYER_INFO_NBR_LINE 5
+    #define PLAYER_INFO_NBR_LINE 7
     #define TEXT_SIZE 20
     #define TEXT_LINE_SPACING_RATIO 1.30
     #define NBR_ITEM 7
@@ -33,7 +34,7 @@ class Player {
         void displayPlayerInfo(Vector3 camPosition);
         void setTeam(std::string team);
         bool isPlayerSelected(BoundingBox playerBox, Ray ray);
-        void displayInfo2D(int x, int y);
+        void displayInfo2D(int x, int y, std::vector<Item> &_allItem);
         void setPlayerColor(Color color);
         void addItem(int itemType);
         void removeItem(int itemType);
@@ -115,7 +116,7 @@ class AllPlayers {
         void setPlayerLevel(int playerID, int level);
         int getPlayerLevel(int playerID);
         bool isPlayerAlive(int playerID);
-        void displayMorePlayerInfo(int playerID, int screenWidth);
+        void displayMorePlayerInfo(int playerID, int screenWidth, std::vector<Item> &_allItem);
         void addItem(int playerID, int itemType);
         void removeItem(int playerID, int itemType);
         void resetInventory(int playerID);

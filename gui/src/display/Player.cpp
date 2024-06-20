@@ -287,7 +287,7 @@ void Player::setInventory(std::vector<int> newInv)
     }
 }
 
-void Player::displayInfo2D(int x, int y)
+void Player::displayInfo2D(int x, int y, std::vector<Item> &_allItem)
 {
     std::string text;
 
@@ -299,6 +299,22 @@ void Player::displayInfo2D(int x, int y)
     text += ("Player inventory :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
     for (std::size_t i = 0; i < NBR_ITEM; i++) {
         text += "|\t" + std::to_string(_inventory[i]) + "\t";
+    }
+    text += "|\n\n";
+    std::vector<int> itemHere;
+
+    for (std::size_t i = 0; i < NBR_ITEM; i++) {
+        itemHere.push_back(0);
+    }
+
+    text += ("Island Ressources :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
+    for (std::size_t i = 0; i < _allItem.size(); i++) {
+        if (Utils::Vec3Comp(_realPos, _allItem[i]._realPos)) {
+            itemHere[_allItem[i]._itemType] += 1;
+        }
+    }
+    for (std::size_t i = 0; i < itemHere.size(); i++) {
+        text += "|\t" + std::to_string(itemHere[i]) + "\t";
     }
     text += "|\n";
     DrawText(text.c_str(), x, y, TEXT_SIZE, BLUE);
