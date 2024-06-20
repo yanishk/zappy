@@ -51,8 +51,10 @@ SRC			=	./src/main.c											\
 				./src/command/command_ia/connect_nbr.c 					\
 				./src/command/command_ia/fork_player.c 					\
 				./src/command/command_ia/eject_from_tile.c 				\
-				./src/command/command_ia/broadcast.c		 			\
 				./src/command/command_ia/incantation.c 					\
+				./src/command/command_ia/broadcast/broadcast.c 			\
+				./src/command/command_ia/broadcast/calculate_all_dir.c	\
+				./src/command/command_ia/broadcast/get_straight_line.c	\
 				./src/command/command_ia/look/look.c		 			\
 				./src/command/command_ia/look/get_on_land.c 			\
 				./src/command/command_ia/commands_function_pointer.c	\
