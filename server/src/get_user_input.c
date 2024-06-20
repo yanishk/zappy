@@ -14,6 +14,7 @@ static char **split_commands(const char *read_buffer)
     static char final_buffer[MAX_BUFFER_SIZE] = {'\0'};
     char **tmp_commands_array = NULL;
 
+    final_buffer[MAX_BUFFER_SIZE - 1] = '\0';
     strcat(final_buffer, read_buffer);
     if (!has_backslash(read_buffer))
         return NULL;

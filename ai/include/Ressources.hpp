@@ -64,6 +64,7 @@ namespace Zappy {
             Ressources() = default;
 
             bool addRessources(const std::string &ressource, int value);
+            bool updateRessources(const std::string &ressource, int value);
             bool removeRessources(const std::string &ressource, int value);
 
             void operator+=(const Ressources &other)

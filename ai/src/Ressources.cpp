@@ -12,6 +12,25 @@ bool Zappy::Ressources::addRessources(const std::string &ressource, int value)
     _ressources[ressource] += value;
     return true;
 }
+
+bool Zappy::Ressources::updateRessources(const std::string &ressource, int value)
+{
+    bool isExisting = false;
+
+    for (const auto &i:_ressources) {
+        if (i.first == ressource) {
+            isExisting = true;
+        }
+    }
+
+    if (!isExisting) {
+        return false;
+    }
+
+    _ressources[ressource] = value;
+    return true;
+}
+
 std::string Zappy::Ressources::indexToRessource(int index)
 {
     switch (index) {
@@ -48,7 +67,6 @@ std::vector<int> Zappy::Ressources::getAllValueRessources()
         _ressources[THYSTAME]
     };
 }
-
 
 bool Zappy::Ressources::removeRessources(const std::string &ressource, int value)
 {

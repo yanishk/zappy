@@ -26,6 +26,7 @@ int main(int ac, char **av)
 
     std::string name;
     std::string port;
+    std::string home;
 
     for (std::size_t i = 0; av[i] != NULL; i++) {
 
@@ -36,10 +37,12 @@ int main(int ac, char **av)
         if (std::string(av[i]) == PORT_FLAG && av[i + 1]) {
             port = std::string(av[i + 1]);
         }
-
+        if (std::string(av[i]) == MACHINE_FLAG && av[i + 1]) {
+            home = std::string(av[i + 1]);
+        }
     }
 
-    Zappy::Threads &threads = Zappy::createAI(name, port);
+    Zappy::Threads &threads = Zappy::createAI(name, port, home);
     Zappy::join(threads);
 
     return EXIT_SUCCESS;
