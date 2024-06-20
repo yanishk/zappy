@@ -16,7 +16,7 @@
 
 class UseRecivedCmd {
     public:
-        UseRecivedCmd(CommandManager &cmd, AllPlayers &player, AllEggs &egg, std::vector<Item> &allItem, std::vector<Item> &allItemModel, asio::ip::tcp::socket &socket);
+        UseRecivedCmd(CommandManager &cmd, AllPlayers &player, AllEggs &egg, asio::ip::tcp::socket &socket);
 
         void callAllFunctions(Vector3 camPosition);
         bool getGameStatus(void);
@@ -25,8 +25,6 @@ class UseRecivedCmd {
         CommandManager &_cmd;
         AllPlayers &_player;
         AllEggs &_egg;
-        std::vector<Item> &_allItem;
-        std::vector<Item> &_allItemModel;
         asio::ip::tcp::socket &_socket;
 
         bool _isFinished = false;

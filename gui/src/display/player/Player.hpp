@@ -41,7 +41,7 @@ class Player {
         void displayPlayerInfo(Vector3 camPosition);
         void setTeam(std::string team);
         bool isPlayerSelected(BoundingBox playerBox, Ray ray);
-        void displayInfo2D(int x, int y, std::vector<Item> &_allItem);
+        void displayInfo2D(int x, int y, std::unique_ptr<AllItem> &_allItem);
         void setPlayerColor(Color color);
         void addItem(int itemType);
         void removeItem(int itemType);
@@ -124,7 +124,7 @@ class AllPlayers {
         void setPlayerLevel(int playerID, int level);
         int getPlayerLevel(int playerID);
         bool isPlayerAlive(int playerID);
-        void displayMorePlayerInfo(int playerID, int screenWidth, std::vector<Item> &_allItem);
+        void displayMorePlayerInfo(int playerID, int screenWidth, std::unique_ptr<AllItem> &_allItem);
         void addItem(int playerID, int itemType);
         void removeItem(int playerID, int itemType);
         void resetInventory(int playerID);

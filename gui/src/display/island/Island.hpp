@@ -42,7 +42,7 @@ class AllIsland {
 
         AllIsland(CommandManager &cmd);
 
-        void setAllIsland(std::pair<Model, float> model);
+        void setAllIsland(std::vector<std::pair<Model, float>> model);
         void renderAll(void);
 
     private:

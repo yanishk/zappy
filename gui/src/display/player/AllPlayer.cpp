@@ -137,7 +137,7 @@ bool AllPlayers::isPlayerAlive(int playerID)
     return false;
 }
 
-void AllPlayers::displayMorePlayerInfo(int playerID, int screenWidth, std::vector<Item> &_allItem)
+void AllPlayers::displayMorePlayerInfo(int playerID, int screenWidth, std::unique_ptr<AllItem> &_allItem)
 {
     int playerInfoBoxWidth = 400;
     for (auto &i: _allPlayer) {

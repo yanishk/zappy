@@ -8,13 +8,12 @@
 #include "UseRecivedCmd.hpp"
 
 UseRecivedCmd::UseRecivedCmd(CommandManager &cmd, AllPlayers &player, AllEggs &egg,
-    std::vector<Item> &allItem, std::vector<Item> &allItemModel, asio::ip::tcp::socket &socket) : _cmd(cmd), _player(player), _egg(egg) , _allItem(allItem), _allItemModel(allItemModel), _socket(socket)
+    asio::ip::tcp::socket &socket) : _cmd(cmd), _player(player), _egg(egg) , _socket(socket)
 {
 }
 
 void UseRecivedCmd::callAllFunctions(Vector3 camPosition)
 {
-    getBct();
     getTna();
     getPnw();
     getPpo();
@@ -34,28 +33,6 @@ void UseRecivedCmd::callAllFunctions(Vector3 camPosition)
     getPie();
     getSeg();
     getPex();
-}
-
-void UseRecivedCmd::getBct(void)
-{
-    while (_cmd.getCommandAt(BCT_CMD, 0).size() > 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(BCT_CMD, 0);
-        float x = std::stof(cmd.front().c_str());
-        float z = std::stof(cmd[1].c_str());
-        Vector3 itemPosition = (Vector3){x, 1.8, z};
-        for (std::size_t j = 2; j < cmd.size(); j++) {
-            int nbItem = std::atoi(cmd[j].c_str());
-            int nbItemOnIsland = getNbrItemTypeOnIsland(itemPosition, j - 2);
-            while (nbItemOnIsland > 0) {
-                removeItemFromIsland(itemPosition, j - 2);
-                nbItemOnIsland--;
-            }
-            for (int k = 0; k < nbItem; k++) {
-                addItemToIsland(itemPosition, j - 2);
-            }
-        }
-        _cmd.eraseFirstCmdInMap(BCT_CMD);
-    }
 }
 
 void UseRecivedCmd::getTna(void)
@@ -283,34 +260,4 @@ void UseRecivedCmd::getSeg(void)
     if (!_cmd.getCommandAt(SEG_CMD, 0).empty()) {
         _isFinished = true;
     }
-}
-
-int UseRecivedCmd::getNbrItemTypeOnIsland(Vector3 pos, int type)
-{
-    int nbr = 0;
-    for (auto &i: _allItem) {
-        if (Utils::Vec3Comp(i._realPos, pos) && i._itemType == type)
-            nbr++;
-    }
-    return nbr;
-}
-
-void UseRecivedCmd::removeItemFromIsland(Vector3 position, int type)
-{
-    for (std::size_t i = 0; i < _allItem.size(); i++) {
-        if (Utils::Vec3Comp(_allItem[i]._realPos, position) && _allItem[i]._itemType == type) {
-            _allItem.erase(_allItem.begin() + i);
-            break;
-        }
-    }
-}
-
-void UseRecivedCmd::addItemToIsland(Vector3 position, int type)
-{
-    _allItem.push_back(_allItemModel[type]);
-    _allItem.back()._itemPosition = (Vector3){(position.x + 1) * spaceBetwenIsland, 1.8, position.z * spaceBetwenIsland};
-    _allItem.back()._itemPosition.x += -3 + (rand() % 6);
-    _allItem.back()._itemPosition.z += -3 + (rand() % 6);
-    _allItem.back()._realPos = position;
-    _allItem.back()._itemType = type;
 }

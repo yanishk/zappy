@@ -287,7 +287,7 @@ void Player::setInventory(std::vector<int> newInv)
     }
 }
 
-void Player::displayInfo2D(int x, int y, std::vector<Item> &_allItem)
+void Player::displayInfo2D(int x, int y, std::unique_ptr<AllItem> &_allItem)
 {
     std::string text;
 
@@ -309,9 +309,10 @@ void Player::displayInfo2D(int x, int y, std::vector<Item> &_allItem)
     }
 
     text += ("Island Ressources :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
-    for (std::size_t i = 0; i < _allItem.size(); i++) {
-        if (Utils::Vec3Comp(_realPos, _allItem[i]._realPos)) {
-            itemHere[_allItem[i]._itemType] += 1;
+    for (std::size_t i = 0; i < _allItem.get()->getTotalNbrItem(); i++) {
+        Vector2 itemPos = _allItem.get()->getItemRealPosition(i);
+        if (_realPos.x == itemPos.x && _realPos.z == itemPos.y) {
+            itemHere[_allItem.get()->getItemType(i)] += 1;
         }
     }
     for (std::size_t i = 0; i < itemHere.size(); i++) {

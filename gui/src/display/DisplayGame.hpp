@@ -56,17 +56,17 @@ class DisplayGame {
         int _screenHeight = 1080;
         int _cameraMode = CAMERA_FREE;
         int _secondLoc;
-        std::pair<Model, float> _islandModel;
         std::pair<int, int> _mapSize;
-        std::vector<Item> _allItem;
-        std::vector<Item> _allItemModel;
         std::pair<bool, std::size_t> _selectedPlayer;
         asio::ip::tcp::socket &_socket;
 
         //std::unique_ptr<AllPlayers> _allPlayers;
         //std::unique_ptr<AllEggs> _allEggs;
+        std::vector<std::pair<Model, float>> _allItemModel;
+        std::vector<std::pair<Model, float>> _islandModel;
 
         std::unique_ptr<AllIsland> _allIsland;
+        std::unique_ptr<AllItem> _allItem;
 
         AllPlayers _player;
         AllEggs _allEggs;

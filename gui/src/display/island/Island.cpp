@@ -28,7 +28,7 @@ AllIsland::AllIsland(CommandManager &cmd) : _cmd(cmd)
 
 }
 
-void AllIsland::setAllIsland(std::pair<Model, float> model)
+void AllIsland::setAllIsland(std::vector<std::pair<Model, float>> model)
 {
     if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
@@ -44,10 +44,11 @@ void AllIsland::setAllIsland(std::pair<Model, float> model)
             posX += spaceBetwenIsland;
             for (int j = 0; j <mapSize.second; j++) {
                 Island tmpIsland;
+                std::size_t modelIndex = rand() % model.size();
                 _allIsland.push_back(tmpIsland);
-                model.first.transform = MatrixRotateXYZ((Vector3){ DEG2RAD*0,
+                model[modelIndex].first.transform = MatrixRotateXYZ((Vector3){ DEG2RAD*0,
                     DEG2RAD*(std::rand() % 360), DEG2RAD*0});
-                _allIsland.back().fillModel(model);
+                _allIsland.back().fillModel(model[modelIndex]);
                 _allIsland.back().setIslandPos((Vector3) {posX, -4, posY});
                 posY += spaceBetwenIsland;
             }

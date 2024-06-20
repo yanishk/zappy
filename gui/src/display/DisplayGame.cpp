@@ -24,13 +24,14 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
     _isAnimated = animation;
 
     _allIsland = std::make_unique<AllIsland>(_cmd);
+    _allItem = std::make_unique<AllItem>(_cmd);
 }
 
 DisplayGame::~DisplayGame()
 {
     CloseWindow();
     for (auto &i: _allItemModel)
-        UnloadModel(i._itemModel);
+        UnloadModel(i.first);
 }
 
 Vector3 DisplayGame::setVector3(float x, float y, float z)
@@ -67,14 +68,10 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
         tmpPair.second = i.first.second;
         switch (i.second) {
             case IslandType:
-                _islandModel = tmpPair;
+                _islandModel.push_back(tmpPair);
                 break;
             case ItemType: {
-                tmpModel.push_back(tmpPair);
-                Item tmpItem;
-                _allItemModel.push_back(tmpItem);
-                _allItemModel.back()._itemModel = tmpModel.back().first;
-                _allItemModel.back()._itemSize = tmpModel.back().second;
+                _allItemModel.push_back(tmpPair);
                 break;
             }
             case PlayerType: {
@@ -178,12 +175,9 @@ void DisplayGame::display3D(void)
 
 
     _allIsland.get()->renderAll();
+    _allItem.get()->renderAll();
     _allEggs.drawEgg();
 
-    for (auto &i: _allItem) {
-        i.changeItemAnim();
-        i.drawItem();
-    }
     _player.drawPlayer(_isAnimated);
 
     for (auto &i: _player._allPlayer) {
@@ -226,13 +220,14 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
-    UseRecivedCmd recivedCmd(_cmd, _player, _allEggs, _allItem, _allItemModel, _socket);
+    UseRecivedCmd recivedCmd(_cmd, _player, _allEggs, _socket);
 
     SetTargetFPS(60);
     float seconds = 0.0f;
 
     while (!WindowShouldClose()) {
         _allIsland.get()->setAllIsland(_islandModel);
+        _allItem.get()->setAllItem(_allItemModel);
         useServerInfo(recivedCmd);
         seconds += (GetFrameTime() / 2);
 
