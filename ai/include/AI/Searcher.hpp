@@ -10,6 +10,18 @@
 
     #define SEARCHER_WELCOME "Searcher initialized.\n"
 
+    #define PREFIX_ASK_ASSISTANT "Queen:AskAssistant:"
+    #define PREFIX_ASK_RESPONSE_HERE "Queen:Here:"
+    #define PREFIX_ASK_RESPONSE_NO "Queen:No:"
+    #define RESPONSE_ASK(x) x + ":Coming:Queen"
+    #define ASK_PING(x) std::to_string(x) + ":Ping:Queen"
+
+    #define ELEVATION_UNDERWAY "Elevation underway"
+
+    #define MAX_LAST_MESSAGE 50
+    #define ONE_LEVEL 1
+    #define START_ID 0
+
     #define FIRST_LEVEL_RANGE       1, 3
     #define SECOND_LEVEL_RANGE      4, 8
     #define THISRT_LEVEL_RANGE      9, 15
@@ -60,11 +72,14 @@ namespace Zappy
 
     class Searcher : public AAi {
 
+        using Message = std::pair<std::string, Orientation>;
+
         public:
             Searcher():
                 AAi(),
                 _order(Order(1, Ressources(1, 0, 0, 0, 0, 0))),
-                _inDelivery(false)
+                _inDelivery(false),
+                _goBackToQueen(false)
                 {
                     std::cout << "A Searcher spawn\n";
                     static int id = 0;
@@ -86,6 +101,8 @@ namespace Zappy
             int _queenLevel;
             bool _inDelivery;
 
+            bool _goBackToQueen;
+
             Zappy::Response move(Network::Network &network);
             void dumpMovement();
 
@@ -102,7 +119,15 @@ namespace Zappy
             void checkQueenLevel(Network::Network &network);
             bool checkComingIsGood();
             int checkQueenLevel();
+
+            Message createMessage(const std::string &content);
+
             bool checkAskAssistants(Network::Network &network);
+            bool waitAskResponse(Network::Network &network);
+
+            bool backToQueen(Network::Network &network);
+            bool launchIncantation(Network::Network &network);
+            Orientation getOrientationToQueen(Network::Network &network);
 
             void updateOrder();
             void searchFood(Network::Network &network);

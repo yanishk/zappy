@@ -132,35 +132,17 @@ void Zappy::Searcher::checkQueenLevel(Network::Network &network)
     }
 }
 
-bool Zappy::Searcher::checkAskAssistants(Network::Network &network)
-{
-    for (const auto &i: _messages) {
-        std::istringstream stream(i.first);
-        std::string otherId("");
-        std::string message("");
-        std::string value("");
-
-        std::getline(stream, otherId, ':');
-        std::getline(stream, message, ':');
-        std::getline(stream, value, ':');
-        if (message == ASK_ASSISTANT && std::atoi(value.c_str()) == (int)_level - 1) {
-            if (broadcastText(network, std::to_string(_id) + ":" + COMING + ":Queen\n") != Response::Ok) {
-                return false;
-            }
-            goToBroadcast(network);
-            broadcastText(network, std::to_string(_id) + ":" + PING + ":Queen\n");
-            handlingMessage(network);
-            handlingMessage(network);
-        }
-    }
-    return true;
-}
-
 bool Zappy::Searcher::run(Network::Network &network)
 {
     checkQueenLevel(network);
     std::cout << "order linemate: " << _order.getLevelRessources(1)["linemate"] << "\n";
     while (true) {
+
+        checkAskAssistants(network);
+
+        if (_goBackToQueen && !backToQueen(network)) {
+            break;
+        }
 
         _lastLook = look(network);
         std::cout << "Searcher : " << _id << " Look: {\n";
@@ -200,7 +182,6 @@ bool Zappy::Searcher::run(Network::Network &network)
             }
         }
 
-        checkAskAssistants(network);
     }
     std::cout << "Searcher : " << _id << " is dead\n";
     return true;
