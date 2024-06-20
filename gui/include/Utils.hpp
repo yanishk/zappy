@@ -39,7 +39,6 @@
 
 class Utils {
     public:
-        //return true if vec1 == vec2
         static bool Vec3Comp(Vector3 vec1, Vector3 vec2)
         {
             if (vec1.x == vec2.x && vec1.y == vec2.y && vec1.z == vec2.z)
