@@ -65,6 +65,5 @@ int frequency_flag(int, const char **, int *, arguments_t *);
 int immortal_flag(int, const char **, int *, arguments_t *);
 
 int fill_arg_struct(int, const char **, arguments_t *);
-void print_arg_struct(const arguments_t);
 
 #endif
