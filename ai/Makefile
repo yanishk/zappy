@@ -12,22 +12,23 @@ CXXFLAGS	=	-Wall -Wextra -Werror -lasio
 CPPFLAGS	=	-pthread -iquote ./include
 TTFLAGS		=	-lcriterion --coverage
 
-SRC			=	./src/Main.cpp					\
-				./src/Network.cpp				\
-				./src/Ressources.cpp			\
-				./src/CreateAI.cpp				\
-				./src/GetAI.cpp					\
-				./src/Run.cpp					\
-				./src/AI/Queen.cpp				\
-				./src/AI/Searcher.cpp			\
-				./src/AI/Searcher/Broadcast.cpp	\
-				./src/AI/Searcher/Mouvement.cpp	\
-				./src/AI/Searcher/Priority.cpp	\
-				./src/AI/Quentin.cpp			\
-				./src/AI/AAi.cpp				\
+SRC			=	./src/Main.cpp						\
+				./src/Network.cpp					\
+				./src/Ressources.cpp				\
+				./src/CreateAI.cpp					\
+				./src/GetAI.cpp						\
+				./src/Run.cpp						\
+				./src/AI/Queen.cpp					\
+				./src/AI/Searcher.cpp				\
+				./src/AI/Searcher/Broadcast.cpp		\
+				./src/AI/Searcher/Mouvement.cpp		\
+				./src/AI/Searcher/Priority.cpp		\
+				./src/AI/Searcher/BackToQueen.cpp	\
+				./src/AI/Quentin.cpp				\
+				./src/AI/AAi.cpp					\
 
-SRC_TEST	=	./src/Ressources.cpp			\
-				./tests/TestsRessources.cpp		\
+SRC_TEST	=	./src/Ressources.cpp				\
+				./tests/TestsRessources.cpp			\
 
 OBJ			=	$(SRC:.cpp=.o)
 
