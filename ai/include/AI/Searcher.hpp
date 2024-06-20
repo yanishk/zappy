@@ -8,6 +8,8 @@
 #ifndef SEARCHER_HPP_
     #define SEARCHER_HPP_
 
+    #define SEARCHER_WELCOME "Searcher initialized.\n"
+
     #define FIRST_LEVEL_RANGE       1, 3
     #define SECOND_LEVEL_RANGE      4, 8
     #define THISRT_LEVEL_RANGE      9, 15
@@ -45,60 +47,47 @@ namespace Zappy
     };
 
     class Searcher : public AAi {
+
         public:
-            Searcher(const std::string &port, const std::string &name, const Order &order):
-                AAi(port, name),
-                _order(order),
+            Searcher():
+                AAi(),
+                _order(Order(1, Ressources(1, 0, 0, 0, 0, 0))),
                 _isGoingToBroadcast(false)
                 {
                     static int id = 0;
                     _id = id++;
 
-                    _network.sendInformationToServer(_name);
+                }
 
-                    if (_network.getInfoFromServer() == "none") {
-                        return;
-                    }
+            bool run(Network::Network &network);
 
-                    if (_network.getInfoFromServer() == "none") {
-                        return;
-                    }
-
-                    _thread = std::thread(&Searcher::run, this);
-                    _thread.join();
-            };
-
-            bool run();
-
-            bool runUntilLevelWanted();
 
         private:
 
             Order _order;
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
-            std::vector<std::string> _objectToTake;
             int _howManySameMove;
             bool _isGoingToBroadcast;
             std::thread _thread;
             std::string _idToReach;
             int _id;
 
-            Zappy::Response move();
+            Zappy::Response move(Network::Network &network);
             void dumpMovement();
 
-            void goToBroadcast();
+            void goToBroadcast(Network::Network &network);
 
-            bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
             void whereShouldIGo(std::vector<int> priority);
 
             std::vector<int> estimatePriority();
             void whereIsThePriority(int index);
 
-            Zappy::Response dropItem();
+            std::string takeThis(std::string tiled);
+            Zappy::Response dropItem(Network::Network &network);
 
             void updateOrder();
-            void searchFood();
+            void searchFood(Network::Network &network);
 
     };
 

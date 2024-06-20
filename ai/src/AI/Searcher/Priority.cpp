@@ -8,37 +8,9 @@
 #include "AI/Searcher.hpp"
 
 
-bool Zappy::Searcher::haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject)
-{
-    if (item == FOOD && _ressources.getRessource(FOOD) < MIN_FOOD) {
-        return true;
-    } else if (item == FOOD || item == PLAYER) {
-        return false;
-    }
-
-    std::vector<double> density = {
-        DERAUMERE_DENSITY,
-        SIBUR_DENSITY,
-        MENDIANE_DENSITY,
-        PHIRAS_DENSITY,
-        THYSTAME_DENSITY
-    };
-
-    for (const auto &i: density) {
-        if (_order[item] > _ressources[item] && *lastDensityObject > density[i]) {
-            *lastDensityObject = density[i];
-            return true;
-        }
-
-    }
-
-    return false;
-}
-
 std::vector<int> Zappy::Searcher::estimatePriority()
 {
     std::vector <int> priority;
-    double objectDensity(1.0);
 
     for (std::size_t i = 0; i < _lastLook.size(); ++i) {
 
@@ -64,18 +36,14 @@ std::vector<int> Zappy::Searcher::estimatePriority()
                     } else {
                         temp.erase(temp.begin(), temp.begin() + actualItem.size() + 1);
                     }
-                    if (haveIToTake(actualItem, std::make_unique<double>(objectDensity)) &&
-                       !haveIToTake(_lastLook[j], std::make_unique<double>(objectDensity))) {
-                        _objectToTake.push_back(actualItem);
+                    if (_order[actualItem]) {
                         itemPriority++;
                     }
 
                 }
             }
 
-            if (haveIToTake(_lastLook[i], std::make_unique<double>(objectDensity)) &&
-               !haveIToTake(_lastLook[j], std::make_unique<double>(objectDensity))) {
-                _objectToTake.push_back(_lastLook[i]);
+            if (_order[_lastLook[i]] > 0) {
                 itemPriority++;
             }
 
@@ -179,5 +147,4 @@ void Zappy::Searcher::whereShouldIGo(std::vector<int> priority)
     }
     priority.erase(priority.begin() + biggestPriority);
 
-    whereShouldIGo(priority);
 }

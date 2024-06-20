@@ -6,7 +6,6 @@
 */
 
 #include "Zappy.hpp"
-#include "Broadcast.hpp"
 #include "AI/Searcher.hpp"
 
 void Zappy::Searcher::updateOrder()
@@ -25,9 +24,9 @@ void Zappy::Searcher::updateOrder()
     }
 }
 
-void Zappy::Searcher::searchFood()
+void Zappy::Searcher::searchFood(Network::Network &network)
 {
-    std::vector<std::string> lookForFood = look();
+    std::vector<std::string> lookForFood = look(network);
     std::size_t priority = 0;
     int index = 0;
 
@@ -43,7 +42,7 @@ void Zappy::Searcher::searchFood()
 }
 
 
-Zappy::Response Zappy::Searcher::dropItem()
+Zappy::Response Zappy::Searcher::dropItem(Network::Network &network)
 {
     std::unordered_map<std::string, int> ressource = _ressources.getRessources();
 
@@ -55,7 +54,7 @@ Zappy::Response Zappy::Searcher::dropItem()
         }
 
         for (int j = 0; j < i.second; ++j) {
-            Zappy::Response rep = setObject(i.first);
+            Zappy::Response rep = setObject(network, i.first);
             if (rep == Response::Dead) {
                 return Response::Dead;
             } else if (rep == Response::Ko) {
@@ -66,85 +65,31 @@ Zappy::Response Zappy::Searcher::dropItem()
     }
     std::cerr << "}\n";
 
-    incantation();
     return Response::Ok;
 }
 
-bool Zappy::Searcher::runUntilLevelWanted()
-{
-    if (_order.empty()) {
-        _order.setRessources(_order.getLevelRessources(_level));
-    }
-    if ((int)_level == _order.getLevel()) {
-        return false;
-    }
-
-    if (_ressources.getRessource(FOOD) < MIN_FOOD) {
-        searchFood();
-    }
-
-    if (_nextMouvment.empty()) {
-        _lastLook = look();
-        std::cout << "look {\n";
-        for (const auto &i: _lastLook) {
-            std::cout << "\t" + i << "\n";
-        }
-        std::cout << "}\n";
-
-        std::vector<int> priority = estimatePriority();
-        whereShouldIGo(priority);
-        if (_nextMouvment.size() == 0 && _howManySameMove != NB_SAME_MOVE_MAX) {
-            _nextMouvment.push_back(Left);
-            _howManySameMove++;
-        } else if (_howManySameMove == NB_SAME_MOVE_MAX) {
-            _nextMouvment.push_back(Forward);
-        }
-        dumpMovement();
-    }
-
-    Response rep = move();
-    if (rep == Response::Ko) {
-        std::cout << "Unable to move\n";
-    } else if (rep == Response::Dead) {
-        std::cout << "Player is Dead\n";
-        return false;
-    }
-
-    updateOrder();
-
-    return true;
-}
-
-bool Zappy::Searcher::run()
+bool Zappy::Searcher::run(Network::Network &network)
 {
     while (true) {
 
+        if (_order.empty()) {
+            dropItem(network);
+            if (incantation(network) == Response::Ok) {
+                _order.setRessources(_order.getLevelRessources(_level));
+            }
+        }
+
         if (_isGoingToBroadcast) {
-            goToBroadcast();
-            dropItem();
-            std::stringstream myId;
-            myId << std::this_thread::get_id();
-
-            Broadcast broadcastHandler(_name, myId.str());
-
-            broadcastHandler.letsIncantate(_network, _idToReach);
+            goToBroadcast(network);
+            dropItem(network);
 
             _isGoingToBroadcast = false;
             continue;
         }
 
-        if ((int)_level != _order.getLevel()) {
-
-            _order.setRessources(_order.getLevelRessources(_level));
-            if (runUntilLevelWanted()) {
-                continue;
-            }
-
-        }
-
         if (_nextMouvment.empty() && !_order.empty()) {
 
-            _lastLook = look();
+            _lastLook = look(network);
             std::cerr << "look {\n";
             for (const auto &i: _lastLook) {
                 std::cerr << "\t" + i << "\n";
@@ -168,20 +113,39 @@ bool Zappy::Searcher::run()
             dumpMovement();
         }
 
-        Response rep = move();
+        Response rep = move(network);
+
         if (rep == Response::Ko) {
             std::cout << "Unable to move\n";
+
+            if (_nextMouvment.size() == 0 && _howManySameMove != NB_SAME_MOVE_MAX) {
+
+                _nextMouvment.push_back(Left);
+                _howManySameMove++;
+
+            } else if (_howManySameMove == NB_SAME_MOVE_MAX) {
+
+                _nextMouvment.push_back(Forward);
+
+            }
+            dumpMovement();
+
         } else if (rep == Response::Dead) {
             std::cout << "Player is Dead\n";
             break;
         }
 
+        if (_order.empty()) {
+            dropItem(network);
+            incantation(network);
+        }
+
         if (_ressources.getRessource(FOOD) < MIN_FOOD) {
-            searchFood();
+            searchFood(network);
         }
 
         updateOrder();
-        updateInventory();
+        updateInventory(network);
 
     }
 

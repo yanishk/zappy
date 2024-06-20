@@ -33,7 +33,34 @@ void Zappy::Searcher::dumpMovement()
     std::cerr << "}\n";
 }
 
-Zappy::Response Zappy::Searcher::move()
+std::string Zappy::Searcher::takeThis(std::string tiled)
+{
+    std::istringstream stream(tiled);
+    std::string temp("");
+    Ressources ress = _order.getRessources();
+
+    std::vector<int> value = ress.getAllValueRessources();
+
+    std::cerr << "\tFood value: " << ress[FOOD] << "\n";
+    std::cerr << "\tLINEMATE value: " << ress[LINEMATE] << "\n";
+    std::cerr << "\tDERAUMERE value: " << ress[DERAUMERE] << "\n";
+    std::cerr << "\tSIBUR value: " << ress[SIBUR] << "\n";
+    std::cerr << "\tMENDIANE value: " << ress[MENDIANE] << "\n";
+    std::cerr << "\tPHIRAS value: " << ress[PHIRAS] << "\n";
+    std::cerr << "\tTHYSTAME value: " << ress[THYSTAME] << "\n";
+
+    while (std::getline(stream, temp, ' ')) {
+
+        if (ress.getRessource(temp) > 0 && temp != FOOD) {
+            _order.removeRessources(temp, 1);
+            return temp;
+        }
+    }
+
+    return "";
+}
+
+Zappy::Response Zappy::Searcher::move(Network::Network &network)
 {
     Mouvement nextMove = _nextMouvment.back();
     Zappy::Response rep;
@@ -43,7 +70,7 @@ Zappy::Response Zappy::Searcher::move()
     switch (nextMove) {
         case Forward:
             std::cerr << "Forward\n";
-            rep = forward();
+            rep = forward(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
             } else if (rep == Response::Dead) {
@@ -55,7 +82,7 @@ Zappy::Response Zappy::Searcher::move()
 
         case Left:
             std::cerr << "Left\n";
-            rep = left();
+            rep = left(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
             } else if (rep == Response::Dead) {
@@ -67,7 +94,7 @@ Zappy::Response Zappy::Searcher::move()
 
         case Right:
             std::cerr << "Right\n";
-            rep = right();
+            rep = right(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
             } else if (rep == Response::Dead) {
@@ -80,21 +107,21 @@ Zappy::Response Zappy::Searcher::move()
 
         case Back:
             std::cerr << "Back\n";
-            rep = left();
+            rep = left(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
             } else if (rep == Response::Dead) {
                 return Response::Dead;
             }
 
-            rep = left();
+            rep = left(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
             } else if (rep == Response::Dead) {
                 return Response::Dead;
             }
 
-            rep = forward();
+            rep = forward(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
             } else if (rep == Response::Dead) {
@@ -109,32 +136,31 @@ Zappy::Response Zappy::Searcher::move()
 
         case Take:
 
-            object = _objectToTake.front();
-            temp = look();
+            temp = look(network);
+            object = takeThis(temp[0]);
+
             std::cerr << "Look {\n";
             for (const auto &i: temp) {
                 std::cerr << "\t" + i << "\n";
             }
+            if (object == "") {
+                std::cerr << "Object not found\n";
+                _nextMouvment.clear();
+                return Response::Ko;
+            }
             std::cerr << "}\n";
-            if (takeObject(object) == Response::Ok) {
+            if (takeObject(network, object) == Response::Ok) {
                 std::cerr << "Take " << object << "\n";
-                _order.removeRessources(object, 1);
             } else {
                 return Response::Ko;
             }
 
-            _objectToTake.erase(_objectToTake.begin());
-            _nextMouvment.pop_back();
+            _nextMouvment.clear();
             updateOrder();
             break;
 
         default:
             break;
-    }
-
-    if (_order.empty()) {
-        _nextMouvment.clear();
-        std::cerr << "Go back to queen\n";
     }
 
     return Response::Ok;
