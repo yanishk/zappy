@@ -27,6 +27,13 @@ To launch the Zappy Server, here's the syntax to follow:
 
 In Immortal mode, the player doesn't consume food every 126 time units, and the server doesn't check if he has no more food in his inventory neither.
 
+# eni GUI Command
+
+The server sends the eggs spawned at the start of the game with the smg command, with the following syntax:
+- smg eni e X Y
+
+For more details, read the Zappy - GUI Protocol
+
 # Add a GUI Command
 
 To add a GUI Command, you will need to add a new line in the following structure array:
