@@ -3,9 +3,9 @@
 
 # Introduction
 
-The Zappy Server manage multiple clients that can take 2 roles, player or GUI (only one GUI is allowed).
+The Zappy Server manages multiple clients that can take 2 roles, player or GUI (only one GUI is allowed).
 
-The server manage the whole game, and sends appropriate informations to the clients according to their roles and to the context.
+The server manages the whole game, and sends appropriate informations to the clients according to their roles and the context.
 
 # How to Launch
 
@@ -25,7 +25,7 @@ To launch the Zappy Server, here's the syntax to follow:
 
 # Immortal mode
 
-In Immortal mode, the player doesn't consume food every 126 time units, and the server doesn't check if he has no more food in his inventory neither.
+In Immortal mode, the player does not consume food every 126 time units, and the server does not check if he has no more food in his inventory either.
 
 # eni GUI Command
 
