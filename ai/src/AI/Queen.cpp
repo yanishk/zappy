@@ -36,7 +36,7 @@ bool Zappy::Queen::run(Network::Network &network)
         }
 
         checkFood();
-        checkIncantation(network);
+        checkIncantation();
 
         if (!execute(network)) {
             break;
@@ -91,13 +91,24 @@ bool Zappy::Queen::checkFood()
     return true;
 }
 
-bool Zappy::Queen::checkIncantation(Network::Network &network)
+bool Zappy::Queen::checkIncantation()
 {
     if (checkRessources() && _level == FIRST_LEVEL) {
         _actions.push_back(Incantation);
+        return true;
     }
 
-    (void)network;
+    if (checkRessources() && checkPlayers()) {
+        _actions.push_back(Incantation);
+        return true;
+    }
+
+    if (!checkRessources()) {
+        _actions.push_back(ForkQueen);
+        return true;
+    }
+
+    _actions.push_back(AskAssistants);
 
     return true;
 }
@@ -120,28 +131,20 @@ bool Zappy::Queen::checkRessources()
     return true;
 }
 
-//bool Zappy::Queen::checkPlayers()
-//{
-//    Zappy::Team &team = Zappy::Team::getTeam(GET);
-//    std::size_t count = INITIAL_COUNT;
-//
-//    for (auto &player: team._players) {
-//
-//        bool checkLevel = (player.get()->getLevel() == _level);
-//        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
-//
-//        if (checkLevel && checkPosition) {
-//            count += ONE_COUNT;
-//        }
-//
-//    }
-//
-//    if (count < _incatation[_level - LEVEL_INDEX].first) {
-//        return false;
-//    }
-//
-//    return true;
-//}
+bool Zappy::Queen::checkPlayers()
+{
+    if (_assistants.size() == _incatation[_level - ONE_LEVEL].first - ONE_PLAYER) {
+        return true;
+    }
+
+    return false;
+}
+
+bool Zappy::Queen::askAssistants(Network::Network &network)
+{
+    (void)network;
+    return false;
+}
 
 bool Zappy::Queen::execute(Network::Network &network)
 {
@@ -197,128 +200,6 @@ bool Zappy::Queen::forkQueen(Network::Network &network)
 
     return true;
 }
-
-//Zappy::Ressources Zappy::Queen::getCommand(bool already)
-//{
-//    const std::vector<std::string> ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
-//    double start = _nbCommands * MAX_ORDER;
-//    std::size_t count = INITIAL_COUNT;
-//
-//    Zappy::Ressources command;
-//
-//    for (std::size_t i = 0; i < ressources.size(); i++) {
-//
-//        std::size_t ressourcesCount = countRessources(_look[HERE], ressources[i]);
-//        std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressources[i]];
-//
-//        std::size_t ressourcesToSearch = ressourcesNeed - ressourcesCount;
-//
-//        while ((already || start > POSITIVE) && ressourcesToSearch) {
-//
-//            start -= ONE_COUNT;
-//            ressourcesToSearch -= ONE_COUNT;
-//
-//        }
-//
-//        if (!already && start > POSITIVE) {
-//            continue;
-//        }
-//
-//        while (ressourcesToSearch && count < MAX_ORDER) {
-//
-//            command[ressources[i]] += ONE_COUNT;
-//            ressourcesToSearch += ONE_COUNT;
-//
-//        }
-//
-//    }
-//
-//    if (!count) {
-//        return getCommand(true);
-//    }
-//
-//    return command;
-//
-//}
-//
-//bool Zappy::Queen::forkSearcher()
-//{
-//    Zappy::Team &team = Zappy::Team::getTeam(GET);
-//
-//    Zappy::Ressources command = getCommand(false);
-//    std::size_t levelToReach = START_LEVEL;
-//
-//    if (_nbCommands > LONG_COMMAND) {
-//        levelToReach = _incatation[_level - LEVEL_INDEX].first;
-//    }
-//
-//    if (_nbCommands < _incatation[_level - LEVEL_INDEX].first) {
-//        levelToReach = _incatation[_level - LEVEL_INDEX].first;
-//    }
-//
-//    command[FOOD] -= FOOD_START_VALUE;
-//    _nbCommands += ONE_COUNT;
-//
-//    Order order(levelToReach, command);
-//
-//    if (!fork()) {
-//        return false;
-//    }
-//
-//    std::cout << QUEEN_FORK_SEARCHER;
-//    std::cout << SEARCHER_LEVEL(order.getLevel());
-//    order.getRessources().dump();
-//
-//    team._players.push_back(std::make_shared<Searcher>(_network.getPort(), _name, order));
-//
-//    _nbTours += NB_TOURS_FORK;
-//
-//    return true;
-//}
-//
-//bool Zappy::Queen::setIncantation()
-//{
-//    Zappy::Team &team = Zappy::Team::getTeam(GET);
-//    std::size_t count = _incatation[_level - LEVEL_INDEX].first;
-//
-//    for (auto &player: team._players) {
-//
-//        bool checkLevel = (player.get()->getLevel() == _level);
-//        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
-//
-//        if (count && checkLevel && checkPosition) {
-//            count -= ONE_COUNT;
-//            player.get()->setIsIncantation(true);
-//        }
-//
-//    }
-//
-//    return true;
-//}
-//
-//bool Zappy::Queen::removeIncantation()
-//{
-//    Zappy::Team &team = Zappy::Team::getTeam(GET);
-//    std::size_t count = _incatation[_level - LEVEL_INDEX].first;
-//
-//    std::size_t level = _level;
-//
-//    for (auto &player: team._players) {
-//
-//        bool checkLevel = (player.get()->getLevel() == level);
-//        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
-//        bool isIncantation = player.get()->getIsIncantation();
-//
-//        if (count && checkLevel && checkPosition && isIncantation) {
-//            count -= ONE_COUNT;
-//            player.get()->setIsIncantation(false);
-//            player.get()->setLevel(player.get()->getLevel() + ONE_LEVEL);
-//        }
-//
-//    }
-//
-//    return true;
-//}
 
 bool Zappy::Queen::makeIncantation(Network::Network &network)
 {

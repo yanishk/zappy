@@ -79,7 +79,8 @@ namespace Zappy {
 
             Take,
             ForkQueen,
-            Incantation
+            Incantation,
+            AskAssistants
 
         };
 
@@ -96,11 +97,12 @@ namespace Zappy {
 
             bool checkFood();
 
+            bool checkIncantation();
+
             bool checkRessources();
-
-            bool checkIncantation(Network::Network &network);
-
-            //bool checkPlayers();
+            bool checkPlayers();
+            
+            bool askAssistants(Network::Network &network);
 
             bool execute(Network::Network &network);
 
@@ -118,9 +120,10 @@ namespace Zappy {
 
             std::vector<std::pair<Action, std::function<bool(Network::Network &network)>>> _execute = {
 
-                { Action::Take,         [this] (Network::Network &network) { return take(network);              } },
-                { Action::ForkQueen,    [this] (Network::Network &network) { return forkQueen(network);         } },
-                { Action::Incantation,  [this] (Network::Network &network) { return makeIncantation(network);   } }
+                { Action::Take,             [this] (Network::Network &network) { return take(network);              } },
+                { Action::ForkQueen,        [this] (Network::Network &network) { return forkQueen(network);         } },
+                { Action::Incantation,      [this] (Network::Network &network) { return makeIncantation(network);   } },
+                { Action::AskAssistants,    [this] (Network::Network &network) { return askAssistants(network);     } }
 
             };
 
