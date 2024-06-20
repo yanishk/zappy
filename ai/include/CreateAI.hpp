@@ -16,7 +16,7 @@ namespace Zappy {
 
     using Threads = std::vector<std::thread>;
 
-    Threads &createAI(const std::string &name, const std::string &port);
+    Threads &createAI(const std::string &name, const std::string &port, const std::string &home);
     void join(Threads &threads);
 
 };

@@ -8,11 +8,11 @@
 #include "Run.hpp"
 #include "CreateAI.hpp"
 
-Zappy::Threads &Zappy::createAI(const std::string &name, const std::string &port)
+Zappy::Threads &Zappy::createAI(const std::string &name, const std::string &port, const std::string &home)
 {
     static Threads threads;
 
-    threads.emplace_back(&Zappy::run, name, port);
+    threads.emplace_back(&Zappy::run, name, port, home);
 
     return threads;
 }
