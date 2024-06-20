@@ -253,7 +253,7 @@ Zappy::Response Zappy::AAi::fork(Network::Network &network)
 {
     network.sendInformationToServer(FORK_CMD);
 
-    std::string response = network.getInfoFromServer();
+    std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
