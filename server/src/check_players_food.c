@@ -31,7 +31,7 @@ static void check_player_food(server_t *server, zappy_t *zappy,
     double food_time_unit = calculate_freq(arg.freq, FOOD_TIME_UNIT);
 
     if (time_is_up(player->clock_begin, food_time_unit)) {
-        if (player->inventory.food == 0) {
+        if (player->inventory.food == 0 && !arg.immortal) {
             kill_player(server, zappy, arg, player);
             return;
         }

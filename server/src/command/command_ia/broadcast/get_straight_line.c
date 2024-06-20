@@ -10,34 +10,34 @@
 void indirect_west_east(road_broadcast_t *road, int i, size_t *dir_diag)
 {
     if (road->width_undirect > 0)
-        *dir_diag = tile_numbering_list[i].east_tile;
+        *dir_diag = EAST_TILE;
     if (road->width_undirect < 0)
-        *dir_diag = tile_numbering_list[i].west_tile;
+        *dir_diag = WEST_TILE;
 }
 
 void direct_west_east(road_broadcast_t *road, int i, size_t *dir_diag)
 {
     if (road->width_direct > 0)
-        *dir_diag = tile_numbering_list[i].west_tile;
+        *dir_diag = WEST_TILE;
     if (road->width_direct < 0)
-        *dir_diag = tile_numbering_list[i].east_tile;
+        *dir_diag = EAST_TILE;
 }
 
 static void indirect_north_south(road_broadcast_t *road, int i,
     size_t *dir_diag)
 {
     if (road->height_undirect > 0)
-        *dir_diag = tile_numbering_list[i].south_tile;
+        *dir_diag = SOUTH_TILE;
     if (road->height_undirect < 0)
-        *dir_diag = tile_numbering_list[i].north_tile;
+        *dir_diag = NORTH_TILE;
 }
 
 static void direct_north_south(road_broadcast_t *road, int i, size_t *dir_diag)
 {
     if (road->height_direct > 0)
-        *dir_diag = tile_numbering_list[i].north_tile;
+        *dir_diag = NORTH_TILE;
     if (road->height_direct < 0)
-        *dir_diag = tile_numbering_list[i].south_tile;
+        *dir_diag = SOUTH_TILE;
 }
 
 void get_straight_line(road_broadcast_t *road, int i, size_t *dir_diag)

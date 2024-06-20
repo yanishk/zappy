@@ -29,6 +29,12 @@
     #define OBJECT_TO_TAKE server->cmd_arg_array[1]
     #define TILE_RESOURCE zappy->resource[player->height][player->width]
 
+    #define DIRECTION_TILE tile_numbering_list[i]
+    #define EAST_TILE DIRECTION_TILE.east_tile
+    #define WEST_TILE DIRECTION_TILE.west_tile
+    #define NORTH_TILE DIRECTION_TILE.north_tile
+    #define SOUTH_TILE DIRECTION_TILE.south_tile
+
 typedef struct command_infos_ia_s {
     char *name;
     double time_unit;

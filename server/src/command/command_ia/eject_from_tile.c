@@ -39,8 +39,8 @@ static void eject_player(const zappy_t *zappy, const player_t *current_player,
 
     move_player(current_player->direction, player, arg);
     for (int i = 0; i < NB_DIRECTIONS; i++) {
-        if (tile_numbering_list[i].direction == player->direction) {
-            previous_tile = get_previous_tile(tile_numbering_list[i],
+        if (DIRECTION_TILE.direction == player->direction) {
+            previous_tile = get_previous_tile(DIRECTION_TILE,
                 current_player->direction);
             dprintf(ejected_client_fd, "eject: %ld\n", previous_tile);
         }

@@ -11,7 +11,7 @@
 
 static void get_north_south_diag(int i, size_t *dir_diag)
 {
-    if (*dir_diag == tile_numbering_list[i].west_tile)
+    if (*dir_diag == WEST_TILE)
         *dir_diag += 1;
     else {
         *dir_diag -= 1;
@@ -22,7 +22,7 @@ static void get_north_south_diag(int i, size_t *dir_diag)
 
 static void decrement_diag(int i, size_t *dir_diag)
 {
-    if (*dir_diag == tile_numbering_list[i].west_tile) {
+    if (*dir_diag == WEST_TILE) {
         *dir_diag -= 1;
         if (*dir_diag == 0)
             *dir_diag = 8;
@@ -65,7 +65,7 @@ static void find_shortest_path(server_t *server, zappy_t *zappy,
     if (fd_player == ERROR_RETURN)
         return;
     for (int i = 0; i < NB_DIRECTIONS; i++) {
-        if (tile_numbering_list[i].direction == receiver->direction) {
+        if (DIRECTION_TILE.direction == receiver->direction) {
             get_straight_line(road, i, &dir_diag);
             get_diagonal_line(road, i, &dir_diag);
             dprintf(fd_player, "message %ld, %s\n", dir_diag,
