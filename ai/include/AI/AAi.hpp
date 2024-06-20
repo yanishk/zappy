@@ -18,6 +18,7 @@
     #define START_POSITION {0.0, 0.0}
     #define START_LEVEL 1
     #define START_WAIT 0
+    #define START 0
 
     #define FORWARD_CMD "Forward\n"
     #define RIGHT_CMD "Right\n"
@@ -32,20 +33,17 @@
     #define SET_CMD "Set "
     #define INCANTATION_CMD "Incantation\n"
 
+    #define ELEVATION_UNDERWAY "Elevation underway"
+    #define PREFIX_LEVEL "Current level:"
     #define RESPONSE_OK "ok"
     #define RESPONSE_KO "ko"
+    #define MESSAGE "message"
+    #define MESSAGE_LEN 7
 
     #define ERROR -1
     #define DEAD "dead"
 
 namespace Zappy {
-
-    enum Orientation {
-        NORTH,
-        SOUTH,
-        WEST,
-        EST
-    };
 
     enum Action {
         Look,
@@ -59,57 +57,43 @@ namespace Zappy {
 
         public:
 
-            AAi(const std::string &port, const std::string &name):
-                _isIncantation(false),
-                _network(Network::Network(port)),
+            AAi():
                 _ressources(Ressources()),
                 _position(START_POSITION),
-                _level(START_LEVEL),
-                _name(name)
+                _level(START_LEVEL)
             {};
 
-            virtual bool run() = 0;
+            virtual bool run(Network::Network &network) = 0;
 
-            Response forward();
-            Response right();
-            Response left();
+            Response forward(Network::Network &network);
+            Response right(Network::Network &network);
+            Response left(Network::Network &network);
 
-            std::vector<std::string> look();
-            bool inventory();
-            Response broadcastText(const std::string &text);
+            std::vector<std::string> look(Network::Network &network);
+            std::vector<std::string> inventory(Network::Network &network);
+            bool updateInventory(Network::Network &network);
 
-            std::size_t connectNumber();
-            Response fork();
-            Response eject();
+            Response broadcastText(Network::Network &network, const std::string &text);
+            std::string handlingMessage(Network::Network &network);
 
-            Response takeObject(const std::string &object);
-            Response setObject(const std::string &object);
-            Response incantation();
+            std::size_t connectNumber(Network::Network &network);
+            Response fork(Network::Network &network);
+            Response eject(Network::Network &network);
 
-            std::pair<double, double> getPosition() const { return _position; };
+            Response takeObject(Network::Network &network, const std::string &object);
+            Response setObject(Network::Network &network, const std::string &object);
+            Response incantation(Network::Network &network);
 
-            std::size_t getLevel() const { return _level; };
-            void setLevel(std::size_t level) { _level = level; };
-
-            bool getIsIncantation() const { return _isIncantation; };
-            void setIsIncantation(bool isIncantation) { _isIncantation = isIncantation; };
+            Orientation getOrientation(int value);
 
         protected:
 
-            bool _isIncantation;
-
-            Network::Network _network;
             Ressources _ressources;
 
             std::pair<double, double> _position;
-            Orientation _orientation;
             std::size_t _level;
 
-            std::string _name;
-
-        private:
-
-            bool checkRessources(const std::vector<std::string> &newRessources);
+            std::vector<std::pair<std::string, Orientation>> _messages;
 
     };
 

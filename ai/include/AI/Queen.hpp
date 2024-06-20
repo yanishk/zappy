@@ -10,22 +10,56 @@
 
     #include "AAi.hpp"
 
-    #define WELCOME_QUEEN "Queen initialized.\n"
-    #define QUEEN_FOOD(x) "Queen has " << x << " food left.\n"
-    #define QUEEN_FOOD_STOCK(x) "There are " << x << " food at floor.\n"
+    #define QUEEN_WELCOME "Queen welcome.\n"
+    #define QUEEN_DEAD "Queen is dead.\n"
+    #define QUEEN_INITIALIZE(x) "Queen create " << x << " fakes queens.\n"
+    #define QUEEN_START "Queen start.\n"
+    #define QUEEN_UPDATE_INVENTORY "Queen update inventory.\n"
+    #define QUEEN_LOOK "Queen look:\n"
+    #define QUEEN_LOOK_ITEM(x) "- " << x << "\n"
+    #define QUEEN_FOOD(x) "Queen has " << x << " foods left.\n"
+    #define QUEEN_FOOD_STOCK(x) "There are " << x << " foods on the floor.\n"
     #define QUEEN_TAKE_FOOD "Queen take food.\n"
-    #define QUEEN_FORK_FOOD "Queen fork food.\n"
+    #define QUEEN_FORK "Queen fork.\n"
+    #define QUEEN_START_INCANTATION(x) "Queen start incantation to level " << x << ".\n"
+    #define QUEEN_INCANTATION(x) "Queen is now level " << x << ".\n"
+
+    #define QUEEN_SAY_LEVEL(x) "Queen broadcast [Queen:Level:" + std::to_string(x) + "]\n"
+    #define QUEEN_SAY_INCANTATION(x) "Queen broadcast [" << x << "]\n"
+    #define QUEEN_SAY_ASK_ASSISTANT(x) "Queen broadcast [Queen:AskAssistant:" + std::to_string(x + 1) + "]\n"
+    #define QUEEN_SAY_NO(x) "Queen broadcast [Queen:No:" + x + "]\n"
+    #define QUEEN_SAY_HERE(x) "Queen broadcast [Queen:Here:" + x + "]\n"
+    #define QUEEN_SAY_HERE_COME(x) "Queen broadcast [Queen:Here:" + x + "] to come.\n"
+
+    #define QUEEN_ASSISTANTS(x) "Queen has " + std::to_string(x) + " assistants.\n"
+    #define QUEEN_ASSISTANTS_INCOMMING(x) "Queen has " + std::to_string(x) + " assistants in comming.\n"
+    #define QUEEN_ASSISTANT_IS_HERE(x) "Queen see that assistant " + x + " is here.\n"
+
+    #define BROADCAST_QUEEN_LEVEL(x) "Queen:Level:" + std::to_string(x) + "\n"
+    #define BROADCAST_QUEEN_INCANTATION "Queen:Incantation"
+    #define BROADCAST_PREFIXE ":"
+    #define BROADCAST_QUEEN_ASK_ASSISTANTS(x) "Queen:AskAssistant:" + std::to_string(x + 1) + "\n"
+    #define BROADCAST_ASK_SUFFIX ":Comming:Queen"
+    #define BROADCAST_QUEEN_HERE(x) "Queen:Here:" + x + "\n"
+    #define BROADCAST_QUEEN_NO(x) "Queen:No:" + x + "\n"
+    #define BROADCAST_PING_SUFFIX ":Ping:Queen"
+
+    #define QUEEN_CHECK_INCANTATION "Queen check fork.\n"
     #define QUEEN_FORK_SEARCHER "Queen fork a searcher:\n"
     #define SEARCHER_LEVEL(x) "Level: " << x << "\n"
-    #define QUEEN_INCANTATION "Queen incantation.\n"
+    #define QUEEN_EXECUTE "Queen execute.\n"
 
-    #define CRITICAL_FOOD 10
-    #define CRITICAL_STOCK 20
+    #define CRITICAL_FOOD 20
+    #define CRITICAL_STOCK 50
+
+    #define MAX_LAST_MESSAGE 50
 
     #define ONE_FOOD 1
     #define ONE_LEVEL 1
     #define ONE_COUNT 1
     #define LEVEL_INDEX 1
+
+    #define FIRST_LEVEL ONE_LEVEL
 
     #define MAX_ORDER 3
     #define LONG_COMMAND 5
@@ -50,82 +84,69 @@
     #define INITIAL_COUNT 0
 
 namespace Zappy {
-    
+
     class Queen : public AAi {
 
         using Ressources = std::vector<std::string>;
+        using Assistants = std::vector<std::string>;
 
         enum Action {
 
-            Look,
-            TakeFood,
-            ForkFood,
-            ForkSearcher,
-            Incantation
+            Take,
+            ForkQueen,
+            Incantation,
+            AskAssistants
 
         };
 
         public:
 
-            Queen(const std::string &port, const std::string &name): AAi(port, name) {
+            Queen(): AAi() {};
+            ~Queen() {};
 
-                std::cout << WELCOME_QUEEN;
-
-                _network.sendInformationToServer(_name);
-
-                if (_network.getInfoFromServer() == RESPONSE_KO) {
-                    return;
-                }
-
-                _network.getInfoFromServer();
-                _thread = std::thread(&Queen::run, this);
-                _thread.join();
-
-            };
-
-            bool run();
+            bool run(Network::Network &network);
 
         private:
 
-            bool initialize();
+            bool initialize(Network::Network &network);
 
             bool checkFood();
 
             bool checkIncantation();
+
             bool checkRessources();
             bool checkPlayers();
+            
+            bool askAssistants(Network::Network &network);
+            bool addAssistantsIncomming(Network::Network &network);
+            bool addAssistants(Network::Network &network);
+            bool sendMessageToAssistant(Network::Network &network, const std::string &content, const Orientation &orientation);
 
-            bool execute();
+            bool execute(Network::Network &network);
 
-            bool takeFood();
-            bool forkFood();
-
-            bool makeIncantation();
-            bool setIncantation();
-            bool removeIncantation();
-
-            bool forkSearcher();
-            Zappy::Ressources getCommand(bool already);
+            bool take(Network::Network &network);
+            bool forkQueen(Network::Network &network);
+            bool makeIncantation(Network::Network &network);
 
             std::size_t countRessources(const std::string &ressources, const std::string &index);
 
             Ressources _look;
 
+            std::size_t _nbAssistants;
+            Assistants _assistants;
+            Assistants _assistantsIncomming;
+
             std::size_t _stock;
-            std::thread _thread;
             std::vector<Action> _actions;
 
-            std::vector<std::pair<Action, std::function<bool()>>> _execute = {
+            std::vector<std::pair<Action, std::function<bool(Network::Network &network)>>> _execute = {
 
-                { Action::TakeFood,     [this] { return takeFood();         } },
-                { Action::ForkFood,     [this] { return forkFood();         } },
-                { Action::ForkSearcher, [this] { return forkSearcher();     } },
-                { Action::Incantation,  [this] { return makeIncantation();  } }
+                { Action::Take,             [this] (Network::Network &network) { return take(network);              } },
+                { Action::ForkQueen,        [this] (Network::Network &network) { return forkQueen(network);         } },
+                { Action::Incantation,      [this] (Network::Network &network) { return makeIncantation(network);   } },
+                { Action::AskAssistants,    [this] (Network::Network &network) { return askAssistants(network);     } }
 
             };
-
-            std::size_t _nbCommands;
-            std::size_t _nbTours;
 
             std::vector<std::pair<size_t, Zappy::Ressources>> _incatation = {
 

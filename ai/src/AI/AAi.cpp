@@ -6,237 +6,342 @@
 */
 
 #include <sstream>
+
 #include "AI/AAi.hpp"
 #include "AI/Quentin.hpp"
-#include "Team.hpp"
 
-Zappy::Response Zappy::AAi::forward()
+std::string Zappy::AAi::handlingMessage(Network::Network &network)
 {
-    _network.sendInformationToServer(FORWARD_CMD);
+    std::string response = network.getInfoFromServer();
 
-    std::string response = _network.getInfoFromServer();
+    if (response == RESPONSE_OK || response == RESPONSE_KO || response == DEAD) {
+        return response;
+    }
+
+    while (!response.compare(START, MESSAGE_LEN, MESSAGE)) {
+
+        std::string value;
+        std::string orientation;
+        std::string message;
+        std::stringstream stream;
+
+        stream << response;
+        stream >> value >> orientation >> message;
+
+        _messages.emplace(_messages.begin(), std::make_pair(message, getOrientation(std::atoi(orientation.c_str()))));
+
+        response = network.getInfoFromServer();
+
+    }
+
+    return response;
+}
+
+Zappy::Response Zappy::AAi::forward(Network::Network &network)
+{
+    network.sendInformationToServer(FORWARD_CMD);
+
+    std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (response == RESPONSE_KO) {
+    }
+    
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
     return Response::Dead;
 }
 
-Zappy::Response Zappy::AAi::right()
+Zappy::Response Zappy::AAi::right(Network::Network &network)
 {
-    _network.sendInformationToServer(RIGHT_CMD);
+    network.sendInformationToServer(RIGHT_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (response == RESPONSE_KO) {
+    }
+    
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
     return Response::Dead;
 }
 
-Zappy::Response Zappy::AAi::left()
+Zappy::Response Zappy::AAi::left(Network::Network &network)
 {
-    _network.sendInformationToServer(LEFT_CMD);
+    network.sendInformationToServer(LEFT_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (response == RESPONSE_KO) {
+    }
+    
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
     return Response::Dead;
 }
 
-std::vector<std::string> Zappy::AAi::look()
+std::vector<std::string> Zappy::AAi::look(Network::Network &network)
 {
-    _network.sendInformationToServer(LOOK_CMD);
-    std::vector<std::string> vector;
-    std::string information = _network.getInfoFromServer();
+    network.sendInformationToServer(LOOK_CMD);
 
-    if (information == RESPONSE_KO || information == DEAD) {
+    std::string informations = handlingMessage(network);
+
+    if (informations == RESPONSE_KO || informations == DEAD) {
         return {};
     }
 
-    if (!information.empty() && information[0] == '[') {
-        information.erase(information.begin());
-    }
-    if (!information.empty() && information.back() == ']') {
-        information.pop_back();
+    if (!informations.empty() && informations.front() == '[') {
+        informations.erase(informations.begin());
     }
 
-    std::istringstream stream(information);
+    if (!informations.empty() && informations.back() == ']') {
+        informations.pop_back();
+    }
+
+    std::vector<std::string> vector;
+
+    std::istringstream stream(informations);
     std::string line;
+
     while (std::getline(stream, line, ',')) {
-        if (!line.empty() && line[0] == ' ') {
+
+        if (!line.empty() && line.front() == ' ') {
             line.erase(line.begin());
         }
+
         vector.push_back(line);
+
     }
 
-    if (information.back() == ',') {
+    if (informations.back() == ',') {
         vector.push_back("");
     }
 
     return vector;
 }
 
-bool Zappy::AAi::checkRessources(const std::vector<std::string> &newRessources)
+std::vector<std::string> Zappy::AAi::inventory(Network::Network &network)
 {
-    for (const auto &i: newRessources) {
+    network.sendInformationToServer(INVENTORY_CMD);
+
+    std::string informations = handlingMessage(network);
+
+    if (informations == RESPONSE_KO || informations == DEAD) {
+        return {};
+    }
+
+    if (!informations.empty() && informations.front() == '[') {
+        informations.erase(informations.begin());
+    }
+
+    if (!informations.empty() && informations.back() == ']') {
+        informations.pop_back();
+    }
+
+    std::vector<std::string> vector;
+
+    std::istringstream stream(informations);
+    std::string line;
+
+    while (std::getline(stream, line, ',')) {
+
+        if (!line.empty() && line.front() == ' ') {
+            line.erase(line.begin());
+        }
+
+        vector.push_back(line);
+
+    }
+
+    if (informations.back() == ',') {
+        vector.push_back("");
+    }
+
+    return vector;
+}
+
+bool Zappy::AAi::updateInventory(Network::Network &network)
+{
+    std::vector<std::string> newInventory = inventory(network);
+
+    if (newInventory.empty()) {
+        return false;
+    }
+
+    for (const auto &i: newInventory) {
+
         std::stringstream stream;
         stream << i;
-        std::string ressources;
+        std::string ressource;
         std::string quantity;
-        stream >> ressources >> quantity;
-        if (_ressources.getRessource(ressources) != std::atoi(quantity.c_str())) {
-            return false;
-        }
+        stream >> ressource >> quantity;
+        _ressources.updateRessources(ressource, std::atoi(quantity.c_str()));
+
     }
 
     return true;
 }
 
-bool Zappy::AAi::inventory()
+Zappy::Response Zappy::AAi::broadcastText(Network::Network &network, const std::string &text)
 {
-    _network.sendInformationToServer(INVENTORY_CMD);
-    std::vector<std::string> vector;
-    std::string information = _network.getInfoFromServer();
+    network.sendInformationToServer(BROADCAST_CMD + text + "\n");
 
-    if (information == RESPONSE_KO || information == DEAD) {
-        return false;
-    }
-
-    if (!information.empty() && information[0] == '[') {
-        information.erase(information.begin());
-    }
-    if (!information.empty() && information.back() == ']') {
-        information.pop_back();
-    }
-
-    std::istringstream stream(information);
-    std::string line;
-    while (std::getline(stream, line, ',')) {
-        if (!line.empty() && line[0] == ' ') {
-            line.erase(line.begin());
-        }
-        vector.push_back(line);
-    }
-
-    if (information.back() == ',') {
-        vector.push_back("");
-    }
-
-    return checkRessources(vector);
-}
-
-Zappy::Response Zappy::AAi::broadcastText(const std::string &text)
-{
-    _network.sendInformationToServer(BROADCAST_CMD + text);
-
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (response == RESPONSE_KO) {
+    }
+    
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
     return Response::Dead;
 }
 
-std::size_t Zappy::AAi::connectNumber()
+Zappy::Orientation Zappy::AAi::getOrientation(int value)
 {
-    _network.sendInformationToServer(CONNECT_NBR_CMD);
+    switch (value) {
+        case FRONT:
+            return FRONT;
+            break;
+        case FRONT_LEFT:
+            return FRONT_LEFT;
+            break;
+        case LEFT:
+            return LEFT;
+            break;
+        case BACK_LEFT:
+            return BACK_LEFT;
+            break;
+        case BACK:
+            return BACK;
+            break;
+        case BACK_RIGHT:
+            return BACK_RIGHT;
+            break;
+        case RIGHT:
+            return RIGHT;
+            break;
+        case FRONT_RIGHT:
+            return FRONT_RIGHT;
+        default:
+            return IN_CASE;
+            break;
+    }
 
-    return std::atoi(_network.getInfoFromServer().c_str());
+    return UNDEFINED;
 }
 
-Zappy::Response Zappy::AAi::fork()
+std::size_t Zappy::AAi::connectNumber(Network::Network &network)
 {
-    _network.sendInformationToServer(FORK_CMD);
+    network.sendInformationToServer(CONNECT_NBR_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    return std::atoi(network.getInfoFromServer().c_str());
+}
+
+Zappy::Response Zappy::AAi::fork(Network::Network &network)
+{
+    network.sendInformationToServer(FORK_CMD);
+
+    std::string response = network.getInfoFromServer();
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (response == RESPONSE_KO) {
+    }
+
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
     return Response::Dead;
 }
 
-Zappy::Response Zappy::AAi::eject()
+Zappy::Response Zappy::AAi::eject(Network::Network &network)
 {
-    _network.sendInformationToServer(EJECT_CMD);
+    network.sendInformationToServer(EJECT_CMD);
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (response == RESPONSE_KO) {
+    }
+    
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
     return Response::Dead;
 }
 
-Zappy::Response Zappy::AAi::takeObject(const std::string &object)
+Zappy::Response Zappy::AAi::takeObject(Network::Network &network, const std::string &object)
 {
-    _network.sendInformationToServer(TAKE_CMD + object + "\n");
+    network.sendInformationToServer(TAKE_CMD + object + "\n");
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
         return Response::Ok;
-    } else if (response == RESPONSE_KO) {
+    }
+    
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
     return Response::Dead;
 }
 
-Zappy::Response Zappy::AAi::setObject(const std::string &object)
+Zappy::Response Zappy::AAi::setObject(Network::Network &network, const std::string &object)
 {
-    _network.sendInformationToServer(SET_CMD + object + "\n");
+    network.sendInformationToServer(SET_CMD + object + "\n");
 
-    std::string response = _network.getInfoFromServer();
+    std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
         _ressources.removeRessources(object, 1);
         return Response::Ok;
-    } else if (response == RESPONSE_KO) {
+    }
+    
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 
     return Response::Dead;
 }
 
-Zappy::Response Zappy::AAi::incantation()
+Zappy::Response Zappy::AAi::incantation(Network::Network &network)
 {
-    std::cout << "Incantation\n";
-    _network.sendInformationToServer(INCANTATION_CMD);
-    std::string value = _network.getInfoFromServer();
+    network.sendInformationToServer(INCANTATION_CMD);
 
-    if (value == RESPONSE_OK) {
-        std::stringstream stream;
-        std::string temp;
-        std::string level;
+    std::string response = handlingMessage(network);
 
-        stream << value;
-        stream >> temp >> temp >> level;
+    if (response == ELEVATION_UNDERWAY) {
 
-        _level = std::atoi(level.c_str());
+        response = handlingMessage(network);
+
+        const std::string prefix = PREFIX_LEVEL;
+        std::size_t position = response.find(PREFIX_LEVEL);
+
+        if (position == std::string::npos) {
+            return Response::Ko;
+        }
+
+        position += prefix.length();
+        _level = std::stoul(response.substr(position));
+    
         return Response::Ok;
-    } else if (value == RESPONSE_KO) {
+
+    }
+    
+    if (response == RESPONSE_KO) {
         return Response::Ko;
     }
 

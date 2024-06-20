@@ -10,7 +10,7 @@
 
 Zappy::Team &Zappy::Team::getTeam(TeamOptions options)
 {
-    static Zappy::Team team(options._name, options._port);
+    static Zappy::Team team(options._name, options._port, options._home);
 
     return team;
 }
@@ -22,7 +22,7 @@ const std::string &Zappy::Team::getName()
 
 int Zappy::Team::run()
 {
-    _players.push_back(std::make_unique<Queen>(_port, _name));
+    _players.push_back(std::make_unique<Searcher>(_port, _name, Order(1, Ressources(1, 0, 0, 0, 0, 0))));
 
     return EXIT_SUCCESS;
 }

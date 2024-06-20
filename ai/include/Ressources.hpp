@@ -64,6 +64,7 @@ namespace Zappy {
             Ressources() = default;
 
             bool addRessources(const std::string &ressource, int value);
+            bool updateRessources(const std::string &ressource, int value);
             bool removeRessources(const std::string &ressource, int value);
 
             void operator+=(const Ressources &other)
@@ -130,13 +131,13 @@ namespace Zappy {
 
             std::unordered_map<std::string, int> _ressources {
 
-                { FOOD,         FOOD_START_VALUE },
-                { LINEMATE,     NONE },
-                { DERAUMERE,    NONE },
-                { SIBUR,        NONE },
-                { MENDIANE,     NONE },
-                { PHIRAS,       NONE },
-                { THYSTAME,     NONE }
+                { FOOD,         FOOD_START_VALUE    },
+                { LINEMATE,     NONE                },
+                { DERAUMERE,    NONE                },
+                { SIBUR,        NONE                },
+                { MENDIANE,     NONE                },
+                { PHIRAS,       NONE                },
+                { THYSTAME,     NONE                }
 
             };
 
