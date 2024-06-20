@@ -67,7 +67,7 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
         tmpPair.second = i.first.second;
         switch (i.second) {
             case IslandType:
-                _islandModel.push_back(tmpPair);
+                _islandModel = tmpPair;
                 break;
             case ItemType: {
                 tmpModel.push_back(tmpPair);
@@ -102,29 +102,6 @@ void DisplayGame::mooveCameraToCoord(Vector3 position, Vector3 target)
 {
     _camera.position = position;
     _camera.target = target;
-}
-
-void DisplayGame::placeIsland(int x, int y)
-{
-    float posX = 0;
-    float posY = 0;
-    _mapSize.first = x;
-    _mapSize.second = y;
-    _allIsland.clear();
-    for (int i = 0; i < x; i++) {
-        posY = 0;
-        posX += spaceBetwenIsland;
-        for (int j = 0; j < y; j++) {
-            std::size_t islandIndex = rand() % _islandModel.size();
-            Island tmpIsland;
-            _allIsland.push_back(tmpIsland);
-            _islandModel[islandIndex].first.transform = MatrixRotateXYZ((Vector3){ DEG2RAD*0, DEG2RAD*(std::rand() % 360), DEG2RAD*0});
-            _allIsland.back()._islandModel = _islandModel[islandIndex].first;
-            _allIsland.back()._islandPosition = setVector3(posX, -4, posY);
-            _allIsland.back()._islandSize = _islandModel[islandIndex].second;
-            posY += spaceBetwenIsland;
-        }
-    }
 }
 
 void DisplayGame::initWaterShader(void)
@@ -178,20 +155,6 @@ void DisplayGame::displayMorePlayerInfo(void)
 
 void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
 {
-    if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
-
-        std::pair<int, int> mapSize;
-        mapSize.first = std::atoi(cmd.front().c_str());
-        mapSize.second = std::atoi(cmd[1].c_str());
-        if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second) {
-            //placeIsland(mapSize.first, mapSize.second);
-            _allIsland.get()->setAllIsland();
-            mooveCameraToCoord(setVector3(mapSize.first * spaceBetwenIsland / 2, 40, (mapSize.second + 3) * spaceBetwenIsland),
-            setVector3(mapSize.first * spaceBetwenIsland / 2, 0, mapSize.second * spaceBetwenIsland / 2));
-        }
-    }
-
     recivedCmd.callAllFunctions(_camera.position);
 }
 
@@ -213,6 +176,8 @@ void DisplayGame::display3D(void)
         DrawModel(_WaterModel, setVector3((_mapSize.first * spaceBetwenIsland) / 2, -2, (_mapSize.second * spaceBetwenIsland) / 2), 1, WHITE);
     EndShaderMode();
 
+
+    _allIsland.get()->renderAll();
     _allEggs.drawEgg();
 
     for (auto &i: _allItem) {
@@ -221,9 +186,6 @@ void DisplayGame::display3D(void)
     }
     _player.drawPlayer(_isAnimated);
 
-    for (auto &i: _allIsland) {
-        DrawModel(i._islandModel , i._islandPosition, i._islandSize, WHITE);
-    }
     for (auto &i: _player._allPlayer) {
         i.displayPlayerInfo(_camera.position);
         i.drawIncantation();
@@ -270,6 +232,7 @@ void DisplayGame::launchGame(void)
     float seconds = 0.0f;
 
     while (!WindowShouldClose()) {
+        _allIsland.get()->setAllIsland(_islandModel);
         useServerInfo(recivedCmd);
         seconds += (GetFrameTime() / 2);
 

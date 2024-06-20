@@ -18,6 +18,7 @@ SRC		=	main.cpp							\
 			src/display/UseRecivedCmd.cpp		\
 			src/display/Eggs.cpp				\
 			src/display/AllEggs.cpp				\
+			src/display/Island.cpp				\
 
 OBJ		=	$(SRC:.cpp=.o)
 

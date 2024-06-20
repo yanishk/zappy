@@ -37,7 +37,6 @@ class DisplayGame {
         Vector3 setVector3(float x, float y, float z);
         void launchGame(void);
         void fillAllModel(ZappyModel);
-        void placeIsland(int x, int y);
 
     private:
         enum ModelType
@@ -57,7 +56,7 @@ class DisplayGame {
         int _screenHeight = 1080;
         int _cameraMode = CAMERA_FREE;
         int _secondLoc;
-        std::vector<std::pair<Model, float>> _islandModel;
+        std::pair<Model, float> _islandModel;
         std::pair<int, int> _mapSize;
         std::vector<Item> _allItem;
         std::vector<Item> _allItemModel;

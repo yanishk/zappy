@@ -42,9 +42,8 @@ class AllIsland {
 
         AllIsland(CommandManager &cmd);
 
-        void getIsland();
-        void setAllIsland(std::pair<Model, float> model,
-            std::pair<int, int> mapSize);
+        void setAllIsland(std::pair<Model, float> model);
+        void renderAll(void);
 
     private:
 
