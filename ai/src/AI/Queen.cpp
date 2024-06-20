@@ -142,8 +142,134 @@ bool Zappy::Queen::checkPlayers()
 
 bool Zappy::Queen::askAssistants(Network::Network &network)
 {
-    (void)network;
+    _nbAssistants = _assistants.size() + _assistantsIncomming.size();
+
+    std::cout << QUEEN_ASSISTANTS(_assistants.size());
+    std::cout << QUEEN_ASSISTANTS_INCOMMING(_assistantsIncomming.size());
+
+    if (_nbAssistants < _incatation[_level - ONE_LEVEL].first - ONE_LEVEL) {
+
+        if (broadcastText(network, BROADCAST_QUEEN_ASK_ASSISTANTS(_level)) != Response::Ok) {
+            return false;
+        }
+
+        std::cout << QUEEN_SAY_ASK_ASSISTANT(_level);
+
+        if (!addAssistantsIncomming(network)) {
+            return false;
+        }
+    }
+
+    if (!addAssistants(network)) {
+        return false;
+    }
+
     return false;
+}
+
+bool Zappy::Queen::addAssistantsIncomming(Network::Network &network)
+{
+    const std::string suffix = BROADCAST_ASK_SUFFIX;
+
+    for (std::size_t i = 0; i < MAX_LAST_MESSAGE; i++) {
+
+        const std::string content = _messages[i].first;
+        const std::size_t size = content.size();
+
+        if (size > suffix.size() && content.substr(size - suffix.size()) == suffix) {
+            
+            const std::string messageId = content.substr(START, size - suffix.size());
+            bool isIncomming = false;
+
+            for (const auto &id: _assistantsIncomming) {
+
+                if (id == messageId) {
+                    isIncomming = true;
+                }
+
+            }
+
+            if (!isIncomming && _nbAssistants == _incatation[_level - ONE_LEVEL].first - ONE_LEVEL) {
+
+                if (broadcastText(network, BROADCAST_QUEEN_NO(messageId)) != Response::Ok) {
+                    return false;
+                }
+
+                std::cout << QUEEN_SAY_NO(messageId);
+
+            }
+
+            if (!isIncomming) {
+
+                _assistantsIncomming.push_back(messageId);
+
+                if (broadcastText(network, BROADCAST_QUEEN_HERE(messageId)) != Response::Ok) {
+                    return false;
+                }
+
+                std::cout << QUEEN_SAY_HERE_COME(messageId);
+
+                _nbAssistants += ONE_COUNT;
+
+            }
+
+        }
+
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::addAssistants(Network::Network &network)
+{
+    const std::string suffix = BROADCAST_PING_SUFFIX;
+
+    for (std::size_t i = 0; i < MAX_LAST_MESSAGE; i++) {
+
+        const std::string content = _messages[i].first;
+        const Orientation orientation = _messages[i].second;
+        const std::size_t size = content.size();
+
+        if (size > suffix.size() && content.substr(size - suffix.size()) == suffix) {
+
+            if (!sendMessageToAssistant(network, content, orientation)) {
+                return false;
+            }
+
+        }
+
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::sendMessageToAssistant(Network::Network &network, const std::string &content, const Orientation &orientation)
+{
+    const std::string suffix = BROADCAST_PING_SUFFIX;
+    const std::size_t size = content.size();
+
+    const std::string messageId = content.substr(START, size - suffix.size());
+
+    for (std::size_t i = 0; i < _assistantsIncomming.size(); i++) {
+
+        if (_assistantsIncomming[i] == messageId && orientation == IN_CASE) {
+
+            _assistants.push_back(_assistantsIncomming[i]);
+            _assistantsIncomming.erase(_assistantsIncomming.begin() + i);
+
+            std::cout << QUEEN_ASSISTANT_IS_HERE(messageId);
+
+        }
+
+    }
+
+    if (broadcastText(network, BROADCAST_QUEEN_HERE(messageId)) != Response::Ok) {
+        return false;
+    }
+
+    std::cout << QUEEN_SAY_HERE(messageId);
+
+    return true;
 }
 
 bool Zappy::Queen::execute(Network::Network &network)
@@ -207,8 +333,8 @@ bool Zappy::Queen::makeIncantation(Network::Network &network)
 
     std::string message(BROADCAST_QUEEN_INCANTATION);
 
-    for (std::size_t i = 0; i < _assistants.size(); i++) {
-        message.append(BROADCAST_PREFIXE + _assistants[i]);
+    for (const auto &assistant: _assistants) {
+        message.append(BROADCAST_PREFIXE + assistant);
     }
 
     _assistants.clear();
