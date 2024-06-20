@@ -43,6 +43,8 @@
     #define BROADCAST_QUEEN_HERE(x) "Queen:Here:" + x + "\n"
     #define BROADCAST_QUEEN_NO(x) "Queen:No:" + x + "\n"
     #define BROADCAST_PING_SUFFIX ":Ping:Queen"
+    #define BROADCAST_HERE_ALL "Queen:Here:All\n"
+    #define QUEEN_SAY_HERE_ALL "Queen broadcast [Queen:Here:All]\n"
 
     #define QUEEN_CHECK_INCANTATION "Queen check fork.\n"
     #define QUEEN_FORK_SEARCHER "Queen fork a searcher:\n"
@@ -111,11 +113,12 @@ namespace Zappy {
             bool initialize(Network::Network &network);
 
             bool checkFood();
-
             bool checkIncantation();
 
             bool checkRessources();
             bool checkPlayers();
+
+            bool checkHere(Network::Network &network);
             
             bool askAssistants(Network::Network &network);
             bool addAssistantsIncomming(Network::Network &network);

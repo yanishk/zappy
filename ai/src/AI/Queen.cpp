@@ -42,6 +42,10 @@ bool Zappy::Queen::run(Network::Network &network)
         checkFood();
         checkIncantation();
 
+        if (!checkHere(network)) {
+            break;
+        }
+
         if (!execute(network)) {
             break;
         };
@@ -113,6 +117,36 @@ bool Zappy::Queen::checkIncantation()
     }
 
     _actions.push_back(AskAssistants);
+
+    return true;
+}
+
+bool Zappy::Queen::checkHere(Network::Network &network)
+{
+    const std::string suffix = BROADCAST_PING_SUFFIX;
+
+    if (_messages.empty()) {
+        return true;
+    }
+
+    for (std::size_t i = 0; i < MAX_LAST_MESSAGE && i < _messages.size(); i++) {
+
+        const std::string content = _messages[i].first;
+        const std::size_t size = content.size();
+
+        if (size > suffix.size() && content.substr(size - suffix.size()) == suffix) {
+
+            if (broadcastText(network, BROADCAST_HERE_ALL) != Response::Ok) {
+                return false;
+            }
+
+            std::cout << QUEEN_SAY_HERE_ALL;
+
+            _messages.clear();
+
+        }
+
+    }
 
     return true;
 }
