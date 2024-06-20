@@ -15,13 +15,13 @@ To launch the Zappy Server, here's the syntax to follow:
 ./zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq --immortal isImmortal
 ```
 
-port            is the port number
-width           is the width of the world
-height          is the height of the world
-nameX           is the name of the team X
-clientsNb       is the number of authorized clients per team
-freq            is the reciprocal of time unit for execution of actions (optional, set to 100 by default)
-isImmortal      is the state of immortality for the players (optional, set to false by default)
+- port is the port number
+- width is the width of the world
+- height is the height of the world
+- nameX is the name of the team X
+- clientsNb is the number of authorized clients per team
+- freq is the reciprocal of time unit for execution of actions (optional, set to 100 by default)
+- isImmortal is the state of immortality for the players (optional, set to false by default)
 
 # Immortal mode
 
