@@ -8,7 +8,6 @@
 #include "command_ia.h"
 #include "command_gui.h"
 
-
 static void get_north_south_diag(int i, size_t *dir_diag)
 {
     if (*dir_diag == WEST_TILE)
