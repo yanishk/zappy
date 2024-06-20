@@ -189,6 +189,12 @@ bool Zappy::Queen::forkQueen(Network::Network &network)
 
     Zappy::createAI(network.getName(), network.getPort(), network.getHome());
 
+    if (broadcastText(network, BROADCAST_QUEEN_LEVEL(_level)) != Response::Ok) {
+        return false;
+    }
+
+    std::cout << QUEEN_LEVEL(_level);
+
     return true;
 }
 

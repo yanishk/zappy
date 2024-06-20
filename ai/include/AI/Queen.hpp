@@ -22,6 +22,10 @@
     #define QUEEN_TAKE_FOOD "Queen take food.\n"
     #define QUEEN_FORK "Queen fork.\n"
 
+    #define QUEEN_LEVEL(x) "Queen broadcast [Queen:level:" << x << "]\n"
+
+    #define BROADCAST_QUEEN_LEVEL(x) "Queen:level" + std::to_string(x) + "\n"
+
     #define QUEEN_CHECK_INCANTATION "Queen check fork.\n"
     #define QUEEN_FORK_SEARCHER "Queen fork a searcher:\n"
     #define SEARCHER_LEVEL(x) "Level: " << x << "\n"
