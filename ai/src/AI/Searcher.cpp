@@ -67,6 +67,7 @@ Zappy::Response Zappy::Searcher::dropItem(Network::Network &network)
 
     return Response::Ok;
 }
+
 int Zappy::Searcher::checkQueenLevel()
 {
     int size = 0;
@@ -145,7 +146,7 @@ bool Zappy::Searcher::run(Network::Network &network)
 
         Zappy::Orientation orientation = checkAskingAssistant(network);
 
-        if (orientation != UNDEFINED && checkComingIsGood()) {
+        if (orientation != UNDEFINED && checkComingIsGood() && _order.empty()) {
             goToBroadcast(network);
             dropItem(network);
             _queenLevel = checkQueenLevel();
