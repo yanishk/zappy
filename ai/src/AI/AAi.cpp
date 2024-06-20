@@ -192,7 +192,7 @@ bool Zappy::AAi::updateInventory(Network::Network &network)
 
 Zappy::Response Zappy::AAi::broadcastText(Network::Network &network, const std::string &text)
 {
-    network.sendInformationToServer(BROADCAST_CMD + text);
+    network.sendInformationToServer(BROADCAST_CMD + text + "\n");
 
     std::string response = handlingMessage(network);
 

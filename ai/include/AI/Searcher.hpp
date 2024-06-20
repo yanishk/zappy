@@ -30,6 +30,18 @@
 
     #define MIN_FOOD                10
 
+    #define MAX_CHECK_MESSAGE       50
+
+    #define ASK_ASSISTANT           "AskAssistant"
+    #define COMING                  "Coming"
+    #define LEVEL                   "Level"
+    #define INCANTATION             "Incantation"
+    #define PING                    "Ping"
+    #define HERE_BROADCAST          "Here"
+    #define NO                      "No"
+
+    #define QUEEN                   "Queen"
+
     #include <map>
     #include <iostream>
     #include <thread>
@@ -51,8 +63,7 @@ namespace Zappy
         public:
             Searcher():
                 AAi(),
-                _order(Order(1, Ressources(1, 0, 0, 0, 0, 0))),
-                _isGoingToBroadcast(false)
+                _order(Order(1, Ressources(1, 0, 0, 0, 0, 0)))
                 {
                     static int id = 0;
                     _id = id++;
@@ -61,17 +72,16 @@ namespace Zappy
 
             bool run(Network::Network &network);
 
-
         private:
 
             Order _order;
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
             int _howManySameMove;
-            bool _isGoingToBroadcast;
             std::thread _thread;
-            std::string _idToReach;
+            std::string _otherId;
             int _id;
+            int _queenLevel;
 
             Zappy::Response move(Network::Network &network);
             void dumpMovement();
@@ -85,6 +95,10 @@ namespace Zappy
 
             std::string takeThis(std::string tiled);
             Zappy::Response dropItem(Network::Network &network);
+
+            Zappy::Orientation checkAskingAssistant(Network::Network &network);
+            bool checkComingIsGood();
+            int checkQueenLevel();
 
             void updateOrder();
             void searchFood(Network::Network &network);

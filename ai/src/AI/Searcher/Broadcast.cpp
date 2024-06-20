@@ -15,19 +15,23 @@ void Zappy::Searcher::goToBroadcast(Network::Network &network)
 
     switch (_messages[0].second) {
         case FRONT:
+            std::cout << _id << " go Front\n";
             forward(network);
             break;
 
         case FRONT_LEFT:
+            std::cout << _id << " go Front Left\n";
             forward(network);
             left(network);
             break;
 
         case LEFT:
+            std::cout << _id << " go Left\n";
             left(network);
             break;
 
         case BACK_LEFT:
+            std::cout << _id << " go Back Left\n";
             left(network);
             left(network);
             forward(network);
@@ -35,12 +39,14 @@ void Zappy::Searcher::goToBroadcast(Network::Network &network)
             break;
 
         case BACK:
+            std::cout << _id << " go Back\n";
             left(network);
             left(network);
             forward(network);
             break;
 
         case BACK_RIGHT:
+            std::cout << _id << " go Back Right\n";
             left(network);
             left(network);
             forward(network);
@@ -48,10 +54,12 @@ void Zappy::Searcher::goToBroadcast(Network::Network &network)
             break;
 
         case RIGHT:
+            std::cout << _id << " go Right\n";
             right(network);
             break;
 
         case FRONT_RIGHT:
+            std::cout << _id << " go Front Right\n";
             forward(network);
             right(network);
             break;
@@ -60,4 +68,7 @@ void Zappy::Searcher::goToBroadcast(Network::Network &network)
             return;
     }
 
+    handlingMessage(network);
+
+    goToBroadcast(network);
 }

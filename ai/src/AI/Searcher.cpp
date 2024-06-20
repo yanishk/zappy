@@ -67,24 +67,95 @@ Zappy::Response Zappy::Searcher::dropItem(Network::Network &network)
 
     return Response::Ok;
 }
+int Zappy::Searcher::checkQueenLevel()
+{
+    int size = 0;
+
+    for (const auto &i: _messages) {
+        if (size > MAX_CHECK_MESSAGE) {
+            break;
+        }
+        std::istringstream stream(i.first);
+        std::string otherId("");
+        std::string message("");
+        std::string value("");
+        std::getline(stream, otherId, ':');
+        std::getline(stream, message, ':');
+        std::getline(stream, value, ':');
+
+        if (otherId == QUEEN && message == LEVEL) {
+            return std::atoi(value.c_str());
+        }
+
+    }
+
+    return ERROR;
+}
+
+bool Zappy::Searcher::checkComingIsGood()
+{
+    for (const auto &i: _messages) {
+        std::istringstream stream(i.first);
+        std::string otherId("");
+        std::string message("");
+        std::string value("");
+        std::getline(stream, otherId, ':');
+        std::getline(stream, message, ':');
+        std::getline(stream, value, ':');
+
+        if (otherId == QUEEN && message == HERE_BROADCAST && std::atoi(value.c_str()) == _id) {
+            return true;
+        }
+
+    }
+
+    return false;
+}
+
+Zappy::Orientation Zappy::Searcher::checkAskingAssistant(Network::Network &network)
+{
+    int size = 0;
+
+    for (auto &i: _messages) {
+        if (size > MAX_CHECK_MESSAGE) {
+            break;
+        }
+        std::istringstream stream(i.first);
+        std::string otherId("");
+        std::string message("");
+        std::string value("");
+        std::getline(stream, otherId, ':');
+        std::getline(stream, message, ':');
+        std::getline(stream, value, ':');
+
+        if (otherId == QUEEN && _order.getLevel() == std::atoi(value.c_str()) - 1 && _order.empty()
+        &&  message == ASK_ASSISTANT) {
+            broadcastText(network, COMING + std::to_string(_id));
+            return i.second;
+        }
+        size += 1;
+    }
+
+    return Orientation::UNDEFINED;
+}
 
 bool Zappy::Searcher::run(Network::Network &network)
 {
     while (true) {
 
-        if (_order.empty()) {
+        Zappy::Orientation orientation = checkAskingAssistant(network);
+
+        if (orientation != UNDEFINED && checkComingIsGood()) {
+            goToBroadcast(network);
+            dropItem(network);
+            _queenLevel = checkQueenLevel();
+        }
+
+        if (_order.empty() && orientation == UNDEFINED) {
             dropItem(network);
             if (incantation(network) == Response::Ok) {
                 _order.setRessources(_order.getLevelRessources(_level));
             }
-        }
-
-        if (_isGoingToBroadcast) {
-            goToBroadcast(network);
-            dropItem(network);
-
-            _isGoingToBroadcast = false;
-            continue;
         }
 
         if (_nextMouvment.empty() && !_order.empty()) {
@@ -133,11 +204,6 @@ bool Zappy::Searcher::run(Network::Network &network)
         } else if (rep == Response::Dead) {
             std::cout << "Player is Dead\n";
             break;
-        }
-
-        if (_order.empty()) {
-            dropItem(network);
-            incantation(network);
         }
 
         if (_ressources.getRessource(FOOD) < MIN_FOOD) {

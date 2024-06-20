@@ -131,7 +131,7 @@ namespace Zappy {
 
             std::unordered_map<std::string, int> _ressources {
 
-                { FOOD,         FOOD_START_VALUE },
+                { FOOD,         NONE },
                 { LINEMATE,     NONE },
                 { DERAUMERE,    NONE },
                 { SIBUR,        NONE },
