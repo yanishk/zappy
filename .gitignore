@@ -2,7 +2,9 @@
 .idea/
 *.o
 *.log
+*.txt
 zappy_ai
 zappy_gui
 zappy_server
 test_server/
+zappy_taha

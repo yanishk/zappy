@@ -9,7 +9,7 @@ CXX			=	g++
 RM			=	rm -f
 
 CXXFLAGS	=	-Wall -Wextra -Werror -lasio
-CPPFLAGS	=	-iquote ./include
+CPPFLAGS	=	-pthread -iquote ./include
 TTFLAGS		=	-lcriterion --coverage
 
 SRC			=	./src/Main.cpp					\
@@ -19,6 +19,10 @@ SRC			=	./src/Main.cpp					\
 				./src/GetAI.cpp					\
 				./src/Run.cpp					\
 				./src/AI/Queen.cpp				\
+				./src/AI/Searcher.cpp			\
+				./src/AI/Searcher/Broadcast.cpp	\
+				./src/AI/Searcher/Mouvement.cpp	\
+				./src/AI/Searcher/Priority.cpp	\
 				./src/AI/Quentin.cpp			\
 				./src/AI/AAi.cpp				\
 
