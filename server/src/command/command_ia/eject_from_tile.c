@@ -8,7 +8,7 @@
 #include "command_ia.h"
 #include "command_gui.h"
 
-static tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {
+tile_numbering_t const tile_numbering_list[NB_DIRECTIONS] = {
     {NORTH, 1, 2, 3, 4, 5, 6, 7, 8},
     {WEST, 7, 8, 1, 2, 3, 4, 5, 6},
     {SOUTH, 5, 6, 7, 8, 1, 2, 3, 4},
