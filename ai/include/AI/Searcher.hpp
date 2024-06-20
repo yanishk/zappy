@@ -30,7 +30,21 @@
 
     #define MIN_FOOD                10
 
+    #define MAX_CHECK_MESSAGE       50
+
+    #define ASK_ASSISTANT           "AskAssistant"
+    #define COMING                  "Coming"
+    #define LEVEL                   "Level"
+    #define INCANTATION             "Incantation"
+    #define PING                    "Ping"
+    #define HERE_BROADCAST          "Here"
+    #define NO                      "No"
+
+    #define QUEEN                   "Queen"
+
     #include <map>
+    #include <iostream>
+    #include <thread>
     #include "AAi.hpp"
     #include "Order.hpp"
 
@@ -47,34 +61,48 @@ namespace Zappy
     class Searcher : public AAi {
 
         public:
+            Searcher():
+                AAi(),
+                _order(Order(1, Ressources(1, 0, 0, 0, 0, 0)))
+                {
+                    static int id = 0;
+                    _id = id++;
 
-            Searcher(): AAi() {};
+                }
 
-            bool run();
-
-            bool runUntilLevelWanted();
+            bool run(Network::Network &network);
 
         private:
 
+            Order _order;
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
-            std::vector<std::string> _objectToTake;
             int _howManySameMove;
+            std::thread _thread;
+            std::string _otherId;
+            int _id;
+            int _queenLevel;
 
-            Zappy::Response move();
+            Zappy::Response move(Network::Network &network);
             void dumpMovement();
 
-            bool haveIToTake(const std::string &item, std::unique_ptr<double> lastDensityObject);
+            void goToBroadcast(Network::Network &network);
+
             void whereShouldIGo(std::vector<int> priority);
 
             std::vector<int> estimatePriority();
             void whereIsThePriority(int index);
 
-            Zappy::Response dropItem();
+            std::string takeThis(std::string tiled);
+            Zappy::Response dropItem(Network::Network &network);
+
+            Zappy::Orientation checkAskingAssistant(Network::Network &network);
+            bool checkComingIsGood();
+            int checkQueenLevel();
 
             void updateOrder();
-            void searchFood();
-            void showMustGoOn();
+            void searchFood(Network::Network &network);
+
     };
 
 }

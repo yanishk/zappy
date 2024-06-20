@@ -81,6 +81,8 @@ std::unique_ptr<Zappy::IAi> Zappy::getAI(Network::Network &network)
 
     std::vector<std::string> ressources = look(network);
 
+    return std::make_unique<Zappy::Searcher>();
+
     if (countRessources(ressources[HERE], PLAYER) == ONE_PLAYER) {
         return std::make_unique<Zappy::Queen>();
     }
@@ -91,5 +93,4 @@ std::unique_ptr<Zappy::IAi> Zappy::getAI(Network::Network &network)
 
     return nullptr;
 
-    //return std::make_unique<Zappy::Searcher>(network);
 }
