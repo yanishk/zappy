@@ -63,8 +63,10 @@ namespace Zappy
         public:
             Searcher():
                 AAi(),
-                _order(Order(1, Ressources(1, 0, 0, 0, 0, 0)))
+                _order(Order(1, Ressources(1, 0, 0, 0, 0, 0))),
+                _inDelivery(false)
                 {
+                    std::cout << "A Searcher spawn\n";
                     static int id = 0;
                     _id = id++;
 
@@ -82,6 +84,7 @@ namespace Zappy
             std::string _otherId;
             int _id;
             int _queenLevel;
+            bool _inDelivery;
 
             Zappy::Response move(Network::Network &network);
             void dumpMovement();
@@ -96,9 +99,10 @@ namespace Zappy
             std::string takeThis(std::string tiled);
             Zappy::Response dropItem(Network::Network &network);
 
-            Zappy::Orientation checkAskingAssistant(Network::Network &network);
+            void checkQueenLevel(Network::Network &network);
             bool checkComingIsGood();
             int checkQueenLevel();
+            bool checkAskAssistants(Network::Network &network);
 
             void updateOrder();
             void searchFood(Network::Network &network);

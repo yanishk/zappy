@@ -69,7 +69,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
 
     switch (nextMove) {
         case Forward:
-            std::cerr << "Forward\n";
+            std::cerr << "Searcher : " << _id << " Forward\n";
             rep = forward(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -81,7 +81,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
             break;
 
         case Left:
-            std::cerr << "Left\n";
+            std::cerr << "Searcher : " << _id << " Left\n";
             rep = left(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -93,7 +93,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
             break;
 
         case Right:
-            std::cerr << "Right\n";
+            std::cerr << "Searcher : " << _id << " Right\n";
             rep = right(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -106,7 +106,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
             break;
 
         case Back:
-            std::cerr << "Back\n";
+            std::cerr << "Searcher : " << _id << " Back\n";
             rep = left(network);
             if (rep == Response::Ko) {
                 return Response::Ko;
@@ -139,7 +139,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
             temp = look(network);
             object = takeThis(temp[0]);
 
-            std::cerr << "Look {\n";
+            std::cerr  << "Searcher : " << _id << " last Look {\n";
             for (const auto &i: temp) {
                 std::cerr << "\t" + i << "\n";
             }
@@ -150,7 +150,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
             }
             std::cerr << "}\n";
             if (takeObject(network, object) == Response::Ok) {
-                std::cerr << "Take " << object << "\n";
+                std::cerr << "Searcher : " << _id << " Take " << object << "\n";
             } else {
                 return Response::Ko;
             }

@@ -36,14 +36,15 @@ std::vector<int> Zappy::Searcher::estimatePriority()
                     } else {
                         temp.erase(temp.begin(), temp.begin() + actualItem.size() + 1);
                     }
-                    if (_order[actualItem]) {
+
+                    if (actualItem != FOOD && _order[actualItem] > 0) {
                         itemPriority++;
                     }
 
                 }
             }
 
-            if (_order[_lastLook[i]] > 0) {
+            if (_lastLook[i] != FOOD && _order[_lastLook[i]] > 0) {
                 itemPriority++;
             }
 

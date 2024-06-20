@@ -9,29 +9,31 @@
 
 void Zappy::Searcher::goToBroadcast(Network::Network &network)
 {
+    // if (!_messages[0].first.compare(0, _messages[0].first.find(":"), QUEEN)) {
+    // }
     if (_messages[0].second == IN_CASE) {
         return;
     }
 
     switch (_messages[0].second) {
         case FRONT:
-            std::cout << _id << " go Front\n";
+            std::cout << "Searcher: " << _id << " go Front\n";
             forward(network);
             break;
 
         case FRONT_LEFT:
-            std::cout << _id << " go Front Left\n";
+            std::cout << "Searcher: " << _id << " go Front Left\n";
             forward(network);
             left(network);
             break;
 
         case LEFT:
-            std::cout << _id << " go Left\n";
+            std::cout << "Searcher: " << _id << " go Left\n";
             left(network);
             break;
 
         case BACK_LEFT:
-            std::cout << _id << " go Back Left\n";
+            std::cout << "Searcher: " << _id << " go Back Left\n";
             left(network);
             left(network);
             forward(network);
@@ -39,14 +41,14 @@ void Zappy::Searcher::goToBroadcast(Network::Network &network)
             break;
 
         case BACK:
-            std::cout << _id << " go Back\n";
+            std::cout << "Searcher: " << _id << " go Back\n";
             left(network);
             left(network);
             forward(network);
             break;
 
         case BACK_RIGHT:
-            std::cout << _id << " go Back Right\n";
+            std::cout << "Searcher: " << _id << " go Back Right\n";
             left(network);
             left(network);
             forward(network);
