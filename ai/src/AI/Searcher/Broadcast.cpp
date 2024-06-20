@@ -66,7 +66,7 @@ bool Zappy::Searcher::waitAskResponse(Network::Network &network)
 
     std::size_t herePosition = message.first.find(herePrefix);
     std::size_t noPosition = message.first.find(noPrefix);
-    std::size_t id = START_ID;
+    int id = START_ID;
 
     if (herePosition == std::string::npos && noPosition == std::string::npos) {
         return waitAskResponse(network);

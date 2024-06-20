@@ -140,7 +140,7 @@ bool Zappy::Searcher::run(Network::Network &network)
 
         checkAskAssistants(network);
 
-        if (_goBackToQueen && !backToQueen(network)) {
+        if (_goBackToQueen && !backToQueen(network, true)) {
             break;
         }
 
@@ -176,10 +176,15 @@ bool Zappy::Searcher::run(Network::Network &network)
         }
 
         if (_order.empty()) {
-            goToBroadcast(network);
+
+            if (!backToQueen(network, false)) {
+                break;
+            }
+
             if (dropItem(network) != Response::Ok) {
                 break;
             }
+
         }
 
     }

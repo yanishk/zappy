@@ -106,8 +106,6 @@ namespace Zappy
             Zappy::Response move(Network::Network &network);
             void dumpMovement();
 
-            void goToBroadcast(Network::Network &network);
-
             void whereShouldIGo(std::vector<int> priority);
 
             std::vector<int> estimatePriority();
@@ -125,7 +123,7 @@ namespace Zappy
             bool checkAskAssistants(Network::Network &network);
             bool waitAskResponse(Network::Network &network);
 
-            bool backToQueen(Network::Network &network);
+            bool backToQueen(Network::Network &network, bool incantation);
             bool launchIncantation(Network::Network &network);
             Orientation getOrientationToQueen(Network::Network &network);
 

@@ -25,7 +25,7 @@ Zappy::Orientation Zappy::Searcher::getOrientationToQueen(Network::Network &netw
         return getOrientationToQueen(network);
     }
 
-    std::size_t id = START_ID;
+    int id = START_ID;
 
     position += prefix.length();
     id = std::stoul(message.first.substr(position));
@@ -71,7 +71,7 @@ bool Zappy::Searcher::launchIncantation(Network::Network &network)
     return true;
 }
 
-bool Zappy::Searcher::backToQueen(Network::Network &network)
+bool Zappy::Searcher::backToQueen(Network::Network &network, bool incantation)
 {
     Orientation orientation = getOrientationToQueen(network);
 
@@ -79,8 +79,12 @@ bool Zappy::Searcher::backToQueen(Network::Network &network)
         return false;
     }
 
-    if (orientation == Orientation::IN_CASE) {
+    if (orientation == Orientation::IN_CASE && incantation) {
         return launchIncantation(network);
+    }
+
+    if (orientation == Orientation::IN_CASE) {
+        return true;
     }
 
     switch (orientation) {
@@ -177,5 +181,5 @@ bool Zappy::Searcher::backToQueen(Network::Network &network)
 
     }
 
-    return backToQueen(network);
+    return backToQueen(network, incantation);
 }
