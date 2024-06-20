@@ -45,48 +45,21 @@ namespace Zappy
     };
 
     class Searcher : public AAi {
+
         public:
-            Searcher(const std::string &port, const std::string &name, Order order):
-                AAi(port, name),
-                _order(order),
-                _isGoingToQueen(false)
-                {
-                    std::cout << SEARCHER_WELCOME;
-                    _network.sendInformationToServer(_name);
 
-                    if (_network.getInfoFromServer() == "none") {
-                        return;
-                    }
-
-                    if (_network.getInfoFromServer() == "none") {
-                        return;
-                    }
-
-                    _thread = std::thread(&Searcher::run, this);
-                    _thread.join();
-            };
+            Searcher(): AAi() {};
 
             bool run();
 
             bool runUntilLevelWanted();
 
-            bool addOrder(const Order &order) {
-                if (!_order.empty()) {
-                    return false;
-                }
-                _order = order;
-                return true;
-            }
-
         private:
-            Order _order;
+
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
             std::vector<std::string> _objectToTake;
             int _howManySameMove;
-            bool _isGoingToQueen;
-            std::thread _thread;
-
 
             Zappy::Response move();
             void dumpMovement();

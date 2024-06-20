@@ -10,26 +10,26 @@
 
     #include "AAi.hpp"
 
-    #define WELCOME_QUEEN "Queen initialized.\n"
-    #define QUEEN_DISCONNECTED "Queen disconnected.\n"
+    #define QUEEN_WELCOME "Queen welcome.\n"
     #define QUEEN_DEAD "Queen is dead.\n"
     #define QUEEN_INITIALIZE(x) "Queen create " << x << " fakes queens.\n"
     #define QUEEN_START "Queen start.\n"
+    #define QUEEN_UPDATE_INVENTORY "Queen update inventory.\n"
     #define QUEEN_LOOK "Queen look:\n"
     #define QUEEN_LOOK_ITEM(x) "- " << x << "\n"
-    #define QUEEN_FOOD(x) "Queen has " << x << " food left.\n"
-    #define QUEEN_FOOD_STOCK(x) "There are " << x << " food at floor.\n"
-    #define QUEEN_CHECK_FOOD "Queen check food.\n"
+    #define QUEEN_FOOD(x) "Queen has " << x << " foods left.\n"
+    #define QUEEN_FOOD_STOCK(x) "There are " << x << " foods on the floor.\n"
     #define QUEEN_TAKE_FOOD "Queen take food.\n"
-    #define QUEEN_FORK_FOOD "Queen fork food.\n"
+    #define QUEEN_FORK "Queen fork.\n"
+
     #define QUEEN_CHECK_INCANTATION "Queen check fork.\n"
     #define QUEEN_FORK_SEARCHER "Queen fork a searcher:\n"
     #define SEARCHER_LEVEL(x) "Level: " << x << "\n"
     #define QUEEN_INCANTATION "Queen incantation.\n"
     #define QUEEN_EXECUTE "Queen execute.\n"
 
-    #define CRITICAL_FOOD 10
-    #define CRITICAL_STOCK 20
+    #define CRITICAL_FOOD 20
+    #define CRITICAL_STOCK 50
 
     #define ONE_FOOD 1
     #define ONE_LEVEL 1
@@ -59,86 +59,61 @@
     #define INITIAL_COUNT 0
 
 namespace Zappy {
-    
+
     class Queen : public AAi {
 
         using Ressources = std::vector<std::string>;
 
         enum Action {
 
-            Look,
-            TakeFood,
-            ForkFood,
-            ForkSearcher,
+            Take,
+            ForkQueen,
             Incantation
 
         };
 
         public:
 
-            Queen(const std::string &port, const std::string &name, bool isRun = true): AAi(port, name) {
+            Queen(): AAi() {};
 
-                std::cout << WELCOME_QUEEN;
+            ~Queen() {};
 
-                _network.sendInformationToServer(name);
-
-                if (_network.getInfoFromServer() == RESPONSE_KO) {
-                    return;
-                }
-
-                _network.getInfoFromServer();
-
-                if (isRun) {
-                    run();
-                }
-
-            };
-
-            ~Queen() { std::cout << QUEEN_DISCONNECTED; };
-
-            bool run();
+            bool run(Network::Network &network);
 
         private:
 
-            bool initialize();
+            bool initialize(Network::Network &network);
 
             bool checkFood();
 
-            bool checkIncantation();
-            bool checkRessources();
-            bool checkPlayers();
+            //bool checkIncantation();
+            //bool checkRessources();
+            //bool checkPlayers();
 
-            bool execute();
+            bool execute(Network::Network &network);
 
-            bool takeFood();
-            bool forkFood();
+            bool take(Network::Network &network);
+            bool forkQueen(Network::Network &network);
 
-            bool makeIncantation();
-            bool setIncantation();
-            bool removeIncantation();
+            //bool makeIncantation();
+            //bool setIncantation();
+            //bool removeIncantation();
 
-            bool forkSearcher();
-            Zappy::Ressources getCommand(bool already);
+            //bool forkSearcher();
+            //Zappy::Ressources getCommand(bool already);
 
             std::size_t countRessources(const std::string &ressources, const std::string &index);
 
             Ressources _look;
-
             std::size_t _stock;
-            std::thread _thread;
             std::vector<Action> _actions;
 
-            std::vector<std::pair<Action, std::function<bool()>>> _execute = {
+            std::vector<std::pair<Action, std::function<bool(Network::Network &network)>>> _execute = {
 
-                { Action::TakeFood,     [this] { return takeFood();         } },
-                { Action::ForkFood,     [this] { return forkFood();         } },
-                { Action::ForkSearcher, [this] { return forkSearcher();     } },
-                { Action::Incantation,  [this] { return makeIncantation();  } }
+                { Action::Take,         [this] (Network::Network &network) { return take(network);      } },
+                { Action::ForkQueen,    [this] (Network::Network &network) { return forkQueen(network); } }
 
             };
-
-            std::size_t _nbCommands;
-            std::size_t _nbTours;
 
             std::vector<std::pair<size_t, Zappy::Ressources>> _incatation = {
 
