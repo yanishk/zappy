@@ -59,11 +59,16 @@ class DisplayGame {
         int _secondLoc;
         std::vector<std::pair<Model, float>> _islandModel;
         std::pair<int, int> _mapSize;
-        std::vector<Island> _allIsland;
         std::vector<Item> _allItem;
         std::vector<Item> _allItemModel;
         std::pair<bool, std::size_t> _selectedPlayer;
         asio::ip::tcp::socket &_socket;
+
+        //std::unique_ptr<AllPlayers> _allPlayers;
+        //std::unique_ptr<AllEggs> _allEggs;
+
+        std::unique_ptr<AllIsland> _allIsland;
+
         AllPlayers _player;
         AllEggs _allEggs;
         bool _isAnimated;

@@ -22,6 +22,8 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
     _mapSize.first = 0;
     _mapSize.second = 0;
     _isAnimated = animation;
+
+    _allIsland = std::make_unique<AllIsland>(_cmd);
 }
 
 DisplayGame::~DisplayGame()
@@ -183,7 +185,8 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
         mapSize.first = std::atoi(cmd.front().c_str());
         mapSize.second = std::atoi(cmd[1].c_str());
         if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second) {
-            placeIsland(mapSize.first, mapSize.second);
+            //placeIsland(mapSize.first, mapSize.second);
+            _allIsland.get()->setAllIsland();
             mooveCameraToCoord(setVector3(mapSize.first * spaceBetwenIsland / 2, 40, (mapSize.second + 3) * spaceBetwenIsland),
             setVector3(mapSize.first * spaceBetwenIsland / 2, 0, mapSize.second * spaceBetwenIsland / 2));
         }

@@ -18,11 +18,39 @@
     #include "raymath.h"
     #include "rlgl.h"
 
-class Island {
+    #include "Render.hpp"
+    #include "Commands.hpp"
+
+class Island : public LoadAndRender {
+
     public:
+
+        void render() override;
+        void fillModel(std::pair<Model, float> model) override;
+        void setIslandPos(Vector3 pos);
+
+    private:
+
         Model _islandModel;
         Vector3 _islandPosition;
         float _islandSize;
+};
+
+class AllIsland {
+
+    public:
+
+        AllIsland(CommandManager &cmd);
+
+        void getIsland();
+        void setAllIsland(std::pair<Model, float> model,
+            std::pair<int, int> mapSize);
+
+    private:
+
+        CommandManager &_cmd;
+        std::vector<Island> _allIsland;
+
 };
 
 #endif /* !ISLAND_HPP_ */
