@@ -52,20 +52,28 @@ static void get_straight_line(road_broadcast_t *road, int i, size_t *dir_diag)
 {
     if (road->height_direct == 0 && road->width_direct != 0) {
         if (abs(road->width_direct) > abs(road->width_undirect)) {
-            printf("STRAIGHT EAST [diag: %ld]", *dir_diag);
-            *dir_diag = tile_numbering_list[i].east_tile;
+            if (road->width_undirect > 0)
+                *dir_diag = tile_numbering_list[i].east_tile;
+            else
+                *dir_diag = tile_numbering_list[i].west_tile;
         } else {
-            printf("STRAIGHT WEST [diag: %ld]", *dir_diag);
-            *dir_diag = tile_numbering_list[i].west_tile;
+            if (road->width_direct > 0)
+                *dir_diag = tile_numbering_list[i].west_tile;
+            else
+                *dir_diag = tile_numbering_list[i].east_tile;
         }
     }
     if (road->width_direct == 0 && road->height_direct != 0) {
         if (abs(road->height_direct) > abs(road->height_undirect)) {
-            printf("STRAIGHT SOUTH [diag: %ld]", *dir_diag);
-            *dir_diag = tile_numbering_list[i].south_tile;
+            if (road->height_undirect > 0)
+                *dir_diag = tile_numbering_list[i].south_tile;
+            else
+                *dir_diag = tile_numbering_list[i].north_tile;
         } else {
-            printf("STRAIGHT NORTH [diag: %ld]", *dir_diag);
-            *dir_diag = tile_numbering_list[i].north_tile;
+            if (road->height_direct > 0)
+                *dir_diag = tile_numbering_list[i].north_tile;
+            else
+                *dir_diag = tile_numbering_list[i].south_tile;
         }
     }
 }
@@ -78,62 +86,51 @@ static void get_diagonal_line(road_broadcast_t *road, int i, size_t *dir_diag)
     unsigned int height_undirect = abs(road->height_undirect);
 
     if (height_direct != 0 && width_direct != 0) {
-        printf("DIAG:\n");
         if (width_direct > width_undirect) {
-            if (road->width_undirect > 0) {
-                printf("\tINDIRECT EAST [diag: %ld]", *dir_diag);
+            if (road->width_undirect > 0)
                 *dir_diag = tile_numbering_list[i].east_tile;
-            }
-            if (road->width_undirect < 0) {
-                printf("\tINDIRECT WEST [diag: %ld]", *dir_diag);
+            if (road->width_undirect < 0)
                 *dir_diag = tile_numbering_list[i].west_tile;
-            }
         } else {
-            if (road->width_direct > 0) {
-                printf("\tDIRECT WEST [diag: %ld]", *dir_diag);
+            if (road->width_direct > 0)
                 *dir_diag = tile_numbering_list[i].west_tile;
-            }
-            if (road->width_direct < 0) {
-                printf("\tDIRECT EAST [diag: %ld]", *dir_diag);
+            if (road->width_direct < 0)
                 *dir_diag = tile_numbering_list[i].east_tile;
-            }
         }
         if (height_direct > height_undirect) {
             if (road->height_undirect > 0) {
-                if (*dir_diag == tile_numbering_list[i].west_tile) {
-                    printf("INDIRECT SUD 1 [diag: %ld]\n", *dir_diag);
+                if (*dir_diag == tile_numbering_list[i].west_tile)
                     *dir_diag += 1;
-                } else {
-                    printf("INDIRECT SUD 2 [diag: %ld]\n", *dir_diag);
+                else {
                     *dir_diag -= 1;
+                    if (*dir_diag == 0)
+                        *dir_diag = 8;
                 }
             }
             if (road->height_undirect < 0) {
                 if (*dir_diag == tile_numbering_list[i].west_tile) {
-                    printf("INDIRECT NORTH 1 [diag: %ld]\n", *dir_diag);
                     *dir_diag -= 1;
-                } else {
-                    printf("INDIRECT NORTH 2 [diag: %ld]\n", *dir_diag);
+                    if (*dir_diag == 0)
+                        *dir_diag = 8;
+                } else
                     *dir_diag += 1;
-                }
             }
         } else {
             if (road->height_direct > 0) {
                 if (*dir_diag == tile_numbering_list[i].west_tile) {
-                    printf("INDIRECT NORTH 3 [diag: %ld]\n", *dir_diag);
                     *dir_diag -= 1;
-                } else {
-                    printf("INDIRECT NORTH 4 [diag: %ld]\n", *dir_diag);
+                    if (*dir_diag == 0)
+                        *dir_diag = 8;
+                } else
                     *dir_diag += 1;
-                }
             }
             if (road->height_direct < 0) {
-                if (*dir_diag == tile_numbering_list[i].west_tile) {
-                    printf("INDIRECT SUD 3 [diag: %ld]\n", *dir_diag);
+                if (*dir_diag == tile_numbering_list[i].west_tile)
                     *dir_diag += 1;
-                } else {
-                    printf("INDIRECT SUD 4 [diag: %ld]\n", *dir_diag);
+                else {
                     *dir_diag -= 1;
+                    if (*dir_diag == 0)
+                        *dir_diag = 8;
                 }
             }
         }
