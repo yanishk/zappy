@@ -26,10 +26,23 @@
 
     #define QUEEN_SAY_LEVEL(x) "Queen broadcast [Queen:Level:" + std::to_string(x) + "]\n"
     #define QUEEN_SAY_INCANTATION(x) "Queen broadcast [" << x << "]\n"
+    #define QUEEN_SAY_ASK_ASSISTANT(x) "Queen broadcast [Queen:AskAssistant:" + std::to_string(x + 1) + "]\n"
+    #define QUEEN_SAY_NO(x) "Queen broadcast [Queen:No:" + x + "]\n"
+    #define QUEEN_SAY_HERE(x) "Queen broadcast [Queen:Here:" + x + "]\n"
+    #define QUEEN_SAY_HERE_COME(x) "Queen broadcast [Queen:Here:" + x + "] to come.\n"
+
+    #define QUEEN_ASSISTANTS(x) "Queen has " + std::to_string(x) + " assistants.\n"
+    #define QUEEN_ASSISTANTS_INCOMMING(x) "Queen has " + std::to_string(x) + " assistants in comming.\n"
+    #define QUEEN_ASSISTANT_IS_HERE(x) "Queen see that assistant " + x + " is here.\n"
 
     #define BROADCAST_QUEEN_LEVEL(x) "Queen:Level" + std::to_string(x) + "\n"
     #define BROADCAST_QUEEN_INCANTATION "Queen:Incantation"
     #define BROADCAST_PREFIXE ":"
+    #define BROADCAST_QUEEN_ASK_ASSISTANTS(x) "Queen:AskAssistant:" + std::to_string(x + 1) + "\n"
+    #define BROADCAST_ASK_SUFFIX ":Comming:Queen"
+    #define BROADCAST_QUEEN_HERE(x) "Queen:Here:" + x + "\n"
+    #define BROADCAST_QUEEN_NO(x) "Queen:No:" + x + "\n"
+    #define BROADCAST_PING_SUFFIX ":Ping:Queen"
 
     #define QUEEN_CHECK_INCANTATION "Queen check fork.\n"
     #define QUEEN_FORK_SEARCHER "Queen fork a searcher:\n"
@@ -38,6 +51,8 @@
 
     #define CRITICAL_FOOD 20
     #define CRITICAL_STOCK 50
+
+    #define MAX_LAST_MESSAGE 50
 
     #define ONE_FOOD 1
     #define ONE_LEVEL 1
@@ -79,7 +94,8 @@ namespace Zappy {
 
             Take,
             ForkQueen,
-            Incantation
+            Incantation,
+            AskAssistants
 
         };
 
@@ -96,11 +112,15 @@ namespace Zappy {
 
             bool checkFood();
 
+            bool checkIncantation();
+
             bool checkRessources();
-
-            bool checkIncantation(Network::Network &network);
-
-            //bool checkPlayers();
+            bool checkPlayers();
+            
+            bool askAssistants(Network::Network &network);
+            bool addAssistantsIncomming(Network::Network &network);
+            bool addAssistants(Network::Network &network);
+            bool sendMessageToAssistant(Network::Network &network, const std::string &content, const Orientation &orientation);
 
             bool execute(Network::Network &network);
 
@@ -111,16 +131,20 @@ namespace Zappy {
             std::size_t countRessources(const std::string &ressources, const std::string &index);
 
             Ressources _look;
+
+            std::size_t _nbAssistants;
             Assistants _assistants;
+            Assistants _assistantsIncomming;
 
             std::size_t _stock;
             std::vector<Action> _actions;
 
             std::vector<std::pair<Action, std::function<bool(Network::Network &network)>>> _execute = {
 
-                { Action::Take,         [this] (Network::Network &network) { return take(network);              } },
-                { Action::ForkQueen,    [this] (Network::Network &network) { return forkQueen(network);         } },
-                { Action::Incantation,  [this] (Network::Network &network) { return makeIncantation(network);   } }
+                { Action::Take,             [this] (Network::Network &network) { return take(network);              } },
+                { Action::ForkQueen,        [this] (Network::Network &network) { return forkQueen(network);         } },
+                { Action::Incantation,      [this] (Network::Network &network) { return makeIncantation(network);   } },
+                { Action::AskAssistants,    [this] (Network::Network &network) { return askAssistants(network);     } }
 
             };
 

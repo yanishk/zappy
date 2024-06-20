@@ -25,7 +25,7 @@ static std::vector<std::string> look(Network::Network &network)
         informations = network.getInfoFromServer();
     }
 
-    if (informations == DEAD) {
+    if (informations == KO || informations == DEAD) {
         return {};
     }
 
@@ -81,7 +81,9 @@ std::unique_ptr<Zappy::IAi> Zappy::getAI(Network::Network &network)
 
     std::vector<std::string> ressources = look(network);
 
-    return std::make_unique<Zappy::Searcher>();
+    if (ressources.empty()) {
+        return nullptr;
+    }
 
     if (countRessources(ressources[HERE], PLAYER) == ONE_PLAYER) {
         return std::make_unique<Zappy::Queen>();
@@ -91,6 +93,5 @@ std::unique_ptr<Zappy::IAi> Zappy::getAI(Network::Network &network)
         return std::make_unique<Zappy::Quentin>();
     }
 
-    return nullptr;
-
+    return std::make_unique<Zappy::Searcher>();
 }

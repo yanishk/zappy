@@ -29,6 +29,10 @@ bool Zappy::Queen::run(Network::Network &network)
 
         _look = look(network);
 
+        if (_look.empty()) {
+            break;
+        }
+
         std::cout << QUEEN_LOOK;
 
         for (const auto &items: _look) {
@@ -36,7 +40,7 @@ bool Zappy::Queen::run(Network::Network &network)
         }
 
         checkFood();
-        checkIncantation(network);
+        checkIncantation();
 
         if (!execute(network)) {
             break;
@@ -91,13 +95,24 @@ bool Zappy::Queen::checkFood()
     return true;
 }
 
-bool Zappy::Queen::checkIncantation(Network::Network &network)
+bool Zappy::Queen::checkIncantation()
 {
     if (checkRessources() && _level == FIRST_LEVEL) {
         _actions.push_back(Incantation);
+        return true;
     }
 
-    (void)network;
+    if (checkRessources() && checkPlayers()) {
+        _actions.push_back(Incantation);
+        return true;
+    }
+
+    if (!checkRessources()) {
+        _actions.push_back(ForkQueen);
+        return true;
+    }
+
+    _actions.push_back(AskAssistants);
 
     return true;
 }
@@ -120,28 +135,146 @@ bool Zappy::Queen::checkRessources()
     return true;
 }
 
-//bool Zappy::Queen::checkPlayers()
-//{
-//    Zappy::Team &team = Zappy::Team::getTeam(GET);
-//    std::size_t count = INITIAL_COUNT;
-//
-//    for (auto &player: team._players) {
-//
-//        bool checkLevel = (player.get()->getLevel() == _level);
-//        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
-//
-//        if (checkLevel && checkPosition) {
-//            count += ONE_COUNT;
-//        }
-//
-//    }
-//
-//    if (count < _incatation[_level - LEVEL_INDEX].first) {
-//        return false;
-//    }
-//
-//    return true;
-//}
+bool Zappy::Queen::checkPlayers()
+{
+    if (_assistants.size() == _incatation[_level - ONE_LEVEL].first - ONE_PLAYER) {
+        return true;
+    }
+
+    return false;
+}
+
+bool Zappy::Queen::askAssistants(Network::Network &network)
+{
+    _nbAssistants = _assistants.size() + _assistantsIncomming.size();
+
+    std::cout << QUEEN_ASSISTANTS(_assistants.size());
+    std::cout << QUEEN_ASSISTANTS_INCOMMING(_assistantsIncomming.size());
+
+    if (_nbAssistants < _incatation[_level - ONE_LEVEL].first - ONE_LEVEL) {
+
+        if (broadcastText(network, BROADCAST_QUEEN_ASK_ASSISTANTS(_level)) != Response::Ok) {
+            return false;
+        }
+
+        std::cout << QUEEN_SAY_ASK_ASSISTANT(_level);
+
+        if (!addAssistantsIncomming(network)) {
+            return false;
+        }
+    }
+
+    if (!addAssistants(network)) {
+        return false;
+    }
+
+    return false;
+}
+
+bool Zappy::Queen::addAssistantsIncomming(Network::Network &network)
+{
+    const std::string suffix = BROADCAST_ASK_SUFFIX;
+
+    for (std::size_t i = 0; i < MAX_LAST_MESSAGE; i++) {
+
+        const std::string content = _messages[i].first;
+        const std::size_t size = content.size();
+
+        if (size > suffix.size() && content.substr(size - suffix.size()) == suffix) {
+            
+            const std::string messageId = content.substr(START, size - suffix.size());
+            bool isIncomming = false;
+
+            for (const auto &id: _assistantsIncomming) {
+
+                if (id == messageId) {
+                    isIncomming = true;
+                }
+
+            }
+
+            if (!isIncomming && _nbAssistants == _incatation[_level - ONE_LEVEL].first - ONE_LEVEL) {
+
+                if (broadcastText(network, BROADCAST_QUEEN_NO(messageId)) != Response::Ok) {
+                    return false;
+                }
+
+                std::cout << QUEEN_SAY_NO(messageId);
+
+            }
+
+            if (!isIncomming) {
+
+                _assistantsIncomming.push_back(messageId);
+
+                if (broadcastText(network, BROADCAST_QUEEN_HERE(messageId)) != Response::Ok) {
+                    return false;
+                }
+
+                std::cout << QUEEN_SAY_HERE_COME(messageId);
+
+                _nbAssistants += ONE_COUNT;
+
+            }
+
+        }
+
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::addAssistants(Network::Network &network)
+{
+    const std::string suffix = BROADCAST_PING_SUFFIX;
+
+    for (std::size_t i = 0; i < MAX_LAST_MESSAGE; i++) {
+
+        const std::string content = _messages[i].first;
+        const Orientation orientation = _messages[i].second;
+        const std::size_t size = content.size();
+
+        if (size > suffix.size() && content.substr(size - suffix.size()) == suffix) {
+
+            if (!sendMessageToAssistant(network, content, orientation)) {
+                return false;
+            }
+
+        }
+
+    }
+
+    return true;
+}
+
+bool Zappy::Queen::sendMessageToAssistant(Network::Network &network, const std::string &content, const Orientation &orientation)
+{
+    const std::string suffix = BROADCAST_PING_SUFFIX;
+    const std::size_t size = content.size();
+
+    const std::string messageId = content.substr(START, size - suffix.size());
+
+    for (std::size_t i = 0; i < _assistantsIncomming.size(); i++) {
+
+        if (_assistantsIncomming[i] == messageId && orientation == IN_CASE) {
+
+            _assistants.push_back(_assistantsIncomming[i]);
+            _assistantsIncomming.erase(_assistantsIncomming.begin() + i);
+
+            std::cout << QUEEN_ASSISTANT_IS_HERE(messageId);
+
+        }
+
+    }
+
+    if (broadcastText(network, BROADCAST_QUEEN_HERE(messageId)) != Response::Ok) {
+        return false;
+    }
+
+    std::cout << QUEEN_SAY_HERE(messageId);
+
+    return true;
+}
 
 bool Zappy::Queen::execute(Network::Network &network)
 {
@@ -198,136 +331,14 @@ bool Zappy::Queen::forkQueen(Network::Network &network)
     return true;
 }
 
-//Zappy::Ressources Zappy::Queen::getCommand(bool already)
-//{
-//    const std::vector<std::string> ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
-//    double start = _nbCommands * MAX_ORDER;
-//    std::size_t count = INITIAL_COUNT;
-//
-//    Zappy::Ressources command;
-//
-//    for (std::size_t i = 0; i < ressources.size(); i++) {
-//
-//        std::size_t ressourcesCount = countRessources(_look[HERE], ressources[i]);
-//        std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressources[i]];
-//
-//        std::size_t ressourcesToSearch = ressourcesNeed - ressourcesCount;
-//
-//        while ((already || start > POSITIVE) && ressourcesToSearch) {
-//
-//            start -= ONE_COUNT;
-//            ressourcesToSearch -= ONE_COUNT;
-//
-//        }
-//
-//        if (!already && start > POSITIVE) {
-//            continue;
-//        }
-//
-//        while (ressourcesToSearch && count < MAX_ORDER) {
-//
-//            command[ressources[i]] += ONE_COUNT;
-//            ressourcesToSearch += ONE_COUNT;
-//
-//        }
-//
-//    }
-//
-//    if (!count) {
-//        return getCommand(true);
-//    }
-//
-//    return command;
-//
-//}
-//
-//bool Zappy::Queen::forkSearcher()
-//{
-//    Zappy::Team &team = Zappy::Team::getTeam(GET);
-//
-//    Zappy::Ressources command = getCommand(false);
-//    std::size_t levelToReach = START_LEVEL;
-//
-//    if (_nbCommands > LONG_COMMAND) {
-//        levelToReach = _incatation[_level - LEVEL_INDEX].first;
-//    }
-//
-//    if (_nbCommands < _incatation[_level - LEVEL_INDEX].first) {
-//        levelToReach = _incatation[_level - LEVEL_INDEX].first;
-//    }
-//
-//    command[FOOD] -= FOOD_START_VALUE;
-//    _nbCommands += ONE_COUNT;
-//
-//    Order order(levelToReach, command);
-//
-//    if (!fork()) {
-//        return false;
-//    }
-//
-//    std::cout << QUEEN_FORK_SEARCHER;
-//    std::cout << SEARCHER_LEVEL(order.getLevel());
-//    order.getRessources().dump();
-//
-//    team._players.push_back(std::make_shared<Searcher>(_network.getPort(), _name, order));
-//
-//    _nbTours += NB_TOURS_FORK;
-//
-//    return true;
-//}
-//
-//bool Zappy::Queen::setIncantation()
-//{
-//    Zappy::Team &team = Zappy::Team::getTeam(GET);
-//    std::size_t count = _incatation[_level - LEVEL_INDEX].first;
-//
-//    for (auto &player: team._players) {
-//
-//        bool checkLevel = (player.get()->getLevel() == _level);
-//        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
-//
-//        if (count && checkLevel && checkPosition) {
-//            count -= ONE_COUNT;
-//            player.get()->setIsIncantation(true);
-//        }
-//
-//    }
-//
-//    return true;
-//}
-//
-//bool Zappy::Queen::removeIncantation()
-//{
-//    Zappy::Team &team = Zappy::Team::getTeam(GET);
-//    std::size_t count = _incatation[_level - LEVEL_INDEX].first;
-//
-//    std::size_t level = _level;
-//
-//    for (auto &player: team._players) {
-//
-//        bool checkLevel = (player.get()->getLevel() == level);
-//        bool checkPosition = (player.get()->getPosition() == POSITION(0.0,0.0));
-//        bool isIncantation = player.get()->getIsIncantation();
-//
-//        if (count && checkLevel && checkPosition && isIncantation) {
-//            count -= ONE_COUNT;
-//            player.get()->setIsIncantation(false);
-//            player.get()->setLevel(player.get()->getLevel() + ONE_LEVEL);
-//        }
-//
-//    }
-//
-//    return true;
-//}
-
 bool Zappy::Queen::makeIncantation(Network::Network &network)
 {
     std::cout << QUEEN_START_INCANTATION(_level + ONE_LEVEL);
 
     std::string message(BROADCAST_QUEEN_INCANTATION);
 
-    for (std::size_t i = 0; i < _assistants.size(); i++) {
-        message.append(BROADCAST_PREFIXE + _assistants[i]);
+    for (const auto &assistant: _assistants) {
+        message.append(BROADCAST_PREFIXE + assistant);
     }
 
     _assistants.clear();
