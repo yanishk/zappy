@@ -36,6 +36,7 @@ bool Zappy::Queen::run(Network::Network &network)
         }
 
         checkFood();
+        checkIncantation(network);
 
         if (!execute(network)) {
             break;
@@ -90,35 +91,34 @@ bool Zappy::Queen::checkFood()
     return true;
 }
 
-//bool Zappy::Queen::checkIncantation()
-//{
-//    if (!checkPlayers() || !checkRessources()) {
-//        _actions.push_back(ForkSearcher);
-//        return false;
-//    }
-//
-//    _actions.push_back(Incantation);
-//
-//    return true;
-//}
+bool Zappy::Queen::checkIncantation(Network::Network &network)
+{
+    if (checkRessources() && _level == FIRST_LEVEL) {
+        _actions.push_back(Incantation);
+    }
 
-//bool Zappy::Queen::checkRessources()
-//{
-//    const std::vector<std::string> ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
-//
-//    for (std::size_t i = 0; i < ressources.size(); i++) {
-//
-//        std::size_t ressourcesCount = countRessources(_look[HERE], ressources[i]);
-//        std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressources[i]];
-//
-//        if (ressourcesCount < ressourcesNeed) {
-//            return false;
-//        }
-//
-//    }
-//
-//    return true;
-//}
+    (void)network;
+
+    return true;
+}
+
+bool Zappy::Queen::checkRessources()
+{
+    const Ressources ressources = { LINEMATE, DERAUMERE, SIBUR, MENDIANE, PHIRAS, THYSTAME };
+
+    for (const auto &ressource: ressources) {
+
+        std::size_t ressourcesCount = countRessources(_look[HERE], ressource);
+        std::size_t ressourcesNeed = _incatation[_level - LEVEL_INDEX].second[ressource];
+
+        if (ressourcesCount < ressourcesNeed) {
+            return false;
+        }
+
+    }
+
+    return true;
+}
 
 //bool Zappy::Queen::checkPlayers()
 //{
@@ -193,7 +193,7 @@ bool Zappy::Queen::forkQueen(Network::Network &network)
         return false;
     }
 
-    std::cout << QUEEN_LEVEL(_level);
+    std::cout << QUEEN_SAY_LEVEL(_level);
 
     return true;
 }
@@ -319,24 +319,33 @@ bool Zappy::Queen::forkQueen(Network::Network &network)
 //
 //    return true;
 //}
-//
-//bool Zappy::Queen::makeIncantation()
-//{
-//    setIncantation();
-//
-//    if (!incantation()) {
-//        return false;
-//    }
-//
-//    std::cout << QUEEN_INCANTATION;
-//
-//    _nbCommands = INITIAL_COUNT;
-//    _nbTours += NB_TOURS_INCANTATION;
-//
-//    removeIncantation();
-//
-//    return true;
-//}
+
+bool Zappy::Queen::makeIncantation(Network::Network &network)
+{
+    std::cout << QUEEN_START_INCANTATION(_level + ONE_LEVEL);
+
+    std::string message(BROADCAST_QUEEN_INCANTATION);
+
+    for (std::size_t i = 0; i < _assistants.size(); i++) {
+        message.append(BROADCAST_PREFIXE + _assistants[i]);
+    }
+
+    _assistants.clear();
+
+    if (broadcastText(network, message) != Response::Ok) {
+        return false;
+    }
+
+    std::cout << QUEEN_SAY_INCANTATION(message);
+
+    if (incantation(network) != Response::Ok) {
+        return false;
+    }
+
+    std::cout << QUEEN_INCANTATION(_level);
+
+    return true;
+}
 
 std::size_t Zappy::Queen::countRessources(const std::string &ressources, const std::string &index)
 {

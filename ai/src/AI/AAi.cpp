@@ -321,17 +321,20 @@ Zappy::Response Zappy::AAi::incantation(Network::Network &network)
 
     std::string response = handlingMessage(network);
 
-    if (response == RESPONSE_OK) {
+    if (response == ELEVATION_UNDERWAY) {
 
-        std::stringstream stream;
-        std::string temp;
-        std::string level;
+        response = handlingMessage(network);
 
-        stream << response;
-        stream >> temp >> temp >> level;
+        const std::string prefix = PREFIX_LEVEL;
+        std::size_t position = response.find(PREFIX_LEVEL);
 
-        _level = std::atoi(level.c_str());
+        if (position == std::string::npos) {
+            return Response::Ko;
+        }
 
+        position += prefix.length();
+        _level = std::stoul(response.substr(position));
+    
         return Response::Ok;
 
     }

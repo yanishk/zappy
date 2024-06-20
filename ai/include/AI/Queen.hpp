@@ -21,15 +21,19 @@
     #define QUEEN_FOOD_STOCK(x) "There are " << x << " foods on the floor.\n"
     #define QUEEN_TAKE_FOOD "Queen take food.\n"
     #define QUEEN_FORK "Queen fork.\n"
+    #define QUEEN_START_INCANTATION(x) "Queen start incantation to level " << x << ".\n"
+    #define QUEEN_INCANTATION(x) "Queen is now level " << x << ".\n"
 
-    #define QUEEN_LEVEL(x) "Queen broadcast [Queen:level:" + std::to_string(x) + "]\n"
+    #define QUEEN_SAY_LEVEL(x) "Queen broadcast [Queen:Level:" + std::to_string(x) + "]\n"
+    #define QUEEN_SAY_INCANTATION(x) "Queen broadcast [" << x << "]\n"
 
-    #define BROADCAST_QUEEN_LEVEL(x) "Queen:level" + std::to_string(x) + "\n"
+    #define BROADCAST_QUEEN_LEVEL(x) "Queen:Level" + std::to_string(x) + "\n"
+    #define BROADCAST_QUEEN_INCANTATION "Queen:Incantation"
+    #define BROADCAST_PREFIXE ":"
 
     #define QUEEN_CHECK_INCANTATION "Queen check fork.\n"
     #define QUEEN_FORK_SEARCHER "Queen fork a searcher:\n"
     #define SEARCHER_LEVEL(x) "Level: " << x << "\n"
-    #define QUEEN_INCANTATION "Queen incantation.\n"
     #define QUEEN_EXECUTE "Queen execute.\n"
 
     #define CRITICAL_FOOD 20
@@ -39,6 +43,8 @@
     #define ONE_LEVEL 1
     #define ONE_COUNT 1
     #define LEVEL_INDEX 1
+
+    #define FIRST_LEVEL ONE_LEVEL
 
     #define MAX_ORDER 3
     #define LONG_COMMAND 5
@@ -67,6 +73,7 @@ namespace Zappy {
     class Queen : public AAi {
 
         using Ressources = std::vector<std::string>;
+        using Assistants = std::vector<std::string>;
 
         enum Action {
 
@@ -79,7 +86,6 @@ namespace Zappy {
         public:
 
             Queen(): AAi() {};
-
             ~Queen() {};
 
             bool run(Network::Network &network);
@@ -90,32 +96,31 @@ namespace Zappy {
 
             bool checkFood();
 
-            //bool checkIncantation();
-            //bool checkRessources();
+            bool checkRessources();
+
+            bool checkIncantation(Network::Network &network);
+
             //bool checkPlayers();
 
             bool execute(Network::Network &network);
 
             bool take(Network::Network &network);
             bool forkQueen(Network::Network &network);
-
-            //bool makeIncantation();
-            //bool setIncantation();
-            //bool removeIncantation();
-
-            //bool forkSearcher();
-            //Zappy::Ressources getCommand(bool already);
+            bool makeIncantation(Network::Network &network);
 
             std::size_t countRessources(const std::string &ressources, const std::string &index);
 
             Ressources _look;
+            Assistants _assistants;
+
             std::size_t _stock;
             std::vector<Action> _actions;
 
             std::vector<std::pair<Action, std::function<bool(Network::Network &network)>>> _execute = {
 
-                { Action::Take,         [this] (Network::Network &network) { return take(network);      } },
-                { Action::ForkQueen,    [this] (Network::Network &network) { return forkQueen(network); } }
+                { Action::Take,         [this] (Network::Network &network) { return take(network);              } },
+                { Action::ForkQueen,    [this] (Network::Network &network) { return forkQueen(network);         } },
+                { Action::Incantation,  [this] (Network::Network &network) { return makeIncantation(network);   } }
 
             };
 

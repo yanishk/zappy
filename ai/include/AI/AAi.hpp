@@ -33,6 +33,8 @@
     #define SET_CMD "Set "
     #define INCANTATION_CMD "Incantation\n"
 
+    #define ELEVATION_UNDERWAY "Elevation underway"
+    #define PREFIX_LEVEL "Current level:"
     #define RESPONSE_OK "ok"
     #define RESPONSE_KO "ko"
     #define MESSAGE "message"
