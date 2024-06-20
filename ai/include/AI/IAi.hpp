@@ -8,12 +8,25 @@
 #ifndef IAI_HPP_
     #define IAI_HPP_
 
-    #define LOOK "look\n"
-
     #include <vector>
     #include <string>
 
+    #include "Network.hpp"
+
 namespace Zappy {
+
+    enum Orientation {
+        IN_CASE,
+        FRONT,
+        FRONT_LEFT,
+        LEFT,
+        BACK_LEFT,
+        BACK,
+        BACK_RIGHT,
+        RIGHT,
+        FRONT_RIGHT,
+        UNDEFINED
+    };
 
     enum Response {
         Ok,
@@ -27,34 +40,28 @@ namespace Zappy {
 
             IAi() = default;
 
-            virtual bool run() = 0;
+            virtual bool run(Network::Network &network) = 0;
 
-            virtual Response forward() = 0;
-            virtual Response right() = 0;
-            virtual Response left() = 0;
+            virtual Response forward(Network::Network &network) = 0;
+            virtual Response right(Network::Network &network) = 0;
+            virtual Response left(Network::Network &network) = 0;
 
-            virtual std::vector<std::string> look() = 0;
-            virtual std::vector<std::string> inventory() = 0;
-            virtual void updateInventory() = 0;
+            virtual std::vector<std::string> look(Network::Network &network) = 0;
+            virtual std::vector<std::string> inventory(Network::Network &network) = 0;
+            virtual bool updateInventory(Network::Network &network) = 0;
 
-            virtual Response broadcastText(const std::string &text) = 0;
-            virtual std::string handlingMessage() = 0;
+            virtual Response broadcastText(Network::Network &network, const std::string &text) = 0;
+            virtual std::string handlingMessage(Network::Network &network) = 0;
 
-            virtual std::size_t connectNumber() = 0;
-            virtual Response fork() = 0;
-            virtual Response eject() = 0;
+            virtual std::size_t connectNumber(Network::Network &network) = 0;
+            virtual Response fork(Network::Network &network) = 0;
+            virtual Response eject(Network::Network &network) = 0;
 
-            virtual Response takeObject(const std::string &object) = 0;
-            virtual Response setObject(const std::string &object) = 0;
-            virtual Response incantation() = 0;
+            virtual Response takeObject(Network::Network &network, const std::string &object) = 0;
+            virtual Response setObject(Network::Network &network, const std::string &object) = 0;
+            virtual Response incantation(Network::Network &network) = 0;
 
-            virtual std::pair<double, double> getPosition() const = 0;
-    
-            virtual std::size_t getLevel() const = 0;
-            virtual void setLevel(std::size_t level) = 0;
-
-            virtual bool getIsIncantation() const = 0;
-            virtual void setIsIncantation(bool isIncantation) = 0;
+            virtual Orientation getOrientation(int value) = 0;
 
     };
 
