@@ -89,7 +89,5 @@ std::unique_ptr<Zappy::IAi> Zappy::getAI(Network::Network &network)
         return std::make_unique<Zappy::Quentin>();
     }
 
-    return nullptr;
-
-    //return std::make_unique<Zappy::Searcher>(network);
+    return std::make_unique<Zappy::Quentin>();
 }
