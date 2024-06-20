@@ -21,6 +21,8 @@ bool Zappy::Queen::run(Network::Network &network)
 
     while (true) {
 
+        std::cout << "START BOUCLE QUEEN.\n";
+
         if (!updateInventory(network)) {
             break;
         }
@@ -168,14 +170,18 @@ bool Zappy::Queen::askAssistants(Network::Network &network)
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool Zappy::Queen::addAssistantsIncomming(Network::Network &network)
 {
     const std::string suffix = BROADCAST_ASK_SUFFIX;
 
-    for (std::size_t i = 0; i < MAX_LAST_MESSAGE; i++) {
+    if (_messages.empty()) {
+        return true;
+    }
+
+    for (std::size_t i = 0; i < MAX_LAST_MESSAGE && i < _messages.size(); i++) {
 
         const std::string content = _messages[i].first;
         const std::size_t size = content.size();
@@ -228,7 +234,11 @@ bool Zappy::Queen::addAssistants(Network::Network &network)
 {
     const std::string suffix = BROADCAST_PING_SUFFIX;
 
-    for (std::size_t i = 0; i < MAX_LAST_MESSAGE; i++) {
+    if (_messages.empty()) {
+        return true;
+    }
+
+    for (std::size_t i = 0; i < MAX_LAST_MESSAGE && i < _messages.size(); i++) {
 
         const std::string content = _messages[i].first;
         const Orientation orientation = _messages[i].second;
@@ -342,6 +352,7 @@ bool Zappy::Queen::makeIncantation(Network::Network &network)
     }
 
     _assistants.clear();
+    _messages.clear();
 
     if (broadcastText(network, message) != Response::Ok) {
         return false;

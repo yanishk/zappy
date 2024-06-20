@@ -35,7 +35,7 @@
     #define QUEEN_ASSISTANTS_INCOMMING(x) "Queen has " + std::to_string(x) + " assistants in comming.\n"
     #define QUEEN_ASSISTANT_IS_HERE(x) "Queen see that assistant " + x + " is here.\n"
 
-    #define BROADCAST_QUEEN_LEVEL(x) "Queen:Level" + std::to_string(x) + "\n"
+    #define BROADCAST_QUEEN_LEVEL(x) "Queen:Level:" + std::to_string(x) + "\n"
     #define BROADCAST_QUEEN_INCANTATION "Queen:Incantation"
     #define BROADCAST_PREFIXE ":"
     #define BROADCAST_QUEEN_ASK_ASSISTANTS(x) "Queen:AskAssistant:" + std::to_string(x + 1) + "\n"
