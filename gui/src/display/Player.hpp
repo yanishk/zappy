@@ -18,7 +18,7 @@
     #include "Item.hpp"
 
     #define MAX_RGB 255
-    #define PLAYER_INFO_NBR_LINE 7
+    #define PLAYER_INFO_NBR_LINE 11
     #define TEXT_SIZE 20
     #define TEXT_LINE_SPACING_RATIO 1.30
     #define NBR_ITEM 7
@@ -26,6 +26,13 @@
     #define TEXT_LEVEL "Level : "
     #define INCANTATION_PATH "./gui/assets/models/subatomic_particle_fx.glb"
     #define EXPULSION_PATH "./gui/assets/models/sun.glb"
+
+    static const std::map<int, std::string> PLAYER_ORIENTATION {
+        {0, "North"},
+        {1, "East"},
+        {2, "South"},
+        {3, "West"}
+    };
 
 class Player {
     public:
@@ -63,6 +70,7 @@ class Player {
         Model _incantationModel;
         Model _expulsionModel;
         std::string _team;
+        int _playerOrientation;
     private:
         void DrawText3D(Font font, const char *text, Vector3 position, float fontSize, float fontSpacing, float lineSpacing, Color tint);
         void DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint);
@@ -108,7 +116,7 @@ class AllPlayers {
         void addPlayerToIsland(Vector3 position, int playerID);
         void moovePlayerToIsland(Vector3 position, int playerID);
         void changePlayerOrientation(float direction, int playerID);
-        void removePlayerFromIsland(int playerID);
+        bool removePlayerFromIsland(int playerID);
         void setPlayerTeam(std::string playerTeam, int playerID);
         void drawPlayer(bool isAnimated);
         Vector3 getPlayerRealPos(int playerID);

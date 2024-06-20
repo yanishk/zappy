@@ -96,6 +96,12 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
         throw ErrorHandling(ERROR_NOT_ENOUTH_ITEM_MODEL);
 }
 
+void DisplayGame::mooveCameraToCoord(Vector3 position, Vector3 target)
+{
+    _camera.position = position;
+    _camera.target = target;
+}
+
 void DisplayGame::placeIsland(int x, int y)
 {
     float posX = 0;
@@ -153,26 +159,6 @@ void DisplayGame::initWaterShader(void)
     _WaterModel.materials[0].shader = _waterShader;
 }
 
-void DisplayGame::addItemToIsland(Vector3 position, int type)
-{
-    _allItem.push_back(_allItemModel[type]);
-    _allItem.back()._itemPosition = setVector3((position.x + 1) * spaceBetwenIsland, 1.8, position.z * spaceBetwenIsland);
-    _allItem.back()._itemPosition.x += -3 + (rand() % 6);
-    _allItem.back()._itemPosition.z += -3 + (rand() % 6);
-    _allItem.back()._realPos = position;
-    _allItem.back()._itemType = type;
-}
-
-void DisplayGame::removeItemFromIsland(Vector3 position, int type)
-{
-    for (std::size_t i = 0; i < _allItem.size(); i++) {
-        if (Utils::Vec3Comp(_allItem[i]._realPos, position) && _allItem[i]._itemType == type) {
-            _allItem.erase(_allItem.begin() + i);
-            break;
-        }
-    }
-}
-
 void DisplayGame::displayMorePlayerInfo(void)
 {
     for (auto &i: _player._allPlayer) {
@@ -188,16 +174,6 @@ void DisplayGame::displayMorePlayerInfo(void)
     }
 }
 
-int DisplayGame::getNbrItemTypeOnIsland(Vector3 pos, int type)
-{
-    int nbr = 0;
-    for (auto &i: _allItem) {
-        if (Utils::Vec3Comp(i._realPos, pos) && i._itemType == type)
-            nbr++;
-    }
-    return nbr;
-}
-
 void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
 {
     if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
@@ -206,62 +182,14 @@ void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
         std::pair<int, int> mapSize;
         mapSize.first = std::atoi(cmd.front().c_str());
         mapSize.second = std::atoi(cmd[1].c_str());
-        if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second)
+        if (mapSize.first != _mapSize.first || mapSize.second != _mapSize.second) {
             placeIsland(mapSize.first, mapSize.second);
-    }
-    while (_cmd.getCommandAt(BCT_CMD, 0).size() > 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(BCT_CMD, 0);
-        float x = std::stof(cmd.front().c_str());
-        float z = std::stof(cmd[1].c_str());
-        Vector3 itemPosition = (Vector3){x, 1.8, z};
-        for (std::size_t j = 2; j < cmd.size(); j++) {
-            int nbItem = std::atoi(cmd[j].c_str());
-            int nbItemOnIsland = getNbrItemTypeOnIsland(itemPosition, j - 2);
-            while (nbItemOnIsland > 0) {
-                removeItemFromIsland(itemPosition, j - 2);
-                nbItemOnIsland--;
-            }
-            for (int k = 0; k < nbItem; k++) {
-                addItemToIsland(itemPosition, j - 2);
-            }
+            mooveCameraToCoord(setVector3(mapSize.first * spaceBetwenIsland / 2, 40, (mapSize.second + 3) * spaceBetwenIsland),
+            setVector3(mapSize.first * spaceBetwenIsland / 2, 0, mapSize.second * spaceBetwenIsland / 2));
         }
-        _cmd.eraseFirstCmdInMap(BCT_CMD);
-    }
-    while (_cmd.getCommandAt(TNA_CMD, 0).size() == 1) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(TNA_CMD, 0);
-        if (_player._allTeamName.size() == 0) {
-            _player._allTeamName.push_back(cmd.front());
-            continue;
-        }
-        bool isUnique = true;
-        for (auto &i: _player._allTeamName) {
-            if (i == cmd.front())
-                isUnique = false;
-        }
-        if (isUnique) {
-            _player._allTeamName.push_back(cmd.front());
-        }
-        _cmd.eraseFirstCmdInMap(TNA_CMD);
     }
 
-    recivedCmd.getPnw();
-    recivedCmd.getPpo();
-    recivedCmd.getPlv();
-    recivedCmd.getPdi();
-    recivedCmd.getEbo();
-    recivedCmd.getPgt();
-    recivedCmd.getPdr();
-    recivedCmd.getPin();
-    recivedCmd.getEnw();
-    recivedCmd.getSmg();
-    recivedCmd.getPbc(_camera.position);
-    recivedCmd.getSgt();
-    recivedCmd.getSst();
-    recivedCmd.getEdi();
-    recivedCmd.getPic();
-    recivedCmd.getPie();
-    recivedCmd.getSeg();
-    recivedCmd.getPex();
+    recivedCmd.callAllFunctions(_camera.position);
 }
 
 void DisplayGame::display3D(void)
@@ -333,7 +261,7 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
-    UseRecivedCmd recivedCmd(_cmd, _player, _allEggs, _socket);
+    UseRecivedCmd recivedCmd(_cmd, _player, _allEggs, _allItem, _allItemModel, _socket);
 
     SetTargetFPS(60);
     float seconds = 0.0f;

@@ -296,6 +296,7 @@ void Player::displayInfo2D(int x, int y, std::vector<Item> &_allItem)
     text += "Player Team : " + _team + "\n";
     text += "Player position : x " + std::to_string((int)_playerPosition.x) + " y " + std::to_string((int)_playerPosition.y) + " z " + std::to_string((int)_playerPosition.z) + "\n";
     text += "Player real position : x " + std::to_string((int)_realPos.x) + " z " + std::to_string((int)_realPos.z) + "\n";
+    text += "Player orientation : " + PLAYER_ORIENTATION.at(_playerOrientation) + "\n";
     text += ("Player inventory :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
     for (std::size_t i = 0; i < NBR_ITEM; i++) {
         text += "|\t" + std::to_string(_inventory[i]) + "\t";

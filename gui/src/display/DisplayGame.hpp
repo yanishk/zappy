@@ -37,8 +37,6 @@ class DisplayGame {
         Vector3 setVector3(float x, float y, float z);
         void launchGame(void);
         void fillAllModel(ZappyModel);
-        void addItemToIsland(Vector3 position, int type);
-        void removeItemFromIsland(Vector3 position, int type);
         void placeIsland(int x, int y);
 
     private:
@@ -73,9 +71,9 @@ class DisplayGame {
         void initWaterShader(void);
         void displayMorePlayerInfo(void);
         void useServerInfo(UseRecivedCmd &recivedCmd);
-        int getNbrItemTypeOnIsland(Vector3 pos, int type);
         void display3D(void);
         void display2D(void);
+        void mooveCameraToCoord(Vector3 position, Vector3 target);
 };
 
 #endif /* !DISPLAYGAME_HPP_ */

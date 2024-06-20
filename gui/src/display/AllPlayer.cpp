@@ -32,8 +32,9 @@ void AllPlayers::changePlayerOrientation(float direction, int playerID)
 {
     for (auto &i: _allPlayer) {
         if (i._playerID == playerID) {
-            i._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * (-direction), DEG2RAD * 0});
-            i._rotationAngle = direction;
+            i._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * (-direction * 90), DEG2RAD * 0});
+            i._rotationAngle = direction * 90;
+            i._playerOrientation = direction;
             break;
         }
     }
@@ -65,15 +66,16 @@ void AllPlayers::addPlayerToIsland(Vector3 position, int playerID)
     _allPlayer.push_back(tmpPlayer);
 }
 
-void AllPlayers::removePlayerFromIsland(int playerID)
+bool AllPlayers::removePlayerFromIsland(int playerID)
 {
     for (std::size_t i = 0; i < _allPlayer.size(); i++) {
         if (_allPlayer[i]._playerID == playerID) {
             _allPlayer[i].isAlive = false;
             _allPlayer.erase(_allPlayer.begin() + i);
-            break;
+            return true;
         }
     }
+    return false;
 }
 
 Vector3 AllPlayers::getPlayerRealPos(int playerID)
@@ -196,7 +198,7 @@ void AllPlayers::setInventory(int playerID, std::vector<int> newInv)
 Color AllPlayers::setPlayerColor(std::string teamName)
 {
     float teamIndex = 0;
-    while (teamName != _allTeamName[teamIndex]) {
+    while (teamName != _allTeamName[teamIndex] && (std::size_t)teamIndex < _allTeamName.size()) {
         teamIndex++;
     }
     Color color;
