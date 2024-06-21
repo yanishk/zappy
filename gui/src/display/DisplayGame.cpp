@@ -21,11 +21,11 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
     _selectedPlayer.first = false;
     _mapSize.first = 0;
     _mapSize.second = 0;
-    _isAnimated = animation;
 
     _allIsland = std::make_unique<AllIsland>(_cmd);
     _allItem = std::make_unique<AllItem>(_cmd);
     _allEggs = std::make_unique<AllEggs>(_cmd);
+    _allPlayer = std::make_unique<AllPlayers>(_cmd, animation);
 }
 
 DisplayGame::~DisplayGame()
@@ -76,7 +76,7 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
                 break;
             }
             case PlayerType: {
-                _player.loadModelAndAnim(tmpPair, i.first.first);
+                _playerModel.push_back(tmpPair);
                 hasPlayer = true;
                 break;
             }
@@ -84,7 +84,6 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
     }
     _eggModel.first = LoadModel(EGG_MOD_PATH);
     _eggModel.second = 0.3;
-    //_allEggs.loadEggModel(eggPair);
 
     _sky = LoadModel("./gui/assets/models/unreal-engine-4-sky/source/ue4sky.obj");
     Texture2D texture = LoadTexture("./gui/assets/models/unreal-engine-4-sky/textures/T_Sky_Blue.png");
@@ -135,24 +134,18 @@ void DisplayGame::initWaterShader(void)
     _WaterModel.materials[0].shader = _waterShader;
 }
 
-void DisplayGame::displayMorePlayerInfo(void)
-{
-    for (auto &i: _player._allPlayer) {
-        Vector3 direction = Vector3Subtract(_camera.target, _camera.position);
-        direction = Vector3Normalize(direction);
-        Ray ray = {_camera.position, direction};
-
-        BoundingBox playerBox = GetMeshBoundingBox(i._playerModel.meshes[0]);
-        if (i.isPlayerSelected(playerBox, ray)) {
-            _selectedPlayer.first = true;
-            _selectedPlayer.second = i._playerID;
-        }
-    }
-}
-
 void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
 {
-    recivedCmd.callAllFunctions(_camera.position);
+    if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
+
+        std::pair<int, int> mapSize;
+        mapSize.first = std::atoi(cmd.front().c_str());
+        mapSize.second = std::atoi(cmd[1].c_str());
+        mooveCameraToCoord(setVector3(mapSize.first * spaceBetwenIsland / 2, 40, (mapSize.second + 3) * spaceBetwenIsland),
+        setVector3(mapSize.first * spaceBetwenIsland / 2, 0, mapSize.second * spaceBetwenIsland / 2));
+    }
+    recivedCmd.callAllFunctions();
 }
 
 void DisplayGame::display3D(void)
@@ -162,7 +155,7 @@ void DisplayGame::display3D(void)
     DrawModel(_sky, setVector3(_camera.position.x, 0, _camera.position.z), 10, WHITE);
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        displayMorePlayerInfo();
+        _selectedPlayer = _allPlayer.get()->isPlayerSelected(_camera.target, _camera.position);
     }
     if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
         _selectedPlayer.first = false;
@@ -177,22 +170,14 @@ void DisplayGame::display3D(void)
     _allIsland.get()->renderAll();
     _allItem.get()->renderAll();
     _allEggs.get()->renderAll();
-    _player.drawPlayer(_isAnimated);
-
-    for (auto &i: _player._allPlayer) {
-        i.displayPlayerInfo(_camera.position);
-        i.drawIncantation();
-        i.drawExpulsion();
-    }
+    _allPlayer.get()->renderAll(_camera.position);
 
     EndMode3D();
 }
 
 void DisplayGame::display2D(void)
 {
-    if (_selectedPlayer.first) {
-        _player.displayMorePlayerInfo(_selectedPlayer.second, _screenWidth, _allItem);
-    }
+    _allPlayer.get()->renderAll2D(_selectedPlayer, _allItem);
 
     int size = 8;
     DrawCircleLines(1920 / 2, 1080 / 2, size, RED);
@@ -219,7 +204,7 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
-    UseRecivedCmd recivedCmd(_cmd, _player, _socket);
+    UseRecivedCmd recivedCmd(_cmd, _socket);
 
     SetTargetFPS(60);
     float seconds = 0.0f;
@@ -228,6 +213,7 @@ void DisplayGame::launchGame(void)
         _allIsland.get()->setAllIsland(_islandModel);
         _allItem.get()->setAllItem(_allItemModel);
         _allEggs.get()->setAllEggs(_eggModel);
+        _allPlayer.get()->setAllPlayer(_playerModel);
         useServerInfo(recivedCmd);
         seconds += (GetFrameTime() / 2);
 

@@ -7,191 +7,97 @@
 
 #include "Player.hpp"
 
-void AllPlayers::loadModelAndAnim(std::pair<Model, float> modelPair, std::string path)
+AllPlayers::AllPlayers(CommandManager &cmd, bool isAnimated) : _cmd(cmd)
 {
-    _model = modelPair.first;
-    float size = modelPair.second;
-    _size = (Vector3){size, size, size};
-    _anim = LoadModelAnimations(path.c_str(), &_animsCount);
+    _isAnimated = isAnimated;
+    _anim = LoadModelAnimations(PLAYER_ANIM, &_animsCount);
     _incantationModel = LoadModel(INCANTATION_PATH);
     _expulsionModel = LoadModel(EXPULSION_PATH);
     _animsCount = 0;
 }
 
-void AllPlayers::moovePlayerToIsland(Vector3 position, int playerID)
+void AllPlayers::renderAll(Vector3 camPosition)
 {
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.moovePlayerToIsland(position);
-            break;
-        }
+    for (auto &player : _allPlayer) {
+        player.render();
+        player.displayPlayerInfo(camPosition);
+        player.drawMessage(player.getMessage(), camPosition);
     }
 }
 
-void AllPlayers::changePlayerOrientation(float direction, int playerID)
-{
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i._playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * (-direction * 90), DEG2RAD * 0});
-            i._rotationAngle = direction * 90;
-            i._playerOrientation = direction;
-            break;
-        }
-    }
-}
-
-void AllPlayers::setPlayerTeam(std::string playerTeam, int playerID)
-{
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.setTeam(playerTeam);
-            i.setPlayerColor(setPlayerColor(playerTeam));
-            break;
-        }
-    }
-}
-
-void AllPlayers::addPlayerToIsland(Vector3 position, int playerID)
-{
-    Player tmpPlayer(position);
-
-    tmpPlayer._playerModel = _model;
-    tmpPlayer._playerAnimation = _anim;
-    tmpPlayer._level = 1;
-    tmpPlayer._playerID = playerID;
-    tmpPlayer._animsCount = 0;
-    tmpPlayer._animFrameCounter = 0;
-    tmpPlayer._incantationModel = _incantationModel;
-    tmpPlayer._expulsionModel = _expulsionModel;
-    _allPlayer.push_back(tmpPlayer);
-}
-
-bool AllPlayers::removePlayerFromIsland(int playerID)
-{
-    for (std::size_t i = 0; i < _allPlayer.size(); i++) {
-        if (_allPlayer[i]._playerID == playerID) {
-            _allPlayer[i].isAlive = false;
-            _allPlayer.erase(_allPlayer.begin() + i);
-            return true;
-        }
-    }
-    return false;
-}
-
-Vector3 AllPlayers::getPlayerRealPos(int playerID)
-{
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            return i._realPos;
-        }
-    }
-    return {};
-}
-
-Vector3 AllPlayers::getSize(void)
-{
-    return _size;
-}
-
-void AllPlayers::drawPlayer(bool isAnimated)
-{
-    for (auto &i: _allPlayer) {
-        if (!isAnimated) {
-            DrawModel(i._playerModel , i.getPosition(), 1, WHITE);
-            continue;
-        }
-        i._animFrameCounter++;
-        if (i._animFrameCounter >= i._playerAnimation[0].frameCount)
-            i._animFrameCounter = 0;
-        UpdateModelAnimation(i._playerModel, i._playerAnimation[0], i._animFrameCounter);
-        DrawModelEx(i._playerModel , i.getPosition(), (Vector3){ 1.0f, 0.0f, 0.0f }, 0.0f, getSize(), WHITE);
-    }
-}
-
-void AllPlayers::setPlayerLevel(int playerID, int level)
-{
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i._level = level;
-        }
-    }
-}
-
-int AllPlayers::getPlayerLevel(int playerID)
-{
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            return i._level;
-        }
-    }
-    return -1;
-}
-
-bool AllPlayers::isPlayerAlive(int playerID)
-{
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            return i.isAlive;
-        }
-    }
-    return false;
-}
-
-void AllPlayers::displayMorePlayerInfo(int playerID, int screenWidth, std::unique_ptr<AllItem> &_allItem)
+void AllPlayers::renderAll2D(std::pair<bool, std::size_t> moreInfo, std::unique_ptr<AllItem> &_allItem)
 {
     int playerInfoBoxWidth = 400;
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            DrawRectangle(screenWidth - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth,
-                (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
-            i.displayInfo2D(screenWidth - playerInfoBoxWidth - 5, 5, _allItem);
-        }
+    if (moreInfo.first) {
+        DrawRectangle(SCREEN_WIDTH - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
+        getPlayerByID(moreInfo.second).displayInfo2D(SCREEN_WIDTH - playerInfoBoxWidth - 5, 5, _allItem);
     }
 }
 
-void AllPlayers::addItem(int playerID, int itemType)
+void AllPlayers::setAllPlayer(std::vector<std::pair<Model, float>> model)
 {
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.addItem(itemType);
-        }
-    }
+    getAllTeam();
+    addPlayer(model);
+    moovePlayer();
+    setPlayerLevel();
+    setInventory();
+    collectOrDropItem();
+    incantation();
+    ejection();
+    broadcast();
+    playerDied();
 }
 
-void AllPlayers::removeItem(int playerID, int itemType)
+std::pair<bool, std::size_t> AllPlayers::isPlayerSelected(Vector3 target, Vector3 position)
 {
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.removeItem(itemType);
+    std::pair<bool, std::size_t> selectedPlayer;
+    for (auto &player: _allPlayer) {
+        Vector3 direction = Vector3Subtract(target, position);
+        direction = Vector3Normalize(direction);
+        Ray ray = {position, direction};
+
+        BoundingBox playerBox = GetMeshBoundingBox(player.getPlayerModel().meshes[0]);
+        if (player.isPlayerSelected(playerBox, ray)) {
+            selectedPlayer.first = true;
+            selectedPlayer.second = player.getPlayerID();
         }
     }
+    return selectedPlayer;
 }
 
-void AllPlayers::resetInventory(int playerID)
+// Private Function
+
+Player &AllPlayers::getPlayerByID(int PlayerID)
 {
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.resetInventory();
+    for (auto &player : _allPlayer) {
+        if (player.getPlayerID() == PlayerID) {
+            return player;
         }
     }
+    return _allPlayer[0];
 }
 
-std::vector<int> AllPlayers::getInventory(int playerID)
+void AllPlayers::addPlayer(std::vector<std::pair<Model, float>> model)
 {
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            return i.getInventory();
-        }
-    }
-    return {};
-}
-
-void AllPlayers::setInventory(int playerID, std::vector<int> newInv)
-{
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.setInventory(newInv);
-        }
+    if (!_cmd.getCommandAt(PNW_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PNW_CMD, 0);
+        int playerID = std::atoi(cmd.front().c_str());
+        Vector2 pos = {std::stof(cmd[1].c_str()), std::stof(cmd[2].c_str())};
+        int orientation = std::atoi(cmd[3].c_str());
+        std::string team = cmd[5];
+        int level = std::atoi(cmd[4].c_str());
+        Player player(pos, _isAnimated);
+        player.setPlayerID(playerID);
+        player.setPlayerDirection(orientation);
+        player.setLevel(level);
+        player.setTeam(team);
+        player.fillModel(model.front());
+        player.setEjectModel(_expulsionModel);
+        player.setIncantModel(_incantationModel);
+        player.setPlayerAnimation(_anim);
+        player.setPlayerColor(setPlayerColor(team));
+        _allPlayer.push_back(player);
+        _cmd.eraseFirstCmdInMap(PNW_CMD);
     }
 }
 
@@ -209,39 +115,157 @@ Color AllPlayers::setPlayerColor(std::string teamName)
     return color;
 }
 
-void AllPlayers::drawMessage(int playerID, std::string msg, Vector3 camPosition)
+void AllPlayers::moovePlayer(void)
 {
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.drawMessage(msg, camPosition);
+    if (!_cmd.getCommandAt(PPO_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PPO_CMD, 0);
+        Vector2 newPos = (Vector2){std::stof(cmd[1].c_str()), std::stof(cmd[2].c_str())};
+        int playerID = std::atoi(cmd.front().c_str());
+        int direction = std::atoi(cmd[3].c_str()) - 1;
+        getPlayerByID(playerID).setPlayerPos(newPos);
+        getPlayerByID(playerID).setPlayerDirection(direction);
+        _cmd.eraseFirstCmdInMap(PPO_CMD);
+    }
+}
+
+void AllPlayers::setPlayerLevel(void)
+{
+    if (!_cmd.getCommandAt(PLV_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PLV_CMD, 0);
+        int playerID = std::atoi(cmd.front().c_str());
+        int playerLevel = std::atoi(cmd[1].c_str());
+        getPlayerByID(playerID).setLevel(playerLevel);
+        _cmd.eraseFirstCmdInMap(PLV_CMD);
+    }
+}
+
+void AllPlayers::collectOrDropItem(void)
+{
+    std::string command = PDR_CMD;
+    bool addOrRemoveItem = REMOVE_ITEM;
+    for (int i = 0; i < 2; i++) {
+        if (!_cmd.getCommandAt(command, 0).empty()) {
+            std::vector<std::string> cmd = _cmd.getCommandAt(command, 0);
+            int playerID = std::atoi(cmd.front().c_str());
+            int itemType = std::atoi(cmd[1].c_str());
+            getPlayerByID(playerID).addOrRemoveItem(itemType, addOrRemoveItem);
+            _cmd.eraseFirstCmdInMap(command);
+        }
+        command = PGT_CMD;
+        addOrRemoveItem = ADD_ITEM;
+    }
+}
+
+void AllPlayers::setInventory(void)
+{
+    while (!_cmd.getCommandAt(PIN_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PIN_CMD, 0);
+        int playerID = std::atoi(cmd.front().c_str());
+        std::vector<int> newInv;
+        for (std::size_t i = 0; i < NBR_ITEM; i++) {
+            newInv.push_back(std::atoi(cmd[i + 3].c_str()));
+        }
+        getPlayerByID(playerID).setInventory(newInv);
+        _cmd.eraseFirstCmdInMap(PIN_CMD);
+    }
+}
+
+void AllPlayers::incantation(void)
+{
+    while (!_cmd.getCommandAt(PIC_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PIC_CMD, 0);
+        Vector2 pos = (Vector2){std::stof(cmd[0].c_str()), std::stof(cmd[1].c_str())};
+        for (std::size_t i = 3; i < cmd.size(); i++) {
+            startIncantation(std::atoi(cmd[i].c_str()), pos);
+        }
+        _cmd.eraseFirstCmdInMap(PIC_CMD);
+    }
+
+    while (!_cmd.getCommandAt(PIE_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PIE_CMD, 0);
+        Vector2 pos = (Vector2){std::stof(cmd[0].c_str()), std::stof(cmd[1].c_str())};
+        endOfIncantation(pos);
+        _cmd.eraseFirstCmdInMap(PIE_CMD);
+    }
+}
+
+void AllPlayers::startIncantation(int playerID, Vector2 pos)
+{
+    for (auto &player : _allPlayer) {
+        if (player.getPlayerID() == playerID) {
+            player.enableIncantationMode(pos);
         }
     }
 }
 
-void AllPlayers::enableIncantationMode(int playerID, Vector2 pos)
+void AllPlayers::endOfIncantation(Vector2 pos)
 {
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.enableIncantationMode(pos);
+    for (auto &player : _allPlayer) {
+        if (Utils::Vec2Comp(player.getRealPos(), pos)) {
+            player.disableIncantationMode();
         }
     }
 }
 
-void AllPlayers::disableIncantationMode(Vector2 pos)
+void AllPlayers::ejection(void)
 {
-    for (auto &i: _allPlayer) {
-        Vector2 incantPos = i.getIncantationPos();
-        if (incantPos.x == pos.x && incantPos.y == pos.y) {
-            i.disableIncantationMode();
+    while (!_cmd.getCommandAt(PEX_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PEX_CMD, 0);
+        int playerID = std::atoi(cmd[0].c_str());
+        getPlayerByID(playerID).playerExpulsion();
+        _cmd.eraseFirstCmdInMap(PEX_CMD);
+    }
+}
+
+void AllPlayers::playerDied(void)
+{
+    while (!_cmd.getCommandAt(PDI_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PDI_CMD, 0);
+        if (removePlayerFromIsland(std::atoi(cmd.front().c_str()))) {
+            _cmd.eraseFirstCmdInMap(PDI_CMD);
+        } else {
+            break;
         }
     }
 }
 
-void AllPlayers::playerExpulsion(int playerID)
+bool AllPlayers::removePlayerFromIsland(int playerID)
 {
-    for (auto &i: _allPlayer) {
-        if (i._playerID == playerID) {
-            i.playerExpulsion();
+    for (std::size_t i = 0; i < _allPlayer.size(); i++) {
+        if (_allPlayer[i].getPlayerID() == playerID) {
+            _allPlayer.erase(_allPlayer.begin() + i);
+            return true;
         }
+    }
+    return false;
+}
+
+void AllPlayers::getAllTeam(void)
+{
+    while (_cmd.getCommandAt(TNA_CMD, 0).size() == 1) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(TNA_CMD, 0);
+        if (_allTeamName.size() == 0) {
+            _allTeamName.push_back(cmd.front());
+            continue;
+        }
+        bool isUnique = true;
+        for (auto &i: _allTeamName) {
+            if (i == cmd.front())
+                isUnique = false;
+        }
+        if (isUnique) {
+            _allTeamName.push_back(cmd.front());
+        }
+        _cmd.eraseFirstCmdInMap(TNA_CMD);
+    }
+}
+
+void AllPlayers::broadcast(void)
+{
+    if (!_cmd.getCommandAt(PBC_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(PBC_CMD, 0);
+        int playerID = std::atoi(cmd.front().c_str());
+        getPlayerByID(playerID).setMessage(cmd[1]);
+        _cmd.eraseFirstCmdInMap(PBC_CMD);
     }
 }

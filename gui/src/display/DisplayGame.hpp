@@ -60,21 +60,17 @@ class DisplayGame {
         std::pair<bool, std::size_t> _selectedPlayer;
         asio::ip::tcp::socket &_socket;
 
-        //std::unique_ptr<AllPlayers> _allPlayers;
-        //std::unique_ptr<AllEggs> _allEggs;
         std::vector<std::pair<Model, float>> _allItemModel;
         std::vector<std::pair<Model, float>> _islandModel;
+        std::vector<std::pair<Model, float>> _playerModel;
         std::pair<Model, float> _eggModel;
 
         std::unique_ptr<AllIsland> _allIsland;
         std::unique_ptr<AllItem> _allItem;
         std::unique_ptr<AllEggs> _allEggs;
-
-        AllPlayers _player;
-        bool _isAnimated;
+        std::unique_ptr<AllPlayers> _allPlayer;
 
         void initWaterShader(void);
-        void displayMorePlayerInfo(void);
         void useServerInfo(UseRecivedCmd &recivedCmd);
         void display3D(void);
         void display2D(void);

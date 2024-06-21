@@ -26,6 +26,11 @@
     #define TEXT_LEVEL "Level : "
     #define INCANTATION_PATH "./gui/assets/models/subatomic_particle_fx.glb"
     #define EXPULSION_PATH "./gui/assets/models/sun.glb"
+    #define PLAYER_ANIM "./gui/assets/models/dilophosaurus-cross-x-men/source/dilophosaurus_sf_bone.glb"
+    #define PLAYER_HIGHT 1.1
+    #define ADD_ITEM true
+    #define REMOVE_ITEM false
+    #define SCREEN_WIDTH 1920
 
     static const std::map<int, std::string> PLAYER_ORIENTATION {
         {0, "North"},
@@ -34,43 +39,43 @@
         {3, "West"}
     };
 
-class Player {
+class Player : public LoadAndRender {
     public:
-        Player(Vector3 position);
-        void moovePlayerToIsland(Vector3 position);
-        void displayPlayerInfo(Vector3 camPosition);
+        Player(Vector2 position, bool isAnimated);
+
+        void render() override;
+        void fillModel(std::pair<Model, float> model) override;
+        void setPlayerAnimation(ModelAnimation *_playerAnimation);
+        void setIncantModel(Model incantModel);
+        void setEjectModel(Model ejectModel);
+        void setPlayerID(int ID);
+        int getPlayerID(void);
+        void setPlayerPos(Vector2 pos);
+        void setPlayerDirection(int direction);
+        Vector3 getPosition(void);
+        Vector2 getRealPos(void);
+        void setLevel(int level);
+        int getLevel(void);
         void setTeam(std::string team);
-        bool isPlayerSelected(BoundingBox playerBox, Ray ray);
-        void displayInfo2D(int x, int y, std::unique_ptr<AllItem> &_allItem);
+        std::string getTeam(void);
         void setPlayerColor(Color color);
-        void addItem(int itemType);
-        void removeItem(int itemType);
-        void resetInventory(void);
-        void setInventory(std::vector<int> newInv);
         void drawMessage(std::string msg, Vector3 camPosition);
+        void displayInfo2D(int x, int y, std::unique_ptr<AllItem> &_allItem);
+        void displayPlayerInfo(Vector3 camPosition);
+        bool isPlayerSelected(BoundingBox playerBox, Ray ray);
+        void addOrRemoveItem(int itemType, bool addOrRemove);
+        void setInventory(std::vector<int> newInv);
+        std::vector<int> getInventory(void);
         void enableIncantationMode(Vector2 pos);
-        void drawIncantation(void);
         void disableIncantationMode(void);
         Vector2 getIncantationPos(void);
-        Vector3 getPosition();
-        std::vector<int> getInventory(void);
+        void drawIncantation(void);
         void playerExpulsion(void);
         void drawExpulsion(void);
+        void setMessage(std::string msg);
+        std::string getMessage(void);
+        Model getPlayerModel(void);
 
-        Model _playerModel;
-        ModelAnimation *_playerAnimation;
-        int _playerID;
-        int _animsCount;
-        int _animFrameCounter;
-        int _level;
-        std::string getTeam(void);
-        Vector3 _realPos;
-        float _rotationAngle;
-        bool isAlive = true;
-        Model _incantationModel;
-        Model _expulsionModel;
-        std::string _team;
-        int _playerOrientation;
     private:
         void DrawText3D(Font font, const char *text, Vector3 position, float fontSize, float fontSpacing, float lineSpacing, Color tint);
         void DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint);
@@ -78,6 +83,17 @@ class Player {
         Vector3 RotatePointAroundY(Vector3 point);
         Color getNegativeColor(Color color);
 
+        Model _playerModel;
+        ModelAnimation *_playerAnimation;
+        int _playerID;
+        int _animFrameCounter;
+        int _level;
+        Vector2 _realPos;
+        float _rotationAngle;
+        Model _incantationModel;
+        Model _expulsionModel;
+        std::string _team;
+        int _playerOrientation;
         Color _playerColor = WHITE;
         Model _infoBackground;
         Model _broadcastBackground;
@@ -86,7 +102,6 @@ class Player {
         Vector3 _destPosition;
         Vector2 _incantPos;
         float _distanceBetweenPos;
-        float _playerHight;
         float _speedX;
         float _speedY;
         float _speedZ;
@@ -99,42 +114,44 @@ class Player {
         float _incantationSize = 0.1;
         float _incantationOpacity = 0.5;
         bool _isIncantationExpload = false;
-
         float _expulsionSize = 0.1;
         float _expulsionOrientation = 0;
         bool _isExpulsion = false;
+        float _playerSize;
+        bool _isAnimated = false;
+        std::string _msg;
 };
 
 class AllPlayers {
 
     public:
+        AllPlayers(CommandManager &cmd, bool isAnimated);
+        void renderAll(Vector3 camPosition);
+        void renderAll2D(std::pair<bool, std::size_t> moreInfo, std::unique_ptr<AllItem> &_allItem);
+        void setAllPlayer(std::vector<std::pair<Model, float>> model);
+        std::pair<bool, std::size_t> isPlayerSelected(Vector3 target, Vector3 position);
 
-        std::vector<Player> _allPlayer;
-        std::vector<std::string> _allTeamName;
-
-        void loadModelAndAnim(std::pair<Model, float>, std::string path);
-        void addPlayerToIsland(Vector3 position, int playerID);
-        void moovePlayerToIsland(Vector3 position, int playerID);
-        void changePlayerOrientation(float direction, int playerID);
-        bool removePlayerFromIsland(int playerID);
-        void setPlayerTeam(std::string playerTeam, int playerID);
-        void drawPlayer(bool isAnimated);
-        Vector3 getPlayerRealPos(int playerID);
-        Vector3 getSize(void);
-        void setPlayerLevel(int playerID, int level);
-        int getPlayerLevel(int playerID);
-        bool isPlayerAlive(int playerID);
-        void displayMorePlayerInfo(int playerID, int screenWidth, std::unique_ptr<AllItem> &_allItem);
-        void addItem(int playerID, int itemType);
-        void removeItem(int playerID, int itemType);
-        void resetInventory(int playerID);
-        std::vector<int> getInventory(int playerID);
-        void setInventory(int playerID, std::vector<int> newInv);
-        void drawMessage(int playerID, std::string msg, Vector3 camPosition);
-        void disableIncantationMode(Vector2 pos);
-        void enableIncantationMode(int playerID, Vector2 pos);
-        void playerExpulsion(int playerID);
     private:
+        CommandManager &_cmd;
+        std::vector<Player> _allPlayer;
+        bool _isAnimated = false;
+
+        Player &getPlayerByID(int PlayerID);
+        void addPlayer(std::vector<std::pair<Model, float>> model);
+        void moovePlayer(void);
+        void setPlayerLevel(void);
+        void collectOrDropItem(void);
+        void setInventory(void);
+        void incantation(void);
+        void startIncantation(int playerID, Vector2 pos);
+        void endOfIncantation(Vector2 pos);
+        void ejection(void);
+        void playerDied(void);
+        bool removePlayerFromIsland(int playerID);
+        void getAllTeam(void);
+        void broadcast(void);
+
+
         Model _model;
         Model _incantationModel;
         Model _expulsionModel;
@@ -142,6 +159,7 @@ class AllPlayers {
         ModelAnimation *_anim;
         int _animsCount;
         std::vector<std::vector<int>> _bct;
+        std::vector<std::string> _allTeamName;
         Color setPlayerColor(std::string teamName);
 };
 

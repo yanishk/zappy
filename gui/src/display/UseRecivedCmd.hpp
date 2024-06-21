@@ -16,42 +16,21 @@
 
 class UseRecivedCmd {
     public:
-        UseRecivedCmd(CommandManager &cmd, AllPlayers &player, asio::ip::tcp::socket &socket);
+        UseRecivedCmd(CommandManager &cmd, asio::ip::tcp::socket &socket);
 
-        void callAllFunctions(Vector3 camPosition);
+        void callAllFunctions(void);
         bool getGameStatus(void);
 
     private:
         CommandManager &_cmd;
-        AllPlayers &_player;
         asio::ip::tcp::socket &_socket;
 
         bool _isFinished = false;
         int _sgtValue;
-        int getNbrItemTypeOnIsland(Vector3 pos, int type);
-        void removeItemFromIsland(Vector3 position, int type);
-        void addItemToIsland(Vector3 position, int type);
 
-        void getBct(void);
-        void getTna(void);
-        void getPnw(void);
-        void getPpo(void);
-        void getPlv(void);
-        void getPin(void);
-        void getPbc(Vector3 camPosition);
-        void getPex(void);
-        void getPic(void);
-        void getPie(void);
-        void getPdr(void);
-        void getPgt(void);
-        void getPdi(void);
-        void getEnw(void);
-        void getEbo(void);
-        void getEdi(void);
         void getSgt(void);
         void getSst(void);
         void getSeg(void);
-        void getSmg(void);
 };
 
 #endif /* !USERECIVEDCMD_HPP_ */
