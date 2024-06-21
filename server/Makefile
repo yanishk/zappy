@@ -103,40 +103,56 @@ SRC			=	./src/main.c											\
 				./src/lib/calculate_time_unit.c							\
 				./src/lib/has_backslash.c
 
-SRC_TEST 	=   	 ./src/lib/calculate_time_unit.c	\
-                    ./tests/test_calculate_time_unit.c	\
-					./src/lib/get_graphical_client.c	\
-                    ./tests/test_get_graphical_client.c	\
-					./src/lib/get_next_id.c				\
-                    ./tests/test_get_next_id.c			\
-					./src/lib/get_random_team_egg.c 	\
-					./tests/test_get_random_team_egg.c	\
-					./src/lib/get_tile_index.c 			\
-					./tests/test_get_tile_index.c		\
-					./src/lib/get_player_direction.c 	\
-					./tests/test_get_player_direction.c	\
-					./src/lib/has_backslash.c 			\
-					./tests/test_has_backslash.c		\
-					./src/lib/is_a_resource.c 			\
-					./tests/test_is_a_resource.c		\
-					./src/lib/is_on_same_tile.c 		\
-					./tests/test_is_on_same_tile.c		\
-					./src/lib/is_positive_number.c 		\
-					./tests/test_is_positive_number.c	\
-					./src/lib/time_is_up.c 				\
-					./tests/test_time_is_up.c			\
-					./src/lib/count_team_slots.c		\
-					./tests/test_count_team_slots.c 	\
-					./src/lib/get_link.c				\
-					./tests/test_get_link.c 			\
-					./src/lib/array_functions.c 		\
-					./tests/test_array_functions.c		\
-					./src/lib/word_array.c 				\
-					./tests/test_word_array.c			\
-					./src/lib/get_resources.c 			\
-					./tests/test_get_resources.c		\
-					./src/lib/is_command_queue_full.c 	\
-					./tests/test_is_command_queue_full.c
+SRC_TEST 	=   	 ./src/lib/calculate_time_unit.c			\
+                    ./tests/lib/test_calculate_time_unit.c		\
+					./src/lib/get_graphical_client.c			\
+                    ./tests/lib/test_get_graphical_client.c		\
+					./src/lib/get_next_id.c						\
+                    ./tests/lib/test_get_next_id.c				\
+					./src/lib/get_random_team_egg.c 			\
+					./tests/lib/test_get_random_team_egg.c		\
+					./src/lib/get_tile_index.c 					\
+					./tests/lib/test_get_tile_index.c			\
+					./src/lib/get_player_direction.c 			\
+					./tests/lib/test_get_player_direction.c		\
+					./src/lib/has_backslash.c 					\
+					./tests/lib/test_has_backslash.c			\
+					./src/lib/is_a_resource.c 					\
+					./tests/lib/test_is_a_resource.c			\
+					./src/lib/is_on_same_tile.c 				\
+					./tests/lib/test_is_on_same_tile.c			\
+					./src/lib/is_positive_number.c 				\
+					./tests/lib/test_is_positive_number.c		\
+					./src/lib/time_is_up.c 						\
+					./tests/lib/test_time_is_up.c				\
+					./src/lib/count_team_slots.c				\
+					./tests/lib/test_count_team_slots.c 		\
+					./src/lib/get_link.c						\
+					./tests/lib/test_get_link.c 				\
+					./src/lib/array_functions.c 				\
+					./tests/lib/test_array_functions.c			\
+					./src/lib/word_array.c 						\
+					./tests/lib/test_word_array.c				\
+					./src/lib/get_resources.c 					\
+					./tests/lib/test_get_resources.c			\
+					./src/lib/is_command_queue_full.c 			\
+					./tests/lib/test_is_command_queue_full.c	\
+					./src/arguments/frequency_flag.c			\
+					./tests/arguments/test_frequency_flag.c 	\
+					./src/arguments/height_flag.c				\
+					./tests/arguments/test_height_flag.c 		\
+					./src/arguments/width_flag.c				\
+					./tests/arguments/test_width_flag.c 		\
+					./src/arguments/port_flag.c					\
+					./tests/arguments/test_port_flag.c 			\
+					./src/arguments/nb_clients_flag.c			\
+					./tests/arguments/test_nb_clients_flag.c 	\
+					./src/arguments/immortal_flag.c				\
+					./tests/arguments/test_immortal_flag.c 		\
+					./src/arguments/team_name_flag.c			\
+					./tests/arguments/test_team_name_flag.c 	\
+					./src/arguments/init_arg_struct.c			\
+					./tests/arguments/test_init_arg_struct.c 	\
 
 OBJ			=	$(SRC:.c=.o)
 
@@ -162,7 +178,7 @@ tests_clean:
 		$(RM) $(NAME_TEST)
 		$(RM) *.gcno *.gcda
 
-clean: tests_clean
+clean:
 	$(RM) $(OBJ)
 	$(RM) *.gcno *.gcda
 
