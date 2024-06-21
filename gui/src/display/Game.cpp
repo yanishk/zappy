@@ -134,11 +134,6 @@ void Game::initWaterShader(void)
     _WaterModel.materials[0].shader = _waterShader;
 }
 
-void Game::useServerInfo(UseRecivedCmd &recivedCmd)
-{
-    recivedCmd.callAllFunctions();
-}
-
 void Game::display3D(void)
 {
     BeginMode3D(_camera);
@@ -212,12 +207,46 @@ void Game::cameraPositionStart(void)
     }
 }
 
+
+int Game::getSgt(void)
+{
+    return _sgtValue;
+}
+
+void Game::getSgtCmd(void)
+{
+    if (!_cmd.getCommandAt(SGT_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(SGT_CMD, 0);
+        _sgtValue = std::stoi(cmd[0]);
+        _cmd.eraseFirstCmdInMap(SGT_CMD);
+    }
+}
+
+void Game::requestChangingTimeUnit(void)
+{
+    if (IsKeyPressed(KEY_UP)) {
+        _sgtValue += SST_CHANGE;
+        std::string value = std::to_string(_sgtValue);
+        std::string sstCmd = SST_CMD;
+        sstCmd += SPACE_C;
+        sstCmd += value;
+        sstCmd += NEW_L;
+        asio::write(_socket, asio::buffer(sstCmd));
+    } else if (IsKeyPressed(KEY_DOWN)) {
+        _sgtValue -= SST_CHANGE;
+        std::string value = std::to_string(_sgtValue);
+        std::string sstCmd = SST_CMD;
+        sstCmd += SPACE_C;
+        sstCmd += value;
+        sstCmd += NEW_L;
+        asio::write(_socket, asio::buffer(sstCmd));
+    }
+}
+
 void Game::launchGame(void)
 {
     DisableCursor();
     cameraPositionStart();
-    UseRecivedCmd recivedCmd(_cmd, _socket);
-
     SetTargetFPS(60);
     float seconds = 0.0f;
 
@@ -226,7 +255,8 @@ void Game::launchGame(void)
         _allItem.get()->setAllItem(_allItemModel);
         _allEggs.get()->setAllEggs(_eggModel);
         _allPlayer.get()->setAllPlayer(_playerModel);
-        useServerInfo(recivedCmd);
+
+        requestChangingTimeUnit();
         seconds += (GetFrameTime() / 2);
 
         SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);

@@ -15,7 +15,6 @@ SRC		=	main.cpp							\
 			src/client/Client.cpp				\
 			src/client/Commands.cpp				\
 			src/display/item/Item.cpp			\
-			src/display/UseRecivedCmd.cpp		\
 			src/display/egg/Eggs.cpp			\
 			src/display/egg/AllEggs.cpp			\
 			src/display/island/Island.cpp		\

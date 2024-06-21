@@ -19,7 +19,6 @@
     #include "Client.hpp"
     #include "Item.hpp"
     #include "Island.hpp"
-    #include "UseRecivedCmd.hpp"
     #include "Eggs.hpp"
 
     #define WINDOW_NAME "Zappy_gui"
@@ -44,8 +43,12 @@ class Game {
         ~Game();
         void updateCamera(void);
         Vector3 setVector3(float x, float y, float z);
+        int getSgt(void);
+
         void launchGame(void);
         void fillAllModel(ZappyModel);
+        void getSgtCmd(void);
+        void requestChangingTimeUnit(void);
 
     private:
         enum ModelType
@@ -61,13 +64,16 @@ class Game {
         Shader _waterShader;
         Model _WaterModel;
         Model _sky;
+        asio::ip::tcp::socket &_socket;
+
         int _screenWidth = 1920;
         int _screenHeight = 1080;
         int _cameraMode = CAMERA_FREE;
         int _secondLoc;
+        int _sgtValue;
+
         std::pair<int, int> _mapSize;
         std::pair<bool, std::size_t> _selectedPlayer;
-        asio::ip::tcp::socket &_socket;
 
         std::vector<std::pair<Model, float>> _allItemModel;
         std::vector<std::pair<Model, float>> _islandModel;
@@ -80,7 +86,6 @@ class Game {
         std::unique_ptr<AllPlayers> _allPlayer;
 
         void initWaterShader(void);
-        void useServerInfo(UseRecivedCmd &recivedCmd);
         void display3D(void);
         void display2D(void);
         void mooveCameraToCoord(Vector3 position, Vector3 target);
