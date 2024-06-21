@@ -59,6 +59,13 @@
     #define SHADER_SPEEDY "speedY"
     #define SHADER_SIZE "size"
 
+    #define VALUE_SHADER_FREQX 25.0
+    #define VALUE_SHADER_FREQY 25.0
+    #define VALUE_SHADER_AMPX 5.0
+    #define VALUE_SHADER_AMPY 5.0
+    #define VALUE_SHADER_SPEEDX 8.0
+    #define VALUE_SHADER_SPEEDY 8.0
+
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
 class Game {

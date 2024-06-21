@@ -112,12 +112,12 @@ void Game::initWaterShader(void)
     int speedXLoc = GetShaderLocation(_waterShader, SHADER_SPEEDX);
     int speedYLoc = GetShaderLocation(_waterShader, SHADER_SPEEDY);
 
-    float freqX = 25.0f;
-    float freqY = 25.0f;
-    float ampX = 5.0f;
-    float ampY = 5.0f;
-    float speedX = 8.0f;
-    float speedY = 8.0f;
+    float freqX = VALUE_SHADER_FREQX;
+    float freqY = VALUE_SHADER_FREQY;
+    float ampX = VALUE_SHADER_AMPX;
+    float ampY = VALUE_SHADER_AMPY;
+    float speedX = VALUE_SHADER_SPEEDX;
+    float speedY = VALUE_SHADER_SPEEDY;
 
     float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
     SetShaderValue(_waterShader, GetShaderLocation(_waterShader, SHADER_SIZE), &screenSize, SHADER_UNIFORM_VEC2);
