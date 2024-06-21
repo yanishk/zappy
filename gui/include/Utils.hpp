@@ -45,6 +45,13 @@ class Utils {
                 return true;
             return false;
         }
+
+        static bool Vec2Comp(Vector2 vec1, Vector2 vec2)
+        {
+            if (vec1.x == vec2.x && vec1.y == vec2.y)
+                return true;
+            return false;
+        }
 };
 
 class ErrorHandling : public std::exception {

@@ -6,7 +6,7 @@
 */
 
 #include "Client.hpp"
-#include "DisplayGame.hpp"
+#include "Game.hpp"
 #include "ParsesModelConfig.hpp"
 #include "Utils.hpp"
 
@@ -36,7 +36,7 @@ void Client::startDisplay()
     std::srand(std::time(NULL));
     ParsesModelConfig parse;
     std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile = parse.parsesFile(CONFIG_FILE_PATH);
-    DisplayGame game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket, _isAnimated);
+    Game game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket, _isAnimated);
     try {
         game.fillAllModel(parsedFile);
     } catch (const ErrorHandling& e) {
