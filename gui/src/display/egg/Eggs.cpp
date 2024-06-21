@@ -68,8 +68,22 @@ void AllEggs::setAllEggs(std::pair<Model, float> model)
         newEgg.setEggPosAndID((Vector2){std::stof(cmd[2].c_str()), std::stof(cmd[3].c_str())}, std::atoi(cmd[0].c_str()));
         _allEggs.push_back(newEgg);
         _cmd.eraseFirstCmdInMap(ENW_CMD);
+    } else if (!_cmd.getCommandAt(EBO_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(EBO_CMD, 0);
+        removeEgg(std::stoi(cmd[0]));
+        _cmd.eraseFirstCmdInMap(EBO_CMD);
     }
 
+}
+
+void AllEggs::removeEgg(int Id)
+{
+    for (auto it = _allEggs.begin(); it != _allEggs.end(); ++it) {
+        if (it->getEggId() == Id) {
+            _allEggs.erase(it);
+            break;
+        }
+    }
 }
 
 

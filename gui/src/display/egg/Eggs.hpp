@@ -48,6 +48,7 @@ class AllEggs {
         AllEggs(CommandManager &cmd);
 
         void setAllEggs(std::pair<Model, float> model);
+        void removeEgg(int Id);
         void renderAll(void);
 
     private:
