@@ -8,16 +8,19 @@
 CXX		=	g++
 
 SRC		=	main.cpp							\
-			src/display/Game.cpp			\
+			src/display/Game.cpp				\
 			src/display/ParsesModelConfig.cpp	\
 			src/display/player/Player.cpp		\
 			src/display/player/AllPlayer.cpp	\
 			src/client/Client.cpp				\
 			src/client/Commands.cpp				\
 			src/display/item/Item.cpp			\
+			src/display/item/AllItem.cpp		\
 			src/display/egg/Eggs.cpp			\
 			src/display/egg/AllEggs.cpp			\
 			src/display/island/Island.cpp		\
+			src/display/island/AllIsland.cpp	\
+
 
 OBJ		=	$(SRC:.cpp=.o)
 

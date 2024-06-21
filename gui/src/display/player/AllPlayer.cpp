@@ -5,15 +5,13 @@
 ** AllPlayers
 */
 
-#include "Player.hpp"
+#include "AllPlayer.hpp"
 
-AllPlayers::AllPlayers(CommandManager &cmd, bool isAnimated) : _cmd(cmd)
+AllPlayers::AllPlayers(CommandManager &cmd, bool isAnimated) : _cmd(cmd), _isAnimated(isAnimated), _animsCount(0)
 {
-    _isAnimated = isAnimated;
     _anim = LoadModelAnimations(PLAYER_ANIM, &_animsCount);
     _incantationModel = LoadModel(INCANTATION_PATH);
     _expulsionModel = LoadModel(EXPULSION_PATH);
-    _animsCount = 0;
 }
 
 void AllPlayers::renderAll(Vector3 camPosition)
@@ -29,13 +27,15 @@ void AllPlayers::renderAll(Vector3 camPosition)
 
 void AllPlayers::renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem)
 {
-    int playerInfoBoxWidth = 400;
     if (!moreInfo.first)
         return;
     for (auto &player: _allPlayer) {
         if (player.getPlayerID() == moreInfo.second) {
-            DrawRectangle(SCREEN_WIDTH - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
-            player.displayInfo2D(SCREEN_WIDTH - playerInfoBoxWidth - 5, 5, _allItem);
+            DrawRectangle(SCREEN_WIDTH - PLAYER_INFOBOX_WIDTH - PLAYER_INFOBOX_POSY,
+                PLAYER_INFOBOX_POSY, PLAYER_INFOBOX_WIDTH,
+                (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE,
+                Fade(GRAY, 0.5f));
+            player.displayInfo2D(SCREEN_WIDTH - PLAYER_INFOBOX_WIDTH - PLAYER_INFOBOX_POSY, PLAYER_INFOBOX_POSY, _allItem);
         }
     }
 }
@@ -44,7 +44,7 @@ void AllPlayers::setAllPlayer(std::vector<std::pair<Model, float>> model)
 {
     getAllTeam();
     addPlayer(model);
-    moovePlayer();
+    movePlayer();
     setPlayerLevel();
     setInventory();
     collectOrDropItem();
@@ -95,7 +95,7 @@ void AllPlayers::addPlayer(std::vector<std::pair<Model, float>> model)
         player.setPlayerID(playerID);
         player.setLevel(level);
         player.setTeam(team);
-        player.fillModel(model.front());
+        player.setModel(model.front());
         player.setEjectModel(_expulsionModel);
         player.setIncantModel(_incantationModel);
         player.setPlayerAnimation(_anim);
@@ -113,14 +113,14 @@ Color AllPlayers::setPlayerColor(std::string teamName)
         teamIndex++;
     }
     Color color;
-    color.r = (3 / teamIndex) * 255;
-    color.g = (2 / teamIndex) * 255;
-    color.b = (1 / teamIndex) * 255;
-    color.a = 255;
+    color.r = (3 / teamIndex) * MAX_RGB;
+    color.g = (2 / teamIndex) * MAX_RGB;
+    color.b = (1 / teamIndex) * MAX_RGB;
+    color.a = MAX_RGB;
     return color;
 }
 
-void AllPlayers::moovePlayer(void)
+void AllPlayers::movePlayer(void)
 {
     if (!_cmd.getCommandAt(PPO_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PPO_CMD, 0);
@@ -148,7 +148,7 @@ void AllPlayers::collectOrDropItem(void)
 {
     std::string command = PDR_CMD;
     bool addOrRemoveItem = REMOVE_ITEM;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < LOOP_ITEM_TAKE_DROP; i++) {
         if (!_cmd.getCommandAt(command, 0).empty()) {
             std::vector<std::string> cmd = _cmd.getCommandAt(command, 0);
             int playerID = std::atoi(cmd.front().c_str());

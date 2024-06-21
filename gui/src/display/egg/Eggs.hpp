@@ -16,12 +16,15 @@
     #include "Render.hpp"
     #include "Commands.hpp"
 
+    #define ROTATE_RAND_RANGE (210 - 159 + 1) + 159
+    #define DEFAULT_EGG_INCLIN 80
+
 class Egg : public ILoadAndRender {
 
     public:
 
         void render() override;
-        void fillModel(std::pair<Model, float> model) override;
+        void setModel(std::pair<Model, float> model) override;
         void setEggPosAndID(Vector2 pos, int eggId);
 
         int getEggId();
@@ -38,22 +41,6 @@ class Egg : public ILoadAndRender {
         float _eggSize;
 
         int _eggID;
-};
-
-class AllEggs {
-
-    public:
-
-        AllEggs(CommandManager &cmd);
-
-        void setAllEggs(std::pair<Model, float> model);
-        void removeEgg(int Id);
-        void renderAll(void);
-
-    private:
-
-        CommandManager &_cmd;
-        std::vector<Egg> _allEggs;
 };
 
 #endif /* !EGGS_HPP_ */

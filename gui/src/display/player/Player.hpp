@@ -15,7 +15,7 @@
     #include <map>
     #include <chrono>
     #include "Utils.hpp"
-    #include "Item.hpp"
+    #include "AllItem.hpp"
 
     #define MAX_RGB 255
     #define PLAYER_INFO_NBR_LINE 11
@@ -44,7 +44,7 @@ class Player : public ILoadAndRender {
         Player(Vector2 position, bool isAnimated);
 
         void render() override;
-        void fillModel(std::pair<Model, float> model) override;
+        void setModel(std::pair<Model, float> model) override;
         void setPlayerAnimation(ModelAnimation *_playerAnimation);
         void setIncantModel(Model incantModel);
         void setEjectModel(Model ejectModel);
@@ -111,56 +111,15 @@ class Player : public ILoadAndRender {
         bool _isMooving;
         bool _isIncantation;
         bool _isTimerStart;
-        float _incantationSize = 0.1;
-        float _incantationOpacity = 0.5;
-        bool _isIncantationExpload = false;
-        float _expulsionSize = 0.1;
-        float _expulsionOrientation = 0;
-        bool _isExpulsion = false;
+        float _incantationSize;
+        float _incantationOpacity;
+        bool _isIncantationExpload;
+        float _expulsionSize;
+        float _expulsionOrientation;
+        bool _isExpulsion;
         float _playerSize;
         bool _isAnimated = false;
         std::string _msg;
-};
-
-class AllPlayers {
-
-    public:
-        AllPlayers(CommandManager &cmd, bool isAnimated);
-        void renderAll(Vector3 camPosition);
-        void renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem);
-        void setAllPlayer(std::vector<std::pair<Model, float>> model);
-        std::pair<bool, int> isPlayerSelected(Vector3 target, Vector3 position);
-
-    private:
-        CommandManager &_cmd;
-        std::vector<Player> _allPlayer;
-        bool _isAnimated = false;
-
-        Player &getPlayerByID(int PlayerID);
-        void addPlayer(std::vector<std::pair<Model, float>> model);
-        void moovePlayer(void);
-        void setPlayerLevel(void);
-        void collectOrDropItem(void);
-        void setInventory(void);
-        void incantation(void);
-        void startIncantation(int playerID, Vector2 pos);
-        void endOfIncantation(Vector2 pos);
-        void ejection(void);
-        void playerDied(void);
-        bool removePlayerFromIsland(int playerID);
-        void getAllTeam(void);
-        void broadcast(void);
-
-
-        Model _model;
-        Model _incantationModel;
-        Model _expulsionModel;
-        Vector3 _size;
-        ModelAnimation *_anim;
-        int _animsCount;
-        std::vector<std::vector<int>> _bct;
-        std::vector<std::string> _allTeamName;
-        Color setPlayerColor(std::string teamName);
 };
 
 #endif /* !PLAYER_HPP_ */

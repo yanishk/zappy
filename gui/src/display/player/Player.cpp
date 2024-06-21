@@ -7,7 +7,8 @@
 
 #include "Player.hpp"
 
-Player::Player(Vector2 position, bool isAnimated)
+Player::Player(Vector2 position, bool isAnimated) : _incantationSize(0.1), _incantationOpacity(0.5), _isIncantationExpload(false),
+    _expulsionSize(0.1), _expulsionOrientation(0), _isExpulsion(false)
 {
     _realPos = position;
     _playerPosition = (Vector3){(position.x + 1) * spaceBetwenIsland, 1.1, position.y * spaceBetwenIsland};
@@ -43,7 +44,7 @@ void Player::render()
     DrawModelEx(_playerModel , getPosition(), (Vector3){ 1.0f, 0.0f, 0.0f }, 0.0f, (Vector3){_playerSize, _playerSize, _playerSize}, WHITE);
 }
 
-void Player::fillModel(std::pair<Model, float> model)
+void Player::setModel(std::pair<Model, float> model)
 {
     _playerModel = model.first;
     _playerSize = model.second;
@@ -274,24 +275,24 @@ Vector3 Player::getPosition()
     }
     float x = _playerPosition.x - _destPosition.x;
 
-    float mooveSpeed = 0.5;
+    float moveSpeed = 0.5;
 
     if (x < 0)
-        _playerPosition.x += mooveSpeed;
+        _playerPosition.x += moveSpeed;
     else if (x > 0)
-        _playerPosition.x -= mooveSpeed;
+        _playerPosition.x -= moveSpeed;
 
     float z = _playerPosition.z - _destPosition.z;
 
     if (z < 0)
-        _playerPosition.z += mooveSpeed;
+        _playerPosition.z += moveSpeed;
     else if (z > 0)
-        _playerPosition.z -= mooveSpeed;
+        _playerPosition.z -= moveSpeed;
 
     if (dist > _distanceBetweenPos / 2)
-        _playerPosition.y += mooveSpeed / 2;
+        _playerPosition.y += moveSpeed / 2;
     else if (dist < _distanceBetweenPos / 2 && dist > 0)
-        _playerPosition.y -= mooveSpeed / 2;
+        _playerPosition.y -= moveSpeed / 2;
 
     return _playerPosition;
 }

@@ -17,7 +17,7 @@ class ILoadAndRender {
         virtual ~ILoadAndRender() = default;
 
         virtual void render() = 0;
-        virtual void fillModel(std::pair<Model, float>) = 0;
+        virtual void setModel(std::pair<Model, float>) = 0;
 };
 
 #endif /* !RENDER_HPP_ */

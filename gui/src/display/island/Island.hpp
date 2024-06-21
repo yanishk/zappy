@@ -21,12 +21,14 @@
     #include "Render.hpp"
     #include "Commands.hpp"
 
+    #define ISLAND_ALTITUDE -4
+
 class Island : public ILoadAndRender {
 
     public:
 
         void render() override;
-        void fillModel(std::pair<Model, float> model) override;
+        void setModel(std::pair<Model, float> model) override;
         void setIslandPos(Vector3 pos);
 
     private:
@@ -34,22 +36,6 @@ class Island : public ILoadAndRender {
         Model _islandModel;
         Vector3 _islandPosition;
         float _islandSize;
-};
-
-class AllIsland {
-
-    public:
-
-        AllIsland(CommandManager &cmd);
-
-        void setAllIsland(std::vector<std::pair<Model, float>> model);
-        void renderAll(void);
-
-    private:
-
-        CommandManager &_cmd;
-        std::vector<Island> _allIsland;
-
 };
 
 #endif /* !ISLAND_HPP_ */

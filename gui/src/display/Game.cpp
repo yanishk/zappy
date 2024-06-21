@@ -40,14 +40,14 @@ Vector3 Game::setVector3(float x, float y, float z)
 void Game::updateCamera(void)
 {
     float alltitude = 0.0;
-    float speed = 0.4;
+    float speed = CAMERA_MOVEMENT_SPEED;
 
     if (IsKeyDown(KEY_SPACE))
         alltitude += speed;
     if (IsKeyDown(KEY_LEFT_SHIFT))
         alltitude -= speed;
     if (IsKeyDown(KEY_LEFT_CONTROL))
-        speed += 0.2;
+        speed += CAMERA_MOVEMENT_SPEED / 2;
     Vector3 movement = setVector3(
         IsKeyDown(KEY_W) * speed - IsKeyDown(KEY_S) * speed,
         IsKeyDown(KEY_D) * speed - IsKeyDown(KEY_A) * speed, alltitude);
@@ -83,7 +83,7 @@ void Game::fillAllModel(ZappyModel allPath)
         }
     }
     _eggModel.first = LoadModel(EGG_MOD_PATH);
-    _eggModel.second = 0.3;
+    _eggModel.second = EGG_MODEL_SIZE;
 
     _sky = LoadModel(SKY_MODEL_PATH);
     Texture2D texture = LoadTexture(SKY_TEXTURE_PATH);
@@ -94,7 +94,7 @@ void Game::fillAllModel(ZappyModel allPath)
         throw ErrorHandling(ERROR_NOT_ENOUTH_ITEM_MODEL);
 }
 
-void Game::mooveCameraToCoord(Vector3 position, Vector3 target)
+void Game::setCameraToCoord(Vector3 position, Vector3 target)
 {
     _camera.position = position;
     _camera.target = target;
@@ -102,15 +102,15 @@ void Game::mooveCameraToCoord(Vector3 position, Vector3 target)
 
 void Game::initWaterShader(void)
 {
-    _waterShader = LoadShader(0, TextFormat(WATER_SHADER, 330));
+    _waterShader = LoadShader(0, TextFormat(WATER_SHADER, SHADER_FORMAT));
 
-    _secondLoc = GetShaderLocation(_waterShader, "seconds");
-    int freqXLoc = GetShaderLocation(_waterShader, "freqX");
-    int freqYLoc = GetShaderLocation(_waterShader, "freqY");
-    int ampXLoc = GetShaderLocation(_waterShader, "ampX");
-    int ampYLoc = GetShaderLocation(_waterShader, "ampY");
-    int speedXLoc = GetShaderLocation(_waterShader, "speedX");
-    int speedYLoc = GetShaderLocation(_waterShader, "speedY");
+    _secondLoc = GetShaderLocation(_waterShader, SHADER_SECONDS);
+    int freqXLoc = GetShaderLocation(_waterShader, SHADER_FREQX);
+    int freqYLoc = GetShaderLocation(_waterShader, SHADER_FREQY);
+    int ampXLoc = GetShaderLocation(_waterShader, SHADER_AMPX);
+    int ampYLoc = GetShaderLocation(_waterShader, SHADER_AMPY);
+    int speedXLoc = GetShaderLocation(_waterShader, SHADER_SPEEDX);
+    int speedYLoc = GetShaderLocation(_waterShader, SHADER_SPEEDY);
 
     float freqX = 25.0f;
     float freqY = 25.0f;
@@ -120,7 +120,7 @@ void Game::initWaterShader(void)
     float speedY = 8.0f;
 
     float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
-    SetShaderValue(_waterShader, GetShaderLocation(_waterShader, "size"), &screenSize, SHADER_UNIFORM_VEC2);
+    SetShaderValue(_waterShader, GetShaderLocation(_waterShader, SHADER_SIZE), &screenSize, SHADER_UNIFORM_VEC2);
     SetShaderValue(_waterShader, freqXLoc, &freqX, SHADER_UNIFORM_FLOAT);
     SetShaderValue(_waterShader, freqYLoc, &freqY, SHADER_UNIFORM_FLOAT);
     SetShaderValue(_waterShader, ampXLoc, &ampX, SHADER_UNIFORM_FLOAT);
@@ -129,7 +129,7 @@ void Game::initWaterShader(void)
     SetShaderValue(_waterShader, speedYLoc, &speedY, SHADER_UNIFORM_FLOAT);
 
     Texture2D texture = LoadTexture(WATER_TEXTURE);
-    _WaterModel = LoadModelFromMesh(GenMeshPlane(1000, 1000, 2, 2));
+    _WaterModel = LoadModelFromMesh(GenMeshPlane(WATER_SIZE, WATER_SIZE, WATER_RESXZ, WATER_RESXZ));
     _WaterModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
     _WaterModel.materials[0].shader = _waterShader;
 }
@@ -150,10 +150,9 @@ void Game::display3D(void)
     }
 
     BeginShaderMode(_waterShader);
-        DrawModel(_WaterModel, setVector3(_camera.position.x, -2.3, _camera.position.z), 1, WHITE);
-        DrawModel(_WaterModel, setVector3((_mapSize.first * spaceBetwenIsland) / 2, -2, (_mapSize.second * spaceBetwenIsland) / 2), 1, WHITE);
+        DrawModel(_WaterModel, setVector3(_camera.position.x, SUB_WATER_ALTITUDE, _camera.position.z), 1, WHITE);
+        DrawModel(_WaterModel, setVector3((_mapSize.first * spaceBetwenIsland) / 2, WATER_ALTITUDE, (_mapSize.second * spaceBetwenIsland) / 2), 1, WHITE);
     EndShaderMode();
-
 
     _allIsland.get()->renderAll();
     _allItem.get()->renderAll();
@@ -167,26 +166,11 @@ void Game::display2D(void)
 {
     _allPlayer.get()->renderAll2D(_selectedPlayer, _allItem);
 
-    int size = 8;
+    int size = CROSSBAR_SIZE;
     DrawCircleLines(_screenWidth / 2, _screenHeight / 2, size, RED);
-    size += 4;
+    size += CROSSBAR_SIZE / 2;
     DrawLine(_screenWidth / 2 - size / 2, _screenHeight / 2 - size / 2, _screenWidth / 2 + size / 2, _screenHeight / 2 + size / 2, RED);
     DrawLine(_screenWidth / 2 + size / 2, _screenHeight / 2 - size / 2, _screenWidth / 2 - size / 2, _screenHeight / 2 + size / 2, RED);
-
-    DrawRectangle(5, 5, 330, 75, Fade(SKYBLUE, 0.5f));
-    DrawRectangleLines(5, 5, 330, 75, BLUE);
-
-    DrawText("camera controls:", 15, 15, 10, BLACK);
-    DrawText("- Move keys: Z, Q, S, D, Space, Left-Ctrl, Left-Shift", 15, 30, 10, BLACK);
-    DrawText("- Look around: mouse", 15, 45, 10, BLACK);
-    DrawText("- Zoom keys: mouse scroll", 15, 60, 10, BLACK);
-
-    DrawRectangle(350, 5, 195, 60, Fade(SKYBLUE, 0.5f));
-    DrawRectangleLines(350, 5, 195, 60, BLUE);
-
-    DrawText(TextFormat("- Position: (%06.3f, %06.3f, %06.3f)", _camera.position.x, _camera.position.y, _camera.position.z), 355, 15, 10, BLACK);
-    DrawText(TextFormat("- Target: (%06.3f, %06.3f, %06.3f)", _camera.target.x, _camera.target.y, _camera.target.z), 355, 30, 10, BLACK);
-    DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", _camera.up.x, _camera.up.y, _camera.up.z), 355, 45, 10, BLACK);
 }
 
 void Game::cameraPositionStart(void)
@@ -202,8 +186,10 @@ void Game::cameraPositionStart(void)
         middleMap.second = (((mapSize.second - 1) * spaceBetwenIsland) / 2);
         Vector3 target =   setVector3(middleMap.first, 0, middleMap.second);
 
-        Vector3 position = setVector3(middleMap.first, mapSize.first * 7, -(mapSize.second * spaceBetwenIsland) / 5 - spaceBetwenIsland);
-        mooveCameraToCoord(position, target);
+        Vector3 position = setVector3(middleMap.first,
+            mapSize.first * START_POS_COEF_Y,
+            -(mapSize.second * spaceBetwenIsland) / START_POS_COEF_Z - spaceBetwenIsland);
+        setCameraToCoord(position, target);
     }
 }
 
@@ -247,7 +233,8 @@ void Game::launchGame(void)
 {
     DisableCursor();
     cameraPositionStart();
-    SetTargetFPS(60);
+
+    SetTargetFPS(FPS);
     float seconds = 0.0f;
 
     while (!WindowShouldClose()) {

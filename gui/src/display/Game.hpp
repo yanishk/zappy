@@ -14,12 +14,12 @@
     #include <vector>
     #include <stdlib.h>
     #include <ctime>
-    #include "Player.hpp"
     #include "Commands.hpp"
     #include "Client.hpp"
-    #include "Item.hpp"
-    #include "Island.hpp"
-    #include "Eggs.hpp"
+    #include "AllPlayer.hpp"
+    #include "AllItem.hpp"
+    #include "AllEggs.hpp"
+    #include "AllIsland.hpp"
 
     #define WINDOW_NAME "Zappy_gui"
     #define ERROR_NO_MODEL "No or bad path to model"
@@ -31,9 +31,33 @@
     #define WATER_SHADER "./gui/assets/shaders/water.fs"
     #define WATER_TEXTURE "./gui/assets/image/water_texture.png"
 
-    #define SKY_SIZE 10
 
     #define FOV 60
+    #define FPS 60
+
+    #define SKY_SIZE 10
+    #define CROSSBAR_SIZE 8
+
+    #define CAMERA_MOVEMENT_SPEED 0.4
+    #define EGG_MODEL_SIZE 0.3
+    #define WATER_SIZE 1000
+    #define WATER_RESXZ 2
+
+    #define START_POS_COEF_Y 7
+    #define START_POS_COEF_Z 5
+
+    #define WATER_ALTITUDE -2
+    #define SUB_WATER_ALTITUDE -2.3
+
+    #define SHADER_FORMAT 330
+    #define SHADER_SECONDS "seconds"
+    #define SHADER_FREQX "freqX"
+    #define SHADER_FREQY "freqY"
+    #define SHADER_AMPX "ampX"
+    #define SHADER_AMPY "ampY"
+    #define SHADER_SPEEDX "speedX"
+    #define SHADER_SPEEDY "speedY"
+    #define SHADER_SIZE "size"
 
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
@@ -88,7 +112,7 @@ class Game {
         void initWaterShader(void);
         void display3D(void);
         void display2D(void);
-        void mooveCameraToCoord(Vector3 position, Vector3 target);
+        void setCameraToCoord(Vector3 position, Vector3 target);
         void cameraPositionStart(void);
 };
 

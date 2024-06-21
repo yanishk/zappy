@@ -5,7 +5,7 @@
 ** Zappy proj
 */
 
-#include "Eggs.hpp"
+#include "AllEggs.hpp"
 
 AllEggs::AllEggs(CommandManager &cmd) : _cmd(cmd)
 {
@@ -29,7 +29,7 @@ void AllEggs::setAllEggs(std::pair<Model, float> model)
 
         { SMG_CMD, [this, &model](std::vector<std::string>& cmd) {
             Egg newEgg;
-            newEgg.fillModel(model);
+            newEgg.setModel(model);
             newEgg.setEggPosAndID((Vector2){std::stof(cmd[2]),
                 std::stof(cmd[3])}, std::atoi(cmd[1].c_str()));
             _allEggs.push_back(newEgg);
@@ -37,7 +37,7 @@ void AllEggs::setAllEggs(std::pair<Model, float> model)
 
         { ENW_CMD, [this, &model](std::vector<std::string>& cmd) {
             Egg newEgg;
-            newEgg.fillModel(model);
+            newEgg.setModel(model);
             newEgg.setEggPosAndID((Vector2){std::stof(cmd[2]),
                 std::stof(cmd[3])}, std::atoi(cmd[0].c_str()));
             _allEggs.push_back(newEgg);

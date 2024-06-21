@@ -16,11 +16,14 @@
     #define LOWEST_POINT 1.5
     #define HIGHTEST_POINT 2
     #define ALTITUDE_SPEED -0.005
+    #define ITEM_ALTITUDE 1.8
+    #define RAND_RANGE 6
 
 class Item : public ILoadAndRender {
     public:
+        Item();
         void render() override;
-        void fillModel(std::pair<Model, float> model) override;
+        void setModel(std::pair<Model, float> model) override;
         void setItemPosAndType(Vector2 pos, int type);
         Vector2 getRealPosition(void);
         int getType(void);
@@ -34,25 +37,8 @@ class Item : public ILoadAndRender {
         float _itemSize;
         int _itemType;
 
-        float _rotation = 0;
-        float _upValue = ALTITUDE_SPEED;
-};
-
-class AllItem {
-    public:
-        AllItem(CommandManager &cmd);
-
-        void setAllItem(std::vector<std::pair<Model, float>> model);
-        void renderAll(void);
-        std::size_t getTotalNbrItem(void);
-        Vector2 getItemRealPosition(int i);
-        int getItemType(int i);
-    private:
-        CommandManager &_cmd;
-        std::vector<Item> _allItem;
-
-        void removeItem(Vector2 pos, int type);
-        int getNbrItemAtPos(Vector2 pos, int type);
+        float _rotation;
+        float _upValue;
 };
 
 #endif /* !ITEM_HPP_ */

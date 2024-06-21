@@ -19,12 +19,12 @@ void Egg::render()
     DrawModel(_eggModel, get3DEggPos(), _eggSize, WHITE);
 }
 
-void Egg::fillModel(std::pair<Model, float> model)
+void Egg::setModel(std::pair<Model, float> model)
 {
     _eggModel = model.first;
     _eggSize = model.second;
-    float rngRotate = std::rand() % (210 - 159 + 1) + 159;
-    float tiltAngle = (std::rand() % 40) + 80;
+    float rngRotate = std::rand() % ROTATE_RAND_RANGE;
+    float tiltAngle = (std::rand() % 40) + DEFAULT_EGG_INCLIN;
     _eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * tiltAngle, DEG2RAD * rngRotate, DEG2RAD * 0});
 }
 
