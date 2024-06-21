@@ -16,6 +16,7 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp
     _camera.up = setVector3(0.0, 1.0, 0.0);
     _camera.fovy = FOV;
     _camera.projection = CAMERA_PERSPECTIVE;
+    _cameraMode = CAMERA_FREE;
     initWaterShader();
     _selectedPlayer.first = false;
 

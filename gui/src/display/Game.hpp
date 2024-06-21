@@ -31,7 +31,6 @@
     #define WATER_SHADER "./gui/assets/shaders/water.fs"
     #define WATER_TEXTURE "./gui/assets/image/water_texture.png"
 
-
     #define FOV 60
     #define FPS 60
 
@@ -97,9 +96,9 @@ class Game {
         Model _sky;
         asio::ip::tcp::socket &_socket;
 
-        int _screenWidth = 1920;
-        int _screenHeight = 1080;
-        int _cameraMode = CAMERA_FREE;
+        int _screenWidth;
+        int _screenHeight;
+        int _cameraMode;
         int _secondLoc;
         int _sgtValue;
 
