@@ -7,13 +7,6 @@
 
 #include "Eggs.hpp"
 
-Egg::Egg(Vector3 position, int eggId) : LoadAndRender()
-{
-    _eggHight = 1.2;
-    _eggRealPos = position;
-    _eggID = eggId;
-}
-
 Vector3 Egg::get3DEggPos()
 {
     return _egg3DPosition;
@@ -28,9 +21,21 @@ void Egg::fillModel(std::pair<Model, float> model)
 {
     _eggModel = model.first;
     _eggSize = model.second;
+    float rngRotate = std::rand() % (210 - 159 + 1) + 159;
+    float tiltAngle = (std::rand() % 40) + 80;
+    _eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * tiltAngle, DEG2RAD * rngRotate, DEG2RAD * 0});
 }
 
-Vector3 Egg::getEggRealPos()
+void Egg::setEggPosAndID(Vector2 pos, int eggId)
+{
+    _eggID = eggId;
+    _eggRealPos = pos;
+    _egg3DPosition = (Vector3){(pos.x + 1) * spaceBetwenIsland, 1.0, pos.y * spaceBetwenIsland};
+    _egg3DPosition.x += -2 + (std::rand() % 4);
+    _egg3DPosition.z += -2 + (std::rand() % 4);
+}
+
+Vector2 Egg::getEggRealPos()
 {
     return _eggRealPos;
 }
@@ -38,11 +43,6 @@ Vector3 Egg::getEggRealPos()
 int Egg::getEggId()
 {
     return _eggID;
-}
-
-int Egg::getRngRotate()
-{
-    return _rngRotate;
 }
 
 AllEggs::AllEggs(CommandManager &cmd) : _cmd(cmd)
@@ -54,22 +54,12 @@ void AllEggs::setAllEggs(std::pair<Model, float> model)
 {
      while (!_cmd.getCommandAt(SMG_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(SMG_CMD, 0);
-        _allEggs.clear();
 
-        Egg tmpEgg((Vector3){std::stof(cmd[2].c_str()), 1.0,
-            std::stof(cmd[3].c_str())}, std::stoi(cmd[1]));
+        Egg newEgg;
 
-        int rngRotate = std::rand() % (210 - 159 + 1) + 159;
-        float tiltAngle = (std::rand() % 40) + 80;
-
-        model.first.transform = MatrixRotateXYZ((Vector3){DEG2RAD * tiltAngle,
-            DEG2RAD * rngRotate, DEG2RAD * 0});
-        tmpEgg.fillModel(model);
-       tmpEgg._egg3DPosition = (Vector3){std::stof(cmd[2].c_str()), 1.0,
-            std::stof(cmd[3].c_str()) + spaceBetwenIsland};
-        tmpEgg._egg3DPosition.x += -2 + (std::rand() % 4);
-        tmpEgg._egg3DPosition.z += -2 + (std::rand() % 4);
-        _allEggs.push_back(tmpEgg);
+        newEgg.fillModel(model);
+        newEgg.setEggPosAndID((Vector2){std::stof(cmd[2].c_str()), std::stof(cmd[3].c_str())}, std::atoi(cmd[1].c_str()));
+        _allEggs.push_back(newEgg);
 
         _cmd.eraseFirstCmdInMap(SMG_CMD);
     }

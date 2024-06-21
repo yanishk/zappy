@@ -20,27 +20,24 @@ class Egg : public LoadAndRender {
 
     public:
 
-        Egg(Vector3 position, int eggId);
-
         void render() override;
         void fillModel(std::pair<Model, float> model) override;
+        void setEggPosAndID(Vector2 pos, int eggId);
 
         int getEggId();
-        int getRngRotate();
-        Vector3 getEggRealPos();
+        Vector2 getEggRealPos();
         Vector3 get3DEggPos();
 
-        Vector3 _eggRealPos;
-        Vector3 _egg3DPosition;
     private:
 
+        Vector2 _eggRealPos;
+        Vector3 _egg3DPosition;
         Model _eggModel;
 
         float _eggHight;
         float _eggSize;
 
         int _eggID;
-        int _rngRotate;
 
 };
 
