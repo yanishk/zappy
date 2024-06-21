@@ -5,6 +5,8 @@
 ** Eggs
 */
 
+#include <unordered_map>
+
 #include "Eggs.hpp"
 
 Vector3 Egg::get3DEggPos()
@@ -62,32 +64,42 @@ void AllEggs::removeEgg(int Id)
 
 void AllEggs::setAllEggs(std::pair<Model, float> model)
 {
-    if (!_cmd.getCommandAt(SMG_CMD, 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(SMG_CMD, 0);
-        Egg newEgg;
+    static const std::unordered_map<std::string,
+        std::function<void(std::vector<std::string> &)>> commandHandlers = {
 
-        newEgg.fillModel(model);
-        newEgg.setEggPosAndID((Vector2){std::stof(cmd[2].c_str()), std::stof(cmd[3].c_str())}, std::atoi(cmd[1].c_str()));
-        _allEggs.push_back(newEgg);
-        _cmd.eraseFirstCmdInMap(SMG_CMD);
-    } else if (!_cmd.getCommandAt(ENW_CMD, 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(ENW_CMD, 0);
-        Egg newEgg;
+        { SMG_CMD, [this, &model](std::vector<std::string>& cmd) {
+            Egg newEgg;
+            newEgg.fillModel(model);
+            newEgg.setEggPosAndID((Vector2){std::stof(cmd[2]),
+                std::stof(cmd[3])}, std::atoi(cmd[1].c_str()));
+            _allEggs.push_back(newEgg);
+        }},
 
-        newEgg.fillModel(model);
-        newEgg.setEggPosAndID((Vector2){std::stof(cmd[2].c_str()), std::stof(cmd[3].c_str())}, std::atoi(cmd[0].c_str()));
-        _allEggs.push_back(newEgg);
-        _cmd.eraseFirstCmdInMap(ENW_CMD);
-    } else if (!_cmd.getCommandAt(EBO_CMD, 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(EBO_CMD, 0);
-        removeEgg(std::stoi(cmd[0]));
-        _cmd.eraseFirstCmdInMap(EBO_CMD);
-    } else if (!_cmd.getCommandAt(EDI_CMD, 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(EDI_CMD, 0);
-        removeEgg(std::stoi(cmd[0]));
-        _cmd.eraseFirstCmdInMap(EDI_CMD);
+        { ENW_CMD, [this, &model](std::vector<std::string>& cmd) {
+            Egg newEgg;
+            newEgg.fillModel(model);
+            newEgg.setEggPosAndID((Vector2){std::stof(cmd[2]),
+                std::stof(cmd[3])}, std::atoi(cmd[0].c_str()));
+            _allEggs.push_back(newEgg);
+        }},
+
+        { EBO_CMD, [this](std::vector<std::string>& cmd) {
+            removeEgg(std::stoi(cmd[0]));
+        }},
+
+        { EDI_CMD, [this](std::vector<std::string>& cmd) {
+            removeEgg(std::stoi(cmd[0]));
+        }}
+    };
+
+    for (const auto& [cmdType, handler] : commandHandlers) {
+        if (!_cmd.getCommandAt(cmdType, 0).empty()) {
+            std::vector<std::string> cmd = _cmd.getCommandAt(cmdType, 0);
+            handler(cmd);
+            _cmd.eraseFirstCmdInMap(cmdType);
+            break;
+        }
     }
-
 }
 
 void AllEggs::renderAll(void)
