@@ -75,6 +75,7 @@ class DisplayGame {
         void display3D(void);
         void display2D(void);
         void mooveCameraToCoord(Vector3 position, Vector3 target);
+        void cameraPositionStart(void);
 };
 
 #endif /* !DISPLAYGAME_HPP_ */

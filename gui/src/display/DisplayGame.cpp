@@ -11,6 +11,7 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
+    SetTraceLogLevel(TraceLogLevel::LOG_ERROR);
     InitWindow(screenWidth, screenHeight, WINDOW_NAME);
     _camera.position = setVector3(70.0, 40.0, -50.0);
     _camera.target = setVector3(70.0, 18.0, -0.0);
@@ -136,15 +137,6 @@ void DisplayGame::initWaterShader(void)
 
 void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
 {
-    if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
-
-        std::pair<int, int> mapSize;
-        mapSize.first = std::atoi(cmd.front().c_str());
-        mapSize.second = std::atoi(cmd[1].c_str());
-        mooveCameraToCoord(setVector3(mapSize.first * spaceBetwenIsland / 2, 40, (mapSize.second + 3) * spaceBetwenIsland),
-        setVector3(mapSize.first * spaceBetwenIsland / 2, 0, mapSize.second * spaceBetwenIsland / 2));
-    }
     recivedCmd.callAllFunctions();
 }
 
@@ -203,9 +195,28 @@ void DisplayGame::display2D(void)
     DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", _camera.up.x, _camera.up.y, _camera.up.z), 355, 45, 10, BLACK);
 }
 
+void DisplayGame::cameraPositionStart(void)
+{
+    if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
+
+        std::pair<float, float> mapSize;
+        mapSize.first = std::stof(cmd.front().c_str());
+        mapSize.second = std::stof(cmd[1].c_str());
+        std::pair<float, float> middleMap;
+        middleMap.first = ((mapSize.first * spaceBetwenIsland) / 2) + (spaceBetwenIsland / 2);
+        middleMap.second = (((mapSize.second - 1) * spaceBetwenIsland) / 2);
+        Vector3 target =   setVector3(middleMap.first, 0, middleMap.second);
+
+        Vector3 position = setVector3(middleMap.first, mapSize.first * 7, -(mapSize.second * spaceBetwenIsland) / 5 - spaceBetwenIsland);
+        mooveCameraToCoord(position, target);
+    }
+}
+
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
+    cameraPositionStart();
     UseRecivedCmd recivedCmd(_cmd, _socket);
 
     SetTargetFPS(60);
