@@ -50,6 +50,16 @@ AllEggs::AllEggs(CommandManager &cmd) : _cmd(cmd)
 
 }
 
+void AllEggs::removeEgg(int Id)
+{
+    for (auto it = _allEggs.begin(); it != _allEggs.end(); ++it) {
+        if (it->getEggId() == Id) {
+            _allEggs.erase(it);
+            break;
+        }
+    }
+}
+
 void AllEggs::setAllEggs(std::pair<Model, float> model)
 {
     if (!_cmd.getCommandAt(SMG_CMD, 0).empty()) {
@@ -72,20 +82,13 @@ void AllEggs::setAllEggs(std::pair<Model, float> model)
         std::vector<std::string> cmd = _cmd.getCommandAt(EBO_CMD, 0);
         removeEgg(std::stoi(cmd[0]));
         _cmd.eraseFirstCmdInMap(EBO_CMD);
+    } else if (!_cmd.getCommandAt(EDI_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(EDI_CMD, 0);
+        removeEgg(std::stoi(cmd[0]));
+        _cmd.eraseFirstCmdInMap(EDI_CMD);
     }
 
 }
-
-void AllEggs::removeEgg(int Id)
-{
-    for (auto it = _allEggs.begin(); it != _allEggs.end(); ++it) {
-        if (it->getEggId() == Id) {
-            _allEggs.erase(it);
-            break;
-        }
-    }
-}
-
 
 void AllEggs::renderAll(void)
 {
