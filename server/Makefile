@@ -13,6 +13,9 @@ CPPFLAGS	=	-iquote ./include -iquote ./include/command/ 	\
 				-iquote ./include/game/
 FLAGS_DEBUG = 	-g
 
+UNIT_TESTS_NAME = unit_tests
+UNIT_TESTS_FLAGS = --coverage -lcriterion
+
 SRC			=	./src/main.c											\
 				./src/server.c 											\
 				./src/initialize_server.c           					\
@@ -102,6 +105,29 @@ SRC			=	./src/main.c											\
 				./src/lib/calculate_time_unit.c							\
 				./src/lib/has_backslash.c
 
+UNIT_TESTS_SRC =    ./src/lib/calculate_time_unit.c		\
+                    ./tests/test_calculate_time_unit.c	\
+					./src/lib/get_graphical_client.c	\
+                    ./tests/test_get_graphical_client.c	\
+					./src/lib/get_next_id.c				\
+                    ./tests/test_get_next_id.c			\
+					./src/lib/get_random_team_egg.c 	\
+					./tests/test_get_random_team_egg.c	\
+					./src/lib/get_tile_index.c 			\
+					./src/lib/is_positive_number.c 		\
+					./tests/test_get_tile_index.c		\
+					./src/lib/get_player_direction.c 	\
+					./tests/test_get_player_direction.c	\
+					./src/lib/has_backslash.c 			\
+					./tests/test_has_backslash.c		\
+					./src/lib/is_a_resource.c 			\
+					./tests/test_is_a_resource.c		\
+					./src/lib/is_on_same_tile.c 		\
+					./tests/test_is_on_same_tile.c		\
+					./tests/test_is_positive_number.c	\
+					./src/lib/time_is_up.c 				\
+					./tests/test_time_is_up.c			\
+
 OBJ			=	$(SRC:.c=.o)
 
 NAME		=	zappy_server
@@ -118,7 +144,16 @@ clean:
 	$(RM) $(OBJ)
 
 fclean:	clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) $(UNIT_TESTS_NAME)
+
+tests_run:
+	$(CC) -o $(UNIT_TESTS_NAME) $(UNIT_TESTS_SRC) \
+	$(UNIT_TESTS_FLAGS) $(CFLAGS) $(CPPFLAGS)
+	./$(UNIT_TESTS_NAME)
+
+tests_clean:
+		$(RM) $(UNIT_TESTS_NAME)
+		$(RM) *.gcno *.gcda
 
 re:	fclean all
 
