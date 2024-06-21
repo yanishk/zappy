@@ -7,47 +7,64 @@
 
 #include "Eggs.hpp"
 
-void AllEggs::loadEggModel(std::pair<Model, float> modelPair)
+AllEggs::AllEggs(CommandManager &cmd) : _cmd(cmd)
 {
-    _model = modelPair.first;
-    _size = modelPair.second;
+
 }
 
-void AllEggs::addEggToIsland(Vector3 position, int eggID)
-{
-    Egg tmpEgg(position);
-
-    tmpEgg._eggModel = _model;
-    tmpEgg._eggID = eggID;
-    tmpEgg.RngRotate = std::rand() % (210 - 159 + 1) + 159;
-    float tiltAngle = (std::rand() % 40) + 80;
-    tmpEgg._eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * tiltAngle, DEG2RAD * tmpEgg.RngRotate, DEG2RAD * 0});
-    _allEggs.push_back(tmpEgg);
-}
-
-void AllEggs::removeEggFromIsland(int eggID)
+void AllEggs::removeEgg(int Id)
 {
     for (auto it = _allEggs.begin(); it != _allEggs.end(); ++it) {
-        if (it->_eggID == eggID) {
+        if (it->getEggId() == Id) {
             _allEggs.erase(it);
             break;
         }
     }
 }
 
-Vector3 AllEggs::getEggRealPos(int eggID)
+void AllEggs::setAllEggs(std::pair<Model, float> model)
 {
-    for (auto &i: _allEggs) {
-        if (i._eggID == eggID) {
-            return i._realPos;
+    static const std::unordered_map<std::string,
+        std::function<void(std::vector<std::string> &)>> commandHandlers = {
+
+        { SMG_CMD, [this, &model](std::vector<std::string>& cmd) {
+            Egg newEgg;
+            newEgg.fillModel(model);
+            newEgg.setEggPosAndID((Vector2){std::stof(cmd[2]),
+                std::stof(cmd[3])}, std::atoi(cmd[1].c_str()));
+            _allEggs.push_back(newEgg);
+        }},
+
+        { ENW_CMD, [this, &model](std::vector<std::string>& cmd) {
+            Egg newEgg;
+            newEgg.fillModel(model);
+            newEgg.setEggPosAndID((Vector2){std::stof(cmd[2]),
+                std::stof(cmd[3])}, std::atoi(cmd[0].c_str()));
+            _allEggs.push_back(newEgg);
+        }},
+
+        { EBO_CMD, [this](std::vector<std::string>& cmd) {
+            removeEgg(std::stoi(cmd[0]));
+        }},
+
+        { EDI_CMD, [this](std::vector<std::string>& cmd) {
+            removeEgg(std::stoi(cmd[0]));
+        }}
+    };
+
+    for (const auto& [cmdType, handler] : commandHandlers) {
+        if (!_cmd.getCommandAt(cmdType, 0).empty()) {
+            std::vector<std::string> cmd = _cmd.getCommandAt(cmdType, 0);
+            handler(cmd);
+            _cmd.eraseFirstCmdInMap(cmdType);
+            break;
         }
     }
-    return {};
 }
 
-void AllEggs::drawEgg()
+void AllEggs::renderAll(void)
 {
-    for (auto &i: _allEggs) {
-        DrawModel(i._eggModel , i.getPosition(), 0.3, WHITE);
+    for (auto &t : _allEggs) {
+        t.render();
     }
 }
