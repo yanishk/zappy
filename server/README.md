@@ -3,9 +3,11 @@
 
 # Introduction
 
-The Zappy Server manages multiple clients that can take 2 roles, player or GUI (only one GUI is allowed).
+The Zappy Server manages multiple clients that can take 2 roles, AI (player) or GUI.
 
 The server manages the whole game, and sends appropriate informations to the clients according to their roles and the context.
+
+All commands sent to the server must end with a new line.
 
 # How to Launch
 
@@ -28,6 +30,29 @@ To launch the Zappy Server, here's the syntax to follow:
 # Immortal mode
 
 In Immortal mode, the player does not consume food every 126 time units, and the server does not check if he has no more food in his inventory either.
+
+# Server/AI Communication
+
+To connect as an AI, the client must send a team's name.
+He will then receive the map size and the number of slots still available for the chosen team.
+
+The client can send up to 10 requests in a row without any response from the server.
+Over 10, the server will no longer take them into account.
+
+The server executes the client’s requests in the order they were received.
+The requests are buffered and a command’s execution time only blocks the player in question.
+
+# Server/GUI Commucation
+
+To connect as a GUI, the client must send `GRAPHIC` to the server. Only one GUI connection is allowed.
+
+The GUI will then receive the following informations, in order:
+- msz X Y\n
+- sgt T\n
+- bct X Y q0 q1 q2 q3 q4 q5 q6\n * nbr_tiles
+- tna N\n * nbr_teams
+- pnw #n X Y O L N\n * nbr_players
+- smg eni e X Y\n * nbr_eggs
 
 # Server/AI Protocol
 
@@ -95,7 +120,7 @@ In Immortal mode, the player does not consume food every 126 time units, and the
 | sst T\n                                    | sst T\n   | time unit modification                        |
 | seg N\n                                    |           | end of game                                   |
 | smg M\n                                    |           | message from the server                       |
-| smg eni e X Y\n                            |           | eggs spawned at the start                     |
+| smg eni e X Y\n                            |           | egg spawn at the start                       |
 | suc\n                                      |           | unknown command                               |
 | sbp\n                                      |           | command parameter                             |
 
