@@ -155,7 +155,9 @@ void DisplayGame::display3D(void)
     DrawModel(_sky, setVector3(_camera.position.x, 0, _camera.position.z), 10, WHITE);
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        _selectedPlayer = _allPlayer.get()->isPlayerSelected(_camera.target, _camera.position);
+        std::pair<bool, int> tmpSelectedPlayer = _allPlayer.get()->isPlayerSelected(_camera.target, _camera.position);
+        if (tmpSelectedPlayer.second != -1)
+            _selectedPlayer = tmpSelectedPlayer;
     }
     if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
         _selectedPlayer.first = false;

@@ -22,15 +22,21 @@ void AllPlayers::renderAll(Vector3 camPosition)
         player.render();
         player.displayPlayerInfo(camPosition);
         player.drawMessage(player.getMessage(), camPosition);
+        player.drawIncantation();
+        player.drawExpulsion();
     }
 }
 
-void AllPlayers::renderAll2D(std::pair<bool, std::size_t> moreInfo, std::unique_ptr<AllItem> &_allItem)
+void AllPlayers::renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem)
 {
     int playerInfoBoxWidth = 400;
-    if (moreInfo.first) {
-        DrawRectangle(SCREEN_WIDTH - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
-        getPlayerByID(moreInfo.second).displayInfo2D(SCREEN_WIDTH - playerInfoBoxWidth - 5, 5, _allItem);
+    if (!moreInfo.first)
+        return;
+    for (auto &player: _allPlayer) {
+        if (player.getPlayerID() == moreInfo.second) {
+            DrawRectangle(SCREEN_WIDTH - playerInfoBoxWidth - 5, 5, playerInfoBoxWidth, (TEXT_SIZE * TEXT_LINE_SPACING_RATIO) * PLAYER_INFO_NBR_LINE, Fade(GRAY, 0.5f));
+            player.displayInfo2D(SCREEN_WIDTH - playerInfoBoxWidth - 5, 5, _allItem);
+        }
     }
 }
 
@@ -48,9 +54,10 @@ void AllPlayers::setAllPlayer(std::vector<std::pair<Model, float>> model)
     playerDied();
 }
 
-std::pair<bool, std::size_t> AllPlayers::isPlayerSelected(Vector3 target, Vector3 position)
+std::pair<bool, int> AllPlayers::isPlayerSelected(Vector3 target, Vector3 position)
 {
-    std::pair<bool, std::size_t> selectedPlayer;
+    std::pair<bool, int> selectedPlayer;
+    selectedPlayer.second = -1;
     for (auto &player: _allPlayer) {
         Vector3 direction = Vector3Subtract(target, position);
         direction = Vector3Normalize(direction);
@@ -83,18 +90,18 @@ void AllPlayers::addPlayer(std::vector<std::pair<Model, float>> model)
         std::vector<std::string> cmd = _cmd.getCommandAt(PNW_CMD, 0);
         int playerID = std::atoi(cmd.front().c_str());
         Vector2 pos = {std::stof(cmd[1].c_str()), std::stof(cmd[2].c_str())};
-        int orientation = std::atoi(cmd[3].c_str());
+        int orientation = std::atoi(cmd[3].c_str()) - 1;
         std::string team = cmd[5];
         int level = std::atoi(cmd[4].c_str());
         Player player(pos, _isAnimated);
         player.setPlayerID(playerID);
-        player.setPlayerDirection(orientation);
         player.setLevel(level);
         player.setTeam(team);
         player.fillModel(model.front());
         player.setEjectModel(_expulsionModel);
         player.setIncantModel(_incantationModel);
         player.setPlayerAnimation(_anim);
+        player.setPlayerDirection(orientation);
         player.setPlayerColor(setPlayerColor(team));
         _allPlayer.push_back(player);
         _cmd.eraseFirstCmdInMap(PNW_CMD);

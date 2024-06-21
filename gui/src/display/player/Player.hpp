@@ -127,9 +127,9 @@ class AllPlayers {
     public:
         AllPlayers(CommandManager &cmd, bool isAnimated);
         void renderAll(Vector3 camPosition);
-        void renderAll2D(std::pair<bool, std::size_t> moreInfo, std::unique_ptr<AllItem> &_allItem);
+        void renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem);
         void setAllPlayer(std::vector<std::pair<Model, float>> model);
-        std::pair<bool, std::size_t> isPlayerSelected(Vector3 target, Vector3 position);
+        std::pair<bool, int> isPlayerSelected(Vector3 target, Vector3 position);
 
     private:
         CommandManager &_cmd;

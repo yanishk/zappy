@@ -120,6 +120,8 @@ void Player::setPlayerColor(Color color)
 
 void Player::drawMessage(std::string msg, Vector3 camPosition)
 {
+    if (msg.empty())
+        return;
     Font font = GetFontDefault();
     Vector3 cameraToText = Vector3Subtract(camPosition, _playerPosition);
     std::chrono::time_point<std::chrono::system_clock> timer = std::chrono::system_clock::now();
@@ -220,12 +222,14 @@ void Player::displayPlayerInfo(Vector3 camPosition)
 
 void Player::setMessage(std::string msg)
 {
-    _broadcastMsg = msg;
+    _msg = msg;
 }
 
 std::string Player::getMessage(void)
 {
-    return _broadcastMsg;
+    std::string msg = _msg;
+    _msg.erase();
+    return msg;
 }
 
 bool Player::isPlayerSelected(BoundingBox playerBox, Ray ray)
