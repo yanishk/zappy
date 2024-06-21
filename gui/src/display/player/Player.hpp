@@ -39,7 +39,7 @@
         {3, "West"}
     };
 
-class Player : public LoadAndRender {
+class Player : public ILoadAndRender {
     public:
         Player(Vector2 position, bool isAnimated);
 

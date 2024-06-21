@@ -8,7 +8,7 @@
 CXX		=	g++
 
 SRC		=	main.cpp							\
-			src/display/DisplayGame.cpp			\
+			src/display/Game.cpp			\
 			src/display/ParsesModelConfig.cpp	\
 			src/display/player/Player.cpp		\
 			src/display/player/AllPlayer.cpp	\

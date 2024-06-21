@@ -21,7 +21,7 @@
     #include "Render.hpp"
     #include "Commands.hpp"
 
-class Island : public LoadAndRender {
+class Island : public ILoadAndRender {
 
     public:
 

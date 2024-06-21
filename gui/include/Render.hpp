@@ -10,12 +10,11 @@
 
     #include "Utils.hpp"
 
-class LoadAndRender {
-
+class ILoadAndRender {
     public:
 
-        LoadAndRender() = default;
-        virtual ~LoadAndRender() = default;
+        ILoadAndRender() = default;
+        virtual ~ILoadAndRender() = default;
 
         virtual void render() = 0;
         virtual void fillModel(std::pair<Model, float>) = 0;

@@ -5,7 +5,7 @@
 ** main
 */
 
-#include "DisplayGame.hpp"
+#include "Game.hpp"
 #include "ParsesModelConfig.hpp"
 #include "Commands.hpp"
 #include "Gui.hpp"

@@ -2,12 +2,12 @@
 ** EPITECH PROJECT, 2024
 ** zappy_gui_try1
 ** File description:
-** DisplayGame
+** Game
 */
 
-#include "DisplayGame.hpp"
+#include "Game.hpp"
 
-DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket)
+Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket)
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
@@ -27,19 +27,19 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
     _allPlayer = std::make_unique<AllPlayers>(_cmd, animation);
 }
 
-DisplayGame::~DisplayGame()
+Game::~Game()
 {
     CloseWindow();
     for (auto &i: _allItemModel)
         UnloadModel(i.first);
 }
 
-Vector3 DisplayGame::setVector3(float x, float y, float z)
+Vector3 Game::setVector3(float x, float y, float z)
 {
     return (Vector3){x, y, z};
 }
 
-void DisplayGame::updateCamera(void)
+void Game::updateCamera(void)
 {
     float alltitude = 0.0;
     float speed = 0.4;
@@ -58,7 +58,7 @@ void DisplayGame::updateCamera(void)
     UpdateCameraPro(&_camera, movement, rotation, GetMouseWheelMove());
 }
 
-void DisplayGame::fillAllModel(ZappyModel allPath)
+void Game::fillAllModel(ZappyModel allPath)
 {
     std::vector<std::pair<Model, float>> tmpModel;
     bool hasPlayer = false;
@@ -95,13 +95,13 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
         throw ErrorHandling(ERROR_NOT_ENOUTH_ITEM_MODEL);
 }
 
-void DisplayGame::mooveCameraToCoord(Vector3 position, Vector3 target)
+void Game::mooveCameraToCoord(Vector3 position, Vector3 target)
 {
     _camera.position = position;
     _camera.target = target;
 }
 
-void DisplayGame::initWaterShader(void)
+void Game::initWaterShader(void)
 {
     _waterShader = LoadShader(0, TextFormat(WATER_SHADER, 330));
 
@@ -135,12 +135,12 @@ void DisplayGame::initWaterShader(void)
     _WaterModel.materials[0].shader = _waterShader;
 }
 
-void DisplayGame::useServerInfo(UseRecivedCmd &recivedCmd)
+void Game::useServerInfo(UseRecivedCmd &recivedCmd)
 {
     recivedCmd.callAllFunctions();
 }
 
-void DisplayGame::display3D(void)
+void Game::display3D(void)
 {
     BeginMode3D(_camera);
 
@@ -169,7 +169,7 @@ void DisplayGame::display3D(void)
     EndMode3D();
 }
 
-void DisplayGame::display2D(void)
+void Game::display2D(void)
 {
     _allPlayer.get()->renderAll2D(_selectedPlayer, _allItem);
 
@@ -195,7 +195,7 @@ void DisplayGame::display2D(void)
     DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", _camera.up.x, _camera.up.y, _camera.up.z), 355, 45, 10, BLACK);
 }
 
-void DisplayGame::cameraPositionStart(void)
+void Game::cameraPositionStart(void)
 {
     if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
@@ -213,7 +213,7 @@ void DisplayGame::cameraPositionStart(void)
     }
 }
 
-void DisplayGame::launchGame(void)
+void Game::launchGame(void)
 {
     DisableCursor();
     cameraPositionStart();

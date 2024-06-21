@@ -17,7 +17,7 @@
     #define HIGHTEST_POINT 2
     #define ALTITUDE_SPEED -0.005
 
-class Item : public LoadAndRender {
+class Item : public ILoadAndRender {
     public:
         void render() override;
         void fillModel(std::pair<Model, float> model) override;

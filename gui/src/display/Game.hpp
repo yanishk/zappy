@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2024
 ** zappy_gui_try1
 ** File description:
-** DisplayGame
+** Game
 */
 
-#ifndef DISPLAYGAME_HPP_
-    #define DISPLAYGAME_HPP_
+#ifndef Game_HPP_
+    #define Game_HPP_
 
     #include <string>
     #include <iostream>
@@ -38,10 +38,10 @@
 
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
-class DisplayGame {
+class Game {
     public:
-        DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation);
-        ~DisplayGame();
+        Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation);
+        ~Game();
         void updateCamera(void);
         Vector3 setVector3(float x, float y, float z);
         void launchGame(void);
@@ -87,4 +87,4 @@ class DisplayGame {
         void cameraPositionStart(void);
 };
 
-#endif /* !DISPLAYGAME_HPP_ */
+#endif /* !Game_HPP_ */

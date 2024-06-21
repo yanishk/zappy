@@ -16,7 +16,7 @@
     #include "Render.hpp"
     #include "Commands.hpp"
 
-class Egg : public LoadAndRender {
+class Egg : public ILoadAndRender {
 
     public:
 
