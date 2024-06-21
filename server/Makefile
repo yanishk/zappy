@@ -23,15 +23,15 @@ SRC			=	./src/main.c											\
 				./src/insert_command_in_queue.c 						\
 				./src/check_command_queue.c 							\
 				./src/close_client_socket.c         					\
-				./src/player_connection.c 								\
-				./src/check_players_food.c 								\
-				./src/win_condition.c									\
 				./src/memory/free_program.c 							\
 				./src/memory/free_game.c 								\
 				./src/game/refill_map_time_unit.c						\
 				./src/game/initialize_game.c 							\
 				./src/game/initialize_teams.c 							\
 				./src/game/initialize_resources.c 						\
+				./src/game/player_connection.c 							\
+				./src/game/check_players_food.c 						\
+				./src/game/win_condition.c								\
 				./src/arguments/init_arg_struct.c 						\
 				./src/arguments/nb_clients_flag.c 						\
 				./src/arguments/frequency_flag.c  						\
