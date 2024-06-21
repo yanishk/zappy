@@ -18,8 +18,6 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp
     _camera.projection = CAMERA_PERSPECTIVE;
     initWaterShader();
     _selectedPlayer.first = false;
-    _mapSize.first = 0;
-    _mapSize.second = 0;
 
     _allIsland = std::make_unique<AllIsland>(_cmd);
     _allItem = std::make_unique<AllItem>(_cmd);
@@ -62,6 +60,7 @@ void Game::fillAllModel(ZappyModel allPath)
 {
     std::vector<std::pair<Model, float>> tmpModel;
     bool hasPlayer = false;
+
     if (allPath.size() == 0)
         throw ErrorHandling(ERROR_NO_MODEL);
     for (auto &i: allPath) {
