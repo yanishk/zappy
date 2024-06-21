@@ -64,12 +64,13 @@ class DisplayGame {
         //std::unique_ptr<AllEggs> _allEggs;
         std::vector<std::pair<Model, float>> _allItemModel;
         std::vector<std::pair<Model, float>> _islandModel;
+        std::pair<Model, float> _eggModel;
 
         std::unique_ptr<AllIsland> _allIsland;
         std::unique_ptr<AllItem> _allItem;
+        std::unique_ptr<AllEggs> _allEggs;
 
         AllPlayers _player;
-        AllEggs _allEggs;
         bool _isAnimated;
 
         void initWaterShader(void);

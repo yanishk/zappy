@@ -7,8 +7,8 @@
 
 #include "UseRecivedCmd.hpp"
 
-UseRecivedCmd::UseRecivedCmd(CommandManager &cmd, AllPlayers &player, AllEggs &egg,
-    asio::ip::tcp::socket &socket) : _cmd(cmd), _player(player), _egg(egg) , _socket(socket)
+UseRecivedCmd::UseRecivedCmd(CommandManager &cmd, AllPlayers &player,
+    asio::ip::tcp::socket &socket) : _cmd(cmd), _player(player) , _socket(socket)
 {
 }
 
@@ -19,16 +19,15 @@ void UseRecivedCmd::callAllFunctions(Vector3 camPosition)
     getPpo();
     getPlv();
     getPdi();
-    getEbo();
     getPgt();
     getPdr();
     getPin();
-    getEnw();
-    getSmg();
+
+
     getPbc(camPosition);
     getSgt();
     getSst();
-    getEdi();
+
     getPic();
     getPie();
     getSeg();
@@ -182,44 +181,44 @@ void UseRecivedCmd::getPdi(void)
     }
 }
 
-void UseRecivedCmd::getEnw(void)
-{
-    while (!_cmd.getCommandAt(ENW_CMD, 0).empty()) {
-        std::vector<std::string> tmpCmd = _cmd.getCommandAt(ENW_CMD, 0);
-        _egg.addEggToIsland((Vector3){std::stof(tmpCmd[2].c_str()), 1.0,
-            std::stof(tmpCmd[3].c_str())}, std::stoi(tmpCmd[0]));
-        _cmd.eraseFirstCmdInMap(ENW_CMD);
-    }
-}
+//void UseRecivedCmd::getEnw(void)
+//{
+//    while (!_cmd.getCommandAt(ENW_CMD, 0).empty()) {
+//        std::vector<std::string> tmpCmd = _cmd.getCommandAt(ENW_CMD, 0);
+//        _egg.addEggToIsland((Vector3){std::stof(tmpCmd[2].c_str()), 1.0,
+//            std::stof(tmpCmd[3].c_str())}, std::stoi(tmpCmd[0]));
+//        _cmd.eraseFirstCmdInMap(ENW_CMD);
+//    }
+//}
 
-void UseRecivedCmd::getEbo(void)
-{
-    while (!_cmd.getCommandAt(EBO_CMD, 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(EBO_CMD, 0);
-        _egg.removeEggFromIsland(std::stoi(cmd[0]));
-        _cmd.eraseFirstCmdInMap(EBO_CMD);
-    }
-}
+//void UseRecivedCmd::getEbo(void)
+//{
+//    while (!_cmd.getCommandAt(EBO_CMD, 0).empty()) {
+//        std::vector<std::string> cmd = _cmd.getCommandAt(EBO_CMD, 0);
+//        _egg.removeEggFromIsland(std::stoi(cmd[0]));
+//        _cmd.eraseFirstCmdInMap(EBO_CMD);
+//    }
+//}
 
-void UseRecivedCmd::getSmg(void)
-{
-    while (!_cmd.getCommandAt(SMG_CMD, 0).empty()) {
-        std::vector<std::string> tmpCmd = _cmd.getCommandAt(SMG_CMD, 0);
-        _egg.addEggToIsland((Vector3){std::stof(tmpCmd[2].c_str()), 1.0,
-            std::stof(tmpCmd[3].c_str())}, std::stoi(tmpCmd[1]));
-        _cmd.eraseFirstCmdInMap(SMG_CMD);
-    }
-}
+//void UseRecivedCmd::getSmg(void)
+//{
+//    while (!_cmd.getCommandAt(SMG_CMD, 0).empty()) {
+//        std::vector<std::string> tmpCmd = _cmd.getCommandAt(SMG_CMD, 0);
+//        _egg.addEggToIsland((Vector3){std::stof(tmpCmd[2].c_str()), 1.0,
+//            std::stof(tmpCmd[3].c_str())}, std::stoi(tmpCmd[1]));
+//        _cmd.eraseFirstCmdInMap(SMG_CMD);
+//    }
+//}
 
-void UseRecivedCmd::getEdi(void)
-{
-    while (!_cmd.getCommandAt(EDI_CMD, 0).empty()) {
-        std::vector<std::string> cmd = _cmd.getCommandAt(EDI_CMD, 0);
-        _egg.removeEggFromIsland(std::stoi(cmd[0]));
-        _cmd.eraseFirstCmdInMap(EDI_CMD);
-    }
-}
-
+//void UseRecivedCmd::getEdi(void)
+//{
+//    while (!_cmd.getCommandAt(EDI_CMD, 0).empty()) {
+//        std::vector<std::string> cmd = _cmd.getCommandAt(EDI_CMD, 0);
+//        _egg.removeEggFromIsland(std::stoi(cmd[0]));
+//        _cmd.eraseFirstCmdInMap(EDI_CMD);
+//    }
+//}
+//
 void UseRecivedCmd::getSgt(void)
 {
     if (!_cmd.getCommandAt(SGT_CMD, 0).empty()) {

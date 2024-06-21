@@ -13,42 +13,50 @@
     #include <iomanip>
     #include <map>
     #include "Utils.hpp"
+    #include "Render.hpp"
+    #include "Commands.hpp"
 
-class Egg {
+class Egg : public LoadAndRender {
 
     public:
 
-        Egg(Vector3 position);
-        Vector3 getPosition();
+        Egg(Vector3 position, int eggId);
 
-        Model _eggModel;
-        int _eggID;
-        int RngRotate;
+        void render() override;
+        void fillModel(std::pair<Model, float> model) override;
 
-        Vector3 _realPos;
+        int getEggId();
+        int getRngRotate();
+        Vector3 getEggRealPos();
+        Vector3 get3DEggPos();
 
+        Vector3 _eggRealPos;
+        Vector3 _egg3DPosition;
     private:
 
-        Vector3 _eggPosition;
+        Model _eggModel;
+
         float _eggHight;
+        float _eggSize;
+
+        int _eggID;
+        int _rngRotate;
+
 };
 
 class AllEggs {
 
     public:
 
-        std::vector<Egg> _allEggs;
+        AllEggs(CommandManager &cmd);
 
-        void loadEggModel(std::pair<Model, float>);
-        void addEggToIsland(Vector3 position, int playerID);
-        void removeEggFromIsland(int playerID);
-        void drawEgg();
-        Vector3 getEggRealPos(int playerID);
+        void setAllEggs(std::pair<Model, float> model);
+        void renderAll(void);
 
     private:
 
-        Model _model;
-        float _size;
+        CommandManager &_cmd;
+        std::vector<Egg> _allEggs;
 
 };
 

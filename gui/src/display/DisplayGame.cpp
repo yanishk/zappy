@@ -25,6 +25,7 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
 
     _allIsland = std::make_unique<AllIsland>(_cmd);
     _allItem = std::make_unique<AllItem>(_cmd);
+    _allEggs = std::make_unique<AllEggs>(_cmd);
 }
 
 DisplayGame::~DisplayGame()
@@ -81,10 +82,9 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
             }
         }
     }
-    std::pair<Model, float> eggPair;
-    eggPair.first = LoadModel(EGG_MOD_PATH);
-    eggPair.second = 0.3;
-    _allEggs.loadEggModel(eggPair);
+    _eggModel.first = LoadModel(EGG_MOD_PATH);
+    _eggModel.second = 0.3;
+    //_allEggs.loadEggModel(eggPair);
 
     _sky = LoadModel("./gui/assets/models/unreal-engine-4-sky/source/ue4sky.obj");
     Texture2D texture = LoadTexture("./gui/assets/models/unreal-engine-4-sky/textures/T_Sky_Blue.png");
@@ -176,8 +176,7 @@ void DisplayGame::display3D(void)
 
     _allIsland.get()->renderAll();
     _allItem.get()->renderAll();
-    _allEggs.drawEgg();
-
+    _allEggs.get()->renderAll();
     _player.drawPlayer(_isAnimated);
 
     for (auto &i: _player._allPlayer) {
@@ -220,7 +219,7 @@ void DisplayGame::display2D(void)
 void DisplayGame::launchGame(void)
 {
     DisableCursor();
-    UseRecivedCmd recivedCmd(_cmd, _player, _allEggs, _socket);
+    UseRecivedCmd recivedCmd(_cmd, _player, _socket);
 
     SetTargetFPS(60);
     float seconds = 0.0f;
@@ -228,6 +227,7 @@ void DisplayGame::launchGame(void)
     while (!WindowShouldClose()) {
         _allIsland.get()->setAllIsland(_islandModel);
         _allItem.get()->setAllItem(_allItemModel);
+        _allEggs.get()->setAllEggs(_eggModel);
         useServerInfo(recivedCmd);
         seconds += (GetFrameTime() / 2);
 
