@@ -114,7 +114,6 @@ UNIT_TESTS_SRC =    ./src/lib/calculate_time_unit.c		\
 					./src/lib/get_random_team_egg.c 	\
 					./tests/test_get_random_team_egg.c	\
 					./src/lib/get_tile_index.c 			\
-					./src/lib/is_positive_number.c 		\
 					./tests/test_get_tile_index.c		\
 					./src/lib/get_player_direction.c 	\
 					./tests/test_get_player_direction.c	\
@@ -124,9 +123,22 @@ UNIT_TESTS_SRC =    ./src/lib/calculate_time_unit.c		\
 					./tests/test_is_a_resource.c		\
 					./src/lib/is_on_same_tile.c 		\
 					./tests/test_is_on_same_tile.c		\
+					./src/lib/is_positive_number.c 		\
 					./tests/test_is_positive_number.c	\
 					./src/lib/time_is_up.c 				\
 					./tests/test_time_is_up.c			\
+					./src/lib/count_team_slots.c		\
+					./tests/count_team_slots.c 			\
+					./src/lib/get_link.c				\
+					./tests/get_link.c 					\
+					./src/lib/array_functions.c 		\
+					./tests/array_functions.c			\
+					./src/lib/word_array.c 				\
+					./tests/word_array.c				\
+					./src/lib/get_resources.c 			\
+					./tests/get_resources.c				\
+					./src/lib/is_command_queue_full.c 	\
+					./tests/is_command_queue_full.c
 
 OBJ			=	$(SRC:.c=.o)
 
