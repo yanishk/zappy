@@ -2,13 +2,13 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** test
+** test_word_array
 */
 
 #include <criterion/criterion.h>
 #include "server.h"
 
-Test(word_array, word_array1)
+Test(word_array, array_of_size_three)
 {
     char *str = "      enorme  \t\t    excellent  \t\n       super    ";
     char **array = word_array(str, " \t\n");

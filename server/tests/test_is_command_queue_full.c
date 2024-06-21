@@ -2,13 +2,13 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** test
+** test_is_command_queue_full
 */
 
 #include <criterion/criterion.h>
 #include "command_ia.h"
 
-Test(is_command_queue_full, queue_not_full)
+Test(is_command_queue_full, empty_queue)
 {
     client_t client;
     bool res = false;

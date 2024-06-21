@@ -11,10 +11,8 @@ RM			=	rm -f
 CFLAGS		=	-Wall -Wextra -Werror -lm
 CPPFLAGS	=	-iquote ./include -iquote ./include/command/ 	\
 				-iquote ./include/game/
+TTFLAGS 	= 	--coverage -lcriterion
 FLAGS_DEBUG = 	-g
-
-UNIT_TESTS_NAME = unit_tests
-UNIT_TESTS_FLAGS = --coverage -lcriterion
 
 SRC			=	./src/main.c											\
 				./src/server.c 											\
@@ -105,7 +103,7 @@ SRC			=	./src/main.c											\
 				./src/lib/calculate_time_unit.c							\
 				./src/lib/has_backslash.c
 
-UNIT_TESTS_SRC =    ./src/lib/calculate_time_unit.c		\
+SRC_TEST 	=   	 ./src/lib/calculate_time_unit.c	\
                     ./tests/test_calculate_time_unit.c	\
 					./src/lib/get_graphical_client.c	\
                     ./tests/test_get_graphical_client.c	\
@@ -128,21 +126,22 @@ UNIT_TESTS_SRC =    ./src/lib/calculate_time_unit.c		\
 					./src/lib/time_is_up.c 				\
 					./tests/test_time_is_up.c			\
 					./src/lib/count_team_slots.c		\
-					./tests/count_team_slots.c 			\
+					./tests/test_count_team_slots.c 	\
 					./src/lib/get_link.c				\
-					./tests/get_link.c 					\
+					./tests/test_get_link.c 			\
 					./src/lib/array_functions.c 		\
-					./tests/array_functions.c			\
+					./tests/test_array_functions.c		\
 					./src/lib/word_array.c 				\
-					./tests/word_array.c				\
+					./tests/test_word_array.c			\
 					./src/lib/get_resources.c 			\
-					./tests/get_resources.c				\
+					./tests/test_get_resources.c		\
 					./src/lib/is_command_queue_full.c 	\
-					./tests/is_command_queue_full.c
+					./tests/test_is_command_queue_full.c
 
 OBJ			=	$(SRC:.c=.o)
 
 NAME		=	zappy_server
+NAME_TEST	=	unit_tests
 
 all:	$(NAME)
 
@@ -152,20 +151,24 @@ $(NAME):	$(OBJ)
 debug: CFLAGS += $(FLAGS_DEBUG)
 debug: all
 
-clean:
-	$(RM) $(OBJ)
-
-fclean:	clean
-	$(RM) $(NAME) $(UNIT_TESTS_NAME)
-
 tests_run:
-	$(CC) -o $(UNIT_TESTS_NAME) $(UNIT_TESTS_SRC) \
-	$(UNIT_TESTS_FLAGS) $(CFLAGS) $(CPPFLAGS)
-	./$(UNIT_TESTS_NAME)
+	$(CC) -o $(NAME_TEST) $(SRC_TEST) $(TTFLAGS) $(CPPFLAGS)
+	./$(NAME_TEST)
+
+coverage: tests_run
+	gcovr --exclude tests/
 
 tests_clean:
-		$(RM) $(UNIT_TESTS_NAME)
+		$(RM) $(NAME_TEST)
 		$(RM) *.gcno *.gcda
+
+clean: tests_clean
+	$(RM) $(OBJ)
+	$(RM) *.gcno *.gcda
+
+fclean:	clean
+	$(RM) $(NAME)
+	$(RM) $(NAME_TEST)
 
 re:	fclean all
 

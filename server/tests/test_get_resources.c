@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** test
+** test_get_resources
 */
 
 #include <criterion/criterion.h>

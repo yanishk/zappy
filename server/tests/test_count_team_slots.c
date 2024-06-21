@@ -2,13 +2,13 @@
 ** EPITECH PROJECT, 2024
 ** B-YEP-400-PAR-4-1-zappy-edward.lalande
 ** File description:
-** test
+** test_count_team_slots
 */
 
 #include <criterion/criterion.h>
 #include "server.h"
 
-Test(count_team_eggs, empty)
+Test(count_team_eggs, no_team_eggs)
 {
     zappy_t zappy;
     const char *team_name = "team1";
@@ -20,7 +20,7 @@ Test(count_team_eggs, empty)
     cr_assert_eq(nb_eggs, res);
 }
 
-Test(count_team_eggs, count_team_eggs1)
+Test(count_team_eggs, four_team_eggs)
 {
     zappy_t zappy;
     egg_t *egg = NULL;
@@ -38,7 +38,7 @@ Test(count_team_eggs, count_team_eggs1)
     cr_assert_eq(nb_eggs, res);
 }
 
-Test(count_team_players, empty)
+Test(count_team_players, no_team_players)
 {
     zappy_t zappy;
     const char *team_name = "team1";
@@ -50,7 +50,7 @@ Test(count_team_players, empty)
     cr_assert_eq(nb_players, res);
 }
 
-Test(count_team_players, count_team_players1)
+Test(count_team_players, six_team_players)
 {
     zappy_t zappy;
     player_t *player = NULL;
@@ -68,7 +68,7 @@ Test(count_team_players, count_team_players1)
     cr_assert_eq(nb_players, res);
 }
 
-Test(count_team_slots, empty)
+Test(count_team_slots, no_team_slots)
 {
     zappy_t zappy;
     const char *team_name = "team1";
@@ -81,7 +81,7 @@ Test(count_team_slots, empty)
     cr_assert_eq(nb_players, res);
 }
 
-Test(count_team_slots, count_team_slots1)
+Test(count_team_slots, eight_team_slots)
 {
     zappy_t zappy;
     egg_t *egg = NULL;

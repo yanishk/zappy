@@ -8,7 +8,7 @@
 #include <criterion/criterion.h>
 #include "server.h"
 
-Test(lib_tests, first_grahical_client_found)
+Test(lib_tests, first_graphical_client_found)
 {
     server_t server;
     server.max_clients = 1;
