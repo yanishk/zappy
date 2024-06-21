@@ -16,7 +16,7 @@ Vector3 Egg::get3DEggPos()
 
 void Egg::render()
 {
-    DrawModel(_eggModel, get3DEggPos(), 0.3, WHITE);
+    DrawModel(_eggModel, get3DEggPos(), _eggSize, WHITE);
 }
 
 void Egg::fillModel(std::pair<Model, float> model)

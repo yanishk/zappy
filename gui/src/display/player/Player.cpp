@@ -371,8 +371,6 @@ Model Player::getPlayerModel(void)
     return _playerModel;
 }
 
-//    Fonction in private
-
 void Player::DrawText3D(Font font, const char *text, Vector3 position, float fontSize, float fontSpacing, float lineSpacing, Color tint)
 {
     int length = TextLength(text);

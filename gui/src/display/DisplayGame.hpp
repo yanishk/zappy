@@ -27,6 +27,15 @@
     #define ERROR_NO_PLAYER_MODEL "No player model"
     #define ERROR_NOT_ENOUTH_ITEM_MODEL "Not enough item model"
 
+    #define SKY_MODEL_PATH "./gui/assets/models/unreal-engine-4-sky/source/ue4sky.obj"
+    #define SKY_TEXTURE_PATH "./gui/assets/models/unreal-engine-4-sky/textures/T_Sky_Blue.png"
+    #define WATER_SHADER "./gui/assets/shaders/water.fs"
+    #define WATER_TEXTURE "./gui/assets/image/water_texture.png"
+
+    #define SKY_SIZE 10
+
+    #define FOV 60
+
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
 class DisplayGame {

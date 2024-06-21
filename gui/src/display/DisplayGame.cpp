@@ -13,10 +13,8 @@ DisplayGame::DisplayGame(int screenWidth, int screenHeight, CommandManager &cmd,
     _screenWidth = screenWidth;
     SetTraceLogLevel(TraceLogLevel::LOG_ERROR);
     InitWindow(screenWidth, screenHeight, WINDOW_NAME);
-    _camera.position = setVector3(70.0, 40.0, -50.0);
-    _camera.target = setVector3(70.0, 18.0, -0.0);
     _camera.up = setVector3(0.0, 1.0, 0.0);
-    _camera.fovy = 60;
+    _camera.fovy = FOV;
     _camera.projection = CAMERA_PERSPECTIVE;
     initWaterShader();
     _selectedPlayer.first = false;
@@ -52,10 +50,12 @@ void DisplayGame::updateCamera(void)
         alltitude -= speed;
     if (IsKeyDown(KEY_LEFT_CONTROL))
         speed += 0.2;
-    Vector3 movement = setVector3(IsKeyDown(KEY_W) * speed - IsKeyDown(KEY_S) * speed, IsKeyDown(KEY_D) * speed - IsKeyDown(KEY_A) * speed, alltitude);
+    Vector3 movement = setVector3(
+        IsKeyDown(KEY_W) * speed - IsKeyDown(KEY_S) * speed,
+        IsKeyDown(KEY_D) * speed - IsKeyDown(KEY_A) * speed, alltitude);
     Vector3 rotation = setVector3(GetMouseDelta().x * 0.05f, GetMouseDelta().y * 0.05f, 0);
 
-    UpdateCameraPro(&_camera, movement, rotation, GetMouseWheelMove() * 2.0f);
+    UpdateCameraPro(&_camera, movement, rotation, GetMouseWheelMove());
 }
 
 void DisplayGame::fillAllModel(ZappyModel allPath)
@@ -86,12 +86,12 @@ void DisplayGame::fillAllModel(ZappyModel allPath)
     _eggModel.first = LoadModel(EGG_MOD_PATH);
     _eggModel.second = 0.3;
 
-    _sky = LoadModel("./gui/assets/models/unreal-engine-4-sky/source/ue4sky.obj");
-    Texture2D texture = LoadTexture("./gui/assets/models/unreal-engine-4-sky/textures/T_Sky_Blue.png");
+    _sky = LoadModel(SKY_MODEL_PATH);
+    Texture2D texture = LoadTexture(SKY_TEXTURE_PATH);
     _sky.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
     if (!hasPlayer)
         throw ErrorHandling(ERROR_NO_PLAYER_MODEL);
-    if (_allItemModel.size() < 7)
+    if (_allItemModel.size() < NBR_ITEM)
         throw ErrorHandling(ERROR_NOT_ENOUTH_ITEM_MODEL);
 }
 
@@ -103,7 +103,7 @@ void DisplayGame::mooveCameraToCoord(Vector3 position, Vector3 target)
 
 void DisplayGame::initWaterShader(void)
 {
-    _waterShader = LoadShader(0, TextFormat("./gui/assets/shaders/water.fs", 330));
+    _waterShader = LoadShader(0, TextFormat(WATER_SHADER, 330));
 
     _secondLoc = GetShaderLocation(_waterShader, "seconds");
     int freqXLoc = GetShaderLocation(_waterShader, "freqX");
@@ -129,7 +129,7 @@ void DisplayGame::initWaterShader(void)
     SetShaderValue(_waterShader, speedXLoc, &speedX, SHADER_UNIFORM_FLOAT);
     SetShaderValue(_waterShader, speedYLoc, &speedY, SHADER_UNIFORM_FLOAT);
 
-    Texture2D texture = LoadTexture("./gui/assets/image/water_texture.png");
+    Texture2D texture = LoadTexture(WATER_TEXTURE);
     _WaterModel = LoadModelFromMesh(GenMeshPlane(1000, 1000, 2, 2));
     _WaterModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
     _WaterModel.materials[0].shader = _waterShader;
@@ -144,7 +144,7 @@ void DisplayGame::display3D(void)
 {
     BeginMode3D(_camera);
 
-    DrawModel(_sky, setVector3(_camera.position.x, 0, _camera.position.z), 10, WHITE);
+    DrawModel(_sky, setVector3(_camera.position.x, 0, _camera.position.z), SKY_SIZE, WHITE);
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         std::pair<bool, int> tmpSelectedPlayer = _allPlayer.get()->isPlayerSelected(_camera.target, _camera.position);
@@ -174,10 +174,10 @@ void DisplayGame::display2D(void)
     _allPlayer.get()->renderAll2D(_selectedPlayer, _allItem);
 
     int size = 8;
-    DrawCircleLines(1920 / 2, 1080 / 2, size, RED);
+    DrawCircleLines(_screenWidth / 2, _screenHeight / 2, size, RED);
     size += 4;
-    DrawLine(1920 / 2 - size / 2, 1080 / 2 - size / 2, 1920 / 2 + size / 2, 1080 / 2 + size / 2, RED);
-    DrawLine(1920 / 2 + size / 2, 1080 / 2 - size / 2, 1920 / 2 - size / 2, 1080 / 2 + size / 2, RED);
+    DrawLine(_screenWidth / 2 - size / 2, _screenHeight / 2 - size / 2, _screenWidth / 2 + size / 2, _screenHeight / 2 + size / 2, RED);
+    DrawLine(_screenWidth / 2 + size / 2, _screenHeight / 2 - size / 2, _screenWidth / 2 - size / 2, _screenHeight / 2 + size / 2, RED);
 
     DrawRectangle(5, 5, 330, 75, Fade(SKYBLUE, 0.5f));
     DrawRectangleLines(5, 5, 330, 75, BLUE);

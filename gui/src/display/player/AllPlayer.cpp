@@ -72,8 +72,6 @@ std::pair<bool, int> AllPlayers::isPlayerSelected(Vector3 target, Vector3 positi
     return selectedPlayer;
 }
 
-// Private Function
-
 Player &AllPlayers::getPlayerByID(int PlayerID)
 {
     for (auto &player : _allPlayer) {

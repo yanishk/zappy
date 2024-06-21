@@ -38,7 +38,6 @@ class Egg : public LoadAndRender {
         float _eggSize;
 
         int _eggID;
-
 };
 
 class AllEggs {
@@ -55,7 +54,6 @@ class AllEggs {
 
         CommandManager &_cmd;
         std::vector<Egg> _allEggs;
-
 };
 
 #endif /* !EGGS_HPP_ */
