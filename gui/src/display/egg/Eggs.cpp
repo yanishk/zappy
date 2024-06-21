@@ -52,18 +52,26 @@ AllEggs::AllEggs(CommandManager &cmd) : _cmd(cmd)
 
 void AllEggs::setAllEggs(std::pair<Model, float> model)
 {
-     while (!_cmd.getCommandAt(SMG_CMD, 0).empty()) {
+    if (!_cmd.getCommandAt(SMG_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(SMG_CMD, 0);
-
         Egg newEgg;
 
         newEgg.fillModel(model);
         newEgg.setEggPosAndID((Vector2){std::stof(cmd[2].c_str()), std::stof(cmd[3].c_str())}, std::atoi(cmd[1].c_str()));
         _allEggs.push_back(newEgg);
-
         _cmd.eraseFirstCmdInMap(SMG_CMD);
+    } else if (!_cmd.getCommandAt(ENW_CMD, 0).empty()) {
+        std::vector<std::string> cmd = _cmd.getCommandAt(ENW_CMD, 0);
+        Egg newEgg;
+
+        newEgg.fillModel(model);
+        newEgg.setEggPosAndID((Vector2){std::stof(cmd[2].c_str()), std::stof(cmd[3].c_str())}, std::atoi(cmd[0].c_str()));
+        _allEggs.push_back(newEgg);
+        _cmd.eraseFirstCmdInMap(ENW_CMD);
     }
+
 }
+
 
 void AllEggs::renderAll(void)
 {
