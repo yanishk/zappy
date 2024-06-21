@@ -71,11 +71,11 @@ class CommandManager {
 
         void fillMapPlayerInfos(const std::string &cmd, const std::vector<std::string> &params);
         void fillMapIsland(const std::string &cmd, const std::vector<std::string> &params);
-        std::vector<std::vector<std::string>> _bctCmd;
-        std::vector<std::vector<std::string>> _smgCmd;
 
     private:
 
+        std::vector<std::vector<std::string>> _bctCmd;
+        std::vector<std::vector<std::string>> _smgCmd;
         std::vector<std::vector<std::string>> _mszCmd;
         std::vector<std::vector<std::string>> _tnaCmd;
 
