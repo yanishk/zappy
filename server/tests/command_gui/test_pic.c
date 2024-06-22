@@ -12,7 +12,6 @@ Test(pic_func, print_start_incantation)
 {
     server_t server;
     player_t player;
-    link_t *link = NULL;
     unsigned int res = 0;
     int id_players[] = {4, 9, 12, 44};
 
@@ -33,7 +32,6 @@ Test(pic_func, no_graphical_client)
 {
     server_t server;
     player_t player;
-    link_t *link = NULL;
     unsigned int res = 0;
     int id_players[] = {4, 9, 12, 44};
 

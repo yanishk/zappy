@@ -13,7 +13,6 @@ Test(plv_func, print_player_level)
     zappy_t zappy;
     server_t server;
     player_t *player = NULL;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 
@@ -37,8 +36,6 @@ Test(plv_func, player_not_found)
 {
     zappy_t zappy;
     server_t server;
-    link_t *link = NULL;
-    int player_id = 4;
     unsigned int res = 0;
 
     server.cmd_arg_array = word_array("plv 4\n", " \n");
@@ -47,6 +44,7 @@ Test(plv_func, player_not_found)
     server.clients[0] = malloc(sizeof(client_t));
     server.clients[0]->is_graphic = true;
     server.clients[0]->client_fd = 0;
+    TAILQ_INIT(&zappy.player_head);
 
     res = plv_func(&server, &zappy, NULL, NULL);
     cr_assert_eq(res, EXIT_WITH_ERROR);
@@ -57,7 +55,6 @@ Test(plv_func, not_a_player_id)
     zappy_t zappy;
     server_t server;
     player_t *player = NULL;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 

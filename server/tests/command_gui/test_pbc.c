@@ -10,10 +10,8 @@
 
 Test(pbc_func, print_broadcast)
 {
-    zappy_t zappy;
     server_t server;
     player_t player;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 
@@ -30,10 +28,8 @@ Test(pbc_func, print_broadcast)
 
 Test(pbc_func, graphical_not_found)
 {
-    zappy_t zappy;
     server_t server;
     player_t player;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 

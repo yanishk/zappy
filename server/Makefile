@@ -195,7 +195,7 @@ debug: CFLAGS += $(FLAGS_DEBUG)
 debug: all
 
 tests_run:
-	$(CC) -o $(NAME_TEST) $(SRC_TEST) $(TTFLAGS) $(CPPFLAGS)
+	$(CC) -o $(NAME_TEST) $(SRC_TEST) $(TTFLAGS) $(CFLAGS) $(CPPFLAGS)
 	./$(NAME_TEST)
 
 coverage: tests_run

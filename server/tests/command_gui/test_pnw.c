@@ -47,9 +47,7 @@ Test(pnw_func, player_not_found)
 {
     zappy_t zappy;
     server_t server;
-    player_t *player = NULL;
     link_t *link = NULL;
-    const char *team_name = "team1";
     int client_fd = 7;
     int player_id = 12;
     unsigned int res = 0;

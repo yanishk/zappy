@@ -10,10 +10,8 @@
 
 Test(pex_func, print_expulsion)
 {
-    zappy_t zappy;
     server_t server;
     player_t player;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 
@@ -30,10 +28,8 @@ Test(pex_func, print_expulsion)
 
 Test(pex_func, graphical_not_found)
 {
-    zappy_t zappy;
     server_t server;
     player_t player;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 

@@ -13,7 +13,6 @@ Test(pin_func, print_player_inventory)
     zappy_t zappy;
     server_t server;
     player_t *player = NULL;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 
@@ -45,8 +44,6 @@ Test(pin_func, player_not_found)
 {
     zappy_t zappy;
     server_t server;
-    link_t *link = NULL;
-    int player_id = 4;
     unsigned int res = 0;
 
     server.cmd_arg_array = word_array("pin 4\n", " \n");
@@ -55,6 +52,7 @@ Test(pin_func, player_not_found)
     server.clients[0] = malloc(sizeof(client_t));
     server.clients[0]->is_graphic = true;
     server.clients[0]->client_fd = 0;
+    TAILQ_INIT(&zappy.player_head);
 
     res = pin_func(&server, &zappy, NULL, NULL);
     cr_assert_eq(res, EXIT_WITH_ERROR);
@@ -65,7 +63,6 @@ Test(pin_func, not_a_player_id)
     zappy_t zappy;
     server_t server;
     player_t *player = NULL;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 

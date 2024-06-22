@@ -13,7 +13,6 @@ Test(ppo_func, print_player_position)
     zappy_t zappy;
     server_t server;
     player_t *player = NULL;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 
@@ -39,8 +38,6 @@ Test(ppo_func, player_not_found)
 {
     zappy_t zappy;
     server_t server;
-    link_t *link = NULL;
-    int player_id = 4;
     unsigned int res = 0;
 
     server.cmd_arg_array = word_array("ppo 4\n", " \n");
@@ -60,7 +57,6 @@ Test(ppo_func, not_a_player_id)
     zappy_t zappy;
     server_t server;
     player_t *player = NULL;
-    link_t *link = NULL;
     int player_id = 4;
     unsigned int res = 0;
 
