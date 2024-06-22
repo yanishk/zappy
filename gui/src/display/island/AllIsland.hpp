@@ -20,6 +20,7 @@ class AllIsland {
 
         void setAllIsland(std::vector<std::pair<Model, float>> model);
         void renderAll(void);
+        std::size_t getTotalNbrIsland(void);
 
     private:
 

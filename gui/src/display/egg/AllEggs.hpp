@@ -19,6 +19,7 @@ class AllEggs {
         void setAllEggs(std::pair<Model, float> model);
         void removeEgg(int Id);
         void renderAll(void);
+        std::size_t getTotalNbrEggs(void);
 
     private:
 

@@ -32,7 +32,7 @@
     #define WATER_SHADER "./gui/assets/shaders/water.fs"
     #define WATER_TEXTURE "./gui/assets/image/water_texture.png"
 
-    #define FOV 60
+    #define FOV 70
     #define FPS 60
 
     #define SKY_SIZE 10
@@ -66,6 +66,22 @@
     #define VALUE_SHADER_SPEEDX 8.0
     #define VALUE_SHADER_SPEEDY 8.0
 
+    #define MARGIN_LEFT 10
+    #define MARGIN_TOP 10
+    #define WIGHT 370
+    #define HIGHT 180
+    #define FONT_SIZE 20
+    #define BACKSLASH_N 25
+    #define START_POS 15
+
+    #define CAM_POS "- Position: (%06.3f, %06.3f, %06.3f)"
+    #define CAM_TARGET "- Target: (%06.3f, %06.3f, %06.3f)"
+    #define TIME_UNIT "- Time unit: %d"
+    #define NBR_ITEM_MAP "- Nbr item on the map: %d"
+    #define NBR_PLAYER_MAP "- Nbr player on the map: %d"
+    #define NBR_ISLAND_MAP "- Nbr island on the map: %d"
+    #define NBR_EGGS_MAP "- Nbr egg on the map: %d"
+
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
 class Game {
@@ -73,10 +89,8 @@ class Game {
     public:
 
         Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation);
-        ~Game();
         void updateCamera(void);
         Vector3 setVector3(float x, float y, float z);
-        int getSgt(void);
 
         void launchGame(void);
         void fillAllModel(ZappyModel);
@@ -105,6 +119,8 @@ class Game {
         int _secondLoc;
         int _sgtValue;
 
+        bool _displayGameInfo;
+
         std::pair<int, int> _mapSize;
         std::pair<bool, std::size_t> _selectedPlayer;
 
@@ -125,6 +141,7 @@ class Game {
         void display2D(void);
         void setCameraToCoord(Vector3 position, Vector3 target);
         void cameraPositionStart(void);
+        void unloadAllModel(void);
 };
 
 #endif /* !Game_HPP_ */

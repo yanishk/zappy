@@ -7,11 +7,11 @@
 
 #include "Game.hpp"
 
-Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket)
+Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket), _displayGameInfo(true)
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
-    SetTraceLogLevel(TraceLogLevel::LOG_ERROR);
+    SetTraceLogLevel(TraceLogLevel::LOG_FATAL);
     InitWindow(screenWidth, screenHeight, WINDOW_NAME);
     _camera.up = setVector3(0.0, 1.0, 0.0);
     _camera.fovy = FOV;
@@ -25,13 +25,6 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp
     _allItem = std::make_unique<AllItem>(_cmd);
     _allEggs = std::make_unique<AllEggs>(_cmd);
     _allPlayer = std::make_unique<AllPlayers>(_cmd, animation);
-}
-
-Game::~Game()
-{
-    CloseWindow();
-    for (auto &i: _allItemModel)
-        UnloadModel(i.first);
 }
 
 Vector3 Game::setVector3(float x, float y, float z)
@@ -172,11 +165,33 @@ void Game::display2D(void)
 {
     _allPlayer.get()->renderAll2D(_selectedPlayer, _allItem);
 
+    int position = START_POS;
     int size = CROSSBAR_SIZE;
     DrawCircleLines(_screenWidth / 2, _screenHeight / 2, size, RED);
     size += CROSSBAR_SIZE / 2;
     DrawLine(_screenWidth / 2 - size / 2, _screenHeight / 2 - size / 2, _screenWidth / 2 + size / 2, _screenHeight / 2 + size / 2, RED);
     DrawLine(_screenWidth / 2 + size / 2, _screenHeight / 2 - size / 2, _screenWidth / 2 - size / 2, _screenHeight / 2 + size / 2, RED);
+
+    if (IsKeyPressed(KEY_F3))
+        _displayGameInfo = !_displayGameInfo;
+
+    if (!_displayGameInfo)
+        return;
+    DrawRectangle(MARGIN_LEFT, MARGIN_TOP, WIGHT, HIGHT, Fade(SKYBLUE, 0.5f));
+    DrawFPS(_screenWidth - 80, MARGIN_TOP);
+    DrawText(TextFormat(CAM_POS, _camera.position.x, _camera.position.y, _camera.position.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    position += BACKSLASH_N;
+    DrawText(TextFormat(CAM_TARGET, _camera.target.x, _camera.target.y, _camera.target.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    position += BACKSLASH_N;
+    DrawText(TextFormat(TIME_UNIT, _sgtValue), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    position += BACKSLASH_N;
+    DrawText(TextFormat(NBR_ITEM_MAP, _allItem.get()->getTotalNbrItem()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    position += BACKSLASH_N;
+    DrawText(TextFormat(NBR_PLAYER_MAP, _allPlayer.get()->getTotalNbrPlayer()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    position += BACKSLASH_N;
+    DrawText(TextFormat(NBR_ISLAND_MAP, _allIsland.get()->getTotalNbrIsland()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    position += BACKSLASH_N;
+    DrawText(TextFormat(NBR_EGGS_MAP, _allEggs.get()->getTotalNbrEggs()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
 }
 
 void Game::cameraPositionStart(void)
@@ -197,12 +212,6 @@ void Game::cameraPositionStart(void)
             -(mapSize.second * spaceBetwenIsland) / START_POS_COEF_Z - spaceBetwenIsland);
         setCameraToCoord(position, target);
     }
-}
-
-
-int Game::getSgt(void)
-{
-    return _sgtValue;
 }
 
 void Game::getSgtCmd(void)
@@ -235,6 +244,18 @@ void Game::requestChangingTimeUnit(void)
     }
 }
 
+void Game::unloadAllModel(void)
+{
+    for (auto &i: _allItemModel)
+        UnloadModel(i.first);
+    for (auto &i : _islandModel)
+        UnloadModel(i.first);
+    for (auto &i : _playerModel)
+        UnloadModel(i.first);
+    UnloadModel(_eggModel.first);
+    CloseWindow();
+}
+
 void Game::launchGame(void)
 {
     DisableCursor();
@@ -264,4 +285,5 @@ void Game::launchGame(void)
         display2D();
         EndDrawing();
     }
+    unloadAllModel();
 }

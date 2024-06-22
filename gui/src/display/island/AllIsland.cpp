@@ -47,3 +47,8 @@ void AllIsland::renderAll(void)
         i.render();
     }
 }
+
+std::size_t AllIsland::getTotalNbrIsland(void)
+{
+    return _allIsland.size();
+}

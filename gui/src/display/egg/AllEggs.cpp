@@ -68,3 +68,8 @@ void AllEggs::renderAll(void)
         t.render();
     }
 }
+
+std::size_t AllEggs::getTotalNbrEggs(void)
+{
+    return _allEggs.size();
+}

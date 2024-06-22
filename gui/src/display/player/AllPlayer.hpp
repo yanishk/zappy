@@ -25,6 +25,7 @@ class AllPlayers {
         void renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem);
         void setAllPlayer(std::vector<std::pair<Model, float>> model);
         std::pair<bool, int> isPlayerSelected(Vector3 target, Vector3 position);
+        std::size_t getTotalNbrPlayer(void);
 
     private:
         CommandManager &_cmd;
