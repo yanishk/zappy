@@ -7,7 +7,8 @@
 
 #include "Game.hpp"
 
-Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket), _displayGameInfo(true)
+Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
+    asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket), _displayGameInfo(true)
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
