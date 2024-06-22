@@ -180,6 +180,30 @@ SRC_TEST 	=   	./src/lib/calculate_time_unit.c						\
 					./tests/command_gui/test_pic.c						\
 					./src/command/command_gui/pie.c						\
 					./tests/command_gui/test_pie.c						\
+					./src/command/command_gui/pfk.c 					\
+					./tests/command_gui/test_pfk.c						\
+					./src/command/command_gui/pdr.c 					\
+					./tests/command_gui/test_pdr.c						\
+					./src/command/command_gui/pgt.c 					\
+					./tests/command_gui/test_pgt.c						\
+					./src/command/command_gui/pdi.c 					\
+					./tests/command_gui/test_pdi.c						\
+					./src/command/command_gui/enw.c 					\
+					./tests/command_gui/test_enw.c						\
+					./src/command/command_gui/ebo.c 					\
+					./tests/command_gui/test_ebo.c						\
+					./src/command/command_gui/edi.c 					\
+					./tests/command_gui/test_edi.c						\
+					./src/command/command_gui/sgt.c 					\
+					./tests/command_gui/test_sgt.c						\
+					./src/command/command_gui/sst.c 					\
+					./tests/command_gui/test_sst.c						\
+					./src/command/command_gui/seg.c 					\
+					./tests/command_gui/test_seg.c						\
+					./src/command/command_gui/smg.c 					\
+					./tests/command_gui/test_smg.c						\
+
+
 
 OBJ			=	$(SRC:.c=.o)
 
