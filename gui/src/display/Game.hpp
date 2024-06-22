@@ -20,6 +20,7 @@
     #include "AllItem.hpp"
     #include "AllEggs.hpp"
     #include "AllIsland.hpp"
+    #include "Sky.hpp"
 
     #define WINDOW_NAME "Zappy_gui"
     #define ERROR_NO_MODEL "No or bad path to model"
@@ -68,7 +69,9 @@
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
 class Game {
+
     public:
+
         Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation);
         ~Game();
         void updateCamera(void);
@@ -81,6 +84,7 @@ class Game {
         void requestChangingTimeUnit(void);
 
     private:
+
         enum ModelType
         {
             ErrorType = 0,
@@ -93,7 +97,6 @@ class Game {
         Camera _camera;
         Shader _waterShader;
         Model _WaterModel;
-        Model _sky;
         asio::ip::tcp::socket &_socket;
 
         int _screenWidth;
@@ -109,11 +112,13 @@ class Game {
         std::vector<std::pair<Model, float>> _islandModel;
         std::vector<std::pair<Model, float>> _playerModel;
         std::pair<Model, float> _eggModel;
+        std::pair<Model, float> _skyModel;
 
         std::unique_ptr<AllIsland> _allIsland;
         std::unique_ptr<AllItem> _allItem;
         std::unique_ptr<AllEggs> _allEggs;
         std::unique_ptr<AllPlayers> _allPlayer;
+        std::unique_ptr<Sky> _sky;
 
         void initWaterShader(void);
         void display3D(void);

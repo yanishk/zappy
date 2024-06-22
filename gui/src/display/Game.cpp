@@ -20,6 +20,7 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp
     initWaterShader();
     _selectedPlayer.first = false;
 
+    _sky = std::make_unique<Sky>();
     _allIsland = std::make_unique<AllIsland>(_cmd);
     _allItem = std::make_unique<AllItem>(_cmd);
     _allEggs = std::make_unique<AllEggs>(_cmd);
@@ -64,6 +65,7 @@ void Game::fillAllModel(ZappyModel allPath)
 
     if (allPath.size() == 0)
         throw ErrorHandling(ERROR_NO_MODEL);
+
     for (auto &i: allPath) {
         std::pair<Model, float> tmpPair;
         tmpPair.first = LoadModel(i.first.first.c_str());
@@ -83,12 +85,14 @@ void Game::fillAllModel(ZappyModel allPath)
             }
         }
     }
+
     _eggModel.first = LoadModel(EGG_MOD_PATH);
     _eggModel.second = EGG_MODEL_SIZE;
 
-    _sky = LoadModel(SKY_MODEL_PATH);
-    Texture2D texture = LoadTexture(SKY_TEXTURE_PATH);
-    _sky.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+    _skyModel.first = LoadModel(SKY_MODEL_PATH);
+    _skyModel.first.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = LoadTexture(SKY_TEXTURE_PATH);
+    _skyModel.second = 10;
+
     if (!hasPlayer)
         throw ErrorHandling(ERROR_NO_PLAYER_MODEL);
     if (_allItemModel.size() < NBR_ITEM)
@@ -139,7 +143,8 @@ void Game::display3D(void)
 {
     BeginMode3D(_camera);
 
-    DrawModel(_sky, setVector3(_camera.position.x, 0, _camera.position.z), SKY_SIZE, WHITE);
+    _sky.get()->setSkyPos(_camera.position);
+    _sky.get()->render();
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         std::pair<bool, int> tmpSelectedPlayer = _allPlayer.get()->isPlayerSelected(_camera.target, _camera.position);
@@ -243,6 +248,7 @@ void Game::launchGame(void)
         _allItem.get()->setAllItem(_allItemModel);
         _allEggs.get()->setAllEggs(_eggModel);
         _allPlayer.get()->setAllPlayer(_playerModel);
+        _sky.get()->setModel(_skyModel);
 
         requestChangingTimeUnit();
         seconds += (GetFrameTime() / 2);
