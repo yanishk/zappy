@@ -21,6 +21,7 @@
     #include "AllEggs.hpp"
     #include "AllIsland.hpp"
     #include "Sky.hpp"
+    #include "Sea.hpp"
 
     #define WINDOW_NAME "Zappy_gui"
     #define ERROR_NO_MODEL "No or bad path to model"
@@ -40,31 +41,9 @@
 
     #define CAMERA_MOVEMENT_SPEED 0.4
     #define EGG_MODEL_SIZE 0.3
-    #define WATER_SIZE 1000
-    #define WATER_RESXZ 2
 
     #define START_POS_COEF_Y 7
     #define START_POS_COEF_Z 5
-
-    #define WATER_ALTITUDE -2
-    #define SUB_WATER_ALTITUDE -2.3
-
-    #define SHADER_FORMAT 330
-    #define SHADER_SECONDS "seconds"
-    #define SHADER_FREQX "freqX"
-    #define SHADER_FREQY "freqY"
-    #define SHADER_AMPX "ampX"
-    #define SHADER_AMPY "ampY"
-    #define SHADER_SPEEDX "speedX"
-    #define SHADER_SPEEDY "speedY"
-    #define SHADER_SIZE "size"
-
-    #define VALUE_SHADER_FREQX 25.0
-    #define VALUE_SHADER_FREQY 25.0
-    #define VALUE_SHADER_AMPX 5.0
-    #define VALUE_SHADER_AMPY 5.0
-    #define VALUE_SHADER_SPEEDX 8.0
-    #define VALUE_SHADER_SPEEDY 8.0
 
     #define MARGIN_LEFT 10
     #define MARGIN_TOP 10
@@ -88,7 +67,8 @@ class Game {
 
     public:
 
-        Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp::socket &socket, bool animation);
+        Game(int screenWidth, int screenHeight, CommandManager &cmd,
+            asio::ip::tcp::socket &socket, bool animation);
         void updateCamera(void);
         Vector3 setVector3(float x, float y, float z);
 
@@ -109,14 +89,11 @@ class Game {
 
         CommandManager &_cmd;
         Camera _camera;
-        Shader _waterShader;
-        Model _WaterModel;
         asio::ip::tcp::socket &_socket;
 
         int _screenWidth;
         int _screenHeight;
         int _cameraMode;
-        int _secondLoc;
         int _sgtValue;
 
         bool _displayGameInfo;
@@ -129,14 +106,15 @@ class Game {
         std::vector<std::pair<Model, float>> _playerModel;
         std::pair<Model, float> _eggModel;
         std::pair<Model, float> _skyModel;
+        std::pair<Model, float> _seaModel;
 
         std::unique_ptr<AllIsland> _allIsland;
         std::unique_ptr<AllItem> _allItem;
         std::unique_ptr<AllEggs> _allEggs;
         std::unique_ptr<AllPlayers> _allPlayer;
         std::unique_ptr<Sky> _sky;
+        std::unique_ptr<Sea> _sea;
 
-        void initWaterShader(void);
         void display3D(void);
         void display2D(void);
         void setCameraToCoord(Vector3 position, Vector3 target);

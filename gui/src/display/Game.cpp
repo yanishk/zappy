@@ -17,9 +17,9 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd, asio::ip::tcp
     _camera.fovy = FOV;
     _camera.projection = CAMERA_PERSPECTIVE;
     _cameraMode = CAMERA_FREE;
-    initWaterShader();
     _selectedPlayer.first = false;
 
+    _sea = std::make_unique<Sea>();
     _sky = std::make_unique<Sky>();
     _allIsland = std::make_unique<AllIsland>(_cmd);
     _allItem = std::make_unique<AllItem>(_cmd);
@@ -98,40 +98,6 @@ void Game::setCameraToCoord(Vector3 position, Vector3 target)
     _camera.target = target;
 }
 
-void Game::initWaterShader(void)
-{
-    _waterShader = LoadShader(0, TextFormat(WATER_SHADER, SHADER_FORMAT));
-
-    _secondLoc = GetShaderLocation(_waterShader, SHADER_SECONDS);
-    int freqXLoc = GetShaderLocation(_waterShader, SHADER_FREQX);
-    int freqYLoc = GetShaderLocation(_waterShader, SHADER_FREQY);
-    int ampXLoc = GetShaderLocation(_waterShader, SHADER_AMPX);
-    int ampYLoc = GetShaderLocation(_waterShader, SHADER_AMPY);
-    int speedXLoc = GetShaderLocation(_waterShader, SHADER_SPEEDX);
-    int speedYLoc = GetShaderLocation(_waterShader, SHADER_SPEEDY);
-
-    float freqX = VALUE_SHADER_FREQX;
-    float freqY = VALUE_SHADER_FREQY;
-    float ampX = VALUE_SHADER_AMPX;
-    float ampY = VALUE_SHADER_AMPY;
-    float speedX = VALUE_SHADER_SPEEDX;
-    float speedY = VALUE_SHADER_SPEEDY;
-
-    float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
-    SetShaderValue(_waterShader, GetShaderLocation(_waterShader, SHADER_SIZE), &screenSize, SHADER_UNIFORM_VEC2);
-    SetShaderValue(_waterShader, freqXLoc, &freqX, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(_waterShader, freqYLoc, &freqY, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(_waterShader, ampXLoc, &ampX, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(_waterShader, ampYLoc, &ampY, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(_waterShader, speedXLoc, &speedX, SHADER_UNIFORM_FLOAT);
-    SetShaderValue(_waterShader, speedYLoc, &speedY, SHADER_UNIFORM_FLOAT);
-
-    Texture2D texture = LoadTexture(WATER_TEXTURE);
-    _WaterModel = LoadModelFromMesh(GenMeshPlane(WATER_SIZE, WATER_SIZE, WATER_RESXZ, WATER_RESXZ));
-    _WaterModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
-    _WaterModel.materials[0].shader = _waterShader;
-}
-
 void Game::display3D(void)
 {
     BeginMode3D(_camera);
@@ -148,11 +114,8 @@ void Game::display3D(void)
         _selectedPlayer.first = false;
     }
 
-    BeginShaderMode(_waterShader);
-        DrawModel(_WaterModel, setVector3(_camera.position.x, SUB_WATER_ALTITUDE, _camera.position.z), 1, WHITE);
-        DrawModel(_WaterModel, setVector3((_mapSize.first * spaceBetwenIsland) / 2, WATER_ALTITUDE, (_mapSize.second * spaceBetwenIsland) / 2), 1, WHITE);
-    EndShaderMode();
-
+    _sea.get()->setSeaPos(_camera.position, _mapSize);
+    _sea.get()->render();
     _allIsland.get()->renderAll();
     _allItem.get()->renderAll();
     _allEggs.get()->renderAll();
@@ -260,11 +223,10 @@ void Game::launchGame(void)
 {
     DisableCursor();
     cameraPositionStart();
-
     SetTargetFPS(FPS);
-    float seconds = 0.0f;
 
     while (!WindowShouldClose()) {
+
         _allIsland.get()->setAllIsland(_islandModel);
         _allItem.get()->setAllItem(_allItemModel);
         _allEggs.get()->setAllEggs(_eggModel);
@@ -272,13 +234,8 @@ void Game::launchGame(void)
         _sky.get()->setModel(_skyModel);
 
         requestChangingTimeUnit();
-        seconds += (GetFrameTime() / 2);
-
-        SetShaderValue(_waterShader, _secondLoc, &seconds, SHADER_UNIFORM_FLOAT);
         updateCamera();
-
         BeginDrawing();
-
         ClearBackground(RAYWHITE);
 
         display3D();
