@@ -9,17 +9,19 @@
     #define ALLEGGS_HPP_
 
     #include "Eggs.hpp"
+    #include "AllObj.hpp"
 
-class AllEggs {
+class AllEggs : public IAllObj {
 
     public:
 
         AllEggs(CommandManager &cmd);
 
-        void setAllEggs(std::pair<Model, float> model);
+        void setAllElements(std::vector<std::pair<Model, float>> model) override;
+
+        std::size_t getTotalNbrElements(void) override;
+        void renderAllElements(void) override;
         void removeEgg(int Id);
-        void renderAll(void);
-        std::size_t getTotalNbrEggs(void);
 
     private:
 

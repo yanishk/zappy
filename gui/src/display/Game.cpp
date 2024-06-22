@@ -50,6 +50,8 @@ void Game::updateCamera(void)
 void Game::fillAllModel(ZappyModel allPath)
 {
     std::vector<std::pair<Model, float>> tmpModel;
+    std::pair<Model, float> tmpEggModel;
+
     bool hasPlayer = false;
 
     if (allPath.size() == 0)
@@ -75,8 +77,9 @@ void Game::fillAllModel(ZappyModel allPath)
         }
     }
 
-    _eggModel.first = LoadModel(EGG_MOD_PATH);
-    _eggModel.second = EGG_MODEL_SIZE;
+    tmpEggModel.first = LoadModel(EGG_MOD_PATH);
+    tmpEggModel.second = EGG_MODEL_SIZE;
+    _eggModel.push_back(tmpEggModel);
 
     _skyModel.first = LoadModel(SKY_MODEL_PATH);
     _skyModel.first.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = LoadTexture(SKY_TEXTURE_PATH);
@@ -112,9 +115,9 @@ void Game::display3D(void)
 
     _sea.get()->setSeaPos(_camera.position, _mapSize);
     _sea.get()->render();
-    _allIsland.get()->renderAll();
-    _allItem.get()->renderAll();
-    _allEggs.get()->renderAll();
+    _allIsland.get()->renderAllElements();
+    _allItem.get()->renderAllElements();
+    _allEggs.get()->renderAllElements();
     _allPlayer.get()->renderAll(_camera.position);
 
     EndMode3D();
@@ -136,6 +139,7 @@ void Game::display2D(void)
 
     if (!_displayGameInfo)
         return;
+
     DrawRectangle(MARGIN_LEFT, MARGIN_TOP, WIGHT, HIGHT, Fade(SKYBLUE, 0.5f));
     DrawFPS(_screenWidth - FPS_MARGIN, MARGIN_TOP);
     DrawText(TextFormat(CAM_POS, _camera.position.x, _camera.position.y, _camera.position.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
@@ -144,13 +148,13 @@ void Game::display2D(void)
     position += BACKSLASH_N;
     DrawText(TextFormat(TIME_UNIT, _sgtValue), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
     position += BACKSLASH_N;
-    DrawText(TextFormat(NBR_ITEM_MAP, _allItem.get()->getTotalNbrItem()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(NBR_ITEM_MAP, _allItem.get()->getTotalNbrElements()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
     position += BACKSLASH_N;
     DrawText(TextFormat(NBR_PLAYER_MAP, _allPlayer.get()->getTotalNbrPlayer()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
     position += BACKSLASH_N;
-    DrawText(TextFormat(NBR_ISLAND_MAP, _allIsland.get()->getTotalNbrIsland()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(NBR_ISLAND_MAP, _allIsland.get()->getTotalNbrElements()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
     position += BACKSLASH_N;
-    DrawText(TextFormat(NBR_EGGS_MAP, _allEggs.get()->getTotalNbrEggs()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(NBR_EGGS_MAP, _allEggs.get()->getTotalNbrElements()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
 }
 
 void Game::cameraPositionStart(void)
@@ -211,7 +215,8 @@ void Game::unloadAllModel(void)
         UnloadModel(i.first);
     for (auto &i : _playerModel)
         UnloadModel(i.first);
-    UnloadModel(_eggModel.first);
+    for (auto &i : _eggModel)
+        UnloadModel(i.first);
     CloseWindow();
 }
 
@@ -223,9 +228,9 @@ void Game::launchGame(void)
 
     while (!WindowShouldClose()) {
 
-        _allIsland.get()->setAllIsland(_islandModel);
-        _allItem.get()->setAllItem(_allItemModel);
-        _allEggs.get()->setAllEggs(_eggModel);
+        _allIsland.get()->setAllElements(_islandModel);
+        _allItem.get()->setAllElements(_allItemModel);
+        _allEggs.get()->setAllElements(_eggModel);
         _allPlayer.get()->setAllPlayer(_playerModel);
         _sky.get()->setModel(_skyModel);
 

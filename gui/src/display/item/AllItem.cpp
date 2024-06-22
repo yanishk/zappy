@@ -36,7 +36,7 @@ int AllItem::getNbrItemAtPos(Vector2 pos, int type)
     return nbr;
 }
 
-void AllItem::setAllItem(std::vector<std::pair<Model, float>> model)
+void AllItem::setAllElements(std::vector<std::pair<Model, float>> model)
 {
     while (_cmd.getCommandAt(BCT_CMD, 0).size() > 1) {
         std::vector<std::string> cmd = _cmd.getCommandAt(BCT_CMD, 0);
@@ -61,14 +61,14 @@ void AllItem::setAllItem(std::vector<std::pair<Model, float>> model)
     }
 }
 
-void AllItem::renderAll(void)
+void AllItem::renderAllElements(void)
 {
     for (auto &i : _allItem) {
         i.render();
     }
 }
 
-std::size_t AllItem::getTotalNbrItem(void)
+std::size_t AllItem::getTotalNbrElements(void)
 {
     return _allItem.size();
 }

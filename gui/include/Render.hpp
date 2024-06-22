@@ -11,6 +11,7 @@
     #include "Utils.hpp"
 
 class ILoadAndRender {
+
     public:
 
         ILoadAndRender() = default;

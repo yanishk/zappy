@@ -104,7 +104,7 @@ class Game {
         std::vector<std::pair<Model, float>> _allItemModel;
         std::vector<std::pair<Model, float>> _islandModel;
         std::vector<std::pair<Model, float>> _playerModel;
-        std::pair<Model, float> _eggModel;
+        std::vector<std::pair<Model, float>> _eggModel;
         std::pair<Model, float> _skyModel;
         std::pair<Model, float> _seaModel;
 

@@ -178,7 +178,7 @@ void Player::displayInfo2D(int x, int y, std::unique_ptr<AllItem> &_allItem)
     }
 
     text += ("Island Ressources :\n| q0 | q1 | q2 | q3 | q4 | q5 | q6 |\n");
-    for (std::size_t i = 0; i < _allItem.get()->getTotalNbrItem(); i++) {
+    for (std::size_t i = 0; i < _allItem.get()->getTotalNbrElements(); i++) {
         Vector2 itemPos = _allItem.get()->getItemRealPosition(i);
         if (_realPos.x == itemPos.x && _realPos.y == itemPos.y) {
             itemHere[_allItem.get()->getItemType(i)] += 1;

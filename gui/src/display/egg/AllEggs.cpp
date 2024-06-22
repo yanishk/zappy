@@ -22,8 +22,10 @@ void AllEggs::removeEgg(int Id)
     }
 }
 
-void AllEggs::setAllEggs(std::pair<Model, float> model)
+void AllEggs::setAllElements(std::vector<std::pair<Model, float>> vecModel)
 {
+    std::pair<Model, float> model = vecModel[0];
+
     static const std::unordered_map<std::string,
         std::function<void(std::vector<std::string> &)>> commandHandlers = {
 
@@ -62,14 +64,14 @@ void AllEggs::setAllEggs(std::pair<Model, float> model)
     }
 }
 
-void AllEggs::renderAll(void)
+void AllEggs::renderAllElements(void)
 {
     for (auto &t : _allEggs) {
         t.render();
     }
 }
 
-std::size_t AllEggs::getTotalNbrEggs(void)
+std::size_t AllEggs::getTotalNbrElements(void)
 {
     return _allEggs.size();
 }

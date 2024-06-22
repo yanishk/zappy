@@ -12,7 +12,7 @@ AllIsland::AllIsland(CommandManager &cmd) : _cmd(cmd)
 
 }
 
-void AllIsland::setAllIsland(std::vector<std::pair<Model, float>> model)
+void AllIsland::setAllElements(std::vector<std::pair<Model, float>> model)
 {
     if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
@@ -41,14 +41,14 @@ void AllIsland::setAllIsland(std::vector<std::pair<Model, float>> model)
     }
 }
 
-void AllIsland::renderAll(void)
+void AllIsland::renderAllElements(void)
 {
     for (auto &i : _allIsland) {
         i.render();
     }
 }
 
-std::size_t AllIsland::getTotalNbrIsland(void)
+std::size_t AllIsland::getTotalNbrElements(void)
 {
     return _allIsland.size();
 }
