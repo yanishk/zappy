@@ -7,14 +7,15 @@
 
 #include "AllPlayer.hpp"
 
-AllPlayers::AllPlayers(CommandManager &cmd, bool isAnimated) : _cmd(cmd), _isAnimated(isAnimated), _animsCount(0)
+AllPlayers::AllPlayers(CommandManager &cmd, bool isAnimated) :
+    _cmd(cmd), _isAnimated(isAnimated), _animsCount(0)
 {
     _anim = LoadModelAnimations(PLAYER_ANIM, &_animsCount);
     _incantationModel = LoadModel(INCANTATION_PATH);
     _expulsionModel = LoadModel(EXPULSION_PATH);
 }
 
-void AllPlayers::renderAll(Vector3 camPosition)
+void AllPlayers::renderAllElements(Vector3 camPosition)
 {
     for (auto &player : _allPlayer) {
         player.render();
@@ -25,7 +26,8 @@ void AllPlayers::renderAll(Vector3 camPosition)
     }
 }
 
-void AllPlayers::renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem)
+void AllPlayers::renderAll2D(std::pair<bool, int> moreInfo,
+    std::unique_ptr<AllItem> &_allItem)
 {
     if (!moreInfo.first)
         return;
@@ -40,7 +42,7 @@ void AllPlayers::renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllI
     }
 }
 
-void AllPlayers::setAllPlayer(std::vector<std::pair<Model, float>> model)
+void AllPlayers::setAllElements(std::vector<std::pair<Model, float>> model)
 {
     getAllTeam();
     addPlayer(model);
@@ -72,7 +74,7 @@ std::pair<bool, int> AllPlayers::isPlayerSelected(Vector3 target, Vector3 positi
     return selectedPlayer;
 }
 
-std::size_t AllPlayers::getTotalNbrPlayer(void)
+std::size_t AllPlayers::getTotalNbrElements(void)
 {
     return _allPlayer.size();
 }
@@ -114,7 +116,8 @@ void AllPlayers::addPlayer(std::vector<std::pair<Model, float>> model)
 Color AllPlayers::setPlayerColor(std::string teamName)
 {
     float teamIndex = 0;
-    while (teamName != _allTeamName[teamIndex] && (std::size_t)teamIndex < _allTeamName.size()) {
+    while (teamName != _allTeamName[teamIndex] &&
+        (std::size_t)teamIndex < _allTeamName.size()) {
         teamIndex++;
     }
     Color color;

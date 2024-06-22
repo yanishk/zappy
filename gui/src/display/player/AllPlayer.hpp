@@ -12,17 +12,21 @@
     #define LOOP_ITEM_TAKE_DROP 2
     #define MAX_RGB 255
     #include "Player.hpp"
+    #include "AallPlayer.hpp"
 
-class AllPlayers {
+class AllPlayers : public AAllPlayerObj {
 
     public:
 
         AllPlayers(CommandManager &cmd, bool isAnimated);
-        void renderAll(Vector3 camPosition);
-        void renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem);
-        void setAllPlayer(std::vector<std::pair<Model, float>> model);
+        void renderAllElements(void) override {};
+        void renderAllElements(Vector3 camPosition) override;
+        void setAllElements(std::vector<std::pair<Model, float>> model) override;
+        std::size_t getTotalNbrElements(void) override;
+
+        void renderAll2D(std::pair<bool, int> moreInfo,
+            std::unique_ptr<AllItem> &_allItem);
         std::pair<bool, int> isPlayerSelected(Vector3 target, Vector3 position);
-        std::size_t getTotalNbrPlayer(void);
 
     private:
 

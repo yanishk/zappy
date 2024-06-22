@@ -8,7 +8,6 @@
 #ifndef ITEM_HPP_
     #define ITEM_HPP_
 
-    #include "Utils.hpp"
     #include "Render.hpp"
     #include "Commands.hpp"
 
