@@ -52,7 +52,8 @@ SRC			=	./src/main.c											\
 				./src/command/command_ia/connect_nbr.c 					\
 				./src/command/command_ia/fork_player.c 					\
 				./src/command/command_ia/eject_from_tile.c 				\
-				./src/command/command_ia/incantation.c 					\
+				./src/command/command_ia/incantation/elevation.c 		\
+				./src/command/command_ia/incantation/incantation.c 		\
 				./src/command/command_ia/broadcast/broadcast.c 			\
 				./src/command/command_ia/broadcast/calculate_all_dir.c	\
 				./src/command/command_ia/broadcast/get_straight_line.c	\
@@ -103,56 +104,82 @@ SRC			=	./src/main.c											\
 				./src/lib/calculate_time_unit.c							\
 				./src/lib/has_backslash.c
 
-SRC_TEST 	=   	 ./src/lib/calculate_time_unit.c			\
-                    ./tests/lib/test_calculate_time_unit.c		\
-					./src/lib/get_graphical_client.c			\
-                    ./tests/lib/test_get_graphical_client.c		\
-					./src/lib/get_next_id.c						\
-                    ./tests/lib/test_get_next_id.c				\
-					./src/lib/get_random_team_egg.c 			\
-					./tests/lib/test_get_random_team_egg.c		\
-					./src/lib/get_tile_index.c 					\
-					./tests/lib/test_get_tile_index.c			\
-					./src/lib/get_player_direction.c 			\
-					./tests/lib/test_get_player_direction.c		\
-					./src/lib/has_backslash.c 					\
-					./tests/lib/test_has_backslash.c			\
-					./src/lib/is_a_resource.c 					\
-					./tests/lib/test_is_a_resource.c			\
-					./src/lib/is_on_same_tile.c 				\
-					./tests/lib/test_is_on_same_tile.c			\
-					./src/lib/is_positive_number.c 				\
-					./tests/lib/test_is_positive_number.c		\
-					./src/lib/time_is_up.c 						\
-					./tests/lib/test_time_is_up.c				\
-					./src/lib/count_team_slots.c				\
-					./tests/lib/test_count_team_slots.c 		\
-					./src/lib/get_link.c						\
-					./tests/lib/test_get_link.c 				\
-					./src/lib/array_functions.c 				\
-					./tests/lib/test_array_functions.c			\
-					./src/lib/word_array.c 						\
-					./tests/lib/test_word_array.c				\
-					./src/lib/get_resources.c 					\
-					./tests/lib/test_get_resources.c			\
-					./src/lib/is_command_queue_full.c 			\
-					./tests/lib/test_is_command_queue_full.c	\
-					./src/arguments/frequency_flag.c			\
-					./tests/arguments/test_frequency_flag.c 	\
-					./src/arguments/height_flag.c				\
-					./tests/arguments/test_height_flag.c 		\
-					./src/arguments/width_flag.c				\
-					./tests/arguments/test_width_flag.c 		\
-					./src/arguments/port_flag.c					\
-					./tests/arguments/test_port_flag.c 			\
-					./src/arguments/nb_clients_flag.c			\
-					./tests/arguments/test_nb_clients_flag.c 	\
-					./src/arguments/immortal_flag.c				\
-					./tests/arguments/test_immortal_flag.c 		\
-					./src/arguments/team_name_flag.c			\
-					./tests/arguments/test_team_name_flag.c 	\
-					./src/arguments/init_arg_struct.c			\
-					./tests/arguments/test_init_arg_struct.c 	\
+SRC_TEST 	=   	./src/lib/calculate_time_unit.c						\
+                    ./tests/lib/test_calculate_time_unit.c				\
+					./src/lib/get_graphical_client.c					\
+                    ./tests/lib/test_get_graphical_client.c				\
+					./src/lib/get_next_id.c								\
+                    ./tests/lib/test_get_next_id.c						\
+					./src/lib/get_random_team_egg.c 					\
+					./tests/lib/test_get_random_team_egg.c				\
+					./src/lib/get_tile_index.c 							\
+					./tests/lib/test_get_tile_index.c					\
+					./src/lib/get_player_direction.c 					\
+					./tests/lib/test_get_player_direction.c				\
+					./src/lib/has_backslash.c 							\
+					./tests/lib/test_has_backslash.c					\
+					./src/lib/is_a_resource.c 							\
+					./tests/lib/test_is_a_resource.c					\
+					./src/lib/is_on_same_tile.c 						\
+					./tests/lib/test_is_on_same_tile.c					\
+					./src/lib/is_positive_number.c 						\
+					./tests/lib/test_is_positive_number.c				\
+					./src/lib/time_is_up.c 								\
+					./tests/lib/test_time_is_up.c						\
+					./src/lib/count_team_slots.c						\
+					./tests/lib/test_count_team_slots.c 				\
+					./src/lib/get_link.c								\
+					./tests/lib/test_get_link.c 						\
+					./src/lib/array_functions.c 						\
+					./tests/lib/test_array_functions.c					\
+					./src/lib/word_array.c 								\
+					./tests/lib/test_word_array.c						\
+					./src/lib/get_resources.c 							\
+					./tests/lib/test_get_resources.c					\
+					./src/lib/is_command_queue_full.c 					\
+					./tests/lib/test_is_command_queue_full.c			\
+					./src/arguments/frequency_flag.c					\
+					./tests/arguments/test_frequency_flag.c 			\
+					./src/arguments/height_flag.c						\
+					./tests/arguments/test_height_flag.c 				\
+					./src/arguments/width_flag.c						\
+					./tests/arguments/test_width_flag.c 				\
+					./src/arguments/port_flag.c							\
+					./tests/arguments/test_port_flag.c 					\
+					./src/arguments/nb_clients_flag.c					\
+					./tests/arguments/test_nb_clients_flag.c 			\
+					./src/arguments/immortal_flag.c						\
+					./tests/arguments/test_immortal_flag.c 				\
+					./src/arguments/team_name_flag.c					\
+					./tests/arguments/test_team_name_flag.c 			\
+					./src/arguments/init_arg_struct.c					\
+					./tests/arguments/test_init_arg_struct.c 			\
+					./src/command/command_gui/msz.c						\
+					./tests/command_gui/test_msz.c						\
+					./src/command/command_gui/bct.c						\
+					./src/lib/print_tile_resources.c					\
+					./tests/command_gui/test_bct.c						\
+					./src/command/command_gui/mct.c						\
+					./tests/command_gui/test_mct.c						\
+					./src/command/command_gui/tna.c						\
+					./tests/command_gui/test_tna.c						\
+					./src/command/command_gui/pnw.c						\
+					./tests/command_gui/test_pnw.c						\
+					./src/command/command_gui/ppo.c						\
+					./tests/command_gui/test_ppo.c						\
+					./src/command/command_gui/plv.c						\
+					./tests/command_gui/test_plv.c						\
+					./src/command/command_gui/pin.c						\
+					./tests/command_gui/test_pin.c						\
+					./src/command/command_gui/pex.c						\
+					./tests/command_gui/test_pex.c						\
+					./src/command/command_gui/pbc.c						\
+					./tests/command_gui/test_pbc.c						\
+					./src/command/command_gui/pic.c						\
+					./src/command/command_ia/incantation/elevation.c	\
+					./tests/command_gui/test_pic.c						\
+					./src/command/command_gui/pie.c						\
+					./tests/command_gui/test_pie.c						\
 
 OBJ			=	$(SRC:.c=.o)
 
