@@ -84,7 +84,9 @@ class Game {
             ErrorType = 0,
             ItemType = 1,
             IslandType = 2,
-            PlayerType = 3
+            PlayerType = 3,
+            Egg = 4,
+            SkyM = 5
         };
 
         CommandManager &_cmd;

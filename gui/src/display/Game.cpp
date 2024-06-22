@@ -54,9 +54,9 @@ void Game::fillAllModel(ZappyModel allPath)
 
     bool hasPlayer = false;
 
-    if (allPath.size() == 0)
+    if (allPath.size() == 0) {
         throw ErrorHandling(ERROR_NO_MODEL);
-
+    }
     for (auto &i: allPath) {
         std::pair<Model, float> tmpPair;
         tmpPair.first = LoadModel(i.first.first.c_str());
@@ -74,17 +74,18 @@ void Game::fillAllModel(ZappyModel allPath)
                 hasPlayer = true;
                 break;
             }
+            case Egg: {
+                _eggModel.push_back(tmpPair);
+                break;
+            }
+            case SkyM: {
+                _skyModel.first = LoadModel(SKY_MODEL_PATH);
+                _skyModel.first.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture =
+                LoadTexture(SKY_TEXTURE_PATH);
+                _skyModel.second = 10;
+            }
         }
     }
-
-    tmpEggModel.first = LoadModel(EGG_MOD_PATH);
-    tmpEggModel.second = EGG_MODEL_SIZE;
-    _eggModel.push_back(tmpEggModel);
-
-    _skyModel.first = LoadModel(SKY_MODEL_PATH);
-    _skyModel.first.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture =
-        LoadTexture(SKY_TEXTURE_PATH);
-    _skyModel.second = 10;
 
     if (!hasPlayer)
         throw ErrorHandling(ERROR_NO_PLAYER_MODEL);
