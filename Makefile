@@ -21,9 +21,11 @@ all:
 
 tests_run:
 	make tests_run -C ai
+	make tests_run -C server
 
 coverage:
 	make coverage -C ai
+	make coverage -C server
 
 clean:
 	make clean -C ai
