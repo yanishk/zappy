@@ -52,6 +52,7 @@
     #define FONT_SIZE 20
     #define BACKSLASH_N 25
     #define START_POS 15
+    #define FPS_MARGIN 80
 
     #define CAM_POS "- Position: (%06.3f, %06.3f, %06.3f)"
     #define CAM_TARGET "- Target: (%06.3f, %06.3f, %06.3f)"
@@ -70,7 +71,6 @@ class Game {
         Game(int screenWidth, int screenHeight, CommandManager &cmd,
             asio::ip::tcp::socket &socket, bool animation);
         void updateCamera(void);
-        Vector3 setVector3(float x, float y, float z);
 
         void launchGame(void);
         void fillAllModel(ZappyModel);

@@ -20,5 +20,5 @@ void Sky::setModel(std::pair<Model, float> model)
 
 void Sky::setSkyPos(Vector3 pos)
 {
-    _skyPosition = Utils::setVector3(pos.x, 0, pos.z);
+    _skyPosition = Utils::Vec3(pos.x, 0, pos.z);
 }

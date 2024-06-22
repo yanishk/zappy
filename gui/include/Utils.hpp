@@ -52,7 +52,7 @@ class Utils {
                 return true;
             return false;
         }
-        static Vector3 setVector3(float x, float y, float z)
+        static Vector3 Vec3(float x, float y, float z)
         {
             return (Vector3){x, y, z};
         }

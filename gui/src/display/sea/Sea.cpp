@@ -54,8 +54,8 @@ void Sea::setSeaPos(Vector3 camera, std::pair<int, int> mapSize)
 {
     _seconds += GetFrameTime() / 2;
     SetShaderValue(_seaShader, _seaSecondLoc, &_seconds, SHADER_UNIFORM_FLOAT);
-    _subSeaPosition = Utils::setVector3(camera.x, SUB_SEA_ALTITUDE, camera.z);
-    _seaPosition = Utils::setVector3((mapSize.first * spaceBetwenIsland) / 2,
+    _subSeaPosition = Utils::Vec3(camera.x, SUB_SEA_ALTITUDE, camera.z);
+    _seaPosition = Utils::Vec3((mapSize.first * spaceBetwenIsland) / 2,
         SEA_ALTITUDE, (mapSize.second * spaceBetwenIsland) / 2);
 }
 

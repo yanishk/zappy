@@ -14,7 +14,7 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
     _screenWidth = screenWidth;
     SetTraceLogLevel(TraceLogLevel::LOG_FATAL);
     InitWindow(screenWidth, screenHeight, WINDOW_NAME);
-    _camera.up = setVector3(0.0, 1.0, 0.0);
+    _camera.up = Utils::Vec3(0.0, 1.0, 0.0);
     _camera.fovy = FOV;
     _camera.projection = CAMERA_PERSPECTIVE;
     _cameraMode = CAMERA_FREE;
@@ -28,11 +28,6 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
     _allPlayer = std::make_unique<AllPlayers>(_cmd, animation);
 }
 
-Vector3 Game::setVector3(float x, float y, float z)
-{
-    return (Vector3){x, y, z};
-}
-
 void Game::updateCamera(void)
 {
     float alltitude = 0.0;
@@ -44,10 +39,10 @@ void Game::updateCamera(void)
         alltitude -= speed;
     if (IsKeyDown(KEY_LEFT_CONTROL))
         speed += CAMERA_MOVEMENT_SPEED / 2;
-    Vector3 movement = setVector3(
+    Vector3 movement = Utils::Vec3(
         IsKeyDown(KEY_W) * speed - IsKeyDown(KEY_S) * speed,
         IsKeyDown(KEY_D) * speed - IsKeyDown(KEY_A) * speed, alltitude);
-    Vector3 rotation = setVector3(GetMouseDelta().x * 0.05f, GetMouseDelta().y * 0.05f, 0);
+    Vector3 rotation = Utils::Vec3(GetMouseDelta().x * 0.05f, GetMouseDelta().y * 0.05f, 0);
 
     UpdateCameraPro(&_camera, movement, rotation, GetMouseWheelMove());
 }
@@ -142,7 +137,7 @@ void Game::display2D(void)
     if (!_displayGameInfo)
         return;
     DrawRectangle(MARGIN_LEFT, MARGIN_TOP, WIGHT, HIGHT, Fade(SKYBLUE, 0.5f));
-    DrawFPS(_screenWidth - 80, MARGIN_TOP);
+    DrawFPS(_screenWidth - FPS_MARGIN, MARGIN_TOP);
     DrawText(TextFormat(CAM_POS, _camera.position.x, _camera.position.y, _camera.position.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
     position += BACKSLASH_N;
     DrawText(TextFormat(CAM_TARGET, _camera.target.x, _camera.target.y, _camera.target.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
@@ -169,9 +164,9 @@ void Game::cameraPositionStart(void)
         std::pair<float, float> middleMap;
         middleMap.first = ((mapSize.first * spaceBetwenIsland) / 2) + (spaceBetwenIsland / 2);
         middleMap.second = (((mapSize.second - 1) * spaceBetwenIsland) / 2);
-        Vector3 target =   setVector3(middleMap.first, 0, middleMap.second);
+        Vector3 target =   Utils::Vec3(middleMap.first, 0, middleMap.second);
 
-        Vector3 position = setVector3(middleMap.first,
+        Vector3 position = Utils::Vec3(middleMap.first,
             mapSize.first * START_POS_COEF_Y,
             -(mapSize.second * spaceBetwenIsland) / START_POS_COEF_Z - spaceBetwenIsland);
         setCameraToCoord(position, target);

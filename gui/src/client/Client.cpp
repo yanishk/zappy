@@ -29,7 +29,6 @@ void Client::run()
 
     reader.join();
     display.join();
-    return;
 }
 
 void Client::startDisplay()
