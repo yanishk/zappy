@@ -9,17 +9,18 @@
     #define ALLISLAND_HPP_
 
     #include "Island.hpp"
-
+    #include "AllObj.hpp"
     #define CIRCUMFERENCE 360
 
-class AllIsland {
+class AllIsland : public IAllObj {
 
     public:
 
         AllIsland(CommandManager &cmd);
 
-        void setAllIsland(std::vector<std::pair<Model, float>> model);
-        void renderAll(void);
+        void setAllElements(std::vector<std::pair<Model, float>> model) override;
+        void renderAllElements(void) override;
+        std::size_t getTotalNbrElements(void) override;
 
     private:
 

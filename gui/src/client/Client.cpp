@@ -45,7 +45,7 @@ void Client::startDisplay()
     }
     asio::write(_socket, asio::buffer(MSZ_CMD_START));
     game.launchGame();
-    exit(0);
+    std::exit(0);
 }
 
 void Client::readServ()

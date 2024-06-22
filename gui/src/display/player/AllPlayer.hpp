@@ -7,26 +7,25 @@
 
 #ifndef ALLPLAYER_HPP_
     #define ALLPLAYER_HPP_
-
-    #include "Player.hpp"
-
     #define PLAYER_INFOBOX_WIDTH 400
     #define PLAYER_INFOBOX_POSY 5
-
     #define LOOP_ITEM_TAKE_DROP 2
-
     #define MAX_RGB 255
+    #include "Player.hpp"
 
 class AllPlayers {
 
     public:
+
         AllPlayers(CommandManager &cmd, bool isAnimated);
         void renderAll(Vector3 camPosition);
         void renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem);
         void setAllPlayer(std::vector<std::pair<Model, float>> model);
         std::pair<bool, int> isPlayerSelected(Vector3 target, Vector3 position);
+        std::size_t getTotalNbrPlayer(void);
 
     private:
+
         CommandManager &_cmd;
         std::vector<Player> _allPlayer;
         bool _isAnimated = false;

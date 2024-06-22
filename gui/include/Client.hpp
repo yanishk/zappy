@@ -7,7 +7,7 @@
 
 #ifndef CLIENT_H
     #define CLIENT_H
-    #define WIN_SIZE_L 1980
+    #define WIN_SIZE_L 1920
     #define WIN_SIZE_W 1080
     #define WELCOME_RESPONSE "WELCOME"
     #define GRAPHIC_MESSAGE "GRAPHIC\n"

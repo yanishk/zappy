@@ -72,6 +72,11 @@ std::pair<bool, int> AllPlayers::isPlayerSelected(Vector3 target, Vector3 positi
     return selectedPlayer;
 }
 
+std::size_t AllPlayers::getTotalNbrPlayer(void)
+{
+    return _allPlayer.size();
+}
+
 Player &AllPlayers::getPlayerByID(int PlayerID)
 {
     for (auto &player : _allPlayer) {
