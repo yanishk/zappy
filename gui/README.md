@@ -23,7 +23,6 @@ The display part allows for the display of information retrieved by the client.
 To launch the Zappy GUI, here's the syntax to follow:
 
 ```bash
-./zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq --immortal isImmortal
 ./zappy_gui -p port -h IP -a
 ```
 
