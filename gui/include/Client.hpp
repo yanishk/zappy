@@ -31,7 +31,6 @@ namespace Zappy {
             Client(const std::string &host, const std::string &port,
                 CommandManager &cmd, bool animation);
             void run();
-            std::atomic<bool> _isRunning = true;
 
         private:
 

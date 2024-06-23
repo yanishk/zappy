@@ -35,7 +35,7 @@ namespace Zappy {
 
             CommandManager &_cmd;
             std::vector<Player> _allPlayer;
-            bool _isAnimated = false;
+            bool _isAnimated;
 
             Player &getPlayerByID(int PlayerID);
             void addPlayer(std::vector<std::pair<Model, float>> model);
