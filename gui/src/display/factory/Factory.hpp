@@ -35,7 +35,8 @@ class Factory {
 
     public:
 
-        using AllObjVar = std::variant<std::unique_ptr<AllItem>, std::unique_ptr<AllPlayers>, std::unique_ptr<AllIsland>, std::unique_ptr<AllEggs>>;
+        using AllObjVar = std::variant<std::unique_ptr<AllItem>,
+            std::unique_ptr<AllPlayers>, std::unique_ptr<AllIsland>, std::unique_ptr<AllEggs>>;
         using ObjVar = std::variant<std::unique_ptr<Sky>, std::unique_ptr<Sea>>;
 
 
