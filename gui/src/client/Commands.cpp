@@ -97,7 +97,7 @@ void Zappy::CommandManager::receiveResponse(const std::string &response)
         it->second(params);
     }
 
-    std::cout << response << std::endl;
+    std::cerr << response << std::endl;
 }
 
 void Zappy::CommandManager::eraseFirstCmdInMap(const std::string &cmd)
@@ -108,10 +108,10 @@ void Zappy::CommandManager::eraseFirstCmdInMap(const std::string &cmd)
         if (!it->second.empty()) {
             it->second.erase(it->second.begin());
         } else {
-            std::cout << EMPTY_MAP_MESSAGE << std::endl;
+            std::cerr << EMPTY_MAP_MESSAGE << std::endl;
         }
     } else {
-        std::cout << BAD_CMD_MAP << std::endl;
+        std::cerr << BAD_CMD_MAP << std::endl;
     }
 }
 

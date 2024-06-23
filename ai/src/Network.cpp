@@ -33,7 +33,7 @@ std::string Network::Network::getInfoFromServer()
         asio::read_until(*_socket, buffer, '\n', error);
 
         if (error == asio::error::eof) {
-            std::cout << "Connection closed by server." << std::endl;
+            std::cerr << "Connection closed by server." << std::endl;
             return std::string("end");
         } else if (error) {
             throw asio::system_error(error);

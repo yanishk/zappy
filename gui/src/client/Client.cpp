@@ -18,7 +18,7 @@ Zappy::Client::Client(const std::string &port, const std::string &host,
     asio::ip::tcp::resolver resolver(_ioContext);
     _endpoints = resolver.resolve(host, port);
     asio::connect(_socket, _endpoints);
-    std::cout << CON_SUCCESS_MSG << std::endl;
+    std::cerr << CON_SUCCESS_MSG << std::endl;
     _isAnimated = animation;
 }
 
@@ -63,7 +63,7 @@ void Zappy::Client::readServ()
             asio::read_until(_socket, _buff, '\n', error);
 
             if (error == asio::error::eof) {
-                std::cout << CON_CLOSE_MESSAGE << std::endl;
+                std::cerr << CON_CLOSE_MESSAGE << std::endl;
                 exit(EXIT_SUCCESS);
             }
             if (error) {

@@ -40,7 +40,7 @@
 
     #define NB_SAME_MOVE_MAX        4
 
-    #define MIN_FOOD                10
+    #define MIN_FOOD                5
 
     #define MAX_CHECK_MESSAGE       50
 
@@ -81,7 +81,7 @@ namespace Zappy
                 _inDelivery(false),
                 _goBackToQueen(false)
                 {
-                    std::cout << "A Searcher spawn\n";
+                    std::cerr << "A Searcher spawn\n";
                     static int id = 0;
                     _id = id++;
 
@@ -94,10 +94,12 @@ namespace Zappy
             Order _order;
             std::vector<std::string> _lastLook;
             std::vector<Mouvement> _nextMouvment;
+            std::vector<Mouvement> _moveToStarter;
             int _howManySameMove;
             std::thread _thread;
             std::string _otherId;
             int _id;
+            std::string _idInCollaboration;
             int _queenLevel;
             bool _inDelivery;
 

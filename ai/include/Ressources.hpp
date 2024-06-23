@@ -91,12 +91,12 @@ namespace Zappy {
 
             void dump() {
 
-                std::cout << "Linemate: " << _ressources[LINEMATE] << "\n";
-                std::cout << "Deraumere: " << _ressources[DERAUMERE] << "\n";
-                std::cout << "Sibur: " << _ressources[SIBUR] << "\n";
-                std::cout << "Mendiane: " << _ressources[MENDIANE] << "\n";
-                std::cout << "Phiras: " << _ressources[PHIRAS] << "\n";
-                std::cout << "Thystame: " << _ressources[THYSTAME] << "\n";
+                std::cerr << "Linemate: " << _ressources[LINEMATE] << "\n";
+                std::cerr << "Deraumere: " << _ressources[DERAUMERE] << "\n";
+                std::cerr << "Sibur: " << _ressources[SIBUR] << "\n";
+                std::cerr << "Mendiane: " << _ressources[MENDIANE] << "\n";
+                std::cerr << "Phiras: " << _ressources[PHIRAS] << "\n";
+                std::cerr << "Thystame: " << _ressources[THYSTAME] << "\n";
 
             };
 

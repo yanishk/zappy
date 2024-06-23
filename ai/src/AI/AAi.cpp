@@ -44,7 +44,7 @@ Zappy::Response Zappy::AAi::forward(Network::Network &network)
     std::string response = handlingMessage(network);
 
     if (response == RESPONSE_OK) {
-        std::cout << "Forward\n";
+        std::cerr << "Forward\n";
         return Response::Ok;
     }
     
@@ -184,7 +184,9 @@ bool Zappy::AAi::updateInventory(Network::Network &network)
         std::string ressource;
         std::string quantity;
         stream >> ressource >> quantity;
-        _ressources.updateRessources(ressource, std::atoi(quantity.c_str()));
+        if (ressource == FOOD) {
+            _ressources.updateRessources(ressource, std::atoi(quantity.c_str()));
+        }
 
     }
 
