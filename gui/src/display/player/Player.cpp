@@ -103,7 +103,6 @@ int Zappy::Player::getLevel(void)
     return _level;
 }
 
-
 void Zappy::Player::setTeam(std::string team)
 {
     _team = team;
@@ -453,7 +452,7 @@ void Zappy::Player::DrawTextCodepoint3D(Font font, int codepoint, Vector3 positi
 
 BoundingBox Zappy::Player::UpdateBoundingBox(BoundingBox box, Vector3 position)
 {
-    Vector3 corners[8] = {
+    Vector3 corners[BOUNDINGBOX_VEC3_SIZE] = {
         {box.min},
         {box.min.x, box.min.y, box.max.z},
         {box.min.x, box.max.y, box.min.z},
@@ -464,12 +463,12 @@ BoundingBox Zappy::Player::UpdateBoundingBox(BoundingBox box, Vector3 position)
         {box.max}
     };
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < BOUNDINGBOX_VEC3_SIZE; i++) {
         corners[i] = Vector3Add(position, RotatePointAroundY(corners[i]));
     }
 
     BoundingBox transformedBBox = { corners[0], corners[0] };
-    for (int i = 1; i < 8; i++) {
+    for (int i = 1; i < BOUNDINGBOX_VEC3_SIZE; i++) {
         if (corners[i].x < transformedBBox.min.x)
             transformedBBox.min.x = corners[i].x;
         if (corners[i].y < transformedBBox.min.y)

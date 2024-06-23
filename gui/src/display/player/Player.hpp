@@ -35,6 +35,7 @@
     #define MAX_INCLINAISON 30
     #define EPULSION_ORIENTATION 10
     #define FADE_COLOR_RATIO 0.5
+    #define BOUNDINGBOX_VEC3_SIZE 8
 
     static const std::map<int, std::string> PLAYER_ORIENTATION {
         {0, "North"},
