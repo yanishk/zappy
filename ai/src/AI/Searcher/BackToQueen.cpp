@@ -57,6 +57,9 @@ bool Zappy::Searcher::launchIncantation(Network::Network &network)
     _level = std::stoul(response.substr(position));
 
     _goBackToQueen = false;
+    _inDelivery = false;
+    _queenLevel += 1;
+    _level += 1;
     _messages.clear();
 
     return true;
@@ -78,99 +81,42 @@ bool Zappy::Searcher::backToQueen(Network::Network &network, bool incantation)
         return true;
     }
 
-    switch (orientation) {
+    if (_position.first < 0) {
 
-        case FRONT:
+        _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Left);
+        _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Left);
+        while (_position.first < 0) {
+            _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Forward);
+            _position.first += 1;
+        }
+    } else {
+        while (_position.first > 0) {
+            _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Forward);
+            _position.first -= 1;
+        }
+    }
 
-            if (forward(network) != Response::Ok) {
-                return false;
-            }
-            break;
+    if (_position.second < 0) {
 
-        case FRONT_LEFT:
+        _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Left);
+        while (_position.first > 0) {
+            _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Forward);
+            _position.first -= 1;
+        }
 
-            if (forward(network) != Response::Ok) {
-                return false;
-            }
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            break;
+    } else {
 
-        case LEFT:
-
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            break;
-
-        case BACK_LEFT:
-
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            if (forward(network) != Response::Ok) {
-                return false;
-            }
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            break;
-
-        case BACK:
-
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            if (forward(network) != Response::Ok) {
-                return false;
-            }
-            break;
-
-        case BACK_RIGHT:
-
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            if (left(network) != Response::Ok) {
-                return false;
-            }
-            if (forward(network) != Response::Ok) {
-                return false;
-            }
-            if (right(network) != Response::Ok) {
-                return false;
-            }
-            break;
-
-        case RIGHT:
-
-            if (right(network) != Response::Ok) {
-                return false;
-            }
-            break;
-
-        case FRONT_RIGHT:
-
-            if (forward(network) != Response::Ok) {
-                return false;
-            }
-            if (right(network) != Response::Ok) {
-                return false;
-            }
-            break;
-
-        default:
-
-            return false;
+        _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Right);
+        while (_position.first < 0) {
+            _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Forward);
+            _position.first += 1;
+        }
 
     }
 
-    return backToQueen(network, incantation);
+    std::cerr << "\t\tposX: " << _position.first << " posY: " << _position.second << "\n";
+    std::cerr << "MOUVEMENT TO QUEEN:\n";
+    dumpMovement();
+
+    return true;
 }

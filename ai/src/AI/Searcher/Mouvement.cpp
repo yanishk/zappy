@@ -76,6 +76,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
             } else if (rep == Response::Dead) {
                 return Response::Dead;
             }
+            _moveToStarter.emplace(_moveToStarter.begin(), Forward);
             _nextMouvment.pop_back();
             _position.first -= 1;
             break;
@@ -88,6 +89,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
             } else if (rep == Response::Dead) {
                 return Response::Dead;
             }
+            _moveToStarter.emplace(_moveToStarter.begin(), Right);
             _nextMouvment.pop_back();
             _position.second -= 1;
             break;
@@ -100,7 +102,7 @@ Zappy::Response Zappy::Searcher::move(Network::Network &network)
             } else if (rep == Response::Dead) {
                 return Response::Dead;
             }
-
+            _moveToStarter.emplace(_moveToStarter.begin(), Left);
             _nextMouvment.pop_back();
             _position.second += 1;
             break;

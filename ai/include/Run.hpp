@@ -30,7 +30,6 @@
 
     #define HERE 0
     #define ONE_PLAYER 1
-    #define CRITICAL_STOCK 10
 
 namespace Zappy {
 

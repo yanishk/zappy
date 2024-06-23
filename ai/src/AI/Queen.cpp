@@ -11,13 +11,13 @@
 
 bool Zappy::Queen::run(Network::Network &network)
 {
-    std::cout << QUEEN_WELCOME;
+    std::cerr << QUEEN_WELCOME;
 
     if (!initialize(network)) {
         return false;
     }
 
-    std::cout << QUEEN_START;
+    std::cerr << QUEEN_START;
 
     while (true) {
 
@@ -25,7 +25,7 @@ bool Zappy::Queen::run(Network::Network &network)
             break;
         }
 
-        std::cout << QUEEN_UPDATE_INVENTORY;
+        std::cerr << QUEEN_UPDATE_INVENTORY;
 
         _look = look(network);
 
@@ -33,10 +33,10 @@ bool Zappy::Queen::run(Network::Network &network)
             break;
         }
 
-        std::cout << QUEEN_LOOK;
+        std::cerr << QUEEN_LOOK;
 
         for (const auto &items: _look) {
-            std::cout << QUEEN_LOOK_ITEM(items);
+            std::cerr << QUEEN_LOOK_ITEM(items);
         }
 
         checkFood();
@@ -52,7 +52,7 @@ bool Zappy::Queen::run(Network::Network &network)
 
     }
 
-    std::cout << QUEEN_DEAD;
+    std::cerr << QUEEN_DEAD;
 
     return false;
 }
@@ -61,7 +61,7 @@ bool Zappy::Queen::initialize(Network::Network &network)
 {
     const std::size_t value = connectNumber(network);
 
-    std::cout << QUEEN_INITIALIZE(value);
+    std::cerr << QUEEN_INITIALIZE(value);
 
     for (std::size_t i = 0; i < value; ++i) {
 
@@ -83,8 +83,8 @@ bool Zappy::Queen::checkFood()
 {
     _stock = countRessources(_look[HERE], FOOD);
 
-    std::cout << QUEEN_FOOD(_ressources[FOOD]);
-    std::cout << QUEEN_FOOD_STOCK(_stock);
+    std::cerr << QUEEN_FOOD(_ressources[FOOD]);
+    std::cerr << QUEEN_FOOD_STOCK(_stock);
 
     while (_ressources[FOOD] < CRITICAL_FOOD && _stock) {
         _actions.push_back(Take);
@@ -140,7 +140,7 @@ bool Zappy::Queen::checkHere(Network::Network &network)
                 return false;
             }
 
-            std::cout << QUEEN_SAY_HERE_ALL;
+            std::cerr << QUEEN_SAY_HERE_ALL;
 
             _messages.clear();
 
@@ -182,8 +182,8 @@ bool Zappy::Queen::askAssistants(Network::Network &network)
 {
     _nbAssistants = _assistants.size() + _assistantsIncomming.size();
 
-    std::cout << QUEEN_ASSISTANTS(_assistants.size());
-    std::cout << QUEEN_ASSISTANTS_INCOMMING(_assistantsIncomming.size());
+    std::cerr << QUEEN_ASSISTANTS(_assistants.size());
+    std::cerr << QUEEN_ASSISTANTS_INCOMMING(_assistantsIncomming.size());
 
     if (_nbAssistants < _incatation[_level - ONE_LEVEL].first - ONE_LEVEL) {
 
@@ -191,7 +191,7 @@ bool Zappy::Queen::askAssistants(Network::Network &network)
             return false;
         }
 
-        std::cout << QUEEN_SAY_ASK_ASSISTANT(_level);
+        std::cerr << QUEEN_SAY_ASK_ASSISTANT(_level);
 
         if (!addAssistantsIncomming(network)) {
             return false;
@@ -237,7 +237,7 @@ bool Zappy::Queen::addAssistantsIncomming(Network::Network &network)
                     return false;
                 }
 
-                std::cout << QUEEN_SAY_NO(messageId);
+                std::cerr << QUEEN_SAY_NO(messageId);
 
             }
 
@@ -249,7 +249,7 @@ bool Zappy::Queen::addAssistantsIncomming(Network::Network &network)
                     return false;
                 }
 
-                std::cout << QUEEN_SAY_HERE_COME(messageId);
+                std::cerr << QUEEN_SAY_HERE_COME(messageId);
 
                 _nbAssistants += ONE_COUNT;
 
@@ -303,7 +303,7 @@ bool Zappy::Queen::sendMessageToAssistant(Network::Network &network, const std::
             _assistants.push_back(_assistantsIncomming[i]);
             _assistantsIncomming.erase(_assistantsIncomming.begin() + i);
 
-            std::cout << QUEEN_ASSISTANT_IS_HERE(messageId);
+            std::cerr << QUEEN_ASSISTANT_IS_HERE(messageId);
 
         }
 
@@ -313,7 +313,7 @@ bool Zappy::Queen::sendMessageToAssistant(Network::Network &network, const std::
         return false;
     }
 
-    std::cout << QUEEN_SAY_HERE(messageId);
+    std::cerr << QUEEN_SAY_HERE(messageId);
 
     return true;
 }
@@ -349,7 +349,7 @@ bool Zappy::Queen::take(Network::Network &network)
         return false;
     }
 
-    std::cout << QUEEN_TAKE_FOOD;
+    std::cerr << QUEEN_TAKE_FOOD;
 
     return true;
 }
@@ -360,7 +360,7 @@ bool Zappy::Queen::forkQueen(Network::Network &network)
         return false;
     }
 
-    std::cout << QUEEN_FORK;
+    std::cerr << QUEEN_FORK;
 
     Zappy::createAI(network.getName(), network.getPort(), network.getHome());
 
@@ -368,14 +368,14 @@ bool Zappy::Queen::forkQueen(Network::Network &network)
         return false;
     }
 
-    std::cout << QUEEN_SAY_LEVEL(_level);
+    std::cerr << QUEEN_SAY_LEVEL(_level);
 
     return true;
 }
 
 bool Zappy::Queen::makeIncantation(Network::Network &network)
 {
-    std::cout << QUEEN_START_INCANTATION(_level + ONE_LEVEL);
+    std::cerr << QUEEN_START_INCANTATION(_level + ONE_LEVEL);
 
     std::string message(BROADCAST_QUEEN_INCANTATION);
 
@@ -390,13 +390,13 @@ bool Zappy::Queen::makeIncantation(Network::Network &network)
         return false;
     }
 
-    std::cout << QUEEN_SAY_INCANTATION(message);
+    std::cerr << QUEEN_SAY_INCANTATION(message);
 
     if (incantation(network) != Response::Ok) {
         return false;
     }
 
-    std::cout << QUEEN_INCANTATION(_level);
+    std::cerr << QUEEN_INCANTATION(_level);
 
     return true;
 }

@@ -59,8 +59,10 @@ Zappy::Response Zappy::Searcher::dropItem(Network::Network &network)
             } else if (rep == Response::Ko) {
                 continue;
             }
-            std::cerr << "Searcher : " << _id << " Set " << i.first << "\n";
+            std::cerr << std::string("Searcher : " + std::to_string(_id) + " Set " + i.first + "\n");
         }
+        _goBackToQueen = false;
+
     }
 
     return Response::Ok;
@@ -119,13 +121,16 @@ void Zappy::Searcher::checkQueenLevel(Network::Network &network)
     std::string message("");
     std::string value("");
 
+    std::getline(stream, otherId, ',');
     std::getline(stream, otherId, ':');
     std::getline(stream, message, ':');
     std::getline(stream, value, ':');
-    std::cout << "\t\tMESSAGE: " << message << "\n";
-    std::cout << "\t\tid: " << otherId << "\n";
-    std::cout << "\t\tvalue: " << value << "\n";
+    std::cerr << "\t\tMESSAGE: " << message << "\n";
+    std::cerr << "\t\tid: " << otherId << "\n";
+    std::cerr << "\t\tvalue: " << value << "\n";
+
     if (otherId == QUEEN && message == LEVEL) {
+        _queenLevel = std::atoi(value.c_str());
         _order.setRessources(_order.getLevelRessources(std::atoi(value.c_str())));
         _order.setLevel(std::atoi(value.c_str()));
         _inDelivery = true;
@@ -134,32 +139,47 @@ void Zappy::Searcher::checkQueenLevel(Network::Network &network)
 
 bool Zappy::Searcher::run(Network::Network &network)
 {
+
+    if (_id > 0) {
+        return false;
+    }
     checkQueenLevel(network);
-    std::cout << "order linemate: " << _order.getLevelRessources(1)["linemate"] << "\n";
+
     while (true) {
 
-        checkAskAssistants(network);
+        if (_goBackToQueen) {
+            move(network);
+            if (_nextMouvment.empty()) {
+                dropItem(network);
+            }
+            dumpMovement();
+            continue;
+        }
+
+        if (_ressources[FOOD] < MIN_FOOD) {
+            searchFood(network);
+        }
+
 
         if (_goBackToQueen && !backToQueen(network, true)) {
             break;
         }
 
-        _lastLook = look(network);
-        std::cout << "Searcher : " << _id << " Look: {\n";
-        for (const auto &i: _lastLook) {
-            std::cout << "\t" << i << "\n";
-        }
-        std::cout << "}\n";
-        if (_lastLook.empty()) {
-            break;
-        }
-        std::vector<int> priority = estimatePriority();
-        for (const auto &i: priority) {
-            std::cout << "\t -  " << i << "\n";
-        }
-        whereShouldIGo(priority);
         if (_nextMouvment.empty()) {
-            if (_howManySameMove < 4) {
+            _lastLook = look(network);
+            std::cerr << "Searcher : " << _id << " Look: {\n";
+            for (const auto &i: _lastLook) {
+                std::cerr << "\t" << i << "\n";
+            }
+            std::cerr << "}\n";
+
+            std::vector<int> priority = estimatePriority();
+
+            whereShouldIGo(priority);
+        }
+
+        if (_nextMouvment.empty()) {
+            if (_howManySameMove < NB_SAME_MOVE_MAX) {
                 _nextMouvment.emplace(_nextMouvment.begin(), Mouvement::Left);
                 _howManySameMove += 1;
             } else {
@@ -171,23 +191,25 @@ bool Zappy::Searcher::run(Network::Network &network)
 
         dumpMovement();
 
-        if (move(network) != Response::Ok) {
+        Response rep = move(network);
+        if (rep == Response::Ko) {
+            _nextMouvment.clear();
+            updateInventory(network);
+            continue;
+        } else if (rep == Response::Dead) {
             break;
         }
 
-        if (_order.empty()) {
-
-            if (!backToQueen(network, false)) {
-                break;
-            }
-
-            if (dropItem(network) != Response::Ok) {
-                break;
-            }
-
+        if (_order.empty() && _nextMouvment.empty()) {
+            _moveToStarter.emplace(_moveToStarter.begin(), Left);
+            _moveToStarter.emplace(_moveToStarter.begin(), Left);
+            _moveToStarter.emplace(_moveToStarter.begin(), Forward);
+            _nextMouvment.clear();
+            _nextMouvment = _moveToStarter;
+            _goBackToQueen = true;
         }
-
+        updateInventory(network);
     }
-    std::cout << "Searcher : " << _id << " is dead\n";
+    std::cerr << "Searcher : " << _id << " is dead\n";
     return true;
 }
