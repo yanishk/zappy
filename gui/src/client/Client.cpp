@@ -35,7 +35,9 @@ void Client::startDisplay()
 {
     std::srand(std::time(NULL));
     ParsesModelConfig parse;
-    std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile = parse.parsesFile(CONFIG_FILE_PATH);
+    std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile =
+        parse.parsesFile(CONFIG_FILE_PATH);
+
     Game game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket, _isAnimated);
     try {
         game.fillAllModel(parsedFile);
@@ -43,6 +45,7 @@ void Client::startDisplay()
         std::cerr << e.what() << std::endl;
         std::exit(ERROR_VALUE);
     }
+
     asio::write(_socket, asio::buffer(MSZ_CMD_START));
     game.launchGame();
     std::exit(0);

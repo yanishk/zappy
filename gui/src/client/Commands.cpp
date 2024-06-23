@@ -115,12 +115,14 @@ void CommandManager::eraseFirstCmdInMap(const std::string &cmd)
     }
 }
 
-void CommandManager::fillMapPlayerInfos(const std::string &cmd, const std::vector<std::string> &params)
+void CommandManager::fillMapPlayerInfos(const std::string &cmd,
+    const std::vector<std::string> &params)
 {
     _cmdMap[cmd].push_back(params);
 }
 
-void CommandManager::fillMapIsland(const std::string &cmd, const std::vector<std::string> &params)
+void CommandManager::fillMapIsland(const std::string &cmd,
+    const std::vector<std::string> &params)
 {
     _cmdMap[cmd].push_back(params);
 }
@@ -179,8 +181,8 @@ std::vector<std::string> CommandManager::getCommandAt(const std::string &cmd,
     std::size_t index)
 {
     auto it = _cmdMap.find(cmd);
-
     std::vector<std::string> vide;
+
     if (it != _cmdMap.end() && index < it->second.size()) {
         return it->second[index];
     } else {
