@@ -23,19 +23,22 @@
 
     #define ISLAND_ALTITUDE -4
 
-class Island : public ILoadAndRender {
+namespace Zappy {
 
-    public:
+    class Island : public ILoadAndRenderObj {
 
-        void render() override;
-        void setModel(std::pair<Model, float> model) override;
-        void setIslandPos(Vector3 pos);
+        public:
 
-    private:
+            void render() override;
+            void setModel(std::pair<Model, float> model) override;
+            void setIslandPos(Vector3 pos);
 
-        Model _islandModel;
-        Vector3 _islandPosition;
-        float _islandSize;
-};
+        private:
+
+            Model _islandModel;
+            Vector3 _islandPosition;
+            float _islandSize;
+    };
+}
 
 #endif /* !ISLAND_HPP_ */

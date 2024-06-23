@@ -12,21 +12,24 @@
     #include "AllObj.hpp"
     #define CIRCUMFERENCE 360
 
-class AllIsland : public IAllObj {
+namespace Zappy {
 
-    public:
+    class AllIsland : public IAllObj {
 
-        AllIsland(CommandManager &cmd);
+        public:
 
-        void setAllElements(std::vector<std::pair<Model, float>> model) override;
-        void renderAllElements(void) override;
-        std::size_t getTotalNbrElements(void) override;
+            AllIsland(CommandManager &cmd);
 
-    private:
+            void setAllElements(std::vector<std::pair<Model, float>> model) override;
+            void renderAllElements(void) override;
+            std::size_t getTotalNbrElements(void) override;
 
-        CommandManager &_cmd;
-        std::vector<Island> _allIsland;
+        private:
 
-};
+            CommandManager &_cmd;
+            std::vector<Island> _allIsland;
+
+    };
+}
 
 #endif /* !ALLISLAND_HPP_ */

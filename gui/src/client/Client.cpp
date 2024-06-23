@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-Client::Client(const std::string &port, const std::string &host,
+Zappy::Client::Client(const std::string &port, const std::string &host,
     CommandManager &cmd, bool animation) : _socket(_ioContext), _cmd(cmd)
 {
     asio::ip::tcp::resolver resolver(_ioContext);
@@ -22,33 +22,36 @@ Client::Client(const std::string &port, const std::string &host,
     _isAnimated = animation;
 }
 
-void Client::run()
+void Zappy::Client::run()
 {
-    std::thread display(&Client::startDisplay, this);
-    std::thread reader(&Client::readServ, this);
+    std::thread display(&Zappy::Client::startDisplay, this);
+    std::thread reader(&Zappy::Client::readServ, this);
 
     reader.join();
     display.join();
 }
 
-void Client::startDisplay()
+void Zappy::Client::startDisplay()
 {
     std::srand(std::time(NULL));
     ParsesModelConfig parse;
-    std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile = parse.parsesFile(CONFIG_FILE_PATH);
-    Game game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket, _isAnimated);
+    std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile =
+        parse.parsesFile(CONFIG_FILE_PATH);
+
+    Zappy::Game game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket, _isAnimated);
     try {
         game.fillAllModel(parsedFile);
     } catch (const ErrorHandling& e) {
         std::cerr << e.what() << std::endl;
         std::exit(ERROR_VALUE);
     }
+
     asio::write(_socket, asio::buffer(MSZ_CMD_START));
     game.launchGame();
     std::exit(0);
 }
 
-void Client::readServ()
+void Zappy::Client::readServ()
 {
     try {
 
@@ -88,7 +91,7 @@ void Client::readServ()
     }
 }
 
-void Client::writeToServ()
+void Zappy::Client::writeToServ()
 {
     while (true) {
 

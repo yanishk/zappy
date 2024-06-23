@@ -19,28 +19,31 @@
     #define ROTATE_RAND_RANGE (210 - 159 + 1) + 159
     #define DEFAULT_EGG_INCLIN 80
 
-class Egg : public ILoadAndRender {
+namespace Zappy {
 
-    public:
+    class Egg : public ILoadAndRenderObj {
 
-        void render() override;
-        void setModel(std::pair<Model, float> model) override;
-        void setEggPosAndID(Vector2 pos, int eggId);
+        public:
 
-        int getEggId();
-        Vector2 getEggRealPos();
-        Vector3 get3DEggPos();
+            void render() override;
+            void setModel(std::pair<Model, float> model) override;
+            void setEggPosAndID(Vector2 pos, int eggId);
 
-    private:
+            int getEggId();
+            Vector2 getEggRealPos();
+            Vector3 get3DEggPos();
 
-        Vector2 _eggRealPos;
-        Vector3 _egg3DPosition;
-        Model _eggModel;
+        private:
 
-        float _eggHight;
-        float _eggSize;
+            Vector2 _eggRealPos;
+            Vector3 _egg3DPosition;
+            Model _eggModel;
 
-        int _eggID;
-};
+            float _eggHight;
+            float _eggSize;
+
+            int _eggID;
+    };
+}
 
 #endif /* !EGGS_HPP_ */

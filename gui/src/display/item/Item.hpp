@@ -8,7 +8,6 @@
 #ifndef ITEM_HPP_
     #define ITEM_HPP_
 
-    #include "Utils.hpp"
     #include "Render.hpp"
     #include "Commands.hpp"
 
@@ -19,26 +18,32 @@
     #define ITEM_ALTITUDE 1.8
     #define RAND_RANGE 6
 
-class Item : public ILoadAndRender {
-    public:
-        Item();
-        void render() override;
-        void setModel(std::pair<Model, float> model) override;
-        void setItemPosAndType(Vector2 pos, int type);
-        Vector2 getRealPosition(void);
-        int getType(void);
+namespace Zappy {
 
+    class Item : public ILoadAndRenderObj {
 
-    private:
-        void changeItemAnim(void);
-        Model _itemModel;
-        Vector2 _realPos;
-        Vector3 _itemPosition;
-        float _itemSize;
-        int _itemType;
+        public:
 
-        float _rotation;
-        float _upValue;
-};
+            Item();
+
+            Vector2 getRealPosition(void);
+            void render() override;
+            void setModel(std::pair<Model, float> model) override;
+            void setItemPosAndType(Vector2 pos, int type);
+            int getType(void);
+
+        private:
+
+            Model _itemModel;
+            Vector2 _realPos;
+            Vector3 _itemPosition;
+            void changeItemAnim(void);
+            int _itemType;
+
+            float _itemSize;
+            float _rotation;
+            float _upValue;
+    };
+}
 
 #endif /* !ITEM_HPP_ */

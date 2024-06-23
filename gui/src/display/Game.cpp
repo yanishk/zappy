@@ -6,9 +6,12 @@
 */
 
 #include "Game.hpp"
+#include "Factory.hpp"
 
-Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
-    asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket), _displayGameInfo(true)
+Zappy::Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
+    asio::ip::tcp::socket &socket, bool anim) : _cmd(cmd),
+                                                    _socket(socket),
+                                                    _displayGameInfo(true)
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
@@ -20,25 +23,28 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
     _cameraMode = CAMERA_FREE;
     _selectedPlayer.first = false;
 
-    _sea = std::make_unique<Sea>();
-    _sky = std::make_unique<Sky>();
-    _allIsland = std::make_unique<AllIsland>(_cmd);
-    _allItem = std::make_unique<AllItem>(_cmd);
-    _allEggs = std::make_unique<AllEggs>(_cmd);
-    _allPlayer = std::make_unique<AllPlayers>(_cmd, animation);
+    _sky = std::get<std::unique_ptr<Sky>>(Factory::newObject(objType::SkyType));
+    _sea = std::get<std::unique_ptr<Sea>>(Factory::newObject(objType::SeaType));
+    _allIsland = std::get<std::unique_ptr<AllIsland>>(Factory::newObjects(objType::IslandType, cmd, anim));
+    _allItem = std::get<std::unique_ptr<AllItem>>(Factory::newObjects(objType::ItemType, cmd, anim));
+    _allEggs = std::get<std::unique_ptr<AllEggs>>(Factory::newObjects(objType::EggType, cmd, anim));
+    _allPlayer = std::get<std::unique_ptr<AllPlayers>>(Factory::newObjects(objType::PlayerType, cmd, anim));
 }
 
-void Game::updateCamera(void)
+void Zappy::Game::updateCamera(void)
 {
     float alltitude = 0.0;
     float speed = CAMERA_MOVEMENT_SPEED;
 
     if (IsKeyDown(KEY_SPACE))
         alltitude += speed;
+
     if (IsKeyDown(KEY_LEFT_SHIFT))
         alltitude -= speed;
+
     if (IsKeyDown(KEY_LEFT_CONTROL))
         speed += CAMERA_MOVEMENT_SPEED / 2;
+
     Vector3 movement = Utils::Vec3(
         IsKeyDown(KEY_W) * speed - IsKeyDown(KEY_S) * speed,
         IsKeyDown(KEY_D) * speed - IsKeyDown(KEY_A) * speed, alltitude);
@@ -47,16 +53,16 @@ void Game::updateCamera(void)
     UpdateCameraPro(&_camera, movement, rotation, GetMouseWheelMove());
 }
 
-void Game::fillAllModel(ZappyModel allPath)
+void Zappy::Game::fillAllModel(ZappyModel allPath)
 {
     std::vector<std::pair<Model, float>> tmpModel;
     std::pair<Model, float> tmpEggModel;
 
     bool hasPlayer = false;
 
-    if (allPath.size() == 0)
+    if (allPath.size() == 0) {
         throw ErrorHandling(ERROR_NO_MODEL);
-
+    }
     for (auto &i: allPath) {
         std::pair<Model, float> tmpPair;
         tmpPair.first = LoadModel(i.first.first.c_str());
@@ -74,16 +80,18 @@ void Game::fillAllModel(ZappyModel allPath)
                 hasPlayer = true;
                 break;
             }
+            case Egg: {
+                _eggModel.push_back(tmpPair);
+                break;
+            }
+            case SkyM: {
+                _skyModel.first = LoadModel(SKY_MODEL_PATH);
+                _skyModel.first.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture =
+                LoadTexture(SKY_TEXTURE_PATH);
+                _skyModel.second = 10;
+            }
         }
     }
-
-    tmpEggModel.first = LoadModel(EGG_MOD_PATH);
-    tmpEggModel.second = EGG_MODEL_SIZE;
-    _eggModel.push_back(tmpEggModel);
-
-    _skyModel.first = LoadModel(SKY_MODEL_PATH);
-    _skyModel.first.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = LoadTexture(SKY_TEXTURE_PATH);
-    _skyModel.second = 10;
 
     if (!hasPlayer)
         throw ErrorHandling(ERROR_NO_PLAYER_MODEL);
@@ -91,13 +99,13 @@ void Game::fillAllModel(ZappyModel allPath)
         throw ErrorHandling(ERROR_NOT_ENOUTH_ITEM_MODEL);
 }
 
-void Game::setCameraToCoord(Vector3 position, Vector3 target)
+void Zappy::Game::setCameraToCoord(Vector3 position, Vector3 target)
 {
     _camera.position = position;
     _camera.target = target;
 }
 
-void Game::display3D(void)
+void Zappy::Game::display3D(void)
 {
     BeginMode3D(_camera);
 
@@ -105,10 +113,13 @@ void Game::display3D(void)
     _sky.get()->render();
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        std::pair<bool, int> tmpSelectedPlayer = _allPlayer.get()->isPlayerSelected(_camera.target, _camera.position);
-        if (tmpSelectedPlayer.second != -1)
+        std::pair<bool, int> tmpSelectedPlayer =
+            _allPlayer.get()->isPlayerSelected(_camera.target, _camera.position);
+        if (tmpSelectedPlayer.second != -1) {
             _selectedPlayer = tmpSelectedPlayer;
+        }
     }
+
     if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
         _selectedPlayer.first = false;
     }
@@ -118,55 +129,75 @@ void Game::display3D(void)
     _allIsland.get()->renderAllElements();
     _allItem.get()->renderAllElements();
     _allEggs.get()->renderAllElements();
-    _allPlayer.get()->renderAll(_camera.position);
+    _allPlayer.get()->renderAllElements(_camera.position);
 
     EndMode3D();
 }
 
-void Game::display2D(void)
+void Zappy::Game::display2D(void)
 {
     _allPlayer.get()->renderAll2D(_selectedPlayer, _allItem);
 
     int position = START_POS;
     int size = CROSSBAR_SIZE;
+
     DrawCircleLines(_screenWidth / 2, _screenHeight / 2, size, RED);
     size += CROSSBAR_SIZE / 2;
-    DrawLine(_screenWidth / 2 - size / 2, _screenHeight / 2 - size / 2, _screenWidth / 2 + size / 2, _screenHeight / 2 + size / 2, RED);
-    DrawLine(_screenWidth / 2 + size / 2, _screenHeight / 2 - size / 2, _screenWidth / 2 - size / 2, _screenHeight / 2 + size / 2, RED);
 
-    if (IsKeyPressed(KEY_F3))
+    DrawLine(_screenWidth / 2 - size / 2, _screenHeight / 2 - size /
+        2, _screenWidth / 2 + size / 2, _screenHeight / 2 + size / 2, RED);
+    DrawLine(_screenWidth / 2 + size / 2, _screenHeight / 2 - size /
+        2, _screenWidth / 2 - size / 2, _screenHeight / 2 + size / 2, RED);
+
+    if (IsKeyPressed(KEY_F3)) {
         _displayGameInfo = !_displayGameInfo;
+    }
 
-    if (!_displayGameInfo)
+    if (!_displayGameInfo) {
         return;
+    }
 
     DrawRectangle(MARGIN_LEFT, MARGIN_TOP, WIGHT, HIGHT, Fade(SKYBLUE, 0.5f));
     DrawFPS(_screenWidth - FPS_MARGIN, MARGIN_TOP);
-    DrawText(TextFormat(CAM_POS, _camera.position.x, _camera.position.y, _camera.position.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+
+    DrawText(TextFormat(CAM_POS, _camera.position.x, _camera.position.y,
+        _camera.position.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+
     position += BACKSLASH_N;
-    DrawText(TextFormat(CAM_TARGET, _camera.target.x, _camera.target.y, _camera.target.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(CAM_TARGET, _camera.target.x, _camera.target.y,
+        _camera.target.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+
     position += BACKSLASH_N;
-    DrawText(TextFormat(TIME_UNIT, _sgtValue), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(TIME_UNIT, _sgtValue), MARGIN_LEFT * 2,
+        position, FONT_SIZE, BLACK);
+
     position += BACKSLASH_N;
-    DrawText(TextFormat(NBR_ITEM_MAP, _allItem.get()->getTotalNbrElements()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(NBR_ITEM_MAP, _allItem.get()->getTotalNbrElements()),
+        MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+
     position += BACKSLASH_N;
-    DrawText(TextFormat(NBR_PLAYER_MAP, _allPlayer.get()->getTotalNbrPlayer()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(NBR_PLAYER_MAP, _allPlayer.get()->getTotalNbrElements()),
+        MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+
     position += BACKSLASH_N;
-    DrawText(TextFormat(NBR_ISLAND_MAP, _allIsland.get()->getTotalNbrElements()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(NBR_ISLAND_MAP, _allIsland.get()->getTotalNbrElements()),
+        MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+
     position += BACKSLASH_N;
-    DrawText(TextFormat(NBR_EGGS_MAP, _allEggs.get()->getTotalNbrElements()), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
+    DrawText(TextFormat(NBR_EGGS_MAP, _allEggs.get()->getTotalNbrElements()),
+        MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
 }
 
-void Game::cameraPositionStart(void)
+void Zappy::Game::cameraPositionStart(void)
 {
     if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
-
         std::pair<float, float> mapSize;
         mapSize.first = std::stof(cmd.front().c_str());
         mapSize.second = std::stof(cmd[1].c_str());
         std::pair<float, float> middleMap;
-        middleMap.first = ((mapSize.first * spaceBetwenIsland) / 2) + (spaceBetwenIsland / 2);
+        middleMap.first = ((mapSize.first * spaceBetwenIsland) / 2) +
+            (spaceBetwenIsland / 2);
         middleMap.second = (((mapSize.second - 1) * spaceBetwenIsland) / 2);
         Vector3 target =   Utils::Vec3(middleMap.first, 0, middleMap.second);
 
@@ -177,7 +208,7 @@ void Game::cameraPositionStart(void)
     }
 }
 
-void Game::getSgtCmd(void)
+void Zappy::Game::getSgtCmd(void)
 {
     if (!_cmd.getCommandAt(SGT_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(SGT_CMD, 0);
@@ -186,7 +217,7 @@ void Game::getSgtCmd(void)
     }
 }
 
-void Game::requestChangingTimeUnit(void)
+void Zappy::Game::requestChangingTimeUnit(void)
 {
     if (IsKeyPressed(KEY_UP)) {
         _sgtValue += SST_CHANGE;
@@ -207,7 +238,7 @@ void Game::requestChangingTimeUnit(void)
     }
 }
 
-void Game::unloadAllModel(void)
+void Zappy::Game::unloadAllModel(void)
 {
     for (auto &i: _allItemModel)
         UnloadModel(i.first);
@@ -220,7 +251,7 @@ void Game::unloadAllModel(void)
     CloseWindow();
 }
 
-void Game::launchGame(void)
+void Zappy::Game::launchGame(void)
 {
     DisableCursor();
     cameraPositionStart();
@@ -231,7 +262,7 @@ void Game::launchGame(void)
         _allIsland.get()->setAllElements(_islandModel);
         _allItem.get()->setAllElements(_allItemModel);
         _allEggs.get()->setAllElements(_eggModel);
-        _allPlayer.get()->setAllPlayer(_playerModel);
+        _allPlayer.get()->setAllElements(_playerModel);
         _sky.get()->setModel(_skyModel);
 
         requestChangingTimeUnit();

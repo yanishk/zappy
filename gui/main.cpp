@@ -24,10 +24,10 @@ int main(int ac, char **av)
         animation = true;
     }
 
-    CommandManager cmd;
+    Zappy::CommandManager cmd;
 
     try {
-        Client client(port, host, cmd, animation);
+        Zappy::Client client(port, host, cmd, animation);
         client.run();
     } catch (std::exception& e) {
         std::cerr << "Failed on: " << e.what() << "\n";

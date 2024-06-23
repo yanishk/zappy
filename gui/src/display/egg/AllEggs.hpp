@@ -11,22 +11,25 @@
     #include "Eggs.hpp"
     #include "AllObj.hpp"
 
-class AllEggs : public IAllObj {
+namespace Zappy {
 
-    public:
+    class AllEggs : public IAllObj {
 
-        AllEggs(CommandManager &cmd);
+        public:
 
-        void setAllElements(std::vector<std::pair<Model, float>> model) override;
+            AllEggs(CommandManager &cmd);
 
-        std::size_t getTotalNbrElements(void) override;
-        void renderAllElements(void) override;
-        void removeEgg(int Id);
+            void setAllElements(std::vector<std::pair<Model, float>> model) override;
 
-    private:
+            std::size_t getTotalNbrElements(void) override;
+            void renderAllElements(void) override;
+            void removeEgg(int Id);
 
-        CommandManager &_cmd;
-        std::vector<Egg> _allEggs;
-};
+        private:
+
+            CommandManager &_cmd;
+            std::vector<Egg> _allEggs;
+    };
+}
 
 #endif /* !ALLEGGS_HPP_ */

@@ -7,14 +7,15 @@
 
 #include "AllPlayer.hpp"
 
-AllPlayers::AllPlayers(CommandManager &cmd, bool isAnimated) : _cmd(cmd), _isAnimated(isAnimated), _animsCount(0)
+Zappy::AllPlayers::AllPlayers(Zappy::CommandManager &cmd, bool isAnimated) :
+    _cmd(cmd), _isAnimated(isAnimated), _animsCount(0)
 {
     _anim = LoadModelAnimations(PLAYER_ANIM, &_animsCount);
     _incantationModel = LoadModel(INCANTATION_PATH);
     _expulsionModel = LoadModel(EXPULSION_PATH);
 }
 
-void AllPlayers::renderAll(Vector3 camPosition)
+void Zappy::AllPlayers::renderAllElements(Vector3 camPosition)
 {
     for (auto &player : _allPlayer) {
         player.render();
@@ -25,7 +26,8 @@ void AllPlayers::renderAll(Vector3 camPosition)
     }
 }
 
-void AllPlayers::renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllItem> &_allItem)
+void Zappy::AllPlayers::renderAll2D(std::pair<bool, int> moreInfo,
+    std::unique_ptr<AllItem> &_allItem)
 {
     if (!moreInfo.first)
         return;
@@ -40,7 +42,7 @@ void AllPlayers::renderAll2D(std::pair<bool, int> moreInfo, std::unique_ptr<AllI
     }
 }
 
-void AllPlayers::setAllPlayer(std::vector<std::pair<Model, float>> model)
+void Zappy::AllPlayers::setAllElements(std::vector<std::pair<Model, float>> model)
 {
     getAllTeam();
     addPlayer(model);
@@ -54,7 +56,7 @@ void AllPlayers::setAllPlayer(std::vector<std::pair<Model, float>> model)
     playerDied();
 }
 
-std::pair<bool, int> AllPlayers::isPlayerSelected(Vector3 target, Vector3 position)
+std::pair<bool, int> Zappy::AllPlayers::isPlayerSelected(Vector3 target, Vector3 position)
 {
     std::pair<bool, int> selectedPlayer;
     selectedPlayer.second = -1;
@@ -72,12 +74,12 @@ std::pair<bool, int> AllPlayers::isPlayerSelected(Vector3 target, Vector3 positi
     return selectedPlayer;
 }
 
-std::size_t AllPlayers::getTotalNbrPlayer(void)
+std::size_t Zappy::AllPlayers::getTotalNbrElements(void)
 {
     return _allPlayer.size();
 }
 
-Player &AllPlayers::getPlayerByID(int PlayerID)
+Zappy::Player &Zappy::AllPlayers::getPlayerByID(int PlayerID)
 {
     for (auto &player : _allPlayer) {
         if (player.getPlayerID() == PlayerID) {
@@ -87,7 +89,7 @@ Player &AllPlayers::getPlayerByID(int PlayerID)
     return _allPlayer[0];
 }
 
-void AllPlayers::addPlayer(std::vector<std::pair<Model, float>> model)
+void Zappy::AllPlayers::addPlayer(std::vector<std::pair<Model, float>> model)
 {
     if (!_cmd.getCommandAt(PNW_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PNW_CMD, 0);
@@ -111,10 +113,11 @@ void AllPlayers::addPlayer(std::vector<std::pair<Model, float>> model)
     }
 }
 
-Color AllPlayers::setPlayerColor(std::string teamName)
+Color Zappy::AllPlayers::setPlayerColor(std::string teamName)
 {
     float teamIndex = 0;
-    while (teamName != _allTeamName[teamIndex] && (std::size_t)teamIndex < _allTeamName.size()) {
+    while (teamName != _allTeamName[teamIndex] &&
+        (std::size_t)teamIndex < _allTeamName.size()) {
         teamIndex++;
     }
     Color color;
@@ -125,7 +128,7 @@ Color AllPlayers::setPlayerColor(std::string teamName)
     return color;
 }
 
-void AllPlayers::movePlayer(void)
+void Zappy::AllPlayers::movePlayer(void)
 {
     if (!_cmd.getCommandAt(PPO_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PPO_CMD, 0);
@@ -138,7 +141,7 @@ void AllPlayers::movePlayer(void)
     }
 }
 
-void AllPlayers::setPlayerLevel(void)
+void Zappy::AllPlayers::setPlayerLevel(void)
 {
     if (!_cmd.getCommandAt(PLV_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PLV_CMD, 0);
@@ -149,7 +152,7 @@ void AllPlayers::setPlayerLevel(void)
     }
 }
 
-void AllPlayers::collectOrDropItem(void)
+void Zappy::AllPlayers::collectOrDropItem(void)
 {
     std::string command = PDR_CMD;
     bool addOrRemoveItem = REMOVE_ITEM;
@@ -166,7 +169,7 @@ void AllPlayers::collectOrDropItem(void)
     }
 }
 
-void AllPlayers::setInventory(void)
+void Zappy::AllPlayers::setInventory(void)
 {
     while (!_cmd.getCommandAt(PIN_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PIN_CMD, 0);
@@ -180,7 +183,7 @@ void AllPlayers::setInventory(void)
     }
 }
 
-void AllPlayers::incantation(void)
+void Zappy::AllPlayers::incantation(void)
 {
     while (!_cmd.getCommandAt(PIC_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PIC_CMD, 0);
@@ -199,7 +202,7 @@ void AllPlayers::incantation(void)
     }
 }
 
-void AllPlayers::startIncantation(int playerID, Vector2 pos)
+void Zappy::AllPlayers::startIncantation(int playerID, Vector2 pos)
 {
     for (auto &player : _allPlayer) {
         if (player.getPlayerID() == playerID) {
@@ -208,7 +211,7 @@ void AllPlayers::startIncantation(int playerID, Vector2 pos)
     }
 }
 
-void AllPlayers::endOfIncantation(Vector2 pos)
+void Zappy::AllPlayers::endOfIncantation(Vector2 pos)
 {
     for (auto &player : _allPlayer) {
         if (Utils::Vec2Comp(player.getRealPos(), pos)) {
@@ -217,7 +220,7 @@ void AllPlayers::endOfIncantation(Vector2 pos)
     }
 }
 
-void AllPlayers::ejection(void)
+void Zappy::AllPlayers::ejection(void)
 {
     while (!_cmd.getCommandAt(PEX_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PEX_CMD, 0);
@@ -227,7 +230,7 @@ void AllPlayers::ejection(void)
     }
 }
 
-void AllPlayers::playerDied(void)
+void Zappy::AllPlayers::playerDied(void)
 {
     while (!_cmd.getCommandAt(PDI_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PDI_CMD, 0);
@@ -239,7 +242,7 @@ void AllPlayers::playerDied(void)
     }
 }
 
-bool AllPlayers::removePlayerFromIsland(int playerID)
+bool Zappy::AllPlayers::removePlayerFromIsland(int playerID)
 {
     for (std::size_t i = 0; i < _allPlayer.size(); i++) {
         if (_allPlayer[i].getPlayerID() == playerID) {
@@ -250,7 +253,7 @@ bool AllPlayers::removePlayerFromIsland(int playerID)
     return false;
 }
 
-void AllPlayers::getAllTeam(void)
+void Zappy::AllPlayers::getAllTeam(void)
 {
     while (_cmd.getCommandAt(TNA_CMD, 0).size() == 1) {
         std::vector<std::string> cmd = _cmd.getCommandAt(TNA_CMD, 0);
@@ -270,7 +273,7 @@ void AllPlayers::getAllTeam(void)
     }
 }
 
-void AllPlayers::broadcast(void)
+void Zappy::AllPlayers::broadcast(void)
 {
     if (!_cmd.getCommandAt(PBC_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(PBC_CMD, 0);

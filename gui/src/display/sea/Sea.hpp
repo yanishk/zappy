@@ -42,29 +42,31 @@
     #define VALUE_SHADER_SPEEDY 8.0
     #define VALUE_SHADER_SPEEDX 8.0
 
-class Sea : public ILoadAndRender {
+namespace Zappy {
 
-    public:
+    class Sea : public ILoadAndRenderObj {
 
-        Sea();
+        public:
 
-        void render() override;
-        void setModel(std::pair<Model, float>) override;
-        void setSeaPos(Vector3 pos, std::pair<int, int> mapSize);
+            Sea();
 
-    private:
+            void render() override;
+            void setModel(std::pair<Model, float>) override;
+            void setSeaPos(Vector3 pos, std::pair<int, int> mapSize);
 
-        Model _seaModel;
-        Shader _seaShader;
+        private:
 
-        Vector3 _subSeaPosition;
-        Vector3 _seaPosition;
+            Model _seaModel;
+            Shader _seaShader;
 
-        float _seaSize;
-        float _seconds;
+            Vector3 _subSeaPosition;
+            Vector3 _seaPosition;
 
-        int _seaSecondLoc;
-};
+            float _seaSize;
+            float _seconds;
 
+            int _seaSecondLoc;
+    };
+}
 
 #endif /* !SEA_HPP_ */

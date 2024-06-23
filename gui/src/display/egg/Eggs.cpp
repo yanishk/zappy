@@ -9,17 +9,17 @@
 
 #include "Eggs.hpp"
 
-Vector3 Egg::get3DEggPos()
+Vector3 Zappy::Egg::get3DEggPos()
 {
     return _egg3DPosition;
 }
 
-void Egg::render()
+void Zappy::Egg::render()
 {
     DrawModel(_eggModel, get3DEggPos(), _eggSize, WHITE);
 }
 
-void Egg::setModel(std::pair<Model, float> model)
+void Zappy::Egg::setModel(std::pair<Model, float> model)
 {
     _eggModel = model.first;
     _eggSize = model.second;
@@ -28,7 +28,7 @@ void Egg::setModel(std::pair<Model, float> model)
     _eggModel.transform = MatrixRotateXYZ((Vector3){DEG2RAD * tiltAngle, DEG2RAD * rngRotate, DEG2RAD * 0});
 }
 
-void Egg::setEggPosAndID(Vector2 pos, int eggId)
+void Zappy::Egg::setEggPosAndID(Vector2 pos, int eggId)
 {
     _eggID = eggId;
     _eggRealPos = pos;
@@ -37,12 +37,12 @@ void Egg::setEggPosAndID(Vector2 pos, int eggId)
     _egg3DPosition.z += -2 + (std::rand() % 4);
 }
 
-Vector2 Egg::getEggRealPos()
+Vector2 Zappy::Egg::getEggRealPos()
 {
     return _eggRealPos;
 }
 
-int Egg::getEggId()
+int Zappy::Egg::getEggId()
 {
     return _eggID;
 }

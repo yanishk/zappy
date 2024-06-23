@@ -22,28 +22,30 @@
     #include <atomic>
     #include "Commands.hpp"
 
-class Client {
+namespace Zappy {
 
-    public:
+    class Client {
 
-        Client(const std::string &host, const std::string &port,
-            CommandManager &cmd, bool animation);
-        void run();
-        std::atomic<bool> _isRunning = true;
+        public:
 
-    private:
+            Client(const std::string &host, const std::string &port,
+                CommandManager &cmd, bool animation);
+            void run();
 
-        void readServ();
-        void writeToServ();
-        void startDisplay();
+        private:
 
-        asio::io_context _ioContext;
-        asio::ip::tcp::socket _socket;
-        asio::ip::tcp::resolver::results_type _endpoints;
-        asio::streambuf _buff;
-        bool _isAnimated;
+            void readServ();
+            void writeToServ();
+            void startDisplay();
 
-        CommandManager &_cmd;
-};
+            asio::io_context _ioContext;
+            asio::ip::tcp::socket _socket;
+            asio::ip::tcp::resolver::results_type _endpoints;
+            asio::streambuf _buff;
+            bool _isAnimated;
+
+            CommandManager &_cmd;
+    };
+}
 
 #endif // CLIENT_H

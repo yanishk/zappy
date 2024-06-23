@@ -7,12 +7,12 @@
 
 #include "AllIsland.hpp"
 
-AllIsland::AllIsland(CommandManager &cmd) : _cmd(cmd)
+Zappy::AllIsland::AllIsland(Zappy::CommandManager &cmd) : _cmd(cmd)
 {
 
 }
 
-void AllIsland::setAllElements(std::vector<std::pair<Model, float>> model)
+void Zappy::AllIsland::setAllElements(std::vector<std::pair<Model, float>> model)
 {
     if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
@@ -41,14 +41,14 @@ void AllIsland::setAllElements(std::vector<std::pair<Model, float>> model)
     }
 }
 
-void AllIsland::renderAllElements(void)
+void Zappy::AllIsland::renderAllElements(void)
 {
     for (auto &i : _allIsland) {
         i.render();
     }
 }
 
-std::size_t AllIsland::getTotalNbrElements(void)
+std::size_t Zappy::AllIsland::getTotalNbrElements(void)
 {
     return _allIsland.size();
 }

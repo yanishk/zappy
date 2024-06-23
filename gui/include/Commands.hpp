@@ -39,98 +39,101 @@
     #include <asio.hpp>
     #include <unordered_map>
 
-class CommandManager {
+namespace Zappy {
 
-    public:
+    class CommandManager {
 
-        CommandManager();
-        void sendCommand(const std::string &command);
-        void receiveResponse(const std::string &response);
+        public:
 
-        // a bit of parsing
+            CommandManager();
+            void sendCommand(const std::string &command);
+            void receiveResponse(const std::string &response);
 
-        bool replaceOrAddPlayerInfos(std::vector<std::vector<std::string>> &cmdList,
-            const std::vector<std::string> &params);
-        bool replaceOrAdd(std::vector<std::vector<std::string>> &cmdList,
-            const std::vector<std::string> &params);
-        std::vector<std::string> strToVec(const std::string &input, char token);
+            // a bit of parsing
 
-        // get
+            bool replaceOrAddPlayerInfos(std::vector<std::vector<std::string>> &cmdList,
+                const std::vector<std::string> &params);
+            bool replaceOrAdd(std::vector<std::vector<std::string>> &cmdList,
+                const std::vector<std::string> &params);
+            std::vector<std::string> strToVec(const std::string &input, char token);
 
-        std::vector<std::string> getSentCommands() const;
-        std::vector<std::string> getReceivedResponses() const;
+            // get
 
-        std::unordered_map<std::string, std::vector<std::vector<std::string>>> getMap();
-        std::vector<std::string> getCommandAt(const std::string &cmd, std::size_t index);
-        std::string getCommandInfoAt(const std::string& cmd,
-            std::size_t vectorIndex, std::size_t elementIndex);
+            std::vector<std::string> getSentCommands() const;
+            std::vector<std::string> getReceivedResponses() const;
 
-        void eraseFirstCmdInMap(const std::string &cmd);
+            std::unordered_map<std::string, std::vector<std::vector<std::string>>> getMap();
+            std::vector<std::string> getCommandAt(const std::string &cmd, std::size_t index);
+            std::string getCommandInfoAt(const std::string& cmd,
+                std::size_t vectorIndex, std::size_t elementIndex);
 
-        // fill for GUI
+            void eraseFirstCmdInMap(const std::string &cmd);
 
-        void fillMapPlayerInfos(const std::string &cmd, const std::vector<std::string> &params);
-        void fillMapIsland(const std::string &cmd, const std::vector<std::string> &params);
+            // fill for GUI
 
-    private:
+            void fillMapPlayerInfos(const std::string &cmd, const std::vector<std::string> &params);
+            void fillMapIsland(const std::string &cmd, const std::vector<std::string> &params);
 
-        std::vector<std::vector<std::string>> _bctCmd;
-        std::vector<std::vector<std::string>> _smgCmd;
-        std::vector<std::vector<std::string>> _mszCmd;
-        std::vector<std::vector<std::string>> _tnaCmd;
+        private:
 
-
-        std::vector<std::vector<std::string>> _ppoCmd;
-        std::vector<std::vector<std::string>> _plvCmd;
-        std::vector<std::vector<std::string>> _pinCmd;
-        std::vector<std::vector<std::string>> _pnwCmd;
-        std::vector<std::vector<std::string>> _pdiCmd;
-        std::vector<std::vector<std::string>> _pdrCmd;
-        std::vector<std::vector<std::string>> _pgtCmd;
-        std::vector<std::vector<std::string>> _pbcCmd;
-        std::vector<std::vector<std::string>> _picCmd;
-        std::vector<std::vector<std::string>> _pieCmd;
-        std::vector<std::vector<std::string>> _pexCmd;
+            std::vector<std::vector<std::string>> _bctCmd;
+            std::vector<std::vector<std::string>> _smgCmd;
+            std::vector<std::vector<std::string>> _mszCmd;
+            std::vector<std::vector<std::string>> _tnaCmd;
 
 
-        std::vector<std::vector<std::string>> _sgtCmd;
-        std::vector<std::vector<std::string>> _sstCmd;
-        std::vector<std::vector<std::string>> _segCmd;
+            std::vector<std::vector<std::string>> _ppoCmd;
+            std::vector<std::vector<std::string>> _plvCmd;
+            std::vector<std::vector<std::string>> _pinCmd;
+            std::vector<std::vector<std::string>> _pnwCmd;
+            std::vector<std::vector<std::string>> _pdiCmd;
+            std::vector<std::vector<std::string>> _pdrCmd;
+            std::vector<std::vector<std::string>> _pgtCmd;
+            std::vector<std::vector<std::string>> _pbcCmd;
+            std::vector<std::vector<std::string>> _picCmd;
+            std::vector<std::vector<std::string>> _pieCmd;
+            std::vector<std::vector<std::string>> _pexCmd;
 
-        std::vector<std::vector<std::string>> _eboCmd;
-        std::vector<std::vector<std::string>> _enwCmd;
-        std::vector<std::vector<std::string>> _ediCmd;
 
-        std::vector<std::string> _sentCommands;
-        std::vector<std::string> _receivedResponses;
+            std::vector<std::vector<std::string>> _sgtCmd;
+            std::vector<std::vector<std::string>> _sstCmd;
+            std::vector<std::vector<std::string>> _segCmd;
 
-        std::unordered_map<std::string, std::vector<std::vector<std::string>>> _cmdMap {
+            std::vector<std::vector<std::string>> _eboCmd;
+            std::vector<std::vector<std::string>> _enwCmd;
+            std::vector<std::vector<std::string>> _ediCmd;
 
-            {MSZ_CMD, _mszCmd},
-            {BCT_CMD, _bctCmd},
-            {TNA_CMD, _tnaCmd},
-            {PLV_CMD, _plvCmd},
-            {PIN_CMD, _plvCmd},
-            {PNW_CMD, _pnwCmd},
-            {PDI_CMD, _pdiCmd},
-            {PPO_CMD, _ppoCmd},
-            {PDR_CMD, _pdrCmd},
-            {PGT_CMD, _pgtCmd},
-            {SST_CMD, _sstCmd},
-            {SGT_CMD, _sgtCmd},
-            {EBO_CMD, _eboCmd},
-            {PEX_CMD, _pexCmd},
-            {PBC_CMD, _pbcCmd},
-            {PIC_CMD, _picCmd},
-            {ENW_CMD, _enwCmd},
-            {SMG_CMD, _smgCmd},
-            {EDI_CMD, _ediCmd},
-            {PIE_CMD, _pieCmd},
-            {SEG_CMD, _segCmd},
+            std::vector<std::string> _sentCommands;
+            std::vector<std::string> _receivedResponses;
 
-        };
+            std::unordered_map<std::string, std::vector<std::vector<std::string>>> _cmdMap {
 
-        mutable std::mutex _mutex;
-};
+                {MSZ_CMD, _mszCmd},
+                {BCT_CMD, _bctCmd},
+                {TNA_CMD, _tnaCmd},
+                {PLV_CMD, _plvCmd},
+                {PIN_CMD, _plvCmd},
+                {PNW_CMD, _pnwCmd},
+                {PDI_CMD, _pdiCmd},
+                {PPO_CMD, _ppoCmd},
+                {PDR_CMD, _pdrCmd},
+                {PGT_CMD, _pgtCmd},
+                {SST_CMD, _sstCmd},
+                {SGT_CMD, _sgtCmd},
+                {EBO_CMD, _eboCmd},
+                {PEX_CMD, _pexCmd},
+                {PBC_CMD, _pbcCmd},
+                {PIC_CMD, _picCmd},
+                {ENW_CMD, _enwCmd},
+                {SMG_CMD, _smgCmd},
+                {EDI_CMD, _ediCmd},
+                {PIE_CMD, _pieCmd},
+                {SEG_CMD, _segCmd},
+
+            };
+
+            mutable std::mutex _mutex;
+    };
+}
 
 #endif

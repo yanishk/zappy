@@ -7,11 +7,11 @@
 
 #include "Item.hpp"
 
-Item::Item() : _rotation(0), _upValue(ALTITUDE_SPEED)
+Zappy::Item::Item() : _rotation(0), _upValue(ALTITUDE_SPEED)
 {
 }
 
-void Item::changeItemAnim(void)
+void Zappy::Item::changeItemAnim(void)
 {
     _rotation += 1;
     if (_rotation > MAX_ROTATION)
@@ -22,19 +22,19 @@ void Item::changeItemAnim(void)
     _itemModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * _rotation, DEG2RAD * 0});
 }
 
-void Item::render()
+void Zappy::Item::render()
 {
     changeItemAnim();
     DrawModel(_itemModel , _itemPosition, _itemSize, WHITE);
 }
 
-void Item::setModel(std::pair<Model, float> model)
+void Zappy::Item::setModel(std::pair<Model, float> model)
 {
     _itemModel = model.first;
     _itemSize = model.second;
 }
 
-void Item::setItemPosAndType(Vector2 pos, int type)
+void Zappy::Item::setItemPosAndType(Vector2 pos, int type)
 {
     _itemType = type;
     _realPos = pos;
@@ -43,12 +43,12 @@ void Item::setItemPosAndType(Vector2 pos, int type)
     _itemPosition.z += -(RAND_RANGE / 2) + (rand() % RAND_RANGE);
 }
 
-Vector2 Item::getRealPosition(void)
+Vector2 Zappy::Item::getRealPosition(void)
 {
     return _realPos;
 }
 
-int Item::getType(void)
+int Zappy::Item::getType(void)
 {
     return _itemType;
 }

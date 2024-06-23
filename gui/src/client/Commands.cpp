@@ -8,17 +8,17 @@
 #include "Commands.hpp"
 #include <iostream>
 
-CommandManager::CommandManager()
+Zappy::CommandManager::CommandManager()
 {
 }
 
-void CommandManager::sendCommand(const std::string &command)
+void Zappy::CommandManager::sendCommand(const std::string &command)
 {
     std::lock_guard<std::mutex> lock(_mutex);
     _sentCommands.push_back(command);
 }
 
-void CommandManager::receiveResponse(const std::string &response)
+void Zappy::CommandManager::receiveResponse(const std::string &response)
 {
     std::lock_guard<std::mutex> lock(_mutex);
 
@@ -100,7 +100,7 @@ void CommandManager::receiveResponse(const std::string &response)
     std::cout << response << std::endl;
 }
 
-void CommandManager::eraseFirstCmdInMap(const std::string &cmd)
+void Zappy::CommandManager::eraseFirstCmdInMap(const std::string &cmd)
 {
     auto it = _cmdMap.find(cmd);
 
@@ -115,17 +115,19 @@ void CommandManager::eraseFirstCmdInMap(const std::string &cmd)
     }
 }
 
-void CommandManager::fillMapPlayerInfos(const std::string &cmd, const std::vector<std::string> &params)
+void Zappy::CommandManager::fillMapPlayerInfos(const std::string &cmd,
+    const std::vector<std::string> &params)
 {
     _cmdMap[cmd].push_back(params);
 }
 
-void CommandManager::fillMapIsland(const std::string &cmd, const std::vector<std::string> &params)
+void Zappy::CommandManager::fillMapIsland(const std::string &cmd,
+    const std::vector<std::string> &params)
 {
     _cmdMap[cmd].push_back(params);
 }
 
-bool CommandManager::replaceOrAddPlayerInfos(std::vector<std::vector<std::string>> &cmdList,
+bool Zappy::CommandManager::replaceOrAddPlayerInfos(std::vector<std::vector<std::string>> &cmdList,
     const std::vector<std::string> &params)
 {
     for (auto &item : cmdList) {
@@ -139,7 +141,7 @@ bool CommandManager::replaceOrAddPlayerInfos(std::vector<std::vector<std::string
     return false;
 }
 
-bool CommandManager::replaceOrAdd(std::vector<std::vector<std::string>> &cmdList,
+bool Zappy::CommandManager::replaceOrAdd(std::vector<std::vector<std::string>> &cmdList,
     const std::vector<std::string> &params)
 {
     if (params.size() < 2) {
@@ -158,29 +160,29 @@ bool CommandManager::replaceOrAdd(std::vector<std::vector<std::string>> &cmdList
 }
 
 
-std::vector<std::string> CommandManager::getSentCommands() const
+std::vector<std::string> Zappy::CommandManager::getSentCommands() const
 {
     std::lock_guard<std::mutex> lock(_mutex);
     return _sentCommands;
 }
 
-std::vector<std::string> CommandManager::getReceivedResponses() const
+std::vector<std::string> Zappy::CommandManager::getReceivedResponses() const
 {
     std::lock_guard<std::mutex> lock(_mutex);
     return _receivedResponses;
 }
 
-std::unordered_map<std::string, std::vector<std::vector<std::string>>> CommandManager::getMap()
+std::unordered_map<std::string, std::vector<std::vector<std::string>>> Zappy::CommandManager::getMap()
 {
     return _cmdMap;
 }
 
-std::vector<std::string> CommandManager::getCommandAt(const std::string &cmd,
+std::vector<std::string> Zappy::CommandManager::getCommandAt(const std::string &cmd,
     std::size_t index)
 {
     auto it = _cmdMap.find(cmd);
-
     std::vector<std::string> vide;
+
     if (it != _cmdMap.end() && index < it->second.size()) {
         return it->second[index];
     } else {
@@ -189,7 +191,7 @@ std::vector<std::string> CommandManager::getCommandAt(const std::string &cmd,
     throw std::out_of_range(INVALID_IDX);
 }
 
-std::string CommandManager::getCommandInfoAt(const std::string &cmd,
+std::string Zappy::CommandManager::getCommandInfoAt(const std::string &cmd,
     std::size_t vectorIndex, std::size_t elementIndex)
 {
     auto it = _cmdMap.find(cmd);
@@ -201,7 +203,7 @@ std::string CommandManager::getCommandInfoAt(const std::string &cmd,
     throw std::out_of_range(INVALID_IDX);
 }
 
-std::vector<std::string> CommandManager::strToVec(const std::string &input, char token)
+std::vector<std::string> Zappy::CommandManager::strToVec(const std::string &input, char token)
 {
     std::vector<std::string> res;
     std::string tmp;

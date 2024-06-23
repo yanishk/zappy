@@ -8,7 +8,7 @@
 #include "ParsesModelConfig.hpp"
 #include "Utils.hpp"
 
-void ParsesModelConfig::parseSizeModel(std::string &line)
+void Zappy::ParsesModelConfig::parseSizeModel(std::string &line)
 {
     std::string modelSize = "Size=";
 
@@ -19,7 +19,7 @@ void ParsesModelConfig::parseSizeModel(std::string &line)
     }
 }
 
-void ParsesModelConfig::parsePathModel(std::string &line)
+void Zappy::ParsesModelConfig::parsePathModel(std::string &line)
 {
     std::string modelPath = "Path=";
     std::pair<std::pair<std::string, float>, int> tmpPair;
@@ -31,7 +31,7 @@ void ParsesModelConfig::parsePathModel(std::string &line)
     }
 }
 
-void ParsesModelConfig::parseTypeModel(std::string &line)
+void Zappy::ParsesModelConfig::parseTypeModel(std::string &line)
 {
     std::string modelType = "Type=";
 
@@ -43,12 +43,16 @@ void ParsesModelConfig::parseTypeModel(std::string &line)
             _typeList.push_back(Island);
         } else if (line == PLAYER) {
             _typeList.push_back(Player);
+        } else if (line == EGG) {
+            _typeList.push_back(Egg);
+        } else if (line == SKYM) {
+            _typeList.push_back(SkyM);
         } else
             throw ErrorHandling("Bad config file");
     }
 }
 
-ZappyModel ParsesModelConfig::parsesFile(std::string path)
+ZappyModel Zappy::ParsesModelConfig::parsesFile(std::string path)
 {
     std::ifstream file(path);
     std::string line;
