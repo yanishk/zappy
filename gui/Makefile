@@ -21,14 +21,15 @@ SRC		=	main.cpp							\
 			src/display/island/Island.cpp		\
 			src/display/island/AllIsland.cpp	\
 			src/display/sky/Sky.cpp				\
-			src/display/sea/Sea.cpp
+			src/display/sea/Sea.cpp				\
+			src/display/factory/Factory.cpp		\
 
 
 OBJ		=	$(SRC:.cpp=.o)
 
 NAME	=	zappy_gui
 
-CPPFLAGS	=	-Wall -Wextra -Werror -iquote include -iquote src/display -iquote src/display/island -iquote src/display/egg -iquote src/display/player -iquote src/display/item -iquote src/display/sky -iquote src/display/sea -iquote src/display/player
+CPPFLAGS	=	-Wall -Wextra -Werror -iquote include -iquote src/display -iquote src/display/island -iquote src/display/egg -iquote src/display/player -iquote src/display/item -iquote src/display/sky -iquote src/display/sea -iquote src/display/player -iquote src/display/factory
 
 LIBFLAGS	=	-lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 

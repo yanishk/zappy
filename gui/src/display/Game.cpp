@@ -6,9 +6,12 @@
 */
 
 #include "Game.hpp"
+#include "Factory.hpp"
 
 Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
-    asio::ip::tcp::socket &socket, bool animation) : _cmd(cmd), _socket(socket), _displayGameInfo(true)
+    asio::ip::tcp::socket &socket, bool anim) : _cmd(cmd),
+                                                    _socket(socket),
+                                                    _displayGameInfo(true)
 {
     _screenHeight = screenHeight;
     _screenWidth = screenWidth;
@@ -20,12 +23,12 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
     _cameraMode = CAMERA_FREE;
     _selectedPlayer.first = false;
 
-    _sea = std::make_unique<Sea>();
-    _sky = std::make_unique<Sky>();
-    _allIsland = std::make_unique<AllIsland>(_cmd);
-    _allItem = std::make_unique<AllItem>(_cmd);
-    _allEggs = std::make_unique<AllEggs>(_cmd);
-    _allPlayer = std::make_unique<AllPlayers>(_cmd, animation);
+    _sky = std::get<std::unique_ptr<Sky>>(Factory::newObject(objType::SkyType));
+    _sea = std::get<std::unique_ptr<Sea>>(Factory::newObject(objType::SeaType));
+    _allIsland = std::get<std::unique_ptr<AllIsland>>(Factory::newObjects(objType::IslandType, cmd, anim));
+    _allItem = std::get<std::unique_ptr<AllItem>>(Factory::newObjects(objType::ItemType, cmd, anim));
+    _allEggs = std::get<std::unique_ptr<AllEggs>>(Factory::newObjects(objType::EggType, cmd, anim));
+    _allPlayer = std::get<std::unique_ptr<AllPlayers>>(Factory::newObjects(objType::PlayerType, cmd, anim));
 }
 
 void Game::updateCamera(void)
@@ -35,10 +38,13 @@ void Game::updateCamera(void)
 
     if (IsKeyDown(KEY_SPACE))
         alltitude += speed;
+
     if (IsKeyDown(KEY_LEFT_SHIFT))
         alltitude -= speed;
+
     if (IsKeyDown(KEY_LEFT_CONTROL))
         speed += CAMERA_MOVEMENT_SPEED / 2;
+
     Vector3 movement = Utils::Vec3(
         IsKeyDown(KEY_W) * speed - IsKeyDown(KEY_S) * speed,
         IsKeyDown(KEY_D) * speed - IsKeyDown(KEY_A) * speed, alltitude);
