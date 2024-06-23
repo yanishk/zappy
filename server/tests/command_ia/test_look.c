@@ -8,7 +8,7 @@
 #include <criterion/criterion.h>
 #include "command_ia.h"
 
-zappy_t *init_zappy(zappy_t *zappy, arguments_t *arg)
+static zappy_t *init_zappy(zappy_t *zappy, arguments_t *arg)
 {
     zappy->resource = malloc(sizeof(resource_t *) * arg->height);
     for (int i = 0; i < arg->height; i++) {

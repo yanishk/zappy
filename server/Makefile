@@ -223,6 +223,11 @@ SRC_TEST 	=   	./src/lib/calculate_time_unit.c							\
 					./src/command/command_ia/move_player.c					\
 					./src/memory/free_game.c								\
 					./tests/command_ia/test_eject.c 						\
+					./src/command/command_ia/take_object.c 					\
+					./src/lib/set_resources.c								\
+					./tests/command_ia/test_take_object.c 					\
+					./src/command/command_ia/set_object.c 					\
+					./tests/command_ia/test_set_object.c
 
 OBJ			=	$(SRC:.c=.o)
 
