@@ -42,7 +42,7 @@
     #define VALUE_SHADER_SPEEDY 8.0
     #define VALUE_SHADER_SPEEDX 8.0
 
-class Sea : public ILoadAndRender {
+class Sea : public ILoadAndRenderObj {
 
     public:
 

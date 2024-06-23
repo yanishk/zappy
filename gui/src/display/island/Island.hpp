@@ -23,7 +23,7 @@
 
     #define ISLAND_ALTITUDE -4
 
-class Island : public ILoadAndRender {
+class Island : public ILoadAndRenderObj {
 
     public:
 

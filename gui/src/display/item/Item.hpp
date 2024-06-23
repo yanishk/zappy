@@ -18,24 +18,27 @@
     #define ITEM_ALTITUDE 1.8
     #define RAND_RANGE 6
 
-class Item : public ILoadAndRender {
+class Item : public ILoadAndRenderObj {
+
     public:
+
         Item();
+
+        Vector2 getRealPosition(void);
         void render() override;
         void setModel(std::pair<Model, float> model) override;
         void setItemPosAndType(Vector2 pos, int type);
-        Vector2 getRealPosition(void);
         int getType(void);
 
-
     private:
-        void changeItemAnim(void);
+
         Model _itemModel;
         Vector2 _realPos;
         Vector3 _itemPosition;
-        float _itemSize;
+        void changeItemAnim(void);
         int _itemType;
 
+        float _itemSize;
         float _rotation;
         float _upValue;
 };

@@ -22,7 +22,7 @@
 
     #include "Render.hpp"
 
-class Sky : public ILoadAndRender {
+class Sky : public ILoadAndRenderObj {
 
     public:
 

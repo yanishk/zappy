@@ -35,11 +35,11 @@
 
     #define FOV 70
     #define FPS 60
+    #define SST_CHANGE 25
 
-    #define SKY_SIZE 10
     #define CROSSBAR_SIZE 8
 
-    #define CAMERA_MOVEMENT_SPEED 0.4
+    #define SKY_SIZE 10
     #define EGG_MODEL_SIZE 0.3
 
     #define START_POS_COEF_Y 7
@@ -54,6 +54,7 @@
     #define START_POS 15
     #define FPS_MARGIN 80
 
+    #define CAMERA_MOVEMENT_SPEED 0.4
     #define CAM_POS "- Position: (%06.3f, %06.3f, %06.3f)"
     #define CAM_TARGET "- Target: (%06.3f, %06.3f, %06.3f)"
     #define TIME_UNIT "- Time unit: %d"

@@ -19,7 +19,7 @@
     #define ROTATE_RAND_RANGE (210 - 159 + 1) + 159
     #define DEFAULT_EGG_INCLIN 80
 
-class Egg : public ILoadAndRender {
+class Egg : public ILoadAndRenderObj {
 
     public:
 

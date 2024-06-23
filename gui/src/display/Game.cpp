@@ -156,28 +156,28 @@ void Game::display2D(void)
 
     DrawText(TextFormat(CAM_POS, _camera.position.x, _camera.position.y,
         _camera.position.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
-    position += BACKSLASH_N;
 
+    position += BACKSLASH_N;
     DrawText(TextFormat(CAM_TARGET, _camera.target.x, _camera.target.y,
         _camera.target.z), MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
-    position += BACKSLASH_N;
 
+    position += BACKSLASH_N;
     DrawText(TextFormat(TIME_UNIT, _sgtValue), MARGIN_LEFT * 2,
         position, FONT_SIZE, BLACK);
-    position += BACKSLASH_N;
 
+    position += BACKSLASH_N;
     DrawText(TextFormat(NBR_ITEM_MAP, _allItem.get()->getTotalNbrElements()),
         MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
-    position += BACKSLASH_N;
 
+    position += BACKSLASH_N;
     DrawText(TextFormat(NBR_PLAYER_MAP, _allPlayer.get()->getTotalNbrElements()),
         MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
-    position += BACKSLASH_N;
 
+    position += BACKSLASH_N;
     DrawText(TextFormat(NBR_ISLAND_MAP, _allIsland.get()->getTotalNbrElements()),
         MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
-    position += BACKSLASH_N;
 
+    position += BACKSLASH_N;
     DrawText(TextFormat(NBR_EGGS_MAP, _allEggs.get()->getTotalNbrElements()),
         MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
 }
@@ -186,7 +186,6 @@ void Game::cameraPositionStart(void)
 {
     if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
-
         std::pair<float, float> mapSize;
         mapSize.first = std::stof(cmd.front().c_str());
         mapSize.second = std::stof(cmd[1].c_str());
