@@ -216,7 +216,13 @@ SRC_TEST 	=   	./src/lib/calculate_time_unit.c							\
 					./src/command/command_ia/broadcast/get_straight_line.c 	\
 					./tests/command_ia/test_broadcast.c 					\
 					./src/command/command_ia/connect_nbr.c 					\
-					./tests/command_ia/test_connect_nbr.c
+					./tests/command_ia/test_connect_nbr.c					\
+					./src/command/command_ia/fork_player.c 					\
+					./tests/command_ia/test_fork.c							\
+					./src/command/command_ia/eject_from_tile.c 				\
+					./src/command/command_ia/move_player.c					\
+					./src/memory/free_game.c								\
+					./tests/command_ia/test_eject.c 						\
 
 OBJ			=	$(SRC:.c=.o)
 
