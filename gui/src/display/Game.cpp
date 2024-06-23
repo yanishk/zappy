@@ -8,7 +8,7 @@
 #include "Game.hpp"
 #include "Factory.hpp"
 
-Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
+Zappy::Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
     asio::ip::tcp::socket &socket, bool anim) : _cmd(cmd),
                                                     _socket(socket),
                                                     _displayGameInfo(true)
@@ -31,7 +31,7 @@ Game::Game(int screenWidth, int screenHeight, CommandManager &cmd,
     _allPlayer = std::get<std::unique_ptr<AllPlayers>>(Factory::newObjects(objType::PlayerType, cmd, anim));
 }
 
-void Game::updateCamera(void)
+void Zappy::Game::updateCamera(void)
 {
     float alltitude = 0.0;
     float speed = CAMERA_MOVEMENT_SPEED;
@@ -53,7 +53,7 @@ void Game::updateCamera(void)
     UpdateCameraPro(&_camera, movement, rotation, GetMouseWheelMove());
 }
 
-void Game::fillAllModel(ZappyModel allPath)
+void Zappy::Game::fillAllModel(ZappyModel allPath)
 {
     std::vector<std::pair<Model, float>> tmpModel;
     std::pair<Model, float> tmpEggModel;
@@ -99,13 +99,13 @@ void Game::fillAllModel(ZappyModel allPath)
         throw ErrorHandling(ERROR_NOT_ENOUTH_ITEM_MODEL);
 }
 
-void Game::setCameraToCoord(Vector3 position, Vector3 target)
+void Zappy::Game::setCameraToCoord(Vector3 position, Vector3 target)
 {
     _camera.position = position;
     _camera.target = target;
 }
 
-void Game::display3D(void)
+void Zappy::Game::display3D(void)
 {
     BeginMode3D(_camera);
 
@@ -134,7 +134,7 @@ void Game::display3D(void)
     EndMode3D();
 }
 
-void Game::display2D(void)
+void Zappy::Game::display2D(void)
 {
     _allPlayer.get()->renderAll2D(_selectedPlayer, _allItem);
 
@@ -188,7 +188,7 @@ void Game::display2D(void)
         MARGIN_LEFT * 2, position, FONT_SIZE, BLACK);
 }
 
-void Game::cameraPositionStart(void)
+void Zappy::Game::cameraPositionStart(void)
 {
     if (!_cmd.getCommandAt(MSZ_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(MSZ_CMD, 0);
@@ -208,7 +208,7 @@ void Game::cameraPositionStart(void)
     }
 }
 
-void Game::getSgtCmd(void)
+void Zappy::Game::getSgtCmd(void)
 {
     if (!_cmd.getCommandAt(SGT_CMD, 0).empty()) {
         std::vector<std::string> cmd = _cmd.getCommandAt(SGT_CMD, 0);
@@ -217,7 +217,7 @@ void Game::getSgtCmd(void)
     }
 }
 
-void Game::requestChangingTimeUnit(void)
+void Zappy::Game::requestChangingTimeUnit(void)
 {
     if (IsKeyPressed(KEY_UP)) {
         _sgtValue += SST_CHANGE;
@@ -238,7 +238,7 @@ void Game::requestChangingTimeUnit(void)
     }
 }
 
-void Game::unloadAllModel(void)
+void Zappy::Game::unloadAllModel(void)
 {
     for (auto &i: _allItemModel)
         UnloadModel(i.first);
@@ -251,7 +251,7 @@ void Game::unloadAllModel(void)
     CloseWindow();
 }
 
-void Game::launchGame(void)
+void Zappy::Game::launchGame(void)
 {
     DisableCursor();
     cameraPositionStart();

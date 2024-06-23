@@ -64,65 +64,67 @@
     #define NBR_EGGS_MAP "- Nbr egg on the map: %d"
 
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
+namespace Zappy {
 
-class Game {
+    class Game {
 
-    public:
+        public:
 
-        Game(int screenWidth, int screenHeight, CommandManager &cmd,
-            asio::ip::tcp::socket &socket, bool animation);
-        void updateCamera(void);
+            Game(int screenWidth, int screenHeight, CommandManager &cmd,
+                asio::ip::tcp::socket &socket, bool animation);
+            void updateCamera(void);
 
-        void launchGame(void);
-        void fillAllModel(ZappyModel);
-        void getSgtCmd(void);
-        void requestChangingTimeUnit(void);
+            void launchGame(void);
+            void fillAllModel(ZappyModel);
+            void getSgtCmd(void);
+            void requestChangingTimeUnit(void);
 
-    private:
+        private:
 
-        enum ModelType
-        {
-            ErrorType = 0,
-            ItemType = 1,
-            IslandType = 2,
-            PlayerType = 3,
-            Egg = 4,
-            SkyM = 5
-        };
+            enum ModelType
+            {
+                ErrorType = 0,
+                ItemType = 1,
+                IslandType = 2,
+                PlayerType = 3,
+                Egg = 4,
+                SkyM = 5
+            };
 
-        CommandManager &_cmd;
-        Camera _camera;
-        asio::ip::tcp::socket &_socket;
+            CommandManager &_cmd;
+            Camera _camera;
+            asio::ip::tcp::socket &_socket;
 
-        int _screenWidth;
-        int _screenHeight;
-        int _cameraMode;
-        int _sgtValue;
+            int _screenWidth;
+            int _screenHeight;
+            int _cameraMode;
+            int _sgtValue;
 
-        bool _displayGameInfo;
+            bool _displayGameInfo;
 
-        std::pair<int, int> _mapSize;
-        std::pair<bool, std::size_t> _selectedPlayer;
+            std::pair<int, int> _mapSize;
+            std::pair<bool, std::size_t> _selectedPlayer;
 
-        std::vector<std::pair<Model, float>> _allItemModel;
-        std::vector<std::pair<Model, float>> _islandModel;
-        std::vector<std::pair<Model, float>> _playerModel;
-        std::vector<std::pair<Model, float>> _eggModel;
-        std::pair<Model, float> _skyModel;
-        std::pair<Model, float> _seaModel;
+            std::vector<std::pair<Model, float>> _allItemModel;
+            std::vector<std::pair<Model, float>> _islandModel;
+            std::vector<std::pair<Model, float>> _playerModel;
+            std::vector<std::pair<Model, float>> _eggModel;
+            std::pair<Model, float> _skyModel;
+            std::pair<Model, float> _seaModel;
 
-        std::unique_ptr<AllIsland> _allIsland;
-        std::unique_ptr<AllItem> _allItem;
-        std::unique_ptr<AllEggs> _allEggs;
-        std::unique_ptr<AllPlayers> _allPlayer;
-        std::unique_ptr<Sky> _sky;
-        std::unique_ptr<Sea> _sea;
+            std::unique_ptr<AllIsland> _allIsland;
+            std::unique_ptr<AllItem> _allItem;
+            std::unique_ptr<AllEggs> _allEggs;
+            std::unique_ptr<AllPlayers> _allPlayer;
+            std::unique_ptr<Sky> _sky;
+            std::unique_ptr<Sea> _sea;
 
-        void display3D(void);
-        void display2D(void);
-        void setCameraToCoord(Vector3 position, Vector3 target);
-        void cameraPositionStart(void);
-        void unloadAllModel(void);
-};
+            void display3D(void);
+            void display2D(void);
+            void setCameraToCoord(Vector3 position, Vector3 target);
+            void cameraPositionStart(void);
+            void unloadAllModel(void);
+    };
+}
 
 #endif /* !Game_HPP_ */

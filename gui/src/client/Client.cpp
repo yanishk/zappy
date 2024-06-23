@@ -38,7 +38,7 @@ void Client::startDisplay()
     std::vector<std::pair<std::pair<std::string, float>, int>> parsedFile =
         parse.parsesFile(CONFIG_FILE_PATH);
 
-    Game game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket, _isAnimated);
+    Zappy::Game game(WIN_SIZE_L, WIN_SIZE_W, _cmd, _socket, _isAnimated);
     try {
         game.fillAllModel(parsedFile);
     } catch (const ErrorHandling& e) {
