@@ -35,38 +35,49 @@
     #define NEW_L "\n"
     #define SPACE_C " "
 
-class Utils {
-    public:
-        static bool Vec3Comp(Vector3 vec1, Vector3 vec2)
-        {
-            if (vec1.x == vec2.x && vec1.y == vec2.y && vec1.z == vec2.z)
-                return true;
-            return false;
-        }
+namespace Zappy {
 
-        static bool Vec2Comp(Vector2 vec1, Vector2 vec2)
-        {
-            if (vec1.x == vec2.x && vec1.y == vec2.y)
-                return true;
-            return false;
-        }
-        static Vector3 Vec3(float x, float y, float z)
-        {
-            return (Vector3){x, y, z};
-        }
+    class Utils {
 
-};
+        public:
 
-class ErrorHandling : public std::exception {
-    public:
-        ErrorHandling(std::string errorMsg) : _errorMessage(errorMsg) {};
+            static bool Vec3Comp(Vector3 vec1, Vector3 vec2)
+            {
+                if (vec1.x == vec2.x && vec1.y == vec2.y && vec1.z == vec2.z)
+                    return true;
+                return false;
+            }
 
-        const char *what() const noexcept
-        {
-            return _errorMessage.c_str();
-        };
-    private:
-        std::string _errorMessage;
-};
+            static bool Vec2Comp(Vector2 vec1, Vector2 vec2)
+            {
+                if (vec1.x == vec2.x && vec1.y == vec2.y)
+                    return true;
+                return false;
+            }
+            static Vector3 Vec3(float x, float y, float z)
+            {
+                return (Vector3){x, y, z};
+            }
+
+    };
+}
+
+namespace Zappy {
+
+    class ErrorHandling : public std::exception {
+
+        public:
+
+            ErrorHandling(std::string errorMsg) : _errorMessage(errorMsg) {};
+
+            const char *what() const noexcept
+            {
+                return _errorMessage.c_str();
+            };
+
+        private:
+            std::string _errorMessage;
+    };
+}
 
 #endif /* !UTILS_HPP_ */

@@ -22,20 +22,23 @@
 
     #include "Render.hpp"
 
-class Sky : public ILoadAndRenderObj {
+namespace Zappy {
 
-    public:
+    class Sky : public ILoadAndRenderObj {
 
-        void render() override;
-        void setModel(std::pair<Model, float> model) override;
-        void setSkyPos(Vector3 pos);
+        public:
 
-    private:
+            void render() override;
+            void setModel(std::pair<Model, float> model) override;
+            void setSkyPos(Vector3 pos);
 
-        Model _skyModel;
-        Vector3 _skyPosition;
-        float _skySize;
+        private:
 
-};
+            Model _skyModel;
+            Vector3 _skyPosition;
+            float _skySize;
+
+    };
+}
 
 #endif /* !SKY_HPP_ */

@@ -7,7 +7,7 @@
 
 #include "Sea.hpp"
 
-Sea::Sea()
+Zappy::Sea::Sea()
 {
     _seconds = 0.0;
     _seaShader = LoadShader(0, TextFormat(SEA_SHADER, SHADER_FORMAT));
@@ -42,7 +42,7 @@ Sea::Sea()
     _seaModel.materials[0].shader = _seaShader;
 }
 
-void Sea::render()
+void Zappy::Sea::render()
 {
     BeginShaderMode(_seaShader);
         DrawModel(_seaModel, _subSeaPosition, 1, WHITE);
@@ -50,7 +50,7 @@ void Sea::render()
     EndShaderMode();
 }
 
-void Sea::setSeaPos(Vector3 camera, std::pair<int, int> mapSize)
+void Zappy::Sea::setSeaPos(Vector3 camera, std::pair<int, int> mapSize)
 {
     _seconds += GetFrameTime() / 2;
     SetShaderValue(_seaShader, _seaSecondLoc, &_seconds, SHADER_UNIFORM_FLOAT);
@@ -59,7 +59,7 @@ void Sea::setSeaPos(Vector3 camera, std::pair<int, int> mapSize)
         SEA_ALTITUDE, (mapSize.second * spaceBetwenIsland) / 2);
 }
 
-void Sea::setModel(std::pair<Model, float> model)
+void Zappy::Sea::setModel(std::pair<Model, float> model)
 {
     _seaModel = model.first;
     _seaSize = model.second;

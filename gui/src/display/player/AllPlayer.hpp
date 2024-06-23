@@ -14,51 +14,55 @@
     #include "Player.hpp"
     #include "AallPlayer.hpp"
 
-class AllPlayers : public AAllPlayerObj {
 
-    public:
+namespace Zappy {
 
-        AllPlayers(CommandManager &cmd, bool isAnimated);
-        void renderAllElements(void) override {};
-        void renderAllElements(Vector3 camPosition) override;
-        void setAllElements(std::vector<std::pair<Model, float>> model) override;
-        std::size_t getTotalNbrElements(void) override;
+    class AllPlayers : public AAllPlayerObj {
 
-        void renderAll2D(std::pair<bool, int> moreInfo,
-            std::unique_ptr<AllItem> &_allItem);
-        std::pair<bool, int> isPlayerSelected(Vector3 target, Vector3 position);
+        public:
 
-    private:
+            AllPlayers(CommandManager &cmd, bool isAnimated);
+            void renderAllElements(void) override {};
+            void renderAllElements(Vector3 camPosition) override;
+            void setAllElements(std::vector<std::pair<Model, float>> model) override;
+            std::size_t getTotalNbrElements(void) override;
 
-        CommandManager &_cmd;
-        std::vector<Player> _allPlayer;
-        bool _isAnimated = false;
+            void renderAll2D(std::pair<bool, int> moreInfo,
+                std::unique_ptr<AllItem> &_allItem);
+            std::pair<bool, int> isPlayerSelected(Vector3 target, Vector3 position);
 
-        Player &getPlayerByID(int PlayerID);
-        void addPlayer(std::vector<std::pair<Model, float>> model);
-        void movePlayer(void);
-        void setPlayerLevel(void);
-        void collectOrDropItem(void);
-        void setInventory(void);
-        void incantation(void);
-        void startIncantation(int playerID, Vector2 pos);
-        void endOfIncantation(Vector2 pos);
-        void ejection(void);
-        void playerDied(void);
-        bool removePlayerFromIsland(int playerID);
-        void getAllTeam(void);
-        void broadcast(void);
+        private:
+
+            CommandManager &_cmd;
+            std::vector<Player> _allPlayer;
+            bool _isAnimated = false;
+
+            Player &getPlayerByID(int PlayerID);
+            void addPlayer(std::vector<std::pair<Model, float>> model);
+            void movePlayer(void);
+            void setPlayerLevel(void);
+            void collectOrDropItem(void);
+            void setInventory(void);
+            void incantation(void);
+            void startIncantation(int playerID, Vector2 pos);
+            void endOfIncantation(Vector2 pos);
+            void ejection(void);
+            void playerDied(void);
+            bool removePlayerFromIsland(int playerID);
+            void getAllTeam(void);
+            void broadcast(void);
 
 
-        Model _model;
-        Model _incantationModel;
-        Model _expulsionModel;
-        Vector3 _size;
-        ModelAnimation *_anim;
-        int _animsCount;
-        std::vector<std::vector<int>> _bct;
-        std::vector<std::string> _allTeamName;
-        Color setPlayerColor(std::string teamName);
-};
+            Model _model;
+            Model _incantationModel;
+            Model _expulsionModel;
+            Vector3 _size;
+            ModelAnimation *_anim;
+            int _animsCount;
+            std::vector<std::vector<int>> _bct;
+            std::vector<std::string> _allTeamName;
+            Color setPlayerColor(std::string teamName);
+    };
+}
 
 #endif /* !ALLPLAYER_HPP_ */

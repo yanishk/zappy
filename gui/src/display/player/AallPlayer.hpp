@@ -11,16 +11,18 @@
     #include "AllObj.hpp"
     #include "raylib.h"
 
-class AAllPlayerObj : public IAllObj {
+namespace Zappy {
 
-    public:
+    class AAllPlayerObj : public IAllObj {
 
-        AAllPlayerObj() = default;
-        virtual ~AAllPlayerObj() = default;
+        public:
 
-        virtual void renderAllElements(Vector3 vec) = 0;
-        using IAllObj::renderAllElements;
-};
+            AAllPlayerObj() = default;
+            virtual ~AAllPlayerObj() = default;
 
+            virtual void renderAllElements(Vector3 vec) = 0;
+            using IAllObj::renderAllElements;
+    };
+}
 
 #endif /* !AALLPLAYER_HPP_ */

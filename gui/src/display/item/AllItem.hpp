@@ -11,26 +11,29 @@
     #include "Item.hpp"
     #include "AllObj.hpp"
 
-class AllItem : public IAllObj {
+namespace Zappy {
 
-    public:
+    class AllItem : public IAllObj {
 
-        AllItem(CommandManager &cmd);
+        public:
 
-        void setAllElements(std::vector<std::pair<Model, float>> model) override;
-        void renderAllElements(void) override;
-        std::size_t getTotalNbrElements(void) override;
+            AllItem(CommandManager &cmd);
 
-        Vector2 getItemRealPosition(int i);
-        int getItemType(int i);
+            void setAllElements(std::vector<std::pair<Model, float>> model) override;
+            void renderAllElements(void) override;
+            std::size_t getTotalNbrElements(void) override;
 
-    private:
+            Vector2 getItemRealPosition(int i);
+            int getItemType(int i);
 
-        CommandManager &_cmd;
-        std::vector<Item> _allItem;
+        private:
 
-        void removeItem(Vector2 pos, int type);
-        int getNbrItemAtPos(Vector2 pos, int type);
-};
+            CommandManager &_cmd;
+            std::vector<Item> _allItem;
+
+            void removeItem(Vector2 pos, int type);
+            int getNbrItemAtPos(Vector2 pos, int type);
+    };
+}
 
 #endif /* !ALLITEM_HPP_ */

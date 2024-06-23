@@ -22,27 +22,30 @@
 
 using ZappyModel = std::vector<std::pair<std::pair<std::string, float>, int>>;
 
-class ParsesModelConfig {
-    public:
-        ZappyModel parsesFile(std::string path);
-    private:
-        enum ModelType
-        {
-            Error = 0,
-            Item = 1,
-            Island = 2,
-            Player = 3,
-            Egg = 4,
-            SkyM = 5,
-        };
-        void parsePathModel(std::string &line);
-        void parseSizeModel(std::string &line);
-        void parseTypeModel(std::string &line);
+namespace Zappy {
 
-        std::vector<float> _sizeList;
-        std::vector<std::string> _pathList;
-        std::vector<int> _typeList;
-        ZappyModel _parsedInfo;
-};
+    class ParsesModelConfig {
+        public:
+            ZappyModel parsesFile(std::string path);
+        private:
+            enum ModelType
+            {
+                Error = 0,
+                Item = 1,
+                Island = 2,
+                Player = 3,
+                Egg = 4,
+                SkyM = 5,
+            };
+            void parsePathModel(std::string &line);
+            void parseSizeModel(std::string &line);
+            void parseTypeModel(std::string &line);
+
+            std::vector<float> _sizeList;
+            std::vector<std::string> _pathList;
+            std::vector<int> _typeList;
+            ZappyModel _parsedInfo;
+    };
+}
 
 #endif /* !PARSESMODELCONFIG_HPP_ */

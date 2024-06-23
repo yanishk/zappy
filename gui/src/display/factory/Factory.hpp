@@ -31,18 +31,21 @@ enum class objType {
     SeaType = 5
 };
 
-class Factory {
+namespace Zappy {
 
-    public:
+    class Factory {
 
-        using AllObjVar = std::variant<std::unique_ptr<AllItem>,
-            std::unique_ptr<AllPlayers>, std::unique_ptr<AllIsland>, std::unique_ptr<AllEggs>>;
-        using ObjVar = std::variant<std::unique_ptr<Sky>, std::unique_ptr<Sea>>;
+        public:
+
+            using AllObjVar = std::variant<std::unique_ptr<AllItem>,
+                std::unique_ptr<AllPlayers>, std::unique_ptr<AllIsland>, std::unique_ptr<AllEggs>>;
+            using ObjVar = std::variant<std::unique_ptr<Sky>, std::unique_ptr<Sea>>;
 
 
-        static AllObjVar newObjects(objType type, CommandManager &cmd, bool anim);
-        static ObjVar newObject(objType type);
+            static AllObjVar newObjects(objType type, CommandManager &cmd, bool anim);
+            static ObjVar newObject(objType type);
 
-};
+    };
+}
 
 #endif // FACTORY_HPP

@@ -7,12 +7,12 @@
 
 #include "AllEggs.hpp"
 
-AllEggs::AllEggs(CommandManager &cmd) : _cmd(cmd)
+Zappy::AllEggs::AllEggs(Zappy::CommandManager &cmd) : _cmd(cmd)
 {
 
 }
 
-void AllEggs::removeEgg(int Id)
+void Zappy::AllEggs::removeEgg(int Id)
 {
     for (auto it = _allEggs.begin(); it != _allEggs.end(); ++it) {
         if (it->getEggId() == Id) {
@@ -22,7 +22,7 @@ void AllEggs::removeEgg(int Id)
     }
 }
 
-void AllEggs::setAllElements(std::vector<std::pair<Model, float>> vecModel)
+void Zappy::AllEggs::setAllElements(std::vector<std::pair<Model, float>> vecModel)
 {
     std::pair<Model, float> model = vecModel[0];
 
@@ -64,14 +64,14 @@ void AllEggs::setAllElements(std::vector<std::pair<Model, float>> vecModel)
     }
 }
 
-void AllEggs::renderAllElements(void)
+void Zappy::AllEggs::renderAllElements(void)
 {
     for (auto &t : _allEggs) {
         t.render();
     }
 }
 
-std::size_t AllEggs::getTotalNbrElements(void)
+std::size_t Zappy::AllEggs::getTotalNbrElements(void)
 {
     return _allEggs.size();
 }

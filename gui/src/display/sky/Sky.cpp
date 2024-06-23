@@ -7,18 +7,18 @@
 
 #include "Sky.hpp"
 
-void Sky::render()
+void Zappy::Sky::render()
 {
     DrawModel(_skyModel, _skyPosition, SKY_SIZE, WHITE);
 }
 
-void Sky::setModel(std::pair<Model, float> model)
+void Zappy::Sky::setModel(std::pair<Model, float> model)
 {
     _skyModel = model.first;
     _skySize = model.second;
 }
 
-void Sky::setSkyPos(Vector3 pos)
+void Zappy::Sky::setSkyPos(Vector3 pos)
 {
-    _skyPosition = Utils::Vec3(pos.x, 0, pos.z);
+    _skyPosition = Zappy::Utils::Vec3(pos.x, 0, pos.z);
 }

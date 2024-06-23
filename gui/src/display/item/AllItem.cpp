@@ -7,12 +7,12 @@
 
 #include "AllItem.hpp"
 
-AllItem::AllItem(CommandManager &cmd) : _cmd(cmd)
+Zappy::AllItem::AllItem(Zappy::CommandManager &cmd) : _cmd(cmd)
 {
 
 }
 
-void AllItem::removeItem(Vector2 pos, int type)
+void Zappy::AllItem::removeItem(Vector2 pos, int type)
 {
     for (std::size_t i = 0; i < _allItem.size(); i++) {
         Vector2 itemPos = _allItem[i].getRealPosition();
@@ -23,7 +23,7 @@ void AllItem::removeItem(Vector2 pos, int type)
     }
 }
 
-int AllItem::getNbrItemAtPos(Vector2 pos, int type)
+int Zappy::AllItem::getNbrItemAtPos(Vector2 pos, int type)
 {
     int nbr = 0;
 
@@ -36,7 +36,7 @@ int AllItem::getNbrItemAtPos(Vector2 pos, int type)
     return nbr;
 }
 
-void AllItem::setAllElements(std::vector<std::pair<Model, float>> model)
+void Zappy::AllItem::setAllElements(std::vector<std::pair<Model, float>> model)
 {
     while (_cmd.getCommandAt(BCT_CMD, 0).size() > 1) {
         std::vector<std::string> cmd = _cmd.getCommandAt(BCT_CMD, 0);
@@ -61,24 +61,24 @@ void AllItem::setAllElements(std::vector<std::pair<Model, float>> model)
     }
 }
 
-void AllItem::renderAllElements(void)
+void Zappy::AllItem::renderAllElements(void)
 {
     for (auto &i : _allItem) {
         i.render();
     }
 }
 
-std::size_t AllItem::getTotalNbrElements(void)
+std::size_t Zappy::AllItem::getTotalNbrElements(void)
 {
     return _allItem.size();
 }
 
-Vector2 AllItem::getItemRealPosition(int i)
+Vector2 Zappy::AllItem::getItemRealPosition(int i)
 {
     return _allItem[i].getRealPosition();
 }
 
-int AllItem::getItemType(int i)
+int Zappy::AllItem::getItemType(int i)
 {
     return _allItem[i].getType();
 }

@@ -39,87 +39,92 @@
         {3, "West"}
     };
 
-class Player : public ILoadAndRenderObj {
-    public:
-        Player(Vector2 position, bool isAnimated);
+namespace Zappy {
 
-        void render() override;
-        void setModel(std::pair<Model, float> model) override;
-        void setPlayerAnimation(ModelAnimation *_playerAnimation);
-        void setIncantModel(Model incantModel);
-        void setEjectModel(Model ejectModel);
-        void setPlayerID(int ID);
-        int getPlayerID(void);
-        void setPlayerPos(Vector2 pos);
-        void setPlayerDirection(int direction);
-        Vector3 getPosition(void);
-        Vector2 getRealPos(void);
-        void setLevel(int level);
-        int getLevel(void);
-        void setTeam(std::string team);
-        std::string getTeam(void);
-        void setPlayerColor(Color color);
-        void drawMessage(std::string msg, Vector3 camPosition);
-        void displayInfo2D(int x, int y, std::unique_ptr<AllItem> &_allItem);
-        void displayPlayerInfo(Vector3 camPosition);
-        bool isPlayerSelected(BoundingBox playerBox, Ray ray);
-        void addOrRemoveItem(int itemType, bool addOrRemove);
-        void setInventory(std::vector<int> newInv);
-        std::vector<int> getInventory(void);
-        void enableIncantationMode(Vector2 pos);
-        void disableIncantationMode(void);
-        Vector2 getIncantationPos(void);
-        void drawIncantation(void);
-        void playerExpulsion(void);
-        void drawExpulsion(void);
-        void setMessage(std::string msg);
-        std::string getMessage(void);
-        Model getPlayerModel(void);
+    class Player : public ILoadAndRenderObj {
 
-    private:
-        void DrawText3D(Font font, const char *text, Vector3 position, float fontSize, float fontSpacing, float lineSpacing, Color tint);
-        void DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint);
-        BoundingBox UpdateBoundingBox(BoundingBox box, Vector3 position);
-        Vector3 RotatePointAroundY(Vector3 point);
-        Color getNegativeColor(Color color);
+        public:
+            Player(Vector2 position, bool isAnimated);
 
-        Model _playerModel;
-        ModelAnimation *_playerAnimation;
-        int _playerID;
-        int _animFrameCounter;
-        int _level;
-        Vector2 _realPos;
-        float _rotationAngle;
-        Model _incantationModel;
-        Model _expulsionModel;
-        std::string _team;
-        int _playerOrientation;
-        Color _playerColor = WHITE;
-        Model _infoBackground;
-        Model _broadcastBackground;
-        Vector3 _incantAngle;
-        Vector3 _playerPosition;
-        Vector3 _destPosition;
-        Vector2 _incantPos;
-        float _distanceBetweenPos;
-        float _speedX;
-        float _speedY;
-        float _speedZ;
-        std::string _broadcastMsg;
-        std::vector<int> _inventory;
-        std::chrono::time_point<std::chrono::system_clock> _startTime;
-        bool _isMooving;
-        bool _isIncantation;
-        bool _isTimerStart;
-        float _incantationSize;
-        float _incantationOpacity;
-        bool _isIncantationExpload;
-        float _expulsionSize;
-        float _expulsionOrientation;
-        bool _isExpulsion;
-        float _playerSize;
-        bool _isAnimated = false;
-        std::string _msg;
-};
+            void render() override;
+            void setModel(std::pair<Model, float> model) override;
+            void setPlayerAnimation(ModelAnimation *_playerAnimation);
+            void setIncantModel(Model incantModel);
+            void setEjectModel(Model ejectModel);
+            void setPlayerID(int ID);
+            int getPlayerID(void);
+            void setPlayerPos(Vector2 pos);
+            void setPlayerDirection(int direction);
+            Vector3 getPosition(void);
+            Vector2 getRealPos(void);
+            void setLevel(int level);
+            int getLevel(void);
+            void setTeam(std::string team);
+            std::string getTeam(void);
+            void setPlayerColor(Color color);
+            void drawMessage(std::string msg, Vector3 camPosition);
+            void displayInfo2D(int x, int y, std::unique_ptr<AllItem> &_allItem);
+            void displayPlayerInfo(Vector3 camPosition);
+            bool isPlayerSelected(BoundingBox playerBox, Ray ray);
+            void addOrRemoveItem(int itemType, bool addOrRemove);
+            void setInventory(std::vector<int> newInv);
+            std::vector<int> getInventory(void);
+            void enableIncantationMode(Vector2 pos);
+            void disableIncantationMode(void);
+            Vector2 getIncantationPos(void);
+            void drawIncantation(void);
+            void playerExpulsion(void);
+            void drawExpulsion(void);
+            void setMessage(std::string msg);
+            std::string getMessage(void);
+            Model getPlayerModel(void);
+
+        private:
+
+            void DrawText3D(Font font, const char *text, Vector3 position, float fontSize, float fontSpacing, float lineSpacing, Color tint);
+            void DrawTextCodepoint3D(Font font, int codepoint, Vector3 position, float scale, Color tint);
+            BoundingBox UpdateBoundingBox(BoundingBox box, Vector3 position);
+            Vector3 RotatePointAroundY(Vector3 point);
+            Color getNegativeColor(Color color);
+
+            Model _playerModel;
+            ModelAnimation *_playerAnimation;
+            int _playerID;
+            int _animFrameCounter;
+            int _level;
+            Vector2 _realPos;
+            float _rotationAngle;
+            Model _incantationModel;
+            Model _expulsionModel;
+            std::string _team;
+            int _playerOrientation;
+            Color _playerColor = WHITE;
+            Model _infoBackground;
+            Model _broadcastBackground;
+            Vector3 _incantAngle;
+            Vector3 _playerPosition;
+            Vector3 _destPosition;
+            Vector2 _incantPos;
+            float _distanceBetweenPos;
+            float _speedX;
+            float _speedY;
+            float _speedZ;
+            std::string _broadcastMsg;
+            std::vector<int> _inventory;
+            std::chrono::time_point<std::chrono::system_clock> _startTime;
+            bool _isMooving;
+            bool _isIncantation;
+            bool _isTimerStart;
+            float _incantationSize;
+            float _incantationOpacity;
+            bool _isIncantationExpload;
+            float _expulsionSize;
+            float _expulsionOrientation;
+            bool _isExpulsion;
+            float _playerSize;
+            bool _isAnimated = false;
+            std::string _msg;
+    };
+}
 
 #endif /* !PLAYER_HPP_ */

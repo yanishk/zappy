@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-Client::Client(const std::string &port, const std::string &host,
+Zappy::Client::Client(const std::string &port, const std::string &host,
     CommandManager &cmd, bool animation) : _socket(_ioContext), _cmd(cmd)
 {
     asio::ip::tcp::resolver resolver(_ioContext);
@@ -22,16 +22,16 @@ Client::Client(const std::string &port, const std::string &host,
     _isAnimated = animation;
 }
 
-void Client::run()
+void Zappy::Client::run()
 {
-    std::thread display(&Client::startDisplay, this);
-    std::thread reader(&Client::readServ, this);
+    std::thread display(&Zappy::Client::startDisplay, this);
+    std::thread reader(&Zappy::Client::readServ, this);
 
     reader.join();
     display.join();
 }
 
-void Client::startDisplay()
+void Zappy::Client::startDisplay()
 {
     std::srand(std::time(NULL));
     ParsesModelConfig parse;
@@ -51,7 +51,7 @@ void Client::startDisplay()
     std::exit(0);
 }
 
-void Client::readServ()
+void Zappy::Client::readServ()
 {
     try {
 
@@ -91,7 +91,7 @@ void Client::readServ()
     }
 }
 
-void Client::writeToServ()
+void Zappy::Client::writeToServ()
 {
     while (true) {
 

@@ -10,15 +10,18 @@
 
     #include "Utils.hpp"
 
-class ILoadAndRenderObj {
+namespace Zappy {
 
-    public:
+    class ILoadAndRenderObj {
 
-        ILoadAndRenderObj() = default;
-        virtual ~ILoadAndRenderObj() = default;
+        public:
 
-        virtual void render() = 0;
-        virtual void setModel(std::pair<Model, float>) = 0;
-};
+            ILoadAndRenderObj() = default;
+            virtual ~ILoadAndRenderObj() = default;
+
+            virtual void render() = 0;
+            virtual void setModel(std::pair<Model, float>) = 0;
+    };
+}
 
 #endif /* !RENDER_HPP_ */
