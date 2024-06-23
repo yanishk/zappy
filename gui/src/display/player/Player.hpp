@@ -31,6 +31,10 @@
     #define ADD_ITEM true
     #define REMOVE_ITEM false
     #define SCREEN_WIDTH 1920
+    #define SQUARE_ANGLE 90
+    #define MAX_INCLINAISON 30
+    #define EPULSION_ORIENTATION 10
+    #define FADE_COLOR_RATIO 0.5
 
     static const std::map<int, std::string> PLAYER_ORIENTATION {
         {0, "North"},
@@ -122,7 +126,7 @@ namespace Zappy {
             float _expulsionOrientation;
             bool _isExpulsion;
             float _playerSize;
-            bool _isAnimated = false;
+            bool _isAnimated;
             std::string _msg;
     };
 }

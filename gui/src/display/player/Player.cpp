@@ -7,11 +7,11 @@
 
 #include "Player.hpp"
 
-Zappy::Player::Player(Vector2 position, bool isAnimated) : _incantationSize(0.1), _incantationOpacity(0.5), _isIncantationExpload(false),
-    _expulsionSize(0.1), _expulsionOrientation(0), _isExpulsion(false)
+Zappy::Player::Player(Vector2 position, bool isAnimated) : _incantationSize(0.1), _incantationOpacity(FADE_COLOR_RATIO), _isIncantationExpload(false),
+    _expulsionSize(0.1), _expulsionOrientation(0), _isExpulsion(false), _isAnimated(isAnimated)
 {
     _realPos = position;
-    _playerPosition = (Vector3){(position.x + 1) * spaceBetwenIsland, 1.1, position.y * spaceBetwenIsland};
+    _playerPosition = (Vector3){(position.x + 1) * spaceBetwenIsland, PLAYER_HIGHT, position.y * spaceBetwenIsland};
     _playerPosition.x += -2 + (std::rand() % 4);
     _playerPosition.z += -2 + (std::rand() % 4);
     _isMooving = false;
@@ -27,7 +27,7 @@ Zappy::Player::Player(Vector2 position, bool isAnimated) : _incantationSize(0.1)
     _speedZ = (float)((std::rand() % 100) - 50) / 50;
     if (_speedY < _speedX || _speedY < _speedZ)
         _speedY += (_speedX + _speedZ) / 2;
-    _incantAngle = (Vector3){_speedX, _speedY, -90};
+    _incantAngle = (Vector3){_speedX, _speedY, -SQUARE_ANGLE};
     _isAnimated = isAnimated;
 }
 
@@ -88,8 +88,8 @@ void Zappy::Player::setPlayerPos(Vector2 pos)
 
 void Zappy::Player::setPlayerDirection(int direction)
 {
-    _playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * (-direction * 90), DEG2RAD * 0});
-    _rotationAngle = direction * 90;
+    _playerModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * (-direction * SQUARE_ANGLE), DEG2RAD * 0});
+    _rotationAngle = direction * SQUARE_ANGLE;
     _playerOrientation = direction;
 }
 
@@ -133,10 +133,10 @@ void Zappy::Player::drawMessage(std::string msg, Vector3 camPosition)
     rlPushMatrix();
         rlTranslatef(_playerPosition.x, _playerPosition.y + 4, _playerPosition.z);
         rlRotatef(angle, 0.0f, 1.0f, 0.0f);
-        rlRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+        rlRotatef(SQUARE_ANGLE, 1.0f, 0.0f, 0.0f);
         float decalage = msg.size() * 4;
         decalage /= 40;
-        DrawText3D(font, msg.c_str(), (Vector3){-decalage, 0.1f, 0.0f }, 4.0f, 0.5f, -1.0f, _playerColor);
+        DrawText3D(font, msg.c_str(), (Vector3){-decalage, 0.1f, 0.0f }, 4.0f, FADE_COLOR_RATIO, -1.0f, _playerColor);
     rlPopMatrix();
     UnloadFont(font);
 
@@ -146,14 +146,14 @@ void Zappy::Player::drawMessage(std::string msg, Vector3 camPosition)
         _broadcastMsg = msg;
         float backgroundWight = msg.size() * 9;
         backgroundWight /= 40;
-        _broadcastBackground = LoadModelFromMesh(GenMeshPlane(backgroundWight, 0.5, 1, 2));
+        _broadcastBackground = LoadModelFromMesh(GenMeshPlane(backgroundWight, FADE_COLOR_RATIO, 1, 2));
     }
     if (std::chrono::duration_cast<std::chrono::seconds>(timer - _startTime).count() >= 5) {
         _isTimerStart = false;
         _broadcastMsg.erase();
     }
-    _broadcastBackground.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 90, DEG2RAD * 0, DEG2RAD * -angle});
-    DrawModel(_broadcastBackground, (Vector3){_playerPosition.x, _playerPosition.y + 3.83f, _playerPosition.z}, 1, Fade(getNegativeColor(_playerColor), 0.5f));
+    _broadcastBackground.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * SQUARE_ANGLE, DEG2RAD * 0, DEG2RAD * -angle});
+    DrawModel(_broadcastBackground, (Vector3){_playerPosition.x, _playerPosition.y + 3.83f, _playerPosition.z}, 1, Fade(getNegativeColor(_playerColor), FADE_COLOR_RATIO));
 }
 
 void Zappy::Player::displayInfo2D(int x, int y, std::unique_ptr<AllItem> &_allItem)
@@ -208,13 +208,13 @@ void Zappy::Player::displayPlayerInfo(Vector3 camPosition)
     rlPushMatrix();
         rlTranslatef(_playerPosition.x, _playerPosition.y + 3, _playerPosition.z);
         rlRotatef(angle, 0.0f, 1.0f, 0.0f);
-        rlRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-        DrawText3D(font, textToDisplay.c_str(), (Vector3){ -0.9f, 0.1f, 0.0f }, 3.0f, 0.5f, -1.0f, _playerColor);
+        rlRotatef(SQUARE_ANGLE, 1.0f, 0.0f, 0.0f);
+        DrawText3D(font, textToDisplay.c_str(), (Vector3){ -0.9f, 0.1f, 0.0f }, 3.0f, FADE_COLOR_RATIO, -1.0f, _playerColor);
     rlPopMatrix();
     UnloadFont(font);
 
-    _infoBackground.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 90, DEG2RAD * 0, DEG2RAD * -angle});
-    DrawModel(_infoBackground, (Vector3){_playerPosition.x, _playerPosition.y + 2.65f, _playerPosition.z}, 1, Fade(getNegativeColor(_playerColor), 0.5f));
+    _infoBackground.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * SQUARE_ANGLE, DEG2RAD * 0, DEG2RAD * -angle});
+    DrawModel(_infoBackground, (Vector3){_playerPosition.x, _playerPosition.y + 2.65f, _playerPosition.z}, 1, Fade(getNegativeColor(_playerColor), FADE_COLOR_RATIO));
 
     if (_isTimerStart) {
         drawMessage(_broadcastMsg, camPosition);
@@ -275,7 +275,7 @@ Vector3 Zappy::Player::getPosition()
     }
     float x = _playerPosition.x - _destPosition.x;
 
-    float moveSpeed = 0.5;
+    float moveSpeed = FADE_COLOR_RATIO;
 
     if (x < 0)
         _playerPosition.x += moveSpeed;
@@ -322,9 +322,9 @@ void Zappy::Player::drawIncantation(void)
 {
     if (!_isIncantation)
         return;
-    if (_incantAngle.z > 30 || _incantAngle.z < -30)
+    if (_incantAngle.z > MAX_INCLINAISON || _incantAngle.z < -MAX_INCLINAISON)
         _speedZ = (-_speedZ);
-    if (_incantAngle.x > 30 || _incantAngle.x < -30)
+    if (_incantAngle.x > MAX_INCLINAISON || _incantAngle.x < -MAX_INCLINAISON)
         _speedX = (-_speedX);
     _incantAngle.x += _speedX;
     _incantAngle.y += _speedY;
@@ -340,7 +340,7 @@ void Zappy::Player::drawIncantation(void)
         _isIncantationExpload = false;
         _isIncantation = false;
         _incantationSize = 0.1;
-        _incantationOpacity = 0.5;
+        _incantationOpacity = FADE_COLOR_RATIO;
     }
     DrawModel(_incantationModel, pos, _incantationSize, Fade(_playerColor, _incantationOpacity));
 }
@@ -357,7 +357,7 @@ void Zappy::Player::drawExpulsion(void)
     if (!_isExpulsion)
         return;
     _expulsionModel.transform = MatrixRotateXYZ((Vector3){ DEG2RAD * 0, DEG2RAD * _expulsionOrientation, DEG2RAD * 0});
-    _expulsionOrientation += 10;
+    _expulsionOrientation += EPULSION_ORIENTATION;
     Vector3 pos = _playerPosition;
     pos.y += 2;
     _expulsionSize += 0.05;
@@ -416,9 +416,9 @@ void Zappy::Player::DrawTextCodepoint3D(Font font, int codepoint, Vector3 positi
     float height = (float)(font.recs[index].height + 2.0f * font.glyphPadding) / (float)font.baseSize*scale;
 
     if (font.texture.id > 0) {
-        const float x = 0.0f;
-        const float y = 0.0f;
-        const float z = 0.0f;
+        const float x = 0.0;
+        const float y = 0.0;
+        const float z = 0.0;
 
         const float tx = srcRec.x / font.texture.width;
         const float ty = srcRec.y / font.texture.height;
@@ -503,9 +503,9 @@ Vector3 Zappy::Player::RotatePointAroundY(Vector3 point)
 Color Zappy::Player::getNegativeColor(Color color)
 {
     Color newColor;
-    newColor.r = 255 - color.r;
-    newColor.g = 255 - color.g;
-    newColor.b = 255 - color.b;
+    newColor.r = MAX_RGB - color.r;
+    newColor.g = MAX_RGB - color.g;
+    newColor.b = MAX_RGB - color.b;
     newColor.a = color.a;
     return newColor;
 }
