@@ -19,6 +19,12 @@ Test(fork, successful_fork)
     int client_fd = 5;
     zappy->infos = malloc(sizeof(game_infos_t));
 
+    server.max_clients = 1;
+    server.clients = malloc(sizeof(client_t) * (server.max_clients));
+    server.clients[0] = malloc(sizeof(client_t));
+    server.clients[0]->is_graphic = true;
+    server.clients[0]->client_fd = 0;
+
     TAILQ_INIT(&zappy->player_head);
     player = malloc(sizeof(player_t));
     TAILQ_INSERT_TAIL(&zappy->player_head, player, player_entries);

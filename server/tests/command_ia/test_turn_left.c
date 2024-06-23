@@ -18,6 +18,11 @@ Test(turn_left, succesful_left_facing_north)
     int player_id = 0;
     int client_fd = 5;
 
+    server.max_clients = 1;
+    server.clients = malloc(sizeof(client_t) * (server.max_clients));
+    server.clients[0] = malloc(sizeof(client_t));
+    server.clients[0]->is_graphic = true;
+    server.clients[0]->client_fd = 0;
     TAILQ_INIT(&zappy.player_head);
     player = malloc(sizeof(player_t));
     TAILQ_INSERT_TAIL(&zappy.player_head, player, player_entries);
@@ -44,6 +49,11 @@ Test(turn_left, succesful_left_facing_south)
     int player_id = 0;
     int client_fd = 5;
 
+    server.max_clients = 1;
+    server.clients = malloc(sizeof(client_t) * (server.max_clients));
+    server.clients[0] = malloc(sizeof(client_t));
+    server.clients[0]->is_graphic = true;
+    server.clients[0]->client_fd = 0;
     TAILQ_INIT(&zappy.player_head);
     player = malloc(sizeof(player_t));
     TAILQ_INSERT_TAIL(&zappy.player_head, player, player_entries);
