@@ -65,7 +65,7 @@ namespace Network
             std::string _home;
             asio::io_context _io_context;
             std::shared_ptr<SOCKET> _socket;
-            asio::io_service _ioservice;
+            asio::io_context _ioservice;
 
     };
 
