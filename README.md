@@ -11,7 +11,7 @@
 ![Criterion](https://img.shields.io/badge/tests-Criterion-6E9F18)
 ![Linux](https://img.shields.io/badge/platform-Linux-lightgrey)
 
-<img src="doc/demo.gif" alt="Two AI teams of dinosaurs exploring floating islands in the 3D viewer, with their broadcast messages shown above their heads" width="760">
+<img src="doc/demo.gif" alt="The 3D viewer flying from a wide shot of the map down to a Queen's island, surrounded by her eggs, while three AI teams play and broadcast" width="760">
 
 [Quick start](#quick-start) · [How it works](#how-it-works) · [Protocol](#protocol) · [Team](#team)
 
