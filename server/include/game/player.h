@@ -10,6 +10,7 @@
     #define PLAYER_H_
 
     #include <sys/queue.h>
+    #include <time.h>
     #include "resource.h"
 
 typedef struct player_s {
