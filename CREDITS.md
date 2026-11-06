@@ -18,3 +18,5 @@ The viewer's 3D models were downloaded from [Sketchfab](https://sketchfab.com). 
 | `models/unreal-engine-4-sky/` | Sky | irons3th | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | [Unreal Engine 4 Sky](https://sketchfab.com/3d-models/unreal-engine-4-sky-be1fae4d5c6e43bbb4970bde465304d0) |
 
 The water shader ([`gui/assets/shaders/water.fs`](gui/assets/shaders/water.fs)) is based on raylib's [texture waves example](https://github.com/raysan5/raylib/blob/master/examples/shaders/resources/shaders/glsl330/wave.fs) by Anata, under the zlib licence.
+
+The water texture ([`gui/assets/image/water_texture.png`](gui/assets/image/water_texture.png)) was generated for the project with ImageMagick.
