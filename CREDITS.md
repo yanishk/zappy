@@ -1,9 +1,10 @@
 # Credits
 
-The viewer's 3D models were downloaded from [Sketchfab](https://sketchfab.com). They are used unmodified and keep their original licences. Many thanks to their authors.
+Most of the viewer's 3D models were downloaded from [Sketchfab](https://sketchfab.com). They are used unmodified and keep their original licences. Many thanks to their authors.
 
 | Asset | Used for | Author | Licence | Source |
 |-------|----------|--------|---------|--------|
+| `models/island.glb` | Islands | Kenney | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | Assembled for the project from [Nature Kit](https://kenney.nl/assets/nature-kit) pieces (cliff blocks, pines, rocks, bushes, flowers), recoloured, with shading baked into vertex colours |
 | `models/dilophosaurus-cross-x-men/` | Players | kenchoo | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | [Dilophosaurus cross X-men](https://sketchfab.com/3d-models/dilophosaurus-cross-x-men-1b193012c22341e0b19143798b3c1013) |
 | `models/minecraft_cake.glb` | Food | tijjulia | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | [MINECRAFT CAKE](https://sketchfab.com/3d-models/minecraft-cake-6d65ad03c1a4426ba77e1efe0dc138b5) |
 | `models/gold-jade-stone-tool/` | Stone | smsi | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | [Gold-Jade Stone Tool](https://sketchfab.com/3d-models/gold-jade-stone-tool-d60e3fd85c9e48eb853ab197eadf0f12) |

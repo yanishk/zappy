@@ -157,7 +157,7 @@ Built in four weeks (May to June 2024) by six Epitech students:
 
 ## Credits
 
-The 3D models come from Sketchfab, mostly under CC BY 4.0. Authors and licences are listed in [`CREDITS.md`](CREDITS.md).
+The 3D models come from Sketchfab, mostly under CC BY 4.0, and the islands are built from Kenney's Nature Kit (CC0). Authors and licences are listed in [`CREDITS.md`](CREDITS.md).
 
 ## License
 
