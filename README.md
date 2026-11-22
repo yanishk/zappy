@@ -11,7 +11,7 @@
 ![Criterion](https://img.shields.io/badge/tests-Criterion-6E9F18)
 ![Linux](https://img.shields.io/badge/platform-Linux-lightgrey)
 
-<img src="doc/demo.gif" alt="The 3D viewer gliding from a wide shot of the map down to the red Queen's island, with her eggs, food and teammates, while three AI teams play in real time" width="760">
+<img src="doc/demo.gif" alt="The 3D viewer flying low across the map while three AI teams play in real time: dinosaurs, eggs, Queen broadcasts and several incantations in progress" width="760">
 
 [Quick start](#quick-start) · [How it works](#how-it-works) · [Protocol](#protocol) · [Team](#team)
 
